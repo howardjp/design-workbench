@@ -148,6 +148,38 @@ for (const family of ["martlet", "krigsvold"]) {
     ).toBeVisible();
     expect(await drafts(page)).toHaveLength(0);
   });
+  test(`${family}: cancelling a restored older draft returns to the latest saved specification`, async ({
+    page,
+    registry,
+  }) => {
+    await edit(page, `${registry.base}/${family}/?record=button`);
+    const saved = registry.store.get("button");
+    const newest =
+      "The latest saved specification remains authoritative after cancelling an older restored draft.";
+    registry.store.save(
+      "button",
+      { ...toDraft(saved), summary: newest },
+      saved.revision,
+    );
+    await page.reload();
+    await page
+      .getByRole("button", { name: "Restore draft Button", exact: true })
+      .click();
+    await expect(page.getByLabel("Summary", { exact: true })).toHaveValue(
+      localText,
+    );
+    await page
+      .getByRole("button", { name: "Cancel editing", exact: true })
+      .click();
+    await page
+      .getByRole("button", { name: "Discard changes", exact: true })
+      .click();
+    await expect(page.locator(".editor .spec-summary")).toHaveText(newest);
+    await expect(page.locator(".editor .record-state")).toContainText(
+      "Revision 2",
+    );
+    expect(registry.store.history("button")).toHaveLength(2);
+  });
   test(`${family}: separate tabs keep independent copies and explicit discard removes only its chosen copy`, async ({
     page,
     context,

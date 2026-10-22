@@ -129,6 +129,9 @@ function App() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(preferences.value.pageSize);
   const [editing, setEditing] = useState(false);
+  const [restoredBase, setRestoredBase] = useState<ComponentRecord | null>(
+    null,
+  );
   const [reviewDirty, setReviewDirty] = useState(false);
   const [draft, setDraft] = useState<Draft>(newDraft() as Draft);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -154,13 +157,17 @@ function App() {
     pendingFocus.current = null;
   });
   const selected = records.find((record) => record.id === selectedId) ?? null;
+  const editingBase =
+    editing && restoredBase?.id === selectedId ? restoredBase : selected;
   const dirty =
     settingsDirty ||
     reviewDirty ||
     recoveryOpen ||
     (editing &&
-      JSON.stringify(draft) !==
-        JSON.stringify(selected ? toDraft(selected) : newDraft()));
+      (conflict ||
+        uncertain ||
+        JSON.stringify(draft) !==
+          JSON.stringify(editingBase ? toDraft(editingBase) : newDraft())));
   const filtered = filterRecords(
     records,
     query,
@@ -236,9 +243,9 @@ function App() {
         schemaVersion: 1,
         id: activeDraftId.current,
         savedAt: new Date().toISOString(),
-        recordId: selected?.id ?? null,
-        baseRevision: selected?.revision ?? null,
-        baseDraft: selected ? toDraft(selected) : null,
+        recordId: editingBase?.id ?? null,
+        baseRevision: editingBase?.revision ?? null,
+        baseDraft: editingBase ? toDraft(editingBase) : null,
         draft,
         uncertain: markUncertain,
       });
@@ -259,7 +266,7 @@ function App() {
     }
     const changed =
       JSON.stringify(draft) !==
-      JSON.stringify(selected ? toDraft(selected) : newDraft());
+      JSON.stringify(editingBase ? toDraft(editingBase) : newDraft());
     if (!changed && !uncertain && !saving) {
       if (activeDraftId.current) {
         try {
@@ -277,7 +284,7 @@ function App() {
   }, [
     editing,
     draft,
-    selected,
+    editingBase,
     uncertain,
     saving,
     preferences.value.protectDrafts,
@@ -305,15 +312,11 @@ function App() {
       // A restored copy has its own key so another tab cannot overwrite it.
       activeDraftId.current = crypto.randomUUID();
       if (latest) {
-        const base = {
-          ...latest,
-          ...item.baseDraft!,
-          revision: item.baseRevision!,
-        };
         setRecords((previous) =>
-          [...previous.filter((record) => record.id !== latest.id), base].sort(
-            (a, b) => a.name.localeCompare(b.name),
-          ),
+          [
+            ...previous.filter((record) => record.id !== latest.id),
+            latest,
+          ].sort((a, b) => a.name.localeCompare(b.name)),
         );
       }
       setSelectedId(item.recordId);
@@ -321,6 +324,11 @@ function App() {
       setView("inventory");
       setEditing(true);
       clearFeedback();
+      setRestoredBase(
+        latest
+          ? { ...latest, ...item.baseDraft!, revision: item.baseRevision! }
+          : null,
+      );
       const changedBase =
         latest &&
         (latest.revision !== item.baseRevision ||
@@ -455,6 +463,7 @@ function App() {
     if (Object.keys(errors).length || failure) summaryRef.current?.focus();
   }, [errors, failure]);
   function clearFeedback() {
+    setRestoredBase(null);
     setDraftSource(null);
     setCreationCandidate(null);
     setErrors({});
@@ -663,7 +672,7 @@ function App() {
     protectDraftCopy(true); // Persist the uncertain marker before a write can leave this tab.
     setSaving(true);
     try {
-      const record = await api.save(draft, selected);
+      const record = await api.save(draft, editingBase);
       setRecords((previous) =>
         [...previous.filter((item) => item.id !== record.id), record].sort(
           (a, b) => a.name.localeCompare(b.name),
@@ -671,6 +680,7 @@ function App() {
       );
       setSelectedId(record.id);
       setEditing(false);
+      setRestoredBase(null);
       forgetActiveDraft();
       setDraftSource(null);
       setErrors({});
@@ -1407,7 +1417,7 @@ function App() {
               )}
               {recoveryOpen && selected ? (
                 <ConflictRecovery
-                  base={selected}
+                  base={editingBase ?? selected}
                   draft={draft}
                   onReturn={() => {
                     setRecoveryOpen(false);
@@ -1442,7 +1452,7 @@ function App() {
                 >
                   <p className="muted">
                     {selected
-                      ? `Editing saved revision ${selected.revision}${draftSource ? ` using revision ${draftSource} as a draft` : ""}.`
+                      ? `Editing saved revision ${editingBase?.revision}${draftSource ? ` using revision ${draftSource} as a draft` : ""}.`
                       : "Create a shared component contract."}{" "}
                     {dirty
                       ? "You have unsaved changes."
