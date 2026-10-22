@@ -33,3 +33,9 @@ Martlet groups each result in two spacious editorial columns with its action bel
 Build/types, Node derivation/HTTP/no-write checks, real browser workflows, keyboard paging, URL reload/family transfer, retained failures, cancelled late loads, fresh review entry, unsaved navigation, empty states, exact content parity, measured family composition, 320/1440px light/dark axe/reflow, and enlarged text/spacing are automated. See verification.md for checkpoint results. Manual screen readers, actual browser zoom, non-Chromium/mobile, forced colors, RTL/localization, print pagination, sustained use, authenticated reviewers, and automated assertion verification remain open. All packages stay unpublished/experimental; the service remains local and unauthenticated.
 
 The partial viewport captures in `docs/qa/martlet-queue.jpg` and `docs/qa/krigsvold-queue.jpg` show the same real seeded inventory, with no saved review observations. After build, reproduce with `node scripts/capture-review.mjs queue` (or set PLAYWRIGHT_EXECUTABLE_PATH). The remaining records and pagination continue below the images.
+
+
+
+## Cross-window entry
+
+Opening a queue result now reads that record directly before entering readiness review, so a refreshed queue can open a record absent from the original parent inventory. Success adds/replaces only that record in the parent's inventory and leaves the review editor's independent fresh read/revision checks intact. Failure retains the previous selection, queue snapshot and filters, and offers Retry/Cancel. Navigating away or selecting another result aborts the pending entry; late responses cannot change the destination. The parent count remains its independently loaded inventory, with newly opened records incorporated; this is not a whole-inventory synchronization or polling feature.

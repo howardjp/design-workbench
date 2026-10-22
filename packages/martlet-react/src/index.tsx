@@ -490,3 +490,127 @@ export function DefinitionList({
     </dl>
   );
 }
+
+export function Switch({
+  label,
+  id,
+  className = "",
+  ...props
+}: Omit<ComponentPropsWithRef<"input">, "type" | "role"> & {
+  label: ReactNode;
+}) {
+  const generatedId = useId();
+  return (
+    <label htmlFor={id ?? generatedId} className="martlet-switch">
+      <span className="martlet-switch-control">
+        <input
+          {...props}
+          id={id ?? generatedId}
+          type="checkbox"
+          role="switch"
+          className={className}
+        />
+        <span className="martlet-switch-track" aria-hidden="true">
+          <span />
+        </span>
+      </span>
+      <span>{label}</span>
+    </label>
+  );
+}
+export type TabItem = {
+  id: string;
+  label: ReactNode;
+  content: ReactNode;
+  disabled?: boolean;
+};
+export function Tabs({
+  items,
+  value,
+  onValueChange,
+  label,
+  orientation = "horizontal",
+  className = "",
+  ...props
+}: Omit<ComponentPropsWithRef<"div">, "children" | "onChange"> & {
+  items: readonly TabItem[];
+  value: string;
+  onValueChange: (id: string) => void;
+  label: string;
+  orientation?: "horizontal" | "vertical";
+}) {
+  const generatedId = useId();
+  const buttons = useRef<(HTMLButtonElement | null)[]>([]);
+  const enabled = items
+    .map((item, index) => (item.disabled ? -1 : index))
+    .filter((index) => index >= 0);
+  const selected = items.findIndex(
+    (item) => item.id === value && !item.disabled,
+  );
+  const active = selected >= 0 ? selected : (enabled[0] ?? -1);
+  return (
+    <div {...props} className={`martlet-tabs ${className}`}>
+      <div
+        role="tablist"
+        aria-label={label}
+        aria-orientation={orientation}
+        onKeyDown={(event) => {
+          const target = (event.target as HTMLElement).closest('[role="tab"]');
+          const index = buttons.current.findIndex(
+            (button) => button === target,
+          );
+          if (index < 0) return;
+          const nextKey =
+            orientation === "horizontal" ? "ArrowRight" : "ArrowDown";
+          const previousKey =
+            orientation === "horizontal" ? "ArrowLeft" : "ArrowUp";
+          let next: number | undefined;
+          if (event.key === "Home") next = enabled[0];
+          else if (event.key === "End") next = enabled.at(-1);
+          else if (event.key === nextKey)
+            next = enabled[(enabled.indexOf(index) + 1) % enabled.length];
+          else if (event.key === previousKey)
+            next =
+              enabled[
+                (enabled.indexOf(index) - 1 + enabled.length) % enabled.length
+              ];
+          if (next !== undefined) {
+            event.preventDefault();
+            buttons.current[next]?.focus();
+          }
+        }}
+      >
+        {items.map((item, index) => (
+          <button
+            key={item.id}
+            type="button"
+            role="tab"
+            ref={(element) => {
+              buttons.current[index] = element;
+            }}
+            id={`${generatedId}-tab-${index}`}
+            aria-controls={`${generatedId}-panel-${index}`}
+            aria-selected={index === active}
+            tabIndex={index === active ? 0 : -1}
+            disabled={item.disabled}
+            onClick={() => onValueChange(item.id)}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
+      {items.map((item, index) => (
+        <div
+          key={item.id}
+          role="tabpanel"
+          id={`${generatedId}-panel-${index}`}
+          aria-labelledby={`${generatedId}-tab-${index}`}
+          hidden={index !== active}
+          tabIndex={0}
+        >
+          {item.content}
+        </div>
+      ))}
+    </div>
+  );
+}

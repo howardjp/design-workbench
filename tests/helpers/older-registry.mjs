@@ -15,6 +15,8 @@ export const missing = [
   "radio",
   "pagination",
   "definition-list",
+  "switch",
+  "tabs",
 ];
 export function createOlderRegistry(options = {}) {
   const dir = mkdtempSync(join(tmpdir(), "inventory-upgrade-"));
@@ -85,3 +87,4 @@ export function createOlderRegistry(options = {}) {
     },
   };
 }
+

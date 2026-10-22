@@ -609,3 +609,140 @@
 .martlet-definitions dd {
   margin-block-start: 0.5rem;
 }
+
+.martlet-switch {
+  display: inline-flex;
+  gap: 0.75rem;
+  align-items: center;
+  min-block-size: 2.8rem;
+  cursor: pointer;
+}
+.martlet-switch-control {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+}
+.martlet-switch input {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  opacity: 0;
+  margin: 0;
+  cursor: inherit;
+}
+.martlet-switch-track {
+  inline-size: 2.6rem;
+  block-size: 1.5rem;
+  border: 2px solid var(--martlet-border-strong);
+  background: var(--martlet-button-secondary-bg);
+  display: flex;
+  align-items: center;
+  padding: 0.15rem;
+  box-sizing: border-box;
+  border-radius: 1rem;
+}
+.martlet-switch-track > span {
+  inline-size: 0.95rem;
+  block-size: 0.95rem;
+  border-radius: 50%;
+  background: var(--martlet-button-secondary-text);
+}
+.martlet-switch input:checked + .martlet-switch-track {
+  background: var(--martlet-accent);
+  border-color: var(--martlet-accent);
+  justify-content: flex-end;
+}
+.martlet-switch input:checked + .martlet-switch-track > span {
+  background: var(--martlet-on-accent);
+}
+.martlet-switch input:focus-visible + .martlet-switch-track {
+  outline: 3px solid var(--martlet-focus-ring);
+  outline-offset: 3px;
+}
+.martlet-switch:has(input:disabled) {
+  cursor: default;
+  color: var(--martlet-disabled-text);
+}
+.martlet-switch input:disabled + .martlet-switch-track {
+  background: var(--martlet-disabled-bg);
+  border-color: var(--martlet-disabled-text);
+}
+.martlet-switch input:disabled + .martlet-switch-track > span {
+  background: var(--martlet-disabled-text);
+}
+.martlet-tabs {
+  min-inline-size: 0;
+}
+.martlet-tabs [role="tablist"] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  border-block-end: 1px solid var(--ui-line);
+}
+.martlet-tabs [role="tablist"][aria-orientation="vertical"] {
+  flex-direction: column;
+}
+.martlet-tabs [role="tab"] {
+  font: inherit;
+  color: var(--ui-text);
+  background: transparent;
+  border: 0;
+  border-block-end: 3px solid transparent;
+  padding: 0.75rem 1rem;
+  min-block-size: 2.8rem;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.martlet-tabs [role="tab"][aria-selected="true"] {
+  border-block-end-color: var(--ui-accent);
+  font-weight: 700;
+}
+.martlet-tabs [role="tab"]:disabled {
+  color: var(--martlet-disabled-text);
+  cursor: default;
+}
+.martlet-tabs [role="tabpanel"] {
+  padding-block: 1.5rem;
+  outline-offset: 3px;
+}
+.martlet-tabs [role="tabpanel"][hidden] {
+  display: none;
+}
+@media (forced-colors: active) {
+  .martlet-switch-track {
+    forced-color-adjust: none;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+  .martlet-switch-track > span {
+    background: CanvasText;
+  }
+  .martlet-switch input:checked + .martlet-switch-track {
+    background: Highlight;
+    border-color: Highlight;
+  }
+  .martlet-switch input:checked + .martlet-switch-track > span {
+    background: HighlightText;
+  }
+  .martlet-switch input:focus-visible + .martlet-switch-track {
+    outline-color: Highlight;
+  }
+  .martlet-switch input:disabled + .martlet-switch-track {
+    background: Canvas;
+    border-color: GrayText;
+  }
+  .martlet-switch input:disabled + .martlet-switch-track > span {
+    background: GrayText;
+  }
+  .martlet-tabs [role="tab"][aria-selected="true"] {
+    border-block-end-color: Highlight;
+  }
+}
+
+.martlet-tabs [role="tab"] {
+  border-radius: 0.3rem 0.3rem 0 0;
+}
+.martlet-tabs [role="tab"][aria-selected="true"] {
+  background: var(--martlet-button-secondary-bg);
+}

@@ -325,7 +325,7 @@ for (const family of ["martlet", "krigsvold"]) {
         exact: true,
       }),
     ).toBeDisabled();
-    expect(registry.store.list()).toHaveLength(36);
+    expect(registry.store.list()).toHaveLength(38);
   });
   test(`${family}: import navigation respects unsaved drafts`, async ({
     page,

@@ -15,6 +15,10 @@ import { ReadinessReviews } from "./readiness-review";
 import { ImportRegistry } from "./import-registry";
 import { ReadingRoom } from "./reading-room";
 import { ConflictRecovery } from "./conflict-recovery";
+import { readDrafts, writeDraft, removeDraft } from "./draft-storage.mjs";
+import type { StoredDraft } from "./draft-types";
+import { WorkbenchSettings } from "./settings";
+import { readPreferences } from "./preferences.mjs";
 import { RevisionReview } from "./revisions";
 import "@martlet/react/styles.css";
 import "@krigsvold/react/styles.css";
@@ -60,6 +64,40 @@ function storedMode(): "light" | "dark" {
   }
 }
 function App() {
+  const [preferences, setPreferences] = useState(() => {
+    try {
+      return readPreferences(localStorage);
+    } catch {
+      return readPreferences({
+        getItem: () => {
+          throw new Error("Storage unavailable");
+        },
+      });
+    }
+  });
+  const [settingsDirty, setSettingsDirty] = useState(false);
+  const queueEntryRequest = useRef<AbortController | null>(null);
+  const [queueEntry, setQueueEntry] = useState<{
+    id: string;
+    failed: boolean;
+  } | null>(null);
+  const queueEntryError = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    if (queueEntry?.failed) queueEntryError.current?.focus();
+  }, [queueEntry]);
+  useEffect(() => () => queueEntryRequest.current?.abort(), []);
+  const activeDraftId = useRef<string | null>(null);
+  const [storedDrafts, setStoredDrafts] = useState<StoredDraft[]>([]);
+  const [storageFailure, setStorageFailure] = useState("");
+  const [invalidDraftKeys, setInvalidDraftKeys] = useState<string[]>([]);
+  const [checkingCreation, setCheckingCreation] = useState(false);
+  const [creationCandidate, setCreationCandidate] =
+    useState<ComponentRecord | null>(null);
+  const [draftRestore, setDraftRestore] = useState<string | null>(null);
+  const draftRequest = useRef<AbortController | null>(null);
+  const [draftFailure, setDraftFailure] = useState("");
+  const [draftProtected, setDraftProtected] = useState(false);
+  const draftFeedback = useRef<HTMLDivElement>(null);
   const [queueSearch, setQueueSearch] = useState(location.search);
   const [mode, setMode] = useState(storedMode);
   const [records, setRecords] = useState<ComponentRecord[]>([]);
@@ -70,11 +108,18 @@ function App() {
   const [maturity, setMaturity] = useState("");
   const [platform, setPlatform] = useState("");
   const [view, setView] = useState(
-    ["overview", "updates", "reading", "import", "review", "queue"].includes(
-      new URLSearchParams(location.search).get("view") ?? "",
-    )
+    [
+      "inventory",
+      "overview",
+      "updates",
+      "reading",
+      "import",
+      "review",
+      "queue",
+      "settings",
+    ].includes(new URLSearchParams(location.search).get("view") ?? "")
       ? new URLSearchParams(location.search).get("view")!
-      : "inventory",
+      : preferences.value.defaultView,
   );
   const [evidence, setEvidence] = useState("");
   const [sortKey, setSortKey] = useState<"name" | "maturity" | "updatedAt">(
@@ -82,7 +127,7 @@ function App() {
   );
   const [direction, setDirection] = useState<"asc" | "desc">("asc");
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(preferences.value.pageSize);
   const [editing, setEditing] = useState(false);
   const [reviewDirty, setReviewDirty] = useState(false);
   const [draft, setDraft] = useState<Draft>(newDraft() as Draft);
@@ -110,6 +155,7 @@ function App() {
   });
   const selected = records.find((record) => record.id === selectedId) ?? null;
   const dirty =
+    settingsDirty ||
     reviewDirty ||
     recoveryOpen ||
     (editing &&
@@ -138,6 +184,198 @@ function App() {
     [query, maturity, platform, evidence, sortKey, direction, pageSize],
   );
 
+  function refreshStoredDrafts() {
+    try {
+      const result = readDrafts(localStorage);
+      setStoredDrafts(
+        result.drafts.filter(
+          (item) => item.id !== activeDraftId.current,
+        ) as StoredDraft[],
+      );
+      setInvalidDraftKeys(result.invalidKeys);
+    } catch {
+      setStorageFailure(
+        "Browser draft storage is unavailable. Keep this page open until you save your specification.",
+      );
+    }
+  }
+  function forgetActiveDraft() {
+    if (activeDraftId.current) {
+      try {
+        removeDraft(localStorage, activeDraftId.current);
+      } catch {
+        setStorageFailure(
+          "The saved browser draft could not be removed. A recovery copy may still appear when you return.",
+        );
+      }
+    }
+    activeDraftId.current = null;
+    setDraftProtected(false);
+    refreshStoredDrafts();
+  }
+  useEffect(() => {
+    refreshStoredDrafts();
+    const changed = (event: StorageEvent) => {
+      if (
+        event.key === null ||
+        event.key?.startsWith("design-workbench:specification-draft:")
+      )
+        refreshStoredDrafts();
+    };
+    window.addEventListener("storage", changed);
+    return () => {
+      window.removeEventListener("storage", changed);
+      draftRequest.current?.abort();
+    };
+  }, []);
+  function protectDraftCopy(markUncertain: boolean) {
+    if (!preferences.value.protectDrafts) return;
+    activeDraftId.current ??= crypto.randomUUID();
+    try {
+      writeDraft(localStorage, {
+        schemaVersion: 1,
+        id: activeDraftId.current,
+        savedAt: new Date().toISOString(),
+        recordId: selected?.id ?? null,
+        baseRevision: selected?.revision ?? null,
+        baseDraft: selected ? toDraft(selected) : null,
+        draft,
+        uncertain: markUncertain,
+      });
+      setDraftProtected(true);
+      setStorageFailure("");
+    } catch {
+      setDraftProtected(false);
+      setStorageFailure(
+        "This draft could not be protected in browser storage. Keep this page open until you save it to the registry.",
+      );
+    }
+  }
+  useLayoutEffect(() => {
+    if (!editing) return;
+    if (!preferences.value.protectDrafts) {
+      setDraftProtected(false);
+      return;
+    }
+    const changed =
+      JSON.stringify(draft) !==
+      JSON.stringify(selected ? toDraft(selected) : newDraft());
+    if (!changed && !uncertain && !saving) {
+      if (activeDraftId.current) {
+        try {
+          removeDraft(localStorage, activeDraftId.current);
+          setDraftProtected(false);
+        } catch {
+          setStorageFailure(
+            "The browser draft could not be cleared. A recovery copy may still appear when you return.",
+          );
+        }
+      }
+      return;
+    }
+    protectDraftCopy(uncertain || saving);
+  }, [
+    editing,
+    draft,
+    selected,
+    uncertain,
+    saving,
+    preferences.value.protectDrafts,
+  ]);
+  useLayoutEffect(() => {
+    if (draftFailure) draftFeedback.current?.focus();
+  }, [draftFailure]);
+  async function restoreDraft(item: StoredDraft) {
+    cancelQueueEntry();
+    draftRequest.current?.abort();
+    const controller = new AbortController();
+    draftRequest.current = controller;
+    setDraftRestore(item.id);
+    setDraftFailure("");
+    try {
+      const latest = item.recordId
+        ? await api.get(item.recordId, controller.signal)
+        : null;
+      if (controller.signal.aborted) return;
+      if (
+        latest &&
+        (latest.id !== item.recordId || latest.revision < item.baseRevision!)
+      )
+        throw new Error("The editing base does not match this registry.");
+      // A restored copy has its own key so another tab cannot overwrite it.
+      activeDraftId.current = crypto.randomUUID();
+      if (latest) {
+        const base = {
+          ...latest,
+          ...item.baseDraft!,
+          revision: item.baseRevision!,
+        };
+        setRecords((previous) =>
+          [...previous.filter((record) => record.id !== latest.id), base].sort(
+            (a, b) => a.name.localeCompare(b.name),
+          ),
+        );
+      }
+      setSelectedId(item.recordId);
+      setDraft(item.draft);
+      setView("inventory");
+      setEditing(true);
+      clearFeedback();
+      const changedBase =
+        latest &&
+        (latest.revision !== item.baseRevision ||
+          compareDrafts(latest, item.baseDraft!).length > 0);
+      setConflict(!!changedBase);
+      setUncertain(item.uncertain);
+      if (changedBase || item.uncertain)
+        setFailure(
+          latest
+            ? "Your browser draft is restored. Compare with the latest saved record before saving again."
+            : "Your browser draft is restored, but a previous save may have completed. Check the saved inventory before retrying creation.",
+        );
+      else
+        setMessage(
+          "Browser draft restored. Review it, then save it to the registry.",
+        );
+      // Remove the offered copy only after protecting the independent restored copy.
+      if (preferences.value.protectDrafts) {
+        try {
+          writeDraft(localStorage, {
+            ...item,
+            id: activeDraftId.current,
+            savedAt: new Date().toISOString(),
+          });
+          removeDraft(localStorage, item.id);
+        } catch {
+          setStorageFailure(
+            "The original recovery copy is retained because browser storage could not be updated.",
+          );
+        }
+      } else {
+        // Retain the offered copy until Save or an explicit discard. Further edits are memory-only.
+        activeDraftId.current = item.id;
+      }
+      refreshStoredDrafts();
+      pendingFocus.current = "editor";
+    } catch {
+      if (!controller.signal.aborted)
+        setDraftFailure(
+          "The editing base could not be loaded from this registry. The browser draft is retained; check the server and retry Restore draft.",
+        );
+    } finally {
+      if (!controller.signal.aborted) setDraftRestore(null);
+    }
+  }
+  function discardStoredDraft(item: StoredDraft) {
+    try {
+      removeDraft(localStorage, item.id);
+      refreshStoredDrafts();
+    } catch {
+      setStorageFailure(
+        "The browser draft could not be discarded. It remains available for recovery.",
+      );
+    }
+  }
   async function load() {
     setLoading(true);
     setLoadError("");
@@ -218,6 +456,7 @@ function App() {
   }, [errors, failure]);
   function clearFeedback() {
     setDraftSource(null);
+    setCreationCandidate(null);
     setErrors({});
     setFailure("");
     setConflict(false);
@@ -225,10 +464,50 @@ function App() {
     setRecoveryOpen(false);
     setMessage("");
   }
+  function cancelQueueEntry() {
+    queueEntryRequest.current?.abort();
+    queueEntryRequest.current = null;
+    setQueueEntry(null);
+    draftRequest.current?.abort();
+    setDraftRestore(null);
+    setDraftFailure("");
+  }
+  async function openQueueRecord(id: string) {
+    cancelQueueEntry();
+    const controller = new AbortController();
+    queueEntryRequest.current = controller;
+    setQueueEntry({ id, failed: false });
+    try {
+      const record = await api.get(id, controller.signal);
+      if (controller.signal.aborted) return;
+      if (record.id !== id) throw new Error("Unexpected record identity");
+      setRecords((previous) =>
+        [...previous.filter((item) => item.id !== id), record].sort((a, b) =>
+          a.name.localeCompare(b.name),
+        ),
+      );
+      setSelectedId(id);
+      setView("review");
+      setEditing(false);
+      clearFeedback();
+      setQueueEntry(null);
+      pendingFocus.current = "main";
+    } catch {
+      if (!controller.signal.aborted) setQueueEntry({ id, failed: true });
+    }
+  }
   function guard(action: () => void) {
     if (saving) return;
-    if (dirty) setPending(() => action);
-    else action();
+    if (dirty)
+      setPending(() => () => {
+        forgetActiveDraft();
+        cancelQueueEntry();
+        action();
+      });
+    else {
+      cancelQueueEntry();
+      action();
+    }
   }
   function selectRecord(record: ComponentRecord) {
     guard(() => {
@@ -318,6 +597,60 @@ function App() {
       );
     }
   }
+  async function checkCreation() {
+    const controller = new AbortController();
+    draftRequest.current?.abort();
+    draftRequest.current = controller;
+    setSaving(true);
+    setCheckingCreation(true);
+    setCreationCandidate(null);
+    setFailure("");
+    try {
+      const inventory = await api.list(controller.signal);
+      if (controller.signal.aborted) return;
+      const name = draft.name.trim();
+      const slug = name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+      const match = inventory.find(
+        (record) =>
+          record.id === slug ||
+          record.name.toLowerCase() === name.toLowerCase(),
+      );
+      setRecords(inventory);
+      if (match && compareDrafts(match, cleanDraft(draft)).length === 0) {
+        setSelectedId(match.id);
+        setEditing(false);
+        forgetActiveDraft();
+        clearFeedback();
+        setMessage(
+          `Your draft matches saved component ${match.name}, revision ${match.revision}. No new save was made.`,
+        );
+        pendingFocus.current = "editor";
+      } else if (match) {
+        setCreationCandidate(match);
+        setFailure(
+          "A saved component uses this name or identifier but has different fields. Your draft is retained. Choose to compare it as an edit, or change the name and check again.",
+        );
+      } else {
+        setUncertain(false);
+        setMessage(
+          "No saved component currently matches this name or identifier. Review your draft before retrying creation; the server still checks name uniqueness.",
+        );
+      }
+    } catch {
+      if (!controller.signal.aborted)
+        setFailure(
+          "The saved inventory could not be checked. Your draft is retained and creation remains locked; retry the check.",
+        );
+    } finally {
+      if (!controller.signal.aborted) {
+        setSaving(false);
+        setCheckingCreation(false);
+      }
+    }
+  }
   async function save(event: FormEvent) {
     event.preventDefault();
     if (saving || conflict || uncertain) return;
@@ -327,6 +660,7 @@ function App() {
     const fields = validateDraft(draft);
     setErrors(fields);
     if (Object.keys(fields).length) return;
+    protectDraftCopy(true); // Persist the uncertain marker before a write can leave this tab.
     setSaving(true);
     try {
       const record = await api.save(draft, selected);
@@ -337,6 +671,7 @@ function App() {
       );
       setSelectedId(record.id);
       setEditing(false);
+      forgetActiveDraft();
       setDraftSource(null);
       setErrors({});
       setMessage(
@@ -347,14 +682,14 @@ function App() {
       if (error instanceof ApiError) {
         setErrors(error.fields);
         setConflict(error.status === 409);
-        setUncertain(!!selected && error.status >= 500);
+        setUncertain(error.status >= 500);
         setFailure(error.message);
       } else {
-        setUncertain(!!selected);
+        setUncertain(true);
         setFailure(
           selected
             ? "The save could not be confirmed. Your draft is still here. Compare with the latest saved record before saving again."
-            : "The save failed. Your draft is still here. Check the server and try again.",
+            : "The save could not be confirmed. Your draft is still here. Check the saved inventory before retrying creation.",
         );
       }
     } finally {
@@ -448,19 +783,21 @@ function App() {
           <div className="intro-line">
             <div>
               <h1>
-                {view === "overview"
-                  ? "System overview"
-                  : view === "updates"
-                    ? "Inventory updates"
-                    : view === "queue"
-                      ? "Review queue"
-                      : view === "review"
-                        ? "Readiness reviews"
-                        : view === "import"
-                          ? "Import specifications"
-                          : view === "reading"
-                            ? "Reading room"
-                            : "Component registry"}
+                {view === "settings"
+                  ? "Workspace settings"
+                  : view === "overview"
+                    ? "System overview"
+                    : view === "updates"
+                      ? "Inventory updates"
+                      : view === "queue"
+                        ? "Review queue"
+                        : view === "review"
+                          ? "Readiness reviews"
+                          : view === "import"
+                            ? "Import specifications"
+                            : view === "reading"
+                              ? "Reading room"
+                              : "Component registry"}
               </h1>
               <p className="lede">A place to make the systems useful.</p>
             </div>
@@ -485,6 +822,7 @@ function App() {
             ["import", "Import specifications"],
             ["review", "Readiness reviews"],
             ["queue", "Review queue"],
+            ["settings", "Settings"],
           ].map(([key, label]) => (
             <a
               key={key}
@@ -510,6 +848,123 @@ function App() {
           </p>
           <p>Local SQLite registry · Experimental application</p>
         </div>
+        {storageFailure && <Notice kind="error">{storageFailure}</Notice>}
+        {!loading &&
+          !editing &&
+          !reviewDirty &&
+          !settingsDirty &&
+          storedDrafts.length > 0 && (
+            <section className="stack" aria-labelledby="browser-drafts-title">
+              <h2 id="browser-drafts-title">
+                Recover unfinished specifications
+              </h2>
+              <p>
+                These browser copies have not been committed to the registry.
+                Restore a copy to review it, or discard it. Copies belong to
+                this browser address; confirm you are using the intended
+                registry.
+              </p>
+              <ul className="stack">
+                {storedDrafts.map((item) => (
+                  <li key={item.id}>
+                    <strong>{item.draft.name || "Unnamed component"}</strong>
+                    {" · "}
+                    {new Date(item.savedAt).toLocaleString("en-US", {
+                      timeZone: "America/New_York",
+                      timeZoneName: "short",
+                    })}
+                    {item.recordId
+                      ? ` · editing revision ${item.baseRevision}`
+                      : " · new component"}
+                    <div className="actions">
+                      <Button
+                        disabled={!!draftRestore || !!loadError || saving}
+                        onClick={() => void restoreDraft(item)}
+                        aria-label={`Restore draft ${item.draft.name || "Unnamed component"}`}
+                      >
+                        Restore draft
+                      </Button>
+                      <Button
+                        disabled={!!draftRestore || saving}
+                        variant="secondary"
+                        onClick={() => discardStoredDraft(item)}
+                        aria-label={`Discard draft ${item.draft.name || "Unnamed component"}`}
+                      >
+                        Discard draft
+                      </Button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              {draftRestore && (
+                <Notice>
+                  <p>Loading the draft’s editing base…</p>
+                  <Button variant="secondary" onClick={cancelQueueEntry}>
+                    Cancel restoring draft
+                  </Button>
+                </Notice>
+              )}
+              {draftFailure && (
+                <ErrorSummary
+                  ref={draftFeedback}
+                  title="Draft could not be restored"
+                >
+                  <p>{draftFailure}</p>
+                </ErrorSummary>
+              )}
+            </section>
+          )}
+        {invalidDraftKeys.length > 0 && (
+          <Notice kind="error">
+            <p>
+              Some browser recovery copies are unreadable or use an unsupported
+              format. They have been retained.
+            </p>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                try {
+                  for (const key of invalidDraftKeys)
+                    localStorage.removeItem(key);
+                  refreshStoredDrafts();
+                } catch {
+                  setStorageFailure(
+                    "Unreadable recovery copies could not be removed.",
+                  );
+                }
+              }}
+            >
+              Discard unreadable recovery copies
+            </Button>
+          </Notice>
+        )}
+        {queueEntry &&
+          (queueEntry.failed ? (
+            <ErrorSummary
+              ref={queueEntryError}
+              title="Review could not be opened"
+            >
+              <p>
+                The saved record could not be loaded. Your selection and queue
+                filters are retained.
+              </p>
+              <div className="actions">
+                <Button onClick={() => void openQueueRecord(queueEntry.id)}>
+                  Retry opening review
+                </Button>
+                <Button variant="secondary" onClick={cancelQueueEntry}>
+                  Cancel opening review
+                </Button>
+              </div>
+            </ErrorSummary>
+          ) : (
+            <Notice>
+              <p>Opening the latest saved record…</p>
+              <Button variant="secondary" onClick={cancelQueueEntry}>
+                Cancel opening review
+              </Button>
+            </Notice>
+          ))}
         {loading ? (
           <Notice>Loading the component registry…</Notice>
         ) : loadError ? (
@@ -517,16 +972,23 @@ function App() {
             <Notice kind="error">{loadError}</Notice>
             <Button onClick={() => void load()}>Retry loading</Button>
           </div>
+        ) : view === "settings" ? (
+          <WorkbenchSettings
+            value={preferences.value}
+            issue={preferences.issue}
+            onDirty={setSettingsDirty}
+            onCleared={refreshStoredDrafts}
+            onSaved={(value) => {
+              setPreferences({ value, issue: "" });
+              setPageSize(value.pageSize);
+            }}
+          />
         ) : view === "queue" ? (
           <ReviewQueue
             onLocationChange={setQueueSearch}
             onOpen={(id) =>
               guard(() => {
-                setSelectedId(id);
-                setView("review");
-                setEditing(false);
-                clearFeedback();
-                pendingFocus.current = "main";
+                void openQueueRecord(id);
               })
             }
           />
@@ -866,6 +1328,33 @@ function App() {
                   </div>
                 )}
               </div>
+              {checkingCreation && (
+                <Notice>
+                  <p>Checking the saved inventory…</p>
+                  <Button
+                    variant="secondary"
+                    onClick={() => {
+                      draftRequest.current?.abort();
+                      setCheckingCreation(false);
+                      setSaving(false);
+                      setFailure(
+                        "The inventory check was cancelled. Your draft is retained; check again before saving.",
+                      );
+                    }}
+                  >
+                    Cancel inventory check
+                  </Button>
+                </Notice>
+              )}
+              {editing && (
+                <p className="small muted">
+                  {draftProtected
+                    ? "Draft protected in this browser. Save specification commits it to the registry."
+                    : preferences.value.protectDrafts
+                      ? "Changes are not yet saved to the registry."
+                      : "Browser draft protection is off. Save specification before leaving this page."}
+                </p>
+              )}
               {message && <Notice kind="success">{message}</Notice>}
               {!recoveryOpen && (Object.keys(errors).length > 0 || failure) && (
                 <ErrorSummary
@@ -884,7 +1373,29 @@ function App() {
                       Compare with latest saved record
                     </Button>
                   )}
-                  {(conflict || uncertain) && (
+                  {editing && !selected && uncertain && (
+                    <div className="actions">
+                      <Button
+                        disabled={checkingCreation}
+                        onClick={() => void checkCreation()}
+                      >
+                        Check saved inventory
+                      </Button>
+                      {creationCandidate && (
+                        <Button
+                          onClick={() => {
+                            setSelectedId(creationCandidate.id);
+                            setConflict(true);
+                            setRecoveryOpen(true);
+                            setCreationCandidate(null);
+                          }}
+                        >
+                          Compare as an edit of {creationCandidate.name}
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                  {selected && (conflict || uncertain) && (
                     <Button
                       variant="secondary"
                       onClick={() => guard(() => void reloadRecord())}
@@ -913,6 +1424,7 @@ function App() {
                     const changed =
                       compareDrafts(latest, cleanDraft(resolved)).length > 0;
                     setEditing(changed);
+                    if (!changed) forgetActiveDraft();
                     setMessage(
                       changed
                         ? `Choices prepared as a draft based on revision ${latest.revision}. Review the fields, then save; nothing has been written yet.`

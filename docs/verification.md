@@ -4,6 +4,24 @@ Registry implementation, structured reviews, and review queue · October 22, 202
 
 The local workbench builds against React 19.3.1, Vite 8.3.5, TypeScript 7.0.2, Node 24.19.0, and the published theme 2.1.0 packages. Package lockfiles pin the installed dependency graph.
 
+## Current continuation: browser recovery and settings
+
+The current app/package builds and native/ref fixtures pass, with 73 Node tests and independent installation/rendering of both packed 22-component libraries. The browser suite now contains 176 unique cases per engine. Local validation used Chromium 153.0.8010.0 from an isolated npm headless runtime, managed Firefox 157.0, and managed WebKit build 2370 on Linux. Each engine's broad run passed 172 cases and exposed the same four outdated-fixture assertions: the earlier-installation helper still included Switch and Tabs, producing 29 rather than the intended 27 records. After removing both additions from that historical fixture, all 18 inventory cases passed again in each engine. This covers every case per engine across the broad and corrective runs; see the PR's exact-head CI for the clean full-suite run on the final fixture. Clean-run CI now has separate Chromium/Firefox/WebKit jobs.
+
+New checks cover incomplete specification drafts across reload and a fresh browser context; explicit Restore/Discard; validation after restore; changed editing bases with comparison before saving; failed/cancelled reads retaining offers; independent tab copies; storage denial without a false protection claim; new-record response loss without replay/history duplication; unsuccessful creation/check/retry; deliberate conversion of a different matching saved component into an edit; and a synchronous uncertain marker before the POST proceeds. New queue cases exercise a cross-window addition, failed entry with retained selection/filters, retry, and navigation cancelling a late entry.
+
+Settings checks cover manual tab arrows/Home/Enter activation; native switch Space activation; value retention across panels; unsaved navigation; saved default section/page size and explicit URL precedence; disabling future protection; failed preference writes and retry; confirmed/cancelled clearing of browser copies without changing saved history; and eight light/dark 320/1440px axe/reflow/text-spacing/enlarged-text cases. Browser-recovery offers also receive fresh-context persistence, keyboard focus, 320px enlarged-text/spacing, axe and emulated forced-colors checks. This is emulation, not manual Windows high-contrast or native mobile-device review.
+
+Both current overviews and both settings captures were visually inspected; reproduce with `PLAYWRIGHT_EXECUTABLE_PATH=<available Chromium> node scripts/capture-settings.mjs`, or omit the variable for the installed managed engine. The settings reference uses saved empty-evidence seed records and does not fabricate review observations. Private package manifests, MIT distribution, loopback binding and all database/API schemas remain unchanged.
+
+Local host adaptations: Firefox needed container-specific content/RDD sandbox environment switches. WebKit dependencies were downloaded/extracted into a scratch runtime; its local wrapper retained that library search path. Playwright's installed-package host precheck was skipped after direct library checks because these libraries were extracted rather than installed globally. CI uses normal engine/dependency installation on clean Ubuntu runners. These adaptations are not application code changes.
+
+Open review remains: manual screen readers; actual browser zoom; native Safari/mobile/Windows behavior rather than Linux engine emulation; complete forced-colors visual review; right-to-left/localization; actual paper/PDF pagination; sustained consumer use; and real evidence verification. Browser specification copies do not protect unsaved readiness observations, comparison choices, file selections or settings. They are origin/profile scoped and are not bound to a cryptographic database identity.
+
+## Earlier checkpoint checks
+
+The following records describe the earlier 20-component/144-case checkpoint and its preceding work. They remain historical context; current counts and boundaries appear above.
+
 Completed checks:
 
 - Retained-draft recovery: every editable field, overlapping/one-sided changes, no implicit source selection or text merge, outer whitespace/target-order normalization, defensive identity/revision checks, copied arrays and no metadata injection. Explicit normal saves preserve latest implementation/review metadata and append history, reject a second conflict and survive real SQLite close/reopen. DefinitionList keeps native dl/dt/dd grouping, attributes/ref types, React text escaping and empty-state composition in both packages.
@@ -41,3 +59,4 @@ The structured-review slice adds 10 Node cases (54 total) and 21 browser cases (
 The readiness checkpoint head `126c5d5f17e02d50cb643381e72ff37147671c69` passed [CI run 39746813933](https://github.com/howardjp/design-workbench/actions/runs/39746813933) on October 22, 2026: clean installation, build/type checks, all 54 Node tests, all 110 managed-Chromium browser cases together, and isolated package installation/rendering. A documentation-only follow-up removes stale rolling counts from the reading-room guide and pins this result; read the PR for the final head CI.
 
 Verified queue CI checkpoint: head `3b24bb4f8be561a1d7fc78571e4c3033fa88abab`, [run 39749918023](https://github.com/howardjp/design-workbench/actions/runs/39749918023), success on October 22, 2026. Clean installation, builds/native-ref types, all 60 Node tests, all 125 managed-Chromium browser cases together, and both isolated package consumers passed. The following documentation-only commit records this result and keeps Pagination inside the rendered component-contract table; app/package/seed/test files are unchanged. Fetch the latest PR head and CI before continuing.
+

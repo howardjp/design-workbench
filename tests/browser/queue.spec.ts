@@ -58,6 +58,95 @@ const list = (page: Page) => page.locator(".queue-list");
 const queueReady = (page: Page) =>
   expect(page.locator(".queue-counts")).toBeVisible();
 for (const family of ["martlet", "krigsvold"]) {
+  test(`${family}: refreshed queue opens a cross-window addition missing from the parent inventory`, async ({
+    page,
+    registry,
+  }) => {
+    await page.goto(`${registry.base}/${family}/?view=queue&record=button`);
+    await queueReady(page);
+    const record = registry.store.save(null, {
+      ...newDraft(),
+      name: "CrossWindow",
+      summary: "Created in another window after the inventory loaded.",
+      acceptanceCriteria: "A refreshed queue must open this new record safely.",
+    });
+    await page
+      .getByRole("button", { name: "Refresh review queue", exact: true })
+      .click();
+    await page
+      .getByLabel("Search review queue", { exact: true })
+      .fill("CrossWindow");
+    await page
+      .getByRole("link", { name: "Review CrossWindow", exact: true })
+      .click();
+    await expect(
+      page.getByLabel("Component to review", { exact: true }),
+    ).toHaveValue(record.id);
+    await expect(page.locator(".review-context")).toContainText(record.summary);
+    expect(registry.store.history(record.id)).toHaveLength(1);
+  });
+  test(`${family}: failed queue entry retains selection and retries; navigation cancels a late entry`, async ({
+    page,
+    registry,
+  }) => {
+    await page.goto(`${registry.base}/${family}/?view=queue&record=button`);
+    await queueReady(page);
+    await page
+      .getByLabel("Search review queue", { exact: true })
+      .fill("TextInput");
+    await page.route("**/api/components/text-input", (route) => route.abort());
+    await page
+      .getByRole("link", { name: "Review TextInput", exact: true })
+      .click();
+    await expect(
+      page.getByRole("button", { name: "Retry opening review", exact: true }),
+    ).toBeVisible();
+    await expect(page).toHaveURL(/record=button/);
+    await expect(
+      page.getByLabel("Search review queue", { exact: true }),
+    ).toHaveValue("TextInput");
+    await page.unroute("**/api/components/text-input");
+    await page
+      .getByRole("button", { name: "Retry opening review", exact: true })
+      .click();
+    await expect(
+      page.getByLabel("Component to review", { exact: true }),
+    ).toHaveValue("text-input");
+    await page
+      .getByRole("navigation", { name: "Workspace sections" })
+      .getByRole("link", { name: "Review queue", exact: true })
+      .click();
+    await queueReady(page);
+    let release!: () => void;
+    const gate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    await page.route("**/api/components/button", async (route) => {
+      await gate;
+      await route.continue().catch(() => {});
+    });
+    await page
+      .getByLabel("Search review queue", { exact: true })
+      .fill("Button");
+    await page
+      .getByRole("link", { name: "Review Button", exact: true })
+      .click();
+    await expect(
+      page.getByText("Opening the latest saved record…", { exact: true }),
+    ).toBeVisible();
+    await page
+      .getByRole("navigation", { name: "Workspace sections" })
+      .getByRole("link", { name: "Overview", exact: true })
+      .click();
+    release();
+    await expect(
+      page.getByRole("heading", { name: "System overview", exact: true }),
+    ).toBeVisible();
+    await expect(page).toHaveURL(/record=text-input/);
+    await expect(
+      page.getByText("Opening the latest saved record…", { exact: true }),
+    ).toHaveCount(0);
+  });
   test(`${family}: queue filters, keyboard pages, URL reload and family navigation retain identical state`, async ({
     page,
     registry,
@@ -290,15 +379,13 @@ test("queue content matches with family-specific typography and row composition;
     ).toContainText("Page 4 of 4");
     await expect(page).toHaveURL(/rq-page=4/);
     snapshots.push(
-      await page
-        .locator(".queue-list")
-        .evaluate((el) => ({
-          text: el.textContent,
-          font: getComputedStyle(el.querySelector("h3")!).fontFamily,
-          columns: getComputedStyle(
-            el.firstElementChild!,
-          ).gridTemplateColumns.split(" ").length,
-        })),
+      await page.locator(".queue-list").evaluate((el) => ({
+        text: el.textContent,
+        font: getComputedStyle(el.querySelector("h3")!).fontFamily,
+        columns: getComputedStyle(
+          el.firstElementChild!,
+        ).gridTemplateColumns.split(" ").length,
+      })),
     );
   }
   expect(snapshots[0].text).toBe(snapshots[1].text);

@@ -857,3 +857,19 @@ body {
 .workspace--recovery .collection {
   display: none;
 }
+
+.settings-workspace {
+  max-inline-size: 70rem;
+}
+.settings-fields {
+  max-inline-size: 48rem;
+}
+.settings-danger {
+  border-block-start: 2px solid var(--ui-line);
+  padding-block-start: 1.5rem;
+  margin-block-start: 1.5rem;
+}
+.krigsvold .settings-fields {
+  border-inline-start: 3px solid var(--ui-accent);
+  padding-inline-start: 1.25rem;
+}

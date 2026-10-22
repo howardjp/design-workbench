@@ -351,3 +351,51 @@ for (const [family, UI] of [
     const empty = renderToStaticMarkup(h(UI.DefinitionList, { items: [] }));
     assert.doesNotMatch(empty, /<dt>/);
   });
+
+for (const [family, UI] of [
+  ["martlet", Martlet],
+  ["krigsvold", Krigsvold],
+]) {
+  test(`${family} Switch preserves native forms and Tabs provides linked, hidden, disabled panels`, () => {
+    const toggle = renderToStaticMarkup(
+      h(UI.Switch, {
+        label: "Protect drafts",
+        name: "protect",
+        value: "yes",
+        defaultChecked: true,
+        disabled: true,
+      }),
+    );
+    assert.match(toggle, /role="switch"/);
+    assert.match(toggle, /type="checkbox"/);
+    assert.match(toggle, /name="protect"/);
+    assert.match(toggle, /checked=""/);
+    assert.match(toggle, /disabled=""/);
+    const html = renderToStaticMarkup(
+      h(UI.Tabs, {
+        label: "Settings",
+        value: "missing",
+        onValueChange() {},
+        items: [
+          {
+            id: "disabled",
+            label: "Disabled",
+            content: "Disabled content",
+            disabled: true,
+          },
+          { id: "one", label: "Workspace", content: "Workspace content" },
+          { id: "two", label: "Recovery", content: "<script>escaped</script>" },
+        ],
+      }),
+    );
+    assert.match(
+      html,
+      /role="tablist" aria-label="Settings" aria-orientation="horizontal"/,
+    );
+    assert.equal((html.match(/aria-selected="true"/g) ?? []).length, 1);
+    assert.equal((html.match(/tabindex="-1" disabled=""/g) ?? []).length, 1);
+    assert.match(html, /aria-selected="true" tabindex="0"/);
+    assert.equal((html.match(/hidden=""/g) ?? []).length, 2);
+    assert.match(html, /&lt;script&gt;escaped&lt;\/script&gt;/);
+  });
+}

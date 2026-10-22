@@ -107,3 +107,27 @@ export const definitionContracts = [Martlet, Krigsvold].map((UI) => (
     ]}
   />
 ));
+
+export const settingsContracts = [Martlet, Krigsvold].map((UI) => (
+  <>
+    <UI.Switch
+      label="Protect drafts"
+      defaultChecked
+      ref={createRef<HTMLInputElement>()}
+      name="protect"
+      onChange={(event) => event.currentTarget.checked}
+      aria-describedby="help"
+    />
+    <UI.Tabs
+      ref={createRef<HTMLDivElement>()}
+      label="Settings"
+      value="one"
+      onValueChange={(id) => void id}
+      orientation="vertical"
+      items={[
+        { id: "one", label: "General", content: <p>One</p> },
+        { id: "two", label: "Recovery", content: <p>Two</p>, disabled: true },
+      ]}
+    />
+  </>
+));

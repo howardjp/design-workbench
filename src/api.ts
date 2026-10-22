@@ -66,7 +66,8 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ token }),
     }),
-  list: () => request<ComponentRecord[]>("/api/components"),
+  list: (signal?: AbortSignal) =>
+    request<ComponentRecord[]>("/api/components", { signal }),
   get: (id: string, signal?: AbortSignal) =>
     request<ComponentRecord>(`/api/components/${encodeURIComponent(id)}`, {
       signal,
