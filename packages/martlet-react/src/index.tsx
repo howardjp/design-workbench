@@ -1,5 +1,5 @@
 import {
-  useEffect,
+  useLayoutEffect,
   useId,
   useRef,
   type ReactNode,
@@ -165,7 +165,7 @@ export function Dialog({
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const id = useId();
-  useEffect(() => {
+  useLayoutEffect(() => {
     const dialog = ref.current;
     if (!dialog) return;
     if (open && !dialog.open) dialog.showModal();

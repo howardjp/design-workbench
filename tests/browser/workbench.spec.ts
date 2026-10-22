@@ -126,6 +126,7 @@ for (const family of ["martlet", "krigsvold"]) {
       .getByRole("button", { name: "Discard changes", exact: true })
       .click();
     await expect(page.locator(".spec-summary")).toHaveText(concurrent);
+    await expect(page.locator(".editor")).toBeFocused();
   });
   test(`${family}: modal keyboard dismissal and unsaved navigation`, async ({
     page,
@@ -149,6 +150,9 @@ for (const family of ["martlet", "krigsvold"]) {
     ).toBeFocused();
     await page.keyboard.press("Escape");
     await expect(dialog).not.toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Inspect Card", exact: true }),
+    ).toBeFocused();
     await expect(page.getByLabel("Summary", { exact: true })).toHaveValue(
       "An unsaved component specification that should stay in the editor.",
     );
@@ -161,6 +165,23 @@ for (const family of ["martlet", "krigsvold"]) {
     await expect(
       page.getByRole("heading", { level: 2, name: "Card", exact: true }),
     ).toBeVisible();
+    await expect(page.locator(".editor")).toBeFocused();
+    await page
+      .getByRole("button", { name: "Edit specification", exact: true })
+      .click();
+    await page
+      .getByLabel("Summary", { exact: true })
+      .fill("A cancelled edit must return focus to the inspected component.");
+    await page
+      .getByRole("button", { name: "Cancel editing", exact: true })
+      .click();
+    await page
+      .getByRole("button", { name: "Discard changes", exact: true })
+      .click();
+    await expect(
+      page.getByRole("heading", { level: 2, name: "Card", exact: true }),
+    ).toBeVisible();
+    await expect(page.locator(".editor")).toBeFocused();
   });
   for (const width of [320, 1440])
     for (const mode of ["light", "dark"]) {

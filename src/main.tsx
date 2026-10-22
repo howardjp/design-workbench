@@ -279,6 +279,7 @@ function App() {
       setEditing(false);
       clearFeedback();
       setMessage("Loaded the latest saved revision.");
+      pendingFocus.current = "editor";
     } catch {
       setFailure(
         "The saved record could not be loaded. Your draft is still here.",
@@ -893,6 +894,7 @@ function App() {
                         guard(() => {
                           setEditing(false);
                           clearFeedback();
+                          pendingFocus.current = "editor";
                           if (!selected) setSelectedId(records[0]?.id ?? null);
                         })
                       }
