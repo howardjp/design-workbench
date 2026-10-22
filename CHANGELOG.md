@@ -11,4 +11,8 @@
 - Saved browser settings for starting section, inventory page size, future draft protection, and confirmed clearing of browser recovery copies.
 - Browser-selectable regression configuration; all claimed results and manual-review gaps belong in docs/verification.md.
 
-No npm publication, remote hosting, or stable component certification is claimed. SQLite schema 2 and API/export schema 1 remain unchanged.
+- Independent static React documentation apps, each with all 22 actual component specimens, relevant controls, copyable standalone JSX, API/state contracts, source-install instructions and isolated family assets.
+- Browser copy persistence extracted into a dedicated hook while saved inventory and historical editing bases remain separate.
+- Manual experimental candidate preparation workflow, package changelogs, explicit next/public/provenance configuration, and source/hash manifests. Packages remain private and unpublished.
+
+No npm publication or stable component certification is claimed. Documentation review Sites are separate private static deployments; the unauthenticated workbench is not hosted. SQLite schema 2 and API/export schema 1 remain unchanged.

@@ -15,7 +15,8 @@ import { ReadinessReviews } from "./readiness-review";
 import { ImportRegistry } from "./import-registry";
 import { ReadingRoom } from "./reading-room";
 import { ConflictRecovery } from "./conflict-recovery";
-import { readDrafts, writeDraft, removeDraft } from "./draft-storage.mjs";
+import { writeDraft, removeDraft } from "./draft-storage.mjs";
+import { useBrowserDrafts } from "./use-browser-drafts";
 import type { StoredDraft } from "./draft-types";
 import { WorkbenchSettings } from "./settings";
 import { readPreferences } from "./preferences.mjs";
@@ -86,17 +87,12 @@ function App() {
     if (queueEntry?.failed) queueEntryError.current?.focus();
   }, [queueEntry]);
   useEffect(() => () => queueEntryRequest.current?.abort(), []);
-  const activeDraftId = useRef<string | null>(null);
-  const [storedDrafts, setStoredDrafts] = useState<StoredDraft[]>([]);
-  const [storageFailure, setStorageFailure] = useState("");
-  const [invalidDraftKeys, setInvalidDraftKeys] = useState<string[]>([]);
   const [checkingCreation, setCheckingCreation] = useState(false);
   const [creationCandidate, setCreationCandidate] =
     useState<ComponentRecord | null>(null);
   const [draftRestore, setDraftRestore] = useState<string | null>(null);
   const draftRequest = useRef<AbortController | null>(null);
   const [draftFailure, setDraftFailure] = useState("");
-  const [draftProtected, setDraftProtected] = useState(false);
   const draftFeedback = useRef<HTMLDivElement>(null);
   const [queueSearch, setQueueSearch] = useState(location.search);
   const [mode, setMode] = useState(storedMode);
@@ -191,104 +187,26 @@ function App() {
     [query, maturity, platform, evidence, sortKey, direction, pageSize],
   );
 
-  function refreshStoredDrafts() {
-    try {
-      const result = readDrafts(localStorage);
-      setStoredDrafts(
-        result.drafts.filter(
-          (item) => item.id !== activeDraftId.current,
-        ) as StoredDraft[],
-      );
-      setInvalidDraftKeys(result.invalidKeys);
-    } catch {
-      setStorageFailure(
-        "Browser draft storage is unavailable. Keep this page open until you save your specification.",
-      );
-    }
-  }
-  function forgetActiveDraft() {
-    if (activeDraftId.current) {
-      try {
-        removeDraft(localStorage, activeDraftId.current);
-      } catch {
-        setStorageFailure(
-          "The saved browser draft could not be removed. A recovery copy may still appear when you return.",
-        );
-      }
-    }
-    activeDraftId.current = null;
-    setDraftProtected(false);
-    refreshStoredDrafts();
-  }
-  useEffect(() => {
-    refreshStoredDrafts();
-    const changed = (event: StorageEvent) => {
-      if (
-        event.key === null ||
-        event.key?.startsWith("design-workbench:specification-draft:")
-      )
-        refreshStoredDrafts();
-    };
-    window.addEventListener("storage", changed);
-    return () => {
-      window.removeEventListener("storage", changed);
-      draftRequest.current?.abort();
-    };
-  }, []);
-  function protectDraftCopy(markUncertain: boolean) {
-    if (!preferences.value.protectDrafts) return;
-    activeDraftId.current ??= crypto.randomUUID();
-    try {
-      writeDraft(localStorage, {
-        schemaVersion: 1,
-        id: activeDraftId.current,
-        savedAt: new Date().toISOString(),
-        recordId: editingBase?.id ?? null,
-        baseRevision: editingBase?.revision ?? null,
-        baseDraft: editingBase ? toDraft(editingBase) : null,
-        draft,
-        uncertain: markUncertain,
-      });
-      setDraftProtected(true);
-      setStorageFailure("");
-    } catch {
-      setDraftProtected(false);
-      setStorageFailure(
-        "This draft could not be protected in browser storage. Keep this page open until you save it to the registry.",
-      );
-    }
-  }
-  useLayoutEffect(() => {
-    if (!editing) return;
-    if (!preferences.value.protectDrafts) {
-      setDraftProtected(false);
-      return;
-    }
-    const changed =
-      JSON.stringify(draft) !==
-      JSON.stringify(editingBase ? toDraft(editingBase) : newDraft());
-    if (!changed && !uncertain && !saving) {
-      if (activeDraftId.current) {
-        try {
-          removeDraft(localStorage, activeDraftId.current);
-          setDraftProtected(false);
-        } catch {
-          setStorageFailure(
-            "The browser draft could not be cleared. A recovery copy may still appear when you return.",
-          );
-        }
-      }
-      return;
-    }
-    protectDraftCopy(uncertain || saving);
-  }, [
+  const {
+    activeDraftId,
+    storedDrafts,
+    storageFailure,
+    invalidDraftKeys,
+    draftProtected,
+    setStorageFailure,
+    refreshStoredDrafts,
+    forgetActiveDraft,
+    protectDraftCopy,
+    discardStoredDraft,
+  } = useBrowserDrafts({
     editing,
     draft,
     editingBase,
     uncertain,
     saving,
-    preferences.value.protectDrafts,
-  ]);
+    enabled: preferences.value.protectDrafts,
+  });
+  useEffect(() => () => draftRequest.current?.abort(), []);
   useLayoutEffect(() => {
     if (draftFailure) draftFeedback.current?.focus();
   }, [draftFailure]);
@@ -372,16 +290,6 @@ function App() {
         );
     } finally {
       if (!controller.signal.aborted) setDraftRestore(null);
-    }
-  }
-  function discardStoredDraft(item: StoredDraft) {
-    try {
-      removeDraft(localStorage, item.id);
-      refreshStoredDrafts();
-    } catch {
-      setStorageFailure(
-        "The browser draft could not be discarded. It remains available for recovery.",
-      );
     }
   }
   async function load() {

@@ -19,7 +19,9 @@ Before 1.0, adopt and publish a stable support policy. Proposed minimum: depreca
 5. Remove each package's private flag only in the release change; publish the verified tarballs with provenance under `next`. Keep the default `latest` tag unchanged until a separately reviewed stable release decision.
 6. Install the actual registry versions in an independent example; inspect package contents and confirm both light/dark family presentations. Announce only the versions and capabilities actually available.
 
-No publishing workflow or token has been added by this preparation. Current manifests intentionally retain `private: true`. A saved readiness observation or maturity value does not authorize an npm release.
+A manual `Prepare experimental React candidates` workflow now gates candidate creation on clean builds, Node checks, three browser engines and isolated package consumers at the same commit. It uploads tarballs and a JSON manifest with source commit, integrity, SHA-256, included files and remaining release steps. It has read-only repository permissions and no npm publication step or publishing credential. Local preparation after successful checks uses `node scripts/prepare-release.mjs both FULL_SOURCE_COMMIT` (or select one family). Package changelogs are included in each tarball.
+
+Current manifests intentionally retain `private: true`; `publishConfig` records public access, the `next` tag and provenance for the later reviewed release change. A saved readiness observation or maturity value does not authorize an npm release.
 
 ## Rollback and migrations
 

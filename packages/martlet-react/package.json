@@ -9,7 +9,8 @@
     "dist",
     "README.md",
     "LICENSE",
-    "NOTICE.md"
+    "NOTICE.md",
+    "CHANGELOG.md"
   ],
   "exports": {
     ".": {
@@ -34,5 +35,10 @@
     "type": "git",
     "url": "git+https://github.com/howardjp/design-workbench.git",
     "directory": "packages/martlet-react"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "next",
+    "provenance": true
   }
 }

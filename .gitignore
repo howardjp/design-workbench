@@ -5,3 +5,6 @@ var/
 test-results/
 playwright-report/
 *.tgz
+
+docs-dist/
+release-candidates/

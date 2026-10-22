@@ -4,7 +4,17 @@ Registry implementation, structured reviews, and review queue · October 22, 202
 
 The local workbench builds against React 19.3.1, Vite 8.3.5, TypeScript 7.0.2, Node 24.19.0, and the published theme 2.1.0 packages. Package lockfiles pin the installed dependency graph.
 
-## Current continuation: browser recovery and settings
+## Current continuation: independent React documentation
+
+The documentation and candidate-preparation source builds/type-checks successfully. There are now 77 passing Node tests, including both families' exact export/contract coverage, real specimen rendering, 88 compiled-and-rendered standalone copied examples (22 × two families × default/altered controls), safe text quoting, family theme wrappers and emitted component/token/font/API isolation. Both package tarballs install and render outside the workspace; package-specific changelogs and release configuration are included. Local candidate preparation produces private/unpublished tarballs and source/SHA-256/integrity manifests. The manual CI workflow contains no npm publication step.
+
+Browser-copy coordination was extracted to useBrowserDrafts without changing storage/schema contracts or replacing the distinction between current saved records and historical editing bases. The existing 178-case suite is being rechecked in all three engines; consult the current PR's exact-head CI for final results. An initial Chromium run passed 177 and hit a temporary missing static file during an overlapping rebuild; its error snapshot showed the server's File not found response. A clean run leaves the workbench output fixed throughout browser tests. The prior baseline 8fb728bbf4031b9435c09c7502fcb1585cc74ef9 passed all three exact-head CI jobs in run 39854997327, including all 178 cases per engine.
+
+New documentation browser review is deliberately narrower than those workbench results: the initial Martlet landing layout and Button route/action/disabled/source-selection fallback were observed in the managed browser. Further observation was blocked by its URL policy. Correct family theme attributes were fixed during source review after those views. Full final docs visual review, dark/narrow layouts, screen readers and sustained use remain open. No docs-wide axe or cross-engine visual pass is claimed. The Appshell live specimen uses an isolated document to preserve one main landmark per document.
+
+See docs/react-sites.md for separate static targets, private review destinations and source provenance. The local administration API is not present in the docs outputs. Public custom domains, source-site changes, stable maturity and npm publication are not part of this checkpoint.
+
+## Previous continuation: browser recovery and settings
 
 The current app/package builds and native/ref fixtures pass, with 73 Node tests and independent installation/rendering of both packed 22-component libraries. The browser suite now contains 178 unique cases per engine (176 in the initial continuation and two cancellation regressions added during final review). Local validation used Chromium 153.0.8010.0 from an isolated npm headless runtime, managed Firefox 157.0, and managed WebKit build 2370 on Linux. Each engine's broad run passed 172 cases and exposed the same four outdated-fixture assertions: the earlier-installation helper still included Switch and Tabs, producing 29 rather than the intended 27 records. After removing both additions from that historical fixture, all 18 inventory cases passed again in each engine. This covers every case per engine across the broad and corrective runs; see the PR's exact-head CI for the clean full-suite run on the final fixture. Clean-run CI now has separate Chromium/Firefox/WebKit jobs.
 

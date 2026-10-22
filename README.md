@@ -29,6 +29,12 @@ Edits update the local registry and its revision history. Earlier contracts can 
 
 Both export AppShell, Button, TextInput, Select, Textarea, Field, Notice, Badge, DataTable, Dialog, Checkbox, Fieldset, Disclosure, ErrorSummary, Article, TableOfContents, FileInput, Radio, Pagination, DefinitionList, Switch, and Tabs. They consume the existing `@martlet/theme` / `@krigsvold/theme` 2.1.0 tokens and work in light and dark modes. Package APIs are experimental and unpublished. `npm run pack:react` produces tarballs for local installation. `private: true` prevents accidental registry publication until release contracts and trusted publishing are ready.
 
+## Independent React reference apps
+
+`npm run build:docs` creates `docs-dist/martlet` and `docs-dist/krigsvold`. Each is a complete static documentation app with 22 live specimens, state controls, copyable JSX, source-install guidance and component contracts. Only the selected family's components, styles and fonts enter each build. These outputs contain no local registry service. See [the documentation apps and review destinations](docs/react-sites.md).
+
+The manual candidate workflow prepares unpublished tarballs and source/hash manifests after verification. It cannot publish to npm. See [experimental release preparation](docs/release-policy.md).
+
 ## Specifications and direction
 
 - [Construction plan](docs/construction-plan.md)

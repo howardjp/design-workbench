@@ -8,8 +8,16 @@
     "skipLibCheck": true,
     "allowJs": true,
     "resolveJsonModule": true,
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "noEmit": true
   },
-  "include": ["src", "vite.config.ts", "packages/*/src"]
+  "include": [
+    "src",
+    "vite.config.ts",
+    "packages/*/src",
+    "docs-app/src",
+    "docs-app/vite.config.ts"
+  ]
 }
