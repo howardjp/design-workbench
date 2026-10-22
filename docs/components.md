@@ -1,6 +1,6 @@
 # React component contracts
 
-Version 0.1 · Experimental · October 21, 2026
+Version 0.1 · Experimental · October 22, 2026
 
 Both packages expose the same behavioral surface. Family-specific typography, spacing, emphasis, and shell composition come from their own styles and theme dependencies. The workbench consumes these exports directly. These are working requirements, not claims of sustained production validation. React 19 is the current supported rendering platform.
 
@@ -28,7 +28,6 @@ Every interactive component must preserve its native keyboard model, consumer at
 | ErrorSummary | Native div props/ref except title; title node; errors containing message and optional targetId; optional recovery children. Named alert, programmatically focusable. | The caller focuses the summary after an attempted operation fails. Field links focus explicit control IDs or focusable fieldsets; unlinked errors explain transport/operation failures. Long messages wrap. The component never clears drafts or focuses itself on mount. Martlet uses a roomier panel with a top rule; Krigsvold uses compact alignment and a leading rule. |
 | Article | Native article props/ref except title; required title node; titleLevel 1 (default) or 2; optional eyebrow, inline summary, metadata, contents, aside, contextLabel, footer; body children. | The generated title ID names the article. The caller owns coherent heading levels, native content, and routing. Context and body reflow at narrow widths; long text wraps; print keeps content and removes contents navigation. Martlet uses serif prose/right context; Krigsvold uses sans-serif prose/left context. No state, fetching, raw-HTML parser, or unsolicited focus is embedded. |
 | TableOfContents | Native nav props/ref except children; required readonly items containing id/label; optional visible label (default On this page). | A named navigation region contains ordered native fragment links. Caller IDs are unique and headings focusable for keyboard navigation. The consumer handles initial asynchronous fragment restoration. No menu, tablist, or custom arrow-key model. Long labels wrap; the list is omitted from print. |
-
 | Pagination | Controlled one-based page, pageCount, onPageChange; optional disabled and label (default Pagination); native nav props/ref except children. | Named navigation with native Previous page/Next page secondary buttons and a polite atomic page position. First/last boundaries and disabled prevent movement; Tab/Enter/Space remain native. Finite values truncate and clamp; nonfinite values become one. Wraps at narrow widths. Consumer owns fetching, route/query persistence, count, page size, recovery, and focus. English labels currently fixed; no numbered page links, RTL/localization, jump-to-page, or custom arrow model. |
 
 FieldControl describes the control attributes returned by Field. SummaryError describes an error message and optional targetId. ContentsItem describes a section ID/label pair. These are TypeScript types, not rendered components.
