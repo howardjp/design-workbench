@@ -170,6 +170,37 @@
     ]
   },
   {
+    "id": "checkbox",
+    "name": "Checkbox",
+    "category": "Input",
+    "summary": "Select an independent boolean value with a visible, clickable native label.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "Checkbox retains native keyboard behavior and consumer attributes.\nNames and group descriptions remain associated with their controls.\nBoth families remain usable at 320 CSS pixels and with enlarged text.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
+  },
+  {
     "id": "cluster",
     "name": "Cluster",
     "category": "Layout",
@@ -294,6 +325,37 @@
     ]
   },
   {
+    "id": "disclosure",
+    "name": "Disclosure",
+    "category": "Content",
+    "summary": "Reveal related supporting content using native details and summary semantics.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "Disclosure retains native keyboard behavior and consumer attributes.\nNames and group descriptions remain associated with their controls.\nBoth families remain usable at 320 CSS pixels and with enlarged text.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
+  },
+  {
     "id": "documentation-layout",
     "name": "DocumentationLayout",
     "category": "Layout",
@@ -334,6 +396,37 @@
       "React"
     ],
     "acceptanceCriteria": "Field exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
+  },
+  {
+    "id": "fieldset",
+    "name": "Fieldset",
+    "category": "Input",
+    "summary": "Group related controls under a shared legend with associated hints and errors.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "Fieldset retains native keyboard behavior and consumer attributes.\nNames and group descriptions remain associated with their controls.\nBoth families remain usable at 320 CSS pixels and with enlarged text.",
     "evidence": "",
     "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
     "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",

@@ -1,7 +1,7 @@
 import { StrictMode, useEffect, useRef, useState, type FormEvent } from "react";
 import { createRoot } from "react-dom/client";
-import * as Martlet from "@martlet/react";
-import * as Krigsvold from "@krigsvold/react";
+import { family, title, UI } from "./family";
+import { ReadinessDashboard } from "./readiness";
 import "@martlet/react/styles.css";
 import "@krigsvold/react/styles.css";
 import "@martlet/theme/fonts.css";
@@ -11,6 +11,7 @@ import {
   maturities,
   platforms,
   filterRecords,
+  sortRecords,
   newDraft,
   toDraft,
   validateDraft,
@@ -19,11 +20,6 @@ import { api, ApiError } from "./api";
 import type { ComponentRecord, Draft, HistoryEntry } from "./types";
 import "./workbench.css";
 
-const family = location.pathname.startsWith("/krigsvold")
-  ? "krigsvold"
-  : "martlet";
-const title = family === "martlet" ? "Martlet" : "Krigsvold";
-const UI = family === "martlet" ? Martlet : Krigsvold;
 const {
   AppShell,
   Button,
@@ -35,6 +31,9 @@ const {
   Badge,
   DataTable,
   Dialog,
+  Checkbox,
+  Fieldset,
+  Disclosure,
 } = UI;
 const initialRecordId = new URLSearchParams(location.search).get("record");
 function storedMode(): "light" | "dark" {
@@ -53,6 +52,18 @@ function App() {
   const [query, setQuery] = useState("");
   const [maturity, setMaturity] = useState("");
   const [platform, setPlatform] = useState("");
+  const [view, setView] = useState(
+    new URLSearchParams(location.search).get("view") === "overview"
+      ? "overview"
+      : "inventory",
+  );
+  const [evidence, setEvidence] = useState("");
+  const [sortKey, setSortKey] = useState<"name" | "maturity" | "updatedAt">(
+    "name",
+  );
+  const [direction, setDirection] = useState<"asc" | "desc">("asc");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<Draft>(newDraft() as Draft);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -75,7 +86,23 @@ function App() {
     query,
     maturity,
     platform,
+    evidence,
   ) as ComponentRecord[];
+  const ordered = sortRecords(
+    filtered,
+    sortKey,
+    direction,
+  ) as ComponentRecord[];
+  const pageCount = Math.max(1, Math.ceil(ordered.length / pageSize));
+  const currentPage = Math.min(page, pageCount);
+  const visibleRecords = ordered.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
+  );
+  useEffect(
+    () => setPage(1),
+    [query, maturity, platform, evidence, sortKey, direction, pageSize],
+  );
 
   async function load() {
     setLoading(true);
@@ -113,6 +140,7 @@ function App() {
     selectedId
       ? url.searchParams.set("record", selectedId)
       : url.searchParams.delete("record");
+    url.searchParams.set("view", view);
     window.history.replaceState(null, "", url);
     setHistory([]);
     setHistoryError("");
@@ -129,7 +157,7 @@ function App() {
     return () => {
       active = false;
     };
-  }, [selectedId, selected?.revision]);
+  }, [selectedId, selected?.revision, view]);
   useEffect(() => {
     if (!dirty) return;
     const guard = (event: BeforeUnloadEvent) => {
@@ -161,9 +189,32 @@ function App() {
       requestAnimationFrame(() => editorRef.current?.focus());
     });
   }
+  function navigateView(next: string) {
+    guard(() => {
+      setView(next);
+      setEditing(false);
+      clearFeedback();
+      requestAnimationFrame(() => document.getElementById("main")?.focus());
+    });
+  }
+  function review(
+    filters: { maturity?: string; platform?: string; evidence?: string } = {},
+  ) {
+    setMaturity(filters.maturity ?? "");
+    setPlatform(filters.platform ?? "");
+    setEvidence(filters.evidence ?? "");
+    setQuery("");
+    setView("inventory");
+    setPage(1);
+  }
+  function sort(key: "name" | "maturity" | "updatedAt") {
+    setDirection(key === sortKey && direction === "asc" ? "desc" : "asc");
+    setSortKey(key);
+  }
   function startNew() {
     guard(() => {
       setSelectedId(null);
+      setView("inventory");
       setDraft(newDraft() as Draft);
       setEditing(true);
       clearFeedback();
@@ -282,13 +333,13 @@ function App() {
         navigation={
           <>
             <a
-              href={`/martlet/${selectedId ? `?record=${selectedId}` : ""}`}
+              href={`/martlet/${selectedId ? `?record=${selectedId}&view=${view}` : ""}`}
               aria-current={family === "martlet" ? "page" : undefined}
             >
               Martlet
             </a>
             <a
-              href={`/krigsvold/${selectedId ? `?record=${selectedId}` : ""}`}
+              href={`/krigsvold/${selectedId ? `?record=${selectedId}&view=${view}` : ""}`}
               aria-current={family === "krigsvold" ? "page" : undefined}
             >
               Krigsvold
@@ -315,7 +366,9 @@ function App() {
           <p className="eyebrow">Design workbench / 01</p>
           <div className="intro-line">
             <div>
-              <h1>Component registry</h1>
+              <h1>
+                {view === "overview" ? "System overview" : "Component registry"}
+              </h1>
               <p className="lede">A place to make the systems useful.</p>
             </div>
             <Button
@@ -330,6 +383,24 @@ function App() {
             together. Both family views share this registry.
           </p>
         </div>
+        <nav aria-label="Workspace sections" className="view-navigation">
+          {[
+            ["overview", "Overview"],
+            ["inventory", "Inventory"],
+          ].map(([key, label]) => (
+            <a
+              key={key}
+              href={`?view=${key}${selectedId ? "&record=" + selectedId : ""}`}
+              aria-current={view === key ? "page" : undefined}
+              onClick={(event) => {
+                event.preventDefault();
+                navigateView(key);
+              }}
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
         <div className="registry-meta">
           <p>
             <strong>{records.length}</strong> components{" "}
@@ -348,6 +419,15 @@ function App() {
             <Notice kind="error">{loadError}</Notice>
             <Button onClick={() => void load()}>Retry loading</Button>
           </div>
+        ) : view === "overview" ? (
+          <ReadinessDashboard
+            records={records}
+            onReview={review}
+            onInspect={(record) => {
+              setView("inventory");
+              selectRecord(record);
+            }}
+          />
         ) : (
           <div className="workspace">
             <section className="collection" aria-labelledby="collection-title">
@@ -398,52 +478,183 @@ function App() {
                     </Select>
                   )}
                 </Field>
+                <Field label="Usage evidence">
+                  {(props) => (
+                    <Select
+                      {...props}
+                      value={evidence}
+                      onChange={(event) => setEvidence(event.target.value)}
+                    >
+                      <option value="">All evidence states</option>
+                      <option value="missing">Missing evidence</option>
+                      <option value="recorded">Evidence recorded</option>
+                    </Select>
+                  )}
+                </Field>
               </div>
               <p className="result-count" role="status">
-                {filtered.length} of {records.length} components
+                {ordered.length
+                  ? `${(currentPage - 1) * pageSize + 1}–${Math.min(currentPage * pageSize, ordered.length)}`
+                  : "0"}{" "}
+                of {filtered.length} matching components · Sorted by{" "}
+                {sortKey === "updatedAt" ? "updated date" : sortKey},{" "}
+                {direction === "asc" ? "ascending" : "descending"}
               </p>
               {filtered.length ? (
-                <DataTable caption="Component specifications">
-                  <thead>
-                    <tr>
-                      <th scope="col">Component</th>
-                      <th scope="col">Stage</th>
-                      <th scope="col">Targets</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filtered.map((record) => (
-                      <tr
-                        key={record.id}
-                        data-selected={record.id === selectedId}
-                      >
-                        <th scope="row">
+                <>
+                  <DataTable caption="Component specifications">
+                    <thead>
+                      <tr>
+                        <th
+                          scope="col"
+                          aria-sort={
+                            sortKey === "name"
+                              ? direction === "asc"
+                                ? "ascending"
+                                : "descending"
+                              : undefined
+                          }
+                        >
                           <button
-                            className="record-link"
-                            type="button"
-                            aria-label={`Inspect ${record.name}`}
-                            aria-current={
-                              record.id === selectedId ? "true" : undefined
-                            }
-                            onClick={() => selectRecord(record)}
-                            disabled={saving}
+                            className="sort-button"
+                            onClick={() => sort("name")}
                           >
-                            <span className="record-name">{record.name}</span>
-                            <span className="record-category">
-                              {record.category}
+                            Component{" "}
+                            <span aria-hidden="true">
+                              {sortKey === "name"
+                                ? direction === "asc"
+                                  ? "↑"
+                                  : "↓"
+                                : "↕"}
                             </span>
                           </button>
                         </th>
-                        <td>
-                          <Badge>{record.maturity}</Badge>
-                        </td>
-                        <td className="target-cell">
-                          {record.targets.join(", ")}
-                        </td>
+                        <th
+                          scope="col"
+                          aria-sort={
+                            sortKey === "maturity"
+                              ? direction === "asc"
+                                ? "ascending"
+                                : "descending"
+                              : undefined
+                          }
+                        >
+                          <button
+                            className="sort-button"
+                            onClick={() => sort("maturity")}
+                          >
+                            Stage{" "}
+                            <span aria-hidden="true">
+                              {sortKey === "maturity"
+                                ? direction === "asc"
+                                  ? "↑"
+                                  : "↓"
+                                : "↕"}
+                            </span>
+                          </button>
+                        </th>
+                        <th scope="col">Targets</th>
+                        <th
+                          scope="col"
+                          aria-sort={
+                            sortKey === "updatedAt"
+                              ? direction === "asc"
+                                ? "ascending"
+                                : "descending"
+                              : undefined
+                          }
+                        >
+                          <button
+                            className="sort-button"
+                            onClick={() => sort("updatedAt")}
+                          >
+                            Updated{" "}
+                            <span aria-hidden="true">
+                              {sortKey === "updatedAt"
+                                ? direction === "asc"
+                                  ? "↑"
+                                  : "↓"
+                                : "↕"}
+                            </span>
+                          </button>
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </DataTable>
+                    </thead>
+                    <tbody>
+                      {visibleRecords.map((record) => (
+                        <tr
+                          key={record.id}
+                          data-selected={record.id === selectedId}
+                        >
+                          <th scope="row">
+                            <button
+                              className="record-link"
+                              type="button"
+                              aria-label={`Inspect ${record.name}`}
+                              aria-current={
+                                record.id === selectedId ? "true" : undefined
+                              }
+                              onClick={() => selectRecord(record)}
+                              disabled={saving}
+                            >
+                              <span className="record-name">{record.name}</span>
+                              <span className="record-category">
+                                {record.category}
+                              </span>
+                            </button>
+                          </th>
+                          <td>
+                            <Badge>{record.maturity}</Badge>
+                          </td>
+                          <td className="target-cell">
+                            {record.targets.join(", ")}
+                          </td>
+                          <td className="updated-cell">
+                            <time dateTime={record.updatedAt}>
+                              {new Date(record.updatedAt).toLocaleDateString(
+                                "en-US",
+                              )}
+                            </time>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </DataTable>
+                  <nav className="pagination" aria-label="Inventory pages">
+                    <Button
+                      variant="secondary"
+                      disabled={currentPage === 1}
+                      onClick={() => setPage(currentPage - 1)}
+                    >
+                      Previous page
+                    </Button>
+                    <span>
+                      Page {currentPage} of {pageCount}
+                    </span>
+                    <Button
+                      variant="secondary"
+                      disabled={currentPage === pageCount}
+                      onClick={() => setPage(currentPage + 1)}
+                    >
+                      Next page
+                    </Button>
+                    <Field label="Components per page">
+                      {(props) => (
+                        <Select
+                          {...props}
+                          value={pageSize}
+                          onChange={(event) =>
+                            setPageSize(Number(event.target.value))
+                          }
+                        >
+                          <option value="10">10</option>
+                          <option value="25">25</option>
+                          <option value="50">50</option>
+                        </Select>
+                      )}
+                    </Field>
+                  </nav>
+                </>
               ) : (
                 <div className="empty">
                   <h3>No components match</h3>
@@ -454,6 +665,7 @@ function App() {
                       setQuery("");
                       setMaturity("");
                       setPlatform("");
+                      setEvidence("");
                     }}
                   >
                     Clear filters
@@ -580,47 +792,33 @@ function App() {
                       )}
                     </Field>
                   </div>
-                  <fieldset
-                    className="platforms"
-                    aria-invalid={errors.targets ? true : undefined}
-                    aria-describedby={
-                      errors.targets ? "targets-error" : undefined
-                    }
+                  <Fieldset
+                    legend="Target platforms"
+                    hint="Planned reach. Released implementations are recorded separately."
+                    error={errors.targets}
+                    disabled={saving}
                   >
-                    <legend>Target platforms</legend>
-                    <p className="muted">
-                      Planned reach. Released implementations are recorded
-                      separately.
-                    </p>
-                    <div>
+                    <div className="platform-options">
                       {platforms.map((value) => (
-                        <label key={value}>
-                          <input
-                            type="checkbox"
-                            name="targets"
-                            checked={draft.targets.includes(value)}
-                            disabled={saving}
-                            onChange={(event) =>
-                              update(
-                                "targets",
-                                event.target.checked
-                                  ? [...draft.targets, value]
-                                  : draft.targets.filter(
-                                      (item) => item !== value,
-                                    ),
-                              )
-                            }
-                          />
-                          {value}
-                        </label>
+                        <Checkbox
+                          key={value}
+                          label={value}
+                          name="targets"
+                          checked={draft.targets.includes(value)}
+                          onChange={(event) =>
+                            update(
+                              "targets",
+                              event.target.checked
+                                ? [...draft.targets, value]
+                                : draft.targets.filter(
+                                    (item) => item !== value,
+                                  ),
+                            )
+                          }
+                        />
                       ))}
                     </div>
-                    {errors.targets && (
-                      <p id="targets-error" className="field-error">
-                        {errors.targets}
-                      </p>
-                    )}
-                  </fieldset>
+                  </Fieldset>
                   {field(
                     "acceptanceCriteria",
                     "Acceptance criteria",
@@ -750,8 +948,7 @@ function App() {
                       <p className="multiline">{selected.migration}</p>
                     </section>
                   )}
-                  <details className="history">
-                    <summary>Revision history</summary>
+                  <Disclosure className="history" summary="Revision history">
                     {historyError ? (
                       <p>{historyError}</p>
                     ) : (
@@ -769,7 +966,7 @@ function App() {
                         ))}
                       </ol>
                     )}
-                  </details>
+                  </Disclosure>
                 </>
               ) : (
                 <p>Choose a component from the inventory or add a new one.</p>

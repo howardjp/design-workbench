@@ -266,3 +266,98 @@ test("HTTP API saves, exports, rejects malformed requests and cross-origin mutat
   );
   assert.equal((await fetch(base + "/api/components/missing")).status, 404);
 });
+
+test("sorting preserves input, honors lifecycle order and deterministic ties", async () => {
+  const { sortRecords } = await import("../src/contract.mjs");
+  const records = [
+    { id: "z", name: "Zeta", maturity: "proposed", updatedAt: "2026-10-20" },
+    { id: "a", name: "Alpha", maturity: "stable", updatedAt: "2026-10-21" },
+    {
+      id: "b",
+      name: "Beta",
+      maturity: "experimental",
+      updatedAt: "2026-10-21",
+    },
+  ];
+  assert.deepEqual(
+    sortRecords(records, "name", "asc").map((x) => x.id),
+    ["a", "b", "z"],
+  );
+  assert.deepEqual(
+    sortRecords(records, "maturity", "asc").map((x) => x.id),
+    ["z", "b", "a"],
+  );
+  assert.deepEqual(
+    sortRecords(records, "updatedAt", "desc").map((x) => x.id),
+    ["a", "b", "z"],
+  );
+  assert.deepEqual(
+    records.map((x) => x.id),
+    ["z", "a", "b"],
+  );
+  assert.throws(() => sortRecords(records, "unknown", "asc"));
+});
+test("readiness derives availability separately from targets and evidence", async () => {
+  const { summarizeRegistry } = await import("../src/contract.mjs");
+  const result = summarizeRegistry([
+    {
+      name: "First",
+      maturity: "experimental",
+      evidence: "",
+      targets: ["Astro", "React"],
+      implementations: [
+        { family: "martlet", platform: "Astro", state: "published" },
+      ],
+    },
+    {
+      name: "Second",
+      maturity: "stable",
+      evidence: "Reviewed in real use.",
+      targets: ["React"],
+      implementations: [],
+    },
+  ]);
+  assert.equal(result.total, 2);
+  assert.equal(result.stable, 1);
+  assert.equal(result.missingEvidence, 1);
+  assert.equal(result.missingImplementations, 1);
+  const martletAstro = result.coverage.find(
+    (row) => row.family === "martlet" && row.platform === "Astro",
+  );
+  assert.equal(martletAstro.published, 1);
+  assert.equal(martletAstro.unimplemented, 0);
+  const krigReact = result.coverage.find(
+    (row) => row.family === "krigsvold" && row.platform === "React",
+  );
+  assert.equal(krigReact.targeted, 2);
+  assert.equal(krigReact.unimplemented, 2);
+  assert.equal(krigReact.published, 0);
+});
+test("evidence filtering distinguishes blank text from recorded observations", () => {
+  const input = [
+    {
+      name: "Blank",
+      summary: "",
+      category: "Input",
+      targets: ["React"],
+      maturity: "experimental",
+      evidence: "  ",
+    },
+    {
+      name: "Observed",
+      summary: "",
+      category: "Input",
+      targets: ["React"],
+      maturity: "experimental",
+      evidence: "Observed in real work.",
+    },
+  ];
+  assert.deepEqual(
+    filterRecords(input, "", "", "", "missing").map((x) => x.name),
+    ["Blank"],
+  );
+  assert.deepEqual(
+    filterRecords(input, "", "", "", "recorded").map((x) => x.name),
+    ["Observed"],
+  );
+});

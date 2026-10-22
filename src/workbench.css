@@ -385,3 +385,152 @@ body {
     grid-template-columns: 1fr;
   }
 }
+.view-navigation {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  border-block-end: 1px solid var(--ui-line);
+  margin-block-start: 1.5rem;
+}
+.view-navigation a {
+  min-block-size: 2.8rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 0.5rem;
+  text-decoration: none;
+}
+.view-navigation a[aria-current] {
+  border-block-end: 3px solid var(--ui-accent);
+  font-weight: 700;
+}
+.sort-button {
+  font: inherit;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: 0;
+  min-block-size: 2.8rem;
+  padding: 0.25rem 0;
+  cursor: pointer;
+}
+.updated-cell {
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-block-start: 1.5rem;
+}
+.pagination > span {
+  font-size: 0.8rem;
+}
+.pagination > div {
+  inline-size: 10rem;
+  margin-inline-start: auto;
+}
+.platform-options {
+  display: flex;
+  gap: 0.5rem 1rem;
+  flex-wrap: wrap;
+  margin-block-start: 0.5rem;
+}
+.readiness-numbers {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin: 0;
+  border-block: 1px solid var(--ui-line);
+  padding-block: 1.5rem;
+}
+.readiness-numbers div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.75rem;
+}
+.readiness-numbers dt {
+  font-size: 0.85rem;
+  color: var(--ui-muted);
+}
+.readiness-numbers dd {
+  font-size: 2.5rem;
+  margin: 0;
+  line-height: 1.1;
+}
+.overview-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(16rem, 1fr);
+  gap: 2rem;
+  margin-block: 1.5rem;
+}
+.overview-layout > * {
+  min-inline-size: 0;
+}
+.review-guidance {
+  padding: 1.5rem;
+  background: var(--ui-surface);
+  align-content: start;
+}
+.review-guidance ol {
+  margin: 0;
+  padding-inline-start: 1.25rem;
+  display: grid;
+  gap: 0.75rem;
+}
+.review-guidance button {
+  justify-self: start;
+}
+.coverage-family {
+  display: block;
+  text-transform: capitalize;
+  font-size: 0.7rem;
+  color: var(--ui-muted);
+  font-weight: 400;
+}
+.recent-records {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.recent-records li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 0.75rem;
+  border-block-end: 1px solid var(--ui-line);
+}
+.recent-records time {
+  font-size: 0.8rem;
+  color: var(--ui-muted);
+}
+.martlet .readiness-numbers dd {
+  font-family: var(--martlet-font-serif);
+}
+.martlet .review-guidance {
+  border-block-start: 3px solid var(--martlet-color-gold-500);
+}
+.krigsvold .readiness-numbers dd {
+  font-family: var(--krigsvold-font-mono);
+}
+.krigsvold .review-guidance {
+  border-inline-start: 3px solid var(--ui-accent);
+}
+@media (max-width: 65rem) {
+  .overview-layout {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 40rem) {
+  .readiness-numbers {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .pagination > div {
+    margin-inline-start: 0;
+  }
+}

@@ -60,7 +60,6 @@
   color: var(--krigsvold-on-accent);
   cursor: pointer;
   font-weight: 700;
-  transition: background-color var(--krigsvold-motion-duration);
 }
 .krigsvold-button:hover:not(:disabled) {
   background: var(--krigsvold-accent-hover);
@@ -333,4 +332,37 @@
   .krigsvold-app-colophon {
     display: none;
   }
+}
+
+.krigsvold-checkbox {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  min-block-size: 2.8rem;
+  cursor: pointer;
+}
+.krigsvold-checkbox input {
+  inline-size: 1.2rem;
+  block-size: 1.2rem;
+  accent-color: var(--ui-accent);
+  flex: none;
+}
+.krigsvold-checkbox:has(input:disabled) {
+  cursor: default;
+  color: var(--krigsvold-disabled-text);
+}
+.krigsvold-fieldset {
+  border: 1px solid var(--ui-line);
+  min-inline-size: 0;
+  padding: 1rem;
+  margin: 0;
+}
+.krigsvold-fieldset legend {
+  font-weight: 700;
+  padding-inline: 0.3rem;
+}
+.krigsvold-disclosure > summary {
+  cursor: pointer;
+  min-block-size: 2.8rem;
+  padding: 0.6rem 0.25rem;
 }

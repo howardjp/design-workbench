@@ -100,14 +100,94 @@ export function newDraft() {
     migration: "",
   };
 }
-export function filterRecords(records, query, maturity = "", platform = "") {
+export function filterRecords(
+  records,
+  query,
+  maturity = "",
+  platform = "",
+  evidence = "",
+) {
   const needle = query.trim().toLocaleLowerCase();
   return records.filter(
     (record) =>
       (!maturity || record.maturity === maturity) &&
       (!platform || record.targets.includes(platform)) &&
+      (!evidence ||
+        (evidence === "missing"
+          ? !record.evidence.trim()
+          : !!record.evidence.trim())) &&
       `${record.name} ${record.summary} ${record.category}`
         .toLocaleLowerCase()
         .includes(needle),
   );
+}
+
+export function sortRecords(records, key = "name", direction = "asc") {
+  if (
+    !["name", "maturity", "updatedAt"].includes(key) ||
+    !["asc", "desc"].includes(direction)
+  )
+    throw new Error("Unsupported sort order");
+  const sign = direction === "asc" ? 1 : -1;
+  return [...records].sort((a, b) => {
+    const result =
+      key === "maturity"
+        ? maturities.indexOf(a.maturity) - maturities.indexOf(b.maturity)
+        : String(a[key]).localeCompare(String(b[key]), "en");
+    return (
+      sign * result ||
+      a.name.localeCompare(b.name, "en") ||
+      a.id.localeCompare(b.id, "en")
+    );
+  });
+}
+export function summarizeRegistry(records) {
+  return {
+    total: records.length,
+    stable: records.filter((record) => record.maturity === "stable").length,
+    missingEvidence: records.filter((record) => !record.evidence.trim()).length,
+    missingImplementations: records.filter(
+      (record) => !record.implementations.length,
+    ).length,
+    coverage: ["martlet", "krigsvold"].flatMap((family) =>
+      platforms
+        .filter((platform) =>
+          records.some(
+            (record) =>
+              record.targets.includes(platform) ||
+              record.implementations.some((item) => item.platform === platform),
+          ),
+        )
+        .map((platform) => ({
+          family,
+          platform,
+          targeted: records.filter((record) =>
+            record.targets.includes(platform),
+          ).length,
+          published: records.filter((record) =>
+            record.implementations.some(
+              (item) =>
+                item.family === family &&
+                item.platform === platform &&
+                item.state === "published",
+            ),
+          ).length,
+          workspace: records.filter((record) =>
+            record.implementations.some(
+              (item) =>
+                item.family === family &&
+                item.platform === platform &&
+                item.state === "workspace",
+            ),
+          ).length,
+          unimplemented: records.filter(
+            (record) =>
+              record.targets.includes(platform) &&
+              !record.implementations.some(
+                (item) => item.family === family && item.platform === platform,
+              ),
+          ).length,
+        })),
+    ),
+  };
 }

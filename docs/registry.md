@@ -21,7 +21,7 @@ Both family views call the same API and edit the same SQLite database. There is 
 | implementations | Read-only inventory of family, platform, package, version, and published/workspace availability |
 | revision / updatedAt | Server-assigned integer revision and UTC timestamp |
 
-The server validates every mutation independently of the client. Creation ignores supplied inventory/revision/id metadata. Editing preserves implementation metadata; changes to target platforms never assert that an implementation exists. Evidence is human-authored, not machine-certified. The initial 26 records combine the 17 Astro exports with the 10 React exports (Button overlaps), with both families represented. New records start without implementation claims.
+The server validates every mutation independently of the client. Creation ignores supplied inventory/revision/id metadata. Editing preserves implementation metadata; changes to target platforms never assert that an implementation exists. Evidence is human-authored, not machine-certified. The initial 29 records combine the 17 Astro exports with the 13 React exports (Button overlaps), with both families represented. New records start without implementation claims.
 
 ## API
 
@@ -36,10 +36,12 @@ The server validates every mutation independently of the client. Creation ignore
 
 Writes return the saved record. Validation uses 422 with field errors; stale revision uses 409; malformed JSON/revision uses 400; an unknown record uses 404. Only successful writes append history. Record and history commit in a single SQLite transaction. SQLite schema version 1 is recorded with user_version. Newer schemas are refused. Initial seeding occurs only at schema creation; upgrades must never overwrite user records implicitly.
 
+The overview derives actual counts and per-family/platform coverage from the same saved records. Its missing-evidence action opens a filtered inventory. It records no synthetic adoption or activity metrics.
+
 ## Acceptance criteria
 
 1. Both family routes expose identical records, filtering behavior, fields, and validation rules.
-2. Search matches component name, purpose, or category; maturity and intended-platform filters intersect. No-match results explain recovery and offer Clear filters.
+2. Search matches component name, purpose, or category; maturity, intended-platform, and usage-evidence filters intersect. Name, lifecycle stage, and update date columns support explicit sort order; changing filters or ordering resets bounded pagination. No-match results explain recovery and offer Clear filters.
 3. Inspecting a record shows its requirements, selected-family implementation inventory, family decisions, and revision history. Availability and maturity remain separate.
 4. Editing preserves entered values after validation, transport, server, and revision-conflict failures. Invalid fields have associated errors and a focused summary; successful writes have a polite status.
 5. Creating a component requires a valid unique name and complete specification. Reload confirms creation without fabricated availability.

@@ -196,3 +196,164 @@ for (const family of ["martlet", "krigsvold"]) {
       });
     }
 }
+
+for (const family of ["martlet", "krigsvold"]) {
+  test(`${family}: real overview, evidence drilldown, sorting, and pagination`, async ({
+    page,
+    request,
+  }) => {
+    const records = await (await request.get("/api/components")).json();
+    await page.goto(`/${family}/?view=overview`);
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "System overview",
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(page.locator(".readiness-numbers dd").first()).toHaveText(
+      String(records.length),
+    );
+    await expect(page.getByRole("table").getByRole("row")).toHaveCount(5);
+    await page
+      .getByRole("button", { name: "Review missing evidence", exact: true })
+      .click();
+    await expect(
+      page.getByLabel("Usage evidence", { exact: true }),
+    ).toHaveValue("missing");
+    await expect(page.getByRole("button", { name: /^Inspect / })).toHaveCount(
+      10,
+    );
+    await page.getByRole("button", { name: "Component", exact: true }).click();
+    await expect(
+      page.getByRole("columnheader", { name: "Component", exact: true }),
+    ).toHaveAttribute("aria-sort", "descending");
+    await expect(
+      page.getByRole("button", { name: "Inspect TextInput", exact: true }),
+    ).toBeVisible();
+    await page.getByRole("button", { name: "Next page", exact: true }).click();
+    await expect(page.getByText(/Page 2 of/)).toBeVisible();
+    await page.getByLabel("Search components", { exact: true }).fill("Button");
+    await expect(page.getByText("Page 1 of 1", { exact: true })).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Previous page", exact: true }),
+    ).toBeDisabled();
+    await page.getByLabel("Search components", { exact: true }).fill("");
+    await page
+      .getByLabel("Components per page", { exact: true })
+      .selectOption("25");
+    await expect(page.getByRole("button", { name: /^Inspect / })).toHaveCount(
+      25,
+    );
+  });
+  test(`${family}: extracted native checkbox and disclosure keyboard interactions`, async ({
+    page,
+  }) => {
+    await page.goto(`/${family}/?record=button`);
+    const summary = page.getByText("Revision history", { exact: true });
+    await summary.press("Enter");
+    await expect(page.locator("details.history")).toHaveAttribute("open", "");
+    await summary.press("Space");
+    await expect(page.locator("details.history")).not.toHaveAttribute(
+      "open",
+      "",
+    );
+    await page
+      .getByRole("button", { name: "Edit specification", exact: true })
+      .click();
+    const checkbox = page.getByRole("checkbox", { name: "CSS", exact: true });
+    await checkbox.press("Space");
+    await expect(checkbox).toBeChecked();
+    await checkbox.press("Space");
+    await expect(checkbox).not.toBeChecked();
+  });
+  for (const width of [320, 1440])
+    for (const mode of ["light", "dark"]) {
+      test(`${family}: overview ${width}px ${mode} accessibility and reflow`, async ({
+        page,
+      }) => {
+        await page.setViewportSize({ width, height: 1000 });
+        await page.goto(`/${family}/?view=overview`);
+        await expect(
+          page.getByRole("heading", {
+            name: "Implementation coverage",
+            exact: true,
+          }),
+        ).toBeVisible();
+        if (mode === "dark")
+          await page
+            .getByRole("button", { name: "Use dark mode", exact: true })
+            .click();
+        expect(
+          await page.evaluate(
+            () => document.documentElement.scrollWidth <= window.innerWidth,
+          ),
+        ).toBeTruthy();
+        expect(
+          (
+            await new AxeBuilder({ page })
+              .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+              .analyze()
+          ).violations,
+        ).toEqual([]);
+      });
+    }
+}
+
+for (const family of ["martlet", "krigsvold"]) {
+  test(`${family}: text resizing and spacing preserve page reflow`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 1000 });
+    await page.goto(`/${family}/?record=button`);
+    await page
+      .getByRole("button", { name: "Edit specification", exact: true })
+      .click();
+    await page.evaluate(() => {
+      document.documentElement.style.fontSize = "200%";
+      for (const element of document.querySelectorAll<HTMLElement>("*")) {
+        element.style.setProperty("line-height", "1.5", "important");
+        element.style.setProperty("letter-spacing", ".12em", "important");
+        element.style.setProperty("word-spacing", ".16em", "important");
+      }
+      for (const paragraph of document.querySelectorAll("p"))
+        paragraph.style.setProperty("margin-bottom", "2em", "important");
+    });
+    await expect(page.locator("html")).toHaveCSS("font-size", "32px");
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
+    ).toBeTruthy();
+    await expect(page.getByLabel("Summary", { exact: true })).toBeEditable();
+    await page
+      .getByLabel("Summary", { exact: true })
+      .fill(
+        "Text resizing and text spacing must preserve an editable, working specification.",
+      );
+    await page
+      .getByRole("button", { name: "Save specification", exact: true })
+      .click();
+    await expect(
+      page.getByRole("status").filter({ hasText: "Button saved." }),
+    ).toBeVisible();
+  });
+  test(`${family}: loading failure recovers through a working retry`, async ({
+    page,
+  }) => {
+    let failures = 1;
+    await page.route("**/api/components", (route) =>
+      route.request().method() === "GET" && failures-- > 0
+        ? route.fulfill({ status: 503, json: { message: "Unavailable" } })
+        : route.continue(),
+    );
+    await page.goto(`/${family}/`);
+    await expect(page.getByRole("alert")).toContainText("could not be loaded");
+    await page
+      .getByRole("button", { name: "Retry loading", exact: true })
+      .click();
+    await expect(
+      page.getByRole("button", { name: "Edit specification", exact: true }),
+    ).toBeVisible();
+  });
+}

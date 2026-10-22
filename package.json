@@ -17,7 +17,8 @@
     "test": "node --test tests/*.test.mjs",
     "test:browser": "playwright test",
     "check": "npm run build && npm test",
-    "pack:react": "npm pack --workspace @martlet/react --workspace @krigsvold/react"
+    "pack:react": "npm pack --workspace @martlet/react --workspace @krigsvold/react",
+    "test:packages": "npm run pack:react && node scripts/test-packages.mjs"
   },
   "dependencies": {
     "@martlet/react": "0.1.0",

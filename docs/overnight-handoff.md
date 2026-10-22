@@ -8,15 +8,15 @@ The interactive work session is implementing the first slice on `work/registry-f
 
 ## Implemented first slice
 
-Two React presentations consume one shared domain/API. A SQLite registry supports create, edit, validation, revision history, optimistic conflicts, persistence across restart, and JSON current-state export. Initial records represent actual Astro and workspace React exports. All component maturity starts experimental; availability is separate from intended targets. The two component packages each export ten initial primitives. They remain unpublished private workspace packages with public MIT source.
+Two React presentations consume one shared domain/API. A SQLite registry supports create, edit, validation, revision history, optimistic conflicts, persistence across restart, and JSON current-state export. Initial records represent actual Astro and workspace React exports. All component maturity starts experimental; availability is separate from intended targets. The two component packages each export thirteen initial primitives. They remain unpublished private workspace packages with public MIT source.
 
 The service is deliberately local-only and unauthenticated. Team hosting, remote authentication/authorization, and npm publication require separate completed implementation and release setup. Do not expose this server publicly. Do not change repository visibility, production websites, unrelated draft showcases, external communications, or billing.
 
 ## Next useful slices
 
-1. Finish checking and publishing the first slice to a reviewable PR. Verify the latest remote CI and package tarball contents. Preserve the existing foundation specs and link them from the construction plan.
-2. Add a real coverage/readiness dashboard derived entirely from registry data, with links into filtered records. Extend the collection with accessible sorting and bounded pagination. Preserve identical behavior/content across both designs.
-3. Extract additional native controls actually used by the editor, then record their full states, keyboard model, API, and acceptance criteria. Checkbox/Fieldset/Disclosure are natural early candidates; do not invent a large unused catalogue.
+1. Verify the latest remote CI and package tarball consumer check. First checkpoint is in howardjp/design-workbench PR #1 at 3d6e0f805996cea1a0d78f4e20aae465f8af6822. The next tested checkpoint extends that same branch; fetch the latest head. Foundation PRs are martlettheme/npm #4 at 6619f7ad8dd56453fb2145a5fe05365dbeadbf7c and krigsvoldtheme/npm #4 at 0a25f1ecf6fa608f425c03db6f28feb987fb7e7c. All first-checkpoint CI runs passed.
+2. Coverage/readiness dashboard, evidence drilldown, accessible sorting, and pagination are implemented in the second checkpoint. Expand only where real registry work calls for it.
+3. Checkbox, Fieldset, and Disclosure are now extracted and consumed; all thirteen exports have API/state/keyboard/acceptance contracts in docs/components.md. Choose further controls from real workflow needs.
 4. Improve revision review and safe recovery (compare snapshots and explicitly restore as a new revision), with stale-write protection and tests. Do not silently replace a live database or add destructive reset actions.
 5. Add controlled inventory-update/import tooling with validation, transactional preview, version checks, and clear conflict handling before claiming automatic synchronization.
 6. Broaden manual-style keyboard, 200% type, 400% zoom equivalent, and text-spacing checks; verify light/dark, long content, empty/error/loading states, and isolated package installation. Document what could not be checked.

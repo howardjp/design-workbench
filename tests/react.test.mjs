@@ -72,3 +72,44 @@ for (const [family, UI] of [
     assert.match(table, /tabindex="0"/);
   });
 }
+for (const [family, UI] of [
+  ["martlet", Martlet],
+  ["krigsvold", Krigsvold],
+]) {
+  test(`${family} checkbox, fieldset, and disclosure retain native behavior contracts`, () => {
+    const checkbox = renderToStaticMarkup(
+      h(UI.Checkbox, {
+        label: "React",
+        name: "targets",
+        checked: true,
+        readOnly: true,
+        disabled: true,
+      }),
+    );
+    assert.match(checkbox, /type="checkbox"/);
+    assert.match(checkbox, /checked=""/);
+    assert.match(checkbox, /disabled=""/);
+    assert.match(checkbox, />React<\/label>/);
+    const group = renderToStaticMarkup(
+      h(
+        UI.Fieldset,
+        {
+          legend: "Targets",
+          hint: "Choose supported intent.",
+          error: "Choose at least one.",
+          disabled: true,
+        },
+        h(UI.Checkbox, { label: "React" }),
+      ),
+    );
+    assert.match(group, /<legend>Targets<\/legend>/);
+    assert.match(group, /aria-invalid="true"/);
+    assert.match(group, /aria-describedby="[^"]+-hint [^"]+-error"/);
+    assert.match(group, /disabled=""/);
+    const disclosure = renderToStaticMarkup(
+      h(UI.Disclosure, { summary: "History", open: true }, "Revision 1"),
+    );
+    assert.match(disclosure, /<details[^>]*open=""/);
+    assert.match(disclosure, /<summary>History<\/summary>Revision 1/);
+  });
+}

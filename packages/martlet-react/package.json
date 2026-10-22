@@ -8,7 +8,8 @@
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "NOTICE.md"
   ],
   "exports": {
     ".": {
@@ -27,7 +28,7 @@
     "@martlet/theme": "2.1.0"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json && node ../../scripts/copy-styles.mjs martlet"
+    "build": "node ../../scripts/clean-package.mjs martlet && tsc -p tsconfig.json && node ../../scripts/copy-styles.mjs martlet"
   },
   "repository": {
     "type": "git",

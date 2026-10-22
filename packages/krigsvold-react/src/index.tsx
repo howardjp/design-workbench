@@ -186,3 +186,74 @@ export function Dialog({
     </dialog>
   );
 }
+
+export function Checkbox({
+  label,
+  id,
+  className = "",
+  ...props
+}: Omit<ComponentPropsWithRef<"input">, "type"> & { label: ReactNode }) {
+  const generatedId = useId();
+  const controlId = id ?? generatedId;
+  return (
+    <label className={`krigsvold-checkbox ${className}`} htmlFor={controlId}>
+      <input {...props} id={controlId} type="checkbox" />
+      {label}
+    </label>
+  );
+}
+export function Fieldset({
+  legend,
+  hint,
+  error,
+  children,
+  className = "",
+  ...props
+}: ComponentPropsWithRef<"fieldset"> & {
+  legend: ReactNode;
+  hint?: string;
+  error?: string;
+}) {
+  const id = useId();
+  const describedBy =
+    [props["aria-describedby"], hint && `${id}-hint`, error && `${id}-error`]
+      .filter(Boolean)
+      .join(" ") || undefined;
+  return (
+    <fieldset
+      {...props}
+      className={`krigsvold-fieldset ${className}`}
+      aria-describedby={describedBy}
+      aria-invalid={error ? true : props["aria-invalid"]}
+    >
+      <legend>{legend}</legend>
+      {hint && (
+        <p id={`${id}-hint`} className="krigsvold-hint">
+          {hint}
+        </p>
+      )}
+      {children}
+      {error && (
+        <p id={`${id}-error`} className="krigsvold-error">
+          {error}
+        </p>
+      )}
+    </fieldset>
+  );
+}
+export function Disclosure({
+  summary,
+  children,
+  className = "",
+  ...props
+}: Omit<ComponentPropsWithRef<"details">, "children"> & {
+  summary: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <details {...props} className={`krigsvold-disclosure ${className}`}>
+      <summary>{summary}</summary>
+      {children}
+    </details>
+  );
+}
