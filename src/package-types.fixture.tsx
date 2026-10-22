@@ -27,3 +27,20 @@ export const summaryContracts = [Martlet, Krigsvold].map((UI) => (
     </UI.Field>
   </UI.ErrorSummary>
 ));
+export const articleContracts = [Martlet, Krigsvold].map((UI) => (
+  <UI.Article
+    title="Contract"
+    titleLevel={2}
+    ref={createRef<HTMLElement>()}
+    contents={
+      <UI.TableOfContents
+        ref={createRef<HTMLElement>()}
+        items={[{ id: "purpose", label: "Purpose" }]}
+      />
+    }
+  >
+    <h3 id="purpose" tabIndex={-1}>
+      Purpose
+    </h3>
+  </UI.Article>
+));

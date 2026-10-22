@@ -31,6 +31,37 @@
     ]
   },
   {
+    "id": "article",
+    "name": "Article",
+    "category": "Content",
+    "summary": "Read a substantial saved specification with a title, metadata, section navigation, context, and a coherent text measure.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "The article has an accessible name associated with its title.\nA single source supplies identical content in both families.\nHeadings, links, lists, tables, code, and long text reflow in light and dark modes.\nContext reflows ahead of the body on narrow screens.\nPrint styling retains the saved content and removes interactive navigation.",
+    "evidence": "",
+    "martletNotes": "Use a broad editorial heading, generous rhythm, serif body text, and a related context panel to the right.",
+    "krigsvoldNotes": "Use an aligned metadata band, a precise left context rail, and a compact sans-serif reading column.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
+  },
+  {
     "id": "article-layout",
     "name": "ArticleLayout",
     "category": "Layout",
@@ -879,6 +910,37 @@
         "package": "@krigsvold/astro",
         "version": "1.1.0",
         "state": "published"
+      }
+    ]
+  },
+  {
+    "id": "table-of-contents",
+    "name": "TableOfContents",
+    "category": "Navigation",
+    "summary": "Jump by keyboard or pointer to named sections in a substantial document using native fragment links.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "A labelled navigation region contains an ordered list of section links.\nEvery link points to a unique ID in the consumer document.\nEnter follows the fragment and focus reaches the consumer-supplied focusable heading.\nThe list wraps at 320 CSS pixels and is omitted from print.",
+    "evidence": "",
+    "martletNotes": "Keep the contents in a welcoming editorial panel, with generous targets and quiet hierarchy.",
+    "krigsvoldNotes": "Keep the contents in a precisely aligned rail, with compact labels and clear section order.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
       }
     ]
   },

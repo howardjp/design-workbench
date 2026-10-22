@@ -384,3 +384,198 @@
   color: inherit;
   text-decoration: underline;
 }
+
+.krigsvold-contents {
+  display: grid;
+  gap: 0.75rem;
+  min-inline-size: 0;
+  font-family: var(--krigsvold-font-sans);
+}
+.krigsvold-contents strong {
+  font-size: 0.875rem;
+}
+.krigsvold-contents ol {
+  margin: 0;
+  padding-inline-start: 1.4rem;
+}
+.krigsvold-contents a {
+  display: block;
+  min-block-size: 2.8rem;
+  padding: 0.5rem 0.25rem;
+}
+.krigsvold-article {
+  min-inline-size: 0;
+}
+.krigsvold-article-header {
+  display: grid;
+  gap: 1rem;
+  padding-block: 1.5rem 2rem;
+  border-block-end: 1px solid var(--ui-line);
+}
+.krigsvold-article-eyebrow {
+  font: 700 0.75rem/1.5 var(--krigsvold-font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.krigsvold-article-summary {
+  max-inline-size: 65ch;
+  font-size: 1.2rem;
+  line-height: 1.65;
+}
+.krigsvold-article-metadata {
+  font: 0.85rem/1.55 var(--krigsvold-font-sans);
+  color: var(--ui-muted);
+}
+.krigsvold-article-metadata dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  margin: 0;
+}
+.krigsvold-article-metadata dt {
+  font-weight: 700;
+}
+.krigsvold-article-metadata dd {
+  margin: 0;
+}
+.krigsvold-article-layout {
+  display: grid;
+  gap: 3rem;
+  padding-block: 2rem;
+  align-items: start;
+}
+.krigsvold-article-context {
+  min-inline-size: 0;
+  display: grid;
+  gap: 2rem;
+  font: 0.9rem/1.65 var(--krigsvold-font-sans);
+}
+.krigsvold-prose {
+  min-inline-size: 0;
+  max-inline-size: 72ch;
+}
+.krigsvold-prose > * + * {
+  margin-block-start: 2rem;
+}
+.krigsvold-prose :where(h2, h3, h4) {
+  scroll-margin-block-start: 1.5rem;
+}
+.krigsvold-prose :where(h2, h3, h4):focus {
+  outline: var(--krigsvold-focus-width) solid var(--krigsvold-focus-ring);
+  outline-offset: var(--krigsvold-focus-gap);
+}
+.krigsvold-prose :where(p, ul, ol, dl, blockquote, pre, figure, table) {
+  margin-block: 1rem;
+}
+.krigsvold-prose :where(ul, ol) {
+  padding-inline-start: 1.5rem;
+}
+.krigsvold-prose li + li {
+  margin-block-start: 0.65rem;
+}
+.krigsvold-prose :where(code, pre) {
+  font-family: var(--krigsvold-font-mono);
+  font-size: 0.85em;
+}
+.krigsvold-prose pre {
+  padding: 1rem;
+  max-inline-size: 100%;
+  overflow: auto;
+  background: var(--ui-surface);
+}
+.krigsvold-prose blockquote {
+  margin-inline: 0;
+  border-inline-start: 3px solid var(--ui-line);
+  padding-inline-start: 1.25rem;
+}
+.krigsvold-prose img {
+  max-inline-size: 100%;
+  block-size: auto;
+}
+.krigsvold-article-footer {
+  padding-block: 1.5rem;
+  border-block-start: 1px solid var(--ui-line);
+  font: 0.85rem/1.6 var(--krigsvold-font-sans);
+  color: var(--ui-muted);
+}
+@media (max-width: 55rem) {
+  .krigsvold-article-layout {
+    grid-template-columns: 1fr !important;
+    gap: 2rem;
+  }
+  .krigsvold-article-context {
+    order: 0 !important;
+  }
+  .krigsvold-prose {
+    order: 1;
+  }
+}
+@media print {
+  .krigsvold-article {
+    background: white;
+    color: black;
+  }
+  .krigsvold-article-layout {
+    display: block;
+  }
+  .krigsvold-contents {
+    display: none;
+  }
+  .krigsvold-article-context {
+    margin-block-end: 1.5rem;
+  }
+  .krigsvold-prose {
+    max-inline-size: none;
+  }
+  .krigsvold-prose :where(h2, h3, h4) {
+    break-after: avoid;
+  }
+  .krigsvold-prose :where(pre, blockquote, figure) {
+    break-inside: avoid;
+  }
+}
+
+.krigsvold-article-header {
+  border-block-start: 2px solid var(--ui-accent);
+}
+.krigsvold-article-header :where(h1, h2) {
+  font-size: clamp(1.8rem, 2.5vw, 2.6rem);
+  letter-spacing: -0.02em;
+}
+.krigsvold-article-eyebrow {
+  font-family: var(--krigsvold-font-mono);
+}
+.krigsvold-article-layout {
+  grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr);
+  gap: 2rem;
+}
+.krigsvold-article-layout:not(:has(> aside)) {
+  grid-template-columns: 1fr;
+}
+.krigsvold-article-context {
+  border-inline-end: 1px solid var(--ui-line);
+  padding-inline-end: 1.25rem;
+}
+.krigsvold-prose {
+  font: 1rem/1.7 var(--krigsvold-font-sans);
+}
+.krigsvold-prose :where(h2, h3, h4) {
+  font-family: var(--krigsvold-font-serif);
+}
+
+@media (max-width: 55rem) {
+  .krigsvold-article-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  .krigsvold-article :is(.krigsvold-article-context, pre) {
+    background: white;
+    color: black;
+  }
+  .krigsvold-article
+    :is(.krigsvold-article-metadata, .krigsvold-article-footer, a) {
+    color: black;
+  }
+}

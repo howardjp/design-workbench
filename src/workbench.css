@@ -620,3 +620,51 @@ body {
     gap: 1rem;
   }
 }
+.reading-room {
+  max-inline-size: 86rem;
+}
+.reading-controls {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  align-items: end;
+  padding-block-end: 1.5rem;
+}
+.reading-controls > div:first-child {
+  flex: 1 1 14rem;
+  max-inline-size: 28rem;
+}
+.reading-room article {
+  min-inline-size: 0;
+}
+@media print {
+  body:has(.reading-room)
+    :is(
+      .page-intro,
+      .view-navigation,
+      .registry-meta,
+      .reading-controls,
+      .workbench-footer,
+      .martlet-app-header,
+      .krigsvold-app-header
+    ) {
+    display: none !important;
+  }
+  body:has(.reading-room) :is(.martlet-app, .krigsvold-app) {
+    display: block;
+  }
+  body:has(.reading-room) :is(.martlet-app, .krigsvold-app) main {
+    padding: 0;
+  }
+  body:has(.reading-room) :is(.martlet, .krigsvold) {
+    background: white;
+    color: black;
+  }
+  .reading-room [role="alert"],
+  .reading-room [role="status"] {
+    display: none;
+  }
+  .reading-room :is(p, li, dt, dd, code, th, td, a, h1, h2, h3, h4) {
+    color: black !important;
+  }
+}

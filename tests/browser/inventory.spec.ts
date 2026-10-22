@@ -1,7 +1,7 @@
 import { test as base, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { resolve } from "node:path";
-import { createOlderRegistry } from "../helpers/older-registry.mjs";
+import { createOlderRegistry, missing } from "../helpers/older-registry.mjs";
 import { createWorkbenchServer } from "../../server/http.mjs";
 const test = base.extend<{
   registry: ReturnType<typeof createOlderRegistry> & { base: string };
@@ -31,9 +31,12 @@ for (const family of ["martlet", "krigsvold"]) {
   }) => {
     await page.goto(`${registry.base}/${family}/?view=updates`);
     await expect(
-      page.getByText("4 new components · 1 implementation update", {
-        exact: false,
-      }),
+      page.getByText(
+        `${missing.length} new components · 1 implementation update`,
+        {
+          exact: false,
+        },
+      ),
     ).toBeVisible();
     await expect(
       page.getByRole("heading", { name: "My Button", exact: true }),
@@ -49,7 +52,7 @@ for (const family of ["martlet", "krigsvold"]) {
       }),
     ).toBeVisible();
     const apply = page.getByRole("button", {
-      name: "Apply 5 component updates",
+      name: `Apply ${missing.length + 1} component updates`,
       exact: true,
     });
     await expect(apply).toBeDisabled();
@@ -80,12 +83,14 @@ for (const family of ["martlet", "krigsvold"]) {
       page.getByRole("heading", { name: "Inventory updates", exact: true }),
     ).toBeVisible();
     await expect(
-      page.getByRole("status").filter({ hasText: "5 component updates saved" }),
+      page
+        .getByRole("status")
+        .filter({ hasText: `${missing.length + 1} component updates saved` }),
     ).toBeVisible();
     await expect(
       page
         .getByRole("status")
-        .filter({ hasText: "5 component updates saved" })
+        .filter({ hasText: `${missing.length + 1} component updates saved` })
         .locator(".."),
     ).toBeFocused();
     expect(registry.store.get("button").summary).toBe(
@@ -160,7 +165,10 @@ for (const family of ["martlet", "krigsvold"]) {
       custom.revision,
     );
     await page
-      .getByRole("button", { name: "Apply 5 component updates", exact: true })
+      .getByRole("button", {
+        name: `Apply ${missing.length + 1} component updates`,
+        exact: true,
+      })
       .click();
     await expect(page.getByRole("alert")).toContainText(
       "changed after this preview",
@@ -178,14 +186,17 @@ for (const family of ["martlet", "krigsvold"]) {
       await route.abort();
     });
     await page
-      .getByRole("button", { name: "Apply 5 component updates", exact: true })
+      .getByRole("button", {
+        name: `Apply ${missing.length + 1} component updates`,
+        exact: true,
+      })
       .click();
     await expect(page.getByRole("alert")).toContainText(
       "result could not be confirmed",
     );
     await expect(
       page.getByRole("button", {
-        name: "Apply 5 component updates",
+        name: `Apply ${missing.length + 1} component updates`,
         exact: true,
       }),
     ).toBeDisabled();
@@ -224,7 +235,7 @@ for (const family of ["martlet", "krigsvold"]) {
     await expect(page.getByRole("checkbox")).toBeDisabled();
     await expect(
       page.getByRole("button", {
-        name: "Apply 4 component updates",
+        name: `Apply ${missing.length} component updates`,
         exact: true,
       }),
     ).toBeDisabled();
@@ -304,7 +315,7 @@ for (const family of ["martlet", "krigsvold"]) {
     await expect(page.getByRole("main")).toBeFocused();
     await expect(
       page.getByRole("button", {
-        name: "Apply 5 component updates",
+        name: `Apply ${missing.length + 1} component updates`,
         exact: true,
       }),
     ).toBeVisible();
@@ -319,7 +330,7 @@ for (const family of ["martlet", "krigsvold"]) {
         await page.goto(`${registry.base}/${family}/?view=updates`);
         await expect(
           page.getByRole("button", {
-            name: "Apply 5 component updates",
+            name: `Apply ${missing.length + 1} component updates`,
             exact: true,
           }),
         ).toBeVisible();
@@ -358,7 +369,7 @@ for (const family of ["martlet", "krigsvold"]) {
         ).toBe(true);
         await expect(
           page.getByRole("button", {
-            name: "Apply 5 component updates",
+            name: `Apply ${missing.length + 1} component updates`,
             exact: true,
           }),
         ).toBeVisible();

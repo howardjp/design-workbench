@@ -36,8 +36,10 @@ export const api = {
       body: JSON.stringify({ token }),
     }),
   list: () => request<ComponentRecord[]>("/api/components"),
-  get: (id: string) =>
-    request<ComponentRecord>(`/api/components/${encodeURIComponent(id)}`),
+  get: (id: string, signal?: AbortSignal) =>
+    request<ComponentRecord>(`/api/components/${encodeURIComponent(id)}`, {
+      signal,
+    }),
   history: (id: string) =>
     request<HistoryEntry[]>(
       `/api/components/${encodeURIComponent(id)}/history`,

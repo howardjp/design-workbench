@@ -10,6 +10,7 @@ import { createRoot } from "react-dom/client";
 import { family, title, UI } from "./family";
 import { ReadinessDashboard } from "./readiness";
 import { InventoryUpdates } from "./inventory-updates";
+import { ReadingRoom } from "./reading-room";
 import { RevisionReview } from "./revisions";
 import "@martlet/react/styles.css";
 import "@krigsvold/react/styles.css";
@@ -62,7 +63,7 @@ function App() {
   const [maturity, setMaturity] = useState("");
   const [platform, setPlatform] = useState("");
   const [view, setView] = useState(
-    ["overview", "updates"].includes(
+    ["overview", "updates", "reading"].includes(
       new URLSearchParams(location.search).get("view") ?? "",
     )
       ? new URLSearchParams(location.search).get("view")!
@@ -148,7 +149,6 @@ function App() {
     void load();
   }, []);
   useEffect(() => {
-    document.title = `${title} · Component registry`;
     try {
       localStorage.setItem("workbench-mode", mode);
     } catch {
@@ -156,6 +156,12 @@ function App() {
     }
     document.documentElement.style.colorScheme = mode;
   }, [mode]);
+  useEffect(() => {
+    document.title =
+      view === "reading" && selected
+        ? `${selected.name} · ${title} specification`
+        : `${title} · Component registry`;
+  }, [view, selected?.name]);
   useEffect(() => {
     const url = new URL(location.href);
     selectedId
@@ -165,7 +171,7 @@ function App() {
     window.history.replaceState(null, "", url);
     setHistory([]);
     setHistoryError("");
-    if (!selectedId) {
+    if (!selectedId || view !== "inventory") {
       setHistoryLoading(false);
       return;
     }
@@ -217,6 +223,14 @@ function App() {
       setDraftSource(null);
       clearFeedback();
       pendingFocus.current = "editor";
+    });
+  }
+  function openReading() {
+    guard(() => {
+      setView("reading");
+      setEditing(false);
+      clearFeedback();
+      pendingFocus.current = "main";
     });
   }
   function navigateView(next: string) {
@@ -412,7 +426,9 @@ function App() {
                   ? "System overview"
                   : view === "updates"
                     ? "Inventory updates"
-                    : "Component registry"}
+                    : view === "reading"
+                      ? "Reading room"
+                      : "Component registry"}
               </h1>
               <p className="lede">A place to make the systems useful.</p>
             </div>
@@ -433,6 +449,7 @@ function App() {
             ["overview", "Overview"],
             ["inventory", "Inventory"],
             ["updates", "Inventory updates"],
+            ["reading", "Reading room"],
           ].map(([key, label]) => (
             <a
               key={key}
@@ -465,6 +482,24 @@ function App() {
             <Notice kind="error">{loadError}</Notice>
             <Button onClick={() => void load()}>Retry loading</Button>
           </div>
+        ) : view === "reading" ? (
+          <ReadingRoom
+            records={records}
+            record={selected}
+            onSelect={(id) => {
+              setSelectedId(id);
+              clearFeedback();
+            }}
+            onUpdated={(record) =>
+              setRecords((previous) =>
+                previous.map((item) => (item.id === record.id ? record : item)),
+              )
+            }
+            onEdit={() => {
+              setView("inventory");
+              edit();
+            }}
+          />
         ) : view === "updates" ? (
           <InventoryUpdates onApplied={setRecords} onBusy={setSaving} />
         ) : view === "overview" ? (
@@ -743,9 +778,14 @@ function App() {
                   </h2>
                 </div>
                 {selected && !editing && (
-                  <Button variant="secondary" onClick={edit}>
-                    Edit specification
-                  </Button>
+                  <div className="actions">
+                    <Button variant="secondary" onClick={openReading}>
+                      Read specification
+                    </Button>
+                    <Button variant="secondary" onClick={edit}>
+                      Edit specification
+                    </Button>
+                  </div>
                 )}
               </div>
               {message && <Notice kind="success">{message}</Notice>}

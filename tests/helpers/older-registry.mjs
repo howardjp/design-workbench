@@ -4,7 +4,14 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { openRegistry } from "../../server/store.mjs";
 import { toDraft } from "../../src/contract.mjs";
-export const missing = ["checkbox", "fieldset", "disclosure", "error-summary"];
+export const missing = [
+  "checkbox",
+  "fieldset",
+  "disclosure",
+  "error-summary",
+  "article",
+  "table-of-contents",
+];
 export function createOlderRegistry(options = {}) {
   const dir = mkdtempSync(join(tmpdir(), "inventory-upgrade-"));
   const path = join(dir, "registry.sqlite");

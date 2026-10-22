@@ -310,3 +310,82 @@ export function ErrorSummary({
     </div>
   );
 }
+
+export type ContentsItem = { id: string; label: ReactNode };
+export function TableOfContents({
+  items,
+  label = "On this page",
+  className = "",
+  ...props
+}: Omit<ComponentPropsWithRef<"nav">, "children"> & {
+  items: readonly ContentsItem[];
+  label?: string;
+}) {
+  return (
+    <nav
+      {...props}
+      aria-label={label}
+      className={`martlet-contents ${className}`}
+    >
+      <strong>{label}</strong>
+      <ol>
+        {items.map((item) => (
+          <li key={item.id}>
+            <a href={`#${encodeURIComponent(item.id)}`}>{item.label}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+export function Article({
+  title,
+  titleLevel = 1,
+  eyebrow,
+  summary,
+  metadata,
+  contents,
+  aside,
+  contextLabel = "Article context",
+  footer,
+  children,
+  className = "",
+  ...props
+}: Omit<ComponentPropsWithRef<"article">, "title"> & {
+  title: ReactNode;
+  titleLevel?: 1 | 2;
+  eyebrow?: ReactNode;
+  summary?: ReactNode;
+  metadata?: ReactNode;
+  contents?: ReactNode;
+  aside?: ReactNode;
+  contextLabel?: string;
+  footer?: ReactNode;
+}) {
+  const titleId = useId();
+  const Heading = titleLevel === 1 ? "h1" : "h2";
+  return (
+    <article
+      {...props}
+      aria-labelledby={titleId}
+      className={`martlet-article ${className}`}
+    >
+      <header className="martlet-article-header">
+        {eyebrow && <p className="martlet-article-eyebrow">{eyebrow}</p>}
+        <Heading id={titleId}>{title}</Heading>
+        {summary && <p className="martlet-article-summary">{summary}</p>}
+        {metadata && <div className="martlet-article-metadata">{metadata}</div>}
+      </header>
+      <div className="martlet-article-layout">
+        {(contents || aside) && (
+          <aside className="martlet-article-context" aria-label={contextLabel}>
+            {contents}
+            {aside}
+          </aside>
+        )}
+        <div className="martlet-prose">{children}</div>
+      </div>
+      {footer && <footer className="martlet-article-footer">{footer}</footer>}
+    </article>
+  );
+}

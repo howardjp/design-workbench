@@ -57,7 +57,10 @@ test("preview is read-only and updates an older registry without replacing edite
   const preview = store.previewInventory();
   assert.deepEqual(store.list(), before);
   assert.deepEqual(store.history("button"), history);
-  assert.equal(preview.changes.filter((item) => item.kind === "add").length, 4);
+  assert.equal(
+    preview.changes.filter((item) => item.kind === "add").length,
+    missing.length,
+  );
   assert.equal(
     preview.changes.filter((item) => item.kind === "implementations").length,
     1,
@@ -69,7 +72,7 @@ test("preview is read-only and updates an older registry without replacing edite
     "@martlet/local",
   );
   const result = store.applyInventory(preview.token);
-  assert.equal(result.applied, 5);
+  assert.equal(result.applied, missing.length + 1);
   const updated = store.get("button");
   assert.deepEqual(toDraft(updated), toDraft(previous));
   assert.equal(updated.revision, previous.revision + 1);
@@ -129,7 +132,10 @@ test("any concurrent save invalidates preview and prevents partial updates", (t)
     () => store.get("checkbox"),
     (error) => error.status === 404,
   );
-  assert.equal(store.applyInventory(store.previewInventory().token).applied, 5);
+  assert.equal(
+    store.applyInventory(store.previewInventory().token).applied,
+    missing.length + 1,
+  );
 });
 test("name conflicts block the entire update until explicitly resolved", (t) => {
   const { store, custom } = olderRegistry(t, { collision: true });
@@ -149,7 +155,10 @@ test("name conflicts block the entire update until explicitly resolved", (t) => 
     saved.revision,
   );
   assert.equal(store.previewInventory().conflicts.length, 0);
-  assert.equal(store.applyInventory(store.previewInventory().token).applied, 5);
+  assert.equal(
+    store.applyInventory(store.previewInventory().token).applied,
+    missing.length + 1,
+  );
 });
 test("database failure rolls back additions, implementation changes, and history together", (t) => {
   const { store, path } = olderRegistry(t);
@@ -213,7 +222,7 @@ test("inventory HTTP endpoints require a current token and retain request bounda
     changes: [{ id: "fake", kind: "add" }],
   });
   assert.equal(response.status, 200);
-  assert.equal((await response.json()).applied, 5);
+  assert.equal((await response.json()).applied, missing.length + 1);
   assert.throws(
     () => store.get("fake"),
     (error) => error.status === 404,

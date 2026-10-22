@@ -17,8 +17,8 @@ The original jameshoward.us and krigsvold.org sites provide continuous evidence 
 | Direction | Independent charters, baseline rule, free distribution commitment | Human approval | Charters adopted; distribution policy recorded here |
 | Foundations | Type, spacing relationships, reflow, density, surfaces, layering, motion, accessibility | Shipped values distinguished from proposals; examples verified in real consumers | Working specifications proposed alongside both theme packages |
 | Administration baseline | Shared registry with independent family presentations | Browse, filter, inspect, create/edit, validate, persist, reload; failures preserve work | First local SQLite/React implementation in this repository |
-| React foundation | Typed packages consumed by the registry | Packaged exports, native semantics, common behavior tests, responsive and accessible composition | Fourteen experimental components in each family; unpublished |
-| Comparative experiences | Article, substantial form, searchable collection, dashboard | Identical content and functionality; family differences documented beyond color | Registry provides form, searchable collection, and coverage dashboard; article comparison remains |
+| React foundation | Typed packages consumed by the registry | Packaged exports, native semantics, common behavior tests, responsive and accessible composition | Sixteen experimental components in each family; unpublished |
+| Comparative experiences | Article, substantial form, searchable collection, dashboard | Identical content and functionality; family differences documented beyond color | Registry provides form, searchable collection, coverage dashboard, and a shared-content specification reading room; sustained consumer review remains |
 | Component expansion | Forms, navigation, feedback, disclosure, overlays, data | Documented states, keyboard model, acceptance criteria, real consumer | Inventory managed here; expanded controls remain planned |
 | Block and application library | Reusable sections, workflows, full admin reference | Working data operations; compositions assembled from public packages | Registry is the first application, not the full admin catalogue |
 | Broader platforms | Idiomatic integrations and adapters | Build/install/example checks for each claimed platform | CSS and Astro already published; React experimental; other platforms planned |
@@ -42,7 +42,7 @@ Expand the registry into an operational workspace only as real work requires it:
 
 Explicit bundled-inventory updates now preview additions, metadata, retained entries, and conflicts before transactional application. They preserve saved specifications and history; general JSON import and destructive reconciliation remain subsequent work.
 
-The four comparative experiences must use identical content, functionality, states, and data volume. Their applications may compose differently. Review at narrow and wide widths, in light and dark modes, with long text, validation failures, empty results, loading, keyboard use, and assistive technology. Publish a showcase only with honest labels distinguishing a working reference, an experiment, and a production consumer.
+The four comparative experiences now have working registry consumers. They must continue to use identical content, functionality, states, and data volume. Their applications may compose differently. Review at narrow and wide widths, in light and dark modes, with long text, validation failures, empty results, loading, keyboard use, and assistive technology. Publish a showcase only with honest labels distinguishing a working reference, an experiment, and a production consumer.
 
 ## Distribution and governance
 

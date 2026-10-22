@@ -149,3 +149,65 @@ for (const [family, UI] of [
     assert.match(field, /aria-describedby="spec-summary-error"/);
   });
 }
+for (const [family, UI] of [
+  ["martlet", Martlet],
+  ["krigsvold", Krigsvold],
+]) {
+  test(`${family} article keeps its accessible title, metadata, content, context, footer, and native attributes`, () => {
+    const markup = renderToStaticMarkup(
+      h(
+        UI.Article,
+        {
+          title: "A working contract",
+          titleLevel: 2,
+          id: "contract",
+          "data-consumer": "article",
+          summary: "Read the saved specification.",
+          metadata: h("time", { dateTime: "2026-10-21" }, "October 21"),
+          contents: h(UI.TableOfContents, {
+            items: [{ id: "purpose", label: "Purpose" }],
+          }),
+          aside: h("p", null, "Context remains available."),
+          footer: "Experimental source under MIT.",
+        },
+        h(
+          "section",
+          null,
+          h("h3", { id: "purpose", tabIndex: -1 }, "Purpose"),
+          h("p", null, "The actual contract."),
+        ),
+      ),
+    );
+    const titleId = markup.match(/<article[^>]*aria-labelledby="([^"]+)"/)[1];
+    assert.ok(markup.includes(`<h2 id="${titleId}">A working contract</h2>`));
+    assert.match(markup, /id="contract"/);
+    assert.match(markup, /data-consumer="article"/);
+    assert.match(markup, /<time dateTime="2026-10-21">October 21<\/time>/);
+    assert.match(markup, /<aside[^>]*aria-label="Article context"/);
+    assert.match(markup, /The actual contract\./);
+    assert.match(markup, /Experimental source under MIT\./);
+    const standalone = renderToStaticMarkup(
+      h(UI.Article, { title: "Standalone" }, "Body"),
+    );
+    assert.match(standalone, /<h1[^>]*>Standalone<\/h1>/);
+    assert.doesNotMatch(standalone, /<aside/);
+  });
+  test(`${family} table of contents uses named native navigation and encoded fragment targets`, () => {
+    const markup = renderToStaticMarkup(
+      h(UI.TableOfContents, {
+        label: "Specification sections",
+        "data-consumer": "contents",
+        items: [
+          { id: "purpose", label: "Purpose" },
+          { id: "a section", label: "A section" },
+        ],
+      }),
+    );
+    assert.match(markup, /<nav[^>]*aria-label="Specification sections"/);
+    assert.match(markup, /data-consumer="contents"/);
+    assert.match(markup, /<ol>/);
+    assert.match(markup, /href="#purpose"/);
+    assert.match(markup, /href="#a%20section"/);
+    assert.doesNotMatch(markup, /role="(menu|tablist)"/);
+  });
+}

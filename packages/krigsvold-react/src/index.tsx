@@ -310,3 +310,87 @@ export function ErrorSummary({
     </div>
   );
 }
+
+export type ContentsItem = { id: string; label: ReactNode };
+export function TableOfContents({
+  items,
+  label = "On this page",
+  className = "",
+  ...props
+}: Omit<ComponentPropsWithRef<"nav">, "children"> & {
+  items: readonly ContentsItem[];
+  label?: string;
+}) {
+  return (
+    <nav
+      {...props}
+      aria-label={label}
+      className={`krigsvold-contents ${className}`}
+    >
+      <strong>{label}</strong>
+      <ol>
+        {items.map((item) => (
+          <li key={item.id}>
+            <a href={`#${encodeURIComponent(item.id)}`}>{item.label}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+export function Article({
+  title,
+  titleLevel = 1,
+  eyebrow,
+  summary,
+  metadata,
+  contents,
+  aside,
+  contextLabel = "Article context",
+  footer,
+  children,
+  className = "",
+  ...props
+}: Omit<ComponentPropsWithRef<"article">, "title"> & {
+  title: ReactNode;
+  titleLevel?: 1 | 2;
+  eyebrow?: ReactNode;
+  summary?: ReactNode;
+  metadata?: ReactNode;
+  contents?: ReactNode;
+  aside?: ReactNode;
+  contextLabel?: string;
+  footer?: ReactNode;
+}) {
+  const titleId = useId();
+  const Heading = titleLevel === 1 ? "h1" : "h2";
+  return (
+    <article
+      {...props}
+      aria-labelledby={titleId}
+      className={`krigsvold-article ${className}`}
+    >
+      <header className="krigsvold-article-header">
+        {eyebrow && <p className="krigsvold-article-eyebrow">{eyebrow}</p>}
+        <Heading id={titleId}>{title}</Heading>
+        {summary && <p className="krigsvold-article-summary">{summary}</p>}
+        {metadata && (
+          <div className="krigsvold-article-metadata">{metadata}</div>
+        )}
+      </header>
+      <div className="krigsvold-article-layout">
+        {(contents || aside) && (
+          <aside
+            className="krigsvold-article-context"
+            aria-label={contextLabel}
+          >
+            {contents}
+            {aside}
+          </aside>
+        )}
+        <div className="krigsvold-prose">{children}</div>
+      </div>
+      {footer && <footer className="krigsvold-article-footer">{footer}</footer>}
+    </article>
+  );
+}
