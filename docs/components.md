@@ -29,6 +29,8 @@ Every interactive component must preserve its native keyboard model, consumer at
 | Article | Native article props/ref except title; required title node; titleLevel 1 (default) or 2; optional eyebrow, inline summary, metadata, contents, aside, contextLabel, footer; body children. | The generated title ID names the article. The caller owns coherent heading levels, native content, and routing. Context and body reflow at narrow widths; long text wraps; print keeps content and removes contents navigation. Martlet uses serif prose/right context; Krigsvold uses sans-serif prose/left context. No state, fetching, raw-HTML parser, or unsolicited focus is embedded. |
 | TableOfContents | Native nav props/ref except children; required readonly items containing id/label; optional visible label (default On this page). | A named navigation region contains ordered native fragment links. Caller IDs are unique and headings focusable for keyboard navigation. The consumer handles initial asynchronous fragment restoration. No menu, tablist, or custom arrow-key model. Long labels wrap; the list is omitted from print. |
 
+| Pagination | Controlled one-based page, pageCount, onPageChange; optional disabled and label (default Pagination); native nav props/ref except children. | Named navigation with native Previous page/Next page secondary buttons and a polite atomic page position. First/last boundaries and disabled prevent movement; Tab/Enter/Space remain native. Finite values truncate and clamp; nonfinite values become one. Wraps at narrow widths. Consumer owns fetching, route/query persistence, count, page size, recovery, and focus. English labels currently fixed; no numbered page links, RTL/localization, jump-to-page, or custom arrow model. |
+
 FieldControl describes the control attributes returned by Field. SummaryError describes an error message and optional targetId. ContentsItem describes a section ID/label pair. These are TypeScript types, not rendered components.
 
 ## Administration compositions
@@ -41,7 +43,7 @@ The revision disclosure exposes the latest 20 snapshots and compares editable fi
 
 ## Verification and promotion
 
-Automated checks cover native semantics and forwarded attributes, field associations, group errors, live-region priority, table captions/overflow, checkbox/disclosure keyboard activation, modal dismissal, collection ordering/pagination, persistence, and conflict recovery. The app exercises all eighteen exports in both families. See verification.md for completed checks and current limitations.
+Automated checks cover native semantics and forwarded attributes, field associations, group errors, live-region priority, table captions/overflow, checkbox/disclosure keyboard activation, modal dismissal, collection ordering/pagination, persistence, and conflict recovery. The app exercises all nineteen exports in both families. See verification.md for completed checks and current limitations.
 
 Before promoting any API to stable, add real use observations, manual screen-reader and keyboard review, text resizing/spacing checks, documented browser support, compatibility and migration guidance, and any missing state-specific regression cases. A passing automated scan is one piece of that evidence.
 
@@ -52,3 +54,5 @@ The reading-room composition displays identical saved content in both families, 
 The specification-import composition consumes FileInput with linked validation, read-only preview, exact field diffs, review acknowledgement, atomic apply, stale/conflict handling, and uncertain-response recovery. See [the import contract](import.md).
 
 Structured readiness reviews consume Radio for six exclusive outcomes and retain native groups, explicit observations, linked validation, revision conflicts, history, and review renewal after contract changes. They do not certify or promote contracts. See [the readiness-review contract](readiness-reviews.md).
+
+The review queue composes Pagination with server-derived current/renewal/not-recorded positions, effective per-area outcomes, URL filters and explicit snapshot refresh. Missing/stale reviews contribute six not-reviewed outcomes; historical passes are labeled separately. Both families have the same content and controls. Martlet uses two editorial columns with the review link below; Krigsvold aligns three regions with the action at the end and a leading rule. Both collapse to one column. See review-queue.md.

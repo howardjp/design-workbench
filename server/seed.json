@@ -1067,5 +1067,36 @@
         "state": "workspace"
       }
     ]
+  },
+  {
+    "id": "pagination",
+    "name": "Pagination",
+    "category": "Navigation",
+    "summary": "Navigate bounded pages of a saved collection with native previous and next buttons.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "Previous and next use native buttons; boundaries and pending states disable movement. The named navigation announces page position, retains keyboard semantics, wraps at narrow widths, and consumes real review queue results.",
+    "evidence": "",
+    "martletNotes": "Roomy editorial spacing separates a visible page position and secondary actions.",
+    "krigsvoldNotes": "Aligned controls and tabular page numerals clarify bounded movement.",
+    "migration": "Experimental controlled page, pageCount, onPageChange, disabled, label, native nav props/ref. No embedded fetching, routing, or focus movement.",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
   }
 ]

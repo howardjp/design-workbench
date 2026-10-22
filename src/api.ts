@@ -1,4 +1,5 @@
 import type {
+  ReviewQueueSnapshot,
   ComponentRecord,
   ReviewCheck,
   ReviewState,
@@ -33,6 +34,8 @@ async function request<T>(url: string, options?: RequestInit): Promise<T> {
   return data;
 }
 export const api = {
+  reviewQueue: (signal?: AbortSignal) =>
+    request<ReviewQueueSnapshot>("/api/reviews/queue", { signal }),
   getReview: (id: string, signal?: AbortSignal) =>
     request<ReviewState>(`/api/components/${encodeURIComponent(id)}/review`, {
       signal,

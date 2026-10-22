@@ -751,3 +751,69 @@ body {
 .review-confirmation-error {
   font-weight: 700;
 }
+
+.review-queue {
+  max-inline-size: 82rem;
+}
+.queue-snapshot {
+  padding: 1rem;
+  background: var(--ui-surface);
+  border-inline-start: 2px solid var(--ui-accent);
+}
+.queue-counts {
+  font-weight: 700;
+}
+.queue-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 1rem;
+}
+.queue-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.queue-list > li {
+  border-block-start: 1px solid var(--ui-line);
+  padding-block: 1.5rem;
+  display: grid;
+  gap: 1.5rem;
+  min-inline-size: 0;
+}
+.queue-list p {
+  margin-block-start: 0.5rem;
+}
+.queue-open {
+  align-self: start;
+  justify-self: start;
+}
+.queue-areas {
+  display: grid;
+  gap: 0.75rem;
+}
+.queue-areas > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.queue-areas dd {
+  margin: 0;
+}
+.martlet .queue-list > li {
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+}
+.martlet .queue-open {
+  grid-column: 1/-1;
+}
+.krigsvold .queue-list > li {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) minmax(7rem, 0.5fr);
+  border-inline-start: 2px solid var(--ui-accent);
+  padding-inline-start: 1rem;
+}
+@media (max-width: 60rem) {
+  .martlet .queue-list > li,
+  .krigsvold .queue-list > li {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

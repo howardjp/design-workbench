@@ -79,3 +79,16 @@ const krigsvoldRadio = (
   />
 );
 void [martletRadio, krigsvoldRadio];
+
+export const paginationContracts = [Martlet, Krigsvold].map((UI) => (
+  <UI.Pagination
+    ref={createRef<HTMLElement>()}
+    id="pages"
+    label="Review pages"
+    page={1}
+    pageCount={3}
+    onPageChange={() => {}}
+    disabled
+    aria-describedby="results"
+  />
+));

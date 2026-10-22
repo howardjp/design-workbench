@@ -115,3 +115,30 @@ export interface ReviewState {
   current: boolean;
   summary: { passed: number; needsWork: number; unreviewed: number };
 }
+
+export interface ReviewQueueEntry {
+  id: string;
+  name: string;
+  summary: string;
+  category: string;
+  maturity: Maturity;
+  revision: number;
+  position: "not-recorded" | "renewal" | "current";
+  recordedAt: string | null;
+  checks: Pick<ReviewCheck, "id" | "outcome">[];
+  summaryCounts: ReviewState["summary"];
+  savedSummary: ReviewState["summary"];
+}
+export interface ReviewQueueSnapshot {
+  schemaVersion: 1;
+  policyVersion: 1;
+  generatedAt: string;
+  entries: ReviewQueueEntry[];
+  counts: {
+    total: number;
+    current: number;
+    renewal: number;
+    notRecorded: number;
+    allPassed: number;
+  };
+}

@@ -575,3 +575,17 @@
   cursor: default;
   color: var(--martlet-disabled-text);
 }
+
+.martlet-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border-block-start: 1px solid var(--ui-line);
+  padding-block: 1rem;
+}
+.martlet-pagination p {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}

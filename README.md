@@ -93,3 +93,5 @@ Readiness-review workspace captures use the same unreviewed Button contract and 
 | Martlet | Krigsvold |
 | --- | --- |
 | ![Martlet readiness review](docs/qa/martlet-review.jpg) | ![Krigsvold readiness review](docs/qa/krigsvold-review.jpg) |
+
+The [review queue](docs/review-queue.md) prioritizes saved observations needing renewal, recorded needs-work outcomes, absent reviews, partial reviews, and all-passed reviews. Search, area/position/outcome filters, ordering, and bounded pages survive reload and family navigation in the URL. Current basis never implies verified evidence, stable maturity, or release approval. Both React packages now expose nineteen experimental exports, including the queue's native Pagination. New databases seed 35 actual export contracts; existing databases gain Pagination only through explicit Inventory updates.

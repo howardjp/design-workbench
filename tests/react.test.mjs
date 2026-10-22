@@ -283,3 +283,33 @@ for (const family of ["martlet", "krigsvold"])
     assert.match(html, /disabled=""/);
     assert.match(html, /checked=""/);
   });
+
+for (const [family, UI] of [
+  ["martlet", Martlet],
+  ["krigsvold", Krigsvold],
+])
+  test(`${family} pagination names native navigation and safely bounds malformed and edge pages`, () => {
+    const render = (page, pageCount, disabled = false) =>
+      renderToStaticMarkup(
+        h(UI.Pagination, {
+          page,
+          pageCount,
+          disabled,
+          onPageChange: () => {},
+          label: "Review pages",
+          "data-consumer": "queue",
+        }),
+      );
+    const first = render(1, 3);
+    assert.match(
+      first,
+      /<nav[^>]*data-consumer="queue"[^>]*aria-label="Review pages"/,
+    );
+    assert.match(first, /aria-live="polite"/);
+    assert.match(first, />Page 1 of 3<\/p>/);
+    assert.equal((first.match(/disabled=""/g) || []).length, 1);
+    assert.equal((render(2, 3, true).match(/disabled=""/g) || []).length, 2);
+    assert.match(render(900, 3), />Page 3 of 3<\/p>/);
+    assert.match(render(NaN, Infinity), />Page 1 of 1<\/p>/);
+    assert.equal((render(-1, 0).match(/disabled=""/g) || []).length, 2);
+  });

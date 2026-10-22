@@ -10,6 +10,7 @@ import { createRoot } from "react-dom/client";
 import { family, title, UI } from "./family";
 import { ReadinessDashboard } from "./readiness";
 import { InventoryUpdates } from "./inventory-updates";
+import { ReviewQueue } from "./review-queue";
 import { ReadinessReviews } from "./readiness-review";
 import { ImportRegistry } from "./import-registry";
 import { ReadingRoom } from "./reading-room";
@@ -56,6 +57,7 @@ function storedMode(): "light" | "dark" {
   }
 }
 function App() {
+  const [queueSearch, setQueueSearch] = useState(location.search);
   const [mode, setMode] = useState(storedMode);
   const [records, setRecords] = useState<ComponentRecord[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -65,7 +67,7 @@ function App() {
   const [maturity, setMaturity] = useState("");
   const [platform, setPlatform] = useState("");
   const [view, setView] = useState(
-    ["overview", "updates", "reading", "import", "review"].includes(
+    ["overview", "updates", "reading", "import", "review", "queue"].includes(
       new URLSearchParams(location.search).get("view") ?? "",
     )
       ? new URLSearchParams(location.search).get("view")!
@@ -378,6 +380,13 @@ function App() {
     </Field>
   );
 
+  const familyHref = (next: string) => {
+    const params = new URLSearchParams(queueSearch);
+    params.set("view", view);
+    if (selectedId) params.set("record", selectedId);
+    else params.delete("record");
+    return `/${next}/?${params}`;
+  };
   return (
     <div className={family} {...{ [`data-${family}`]: mode }}>
       <AppShell
@@ -392,13 +401,13 @@ function App() {
         navigation={
           <>
             <a
-              href={`/martlet/${selectedId ? `?record=${selectedId}&view=${view}` : ""}`}
+              href={familyHref("martlet")}
               aria-current={family === "martlet" ? "page" : undefined}
             >
               Martlet
             </a>
             <a
-              href={`/krigsvold/${selectedId ? `?record=${selectedId}&view=${view}` : ""}`}
+              href={familyHref("krigsvold")}
               aria-current={family === "krigsvold" ? "page" : undefined}
             >
               Krigsvold
@@ -430,13 +439,15 @@ function App() {
                   ? "System overview"
                   : view === "updates"
                     ? "Inventory updates"
-                    : view === "review"
-                      ? "Readiness reviews"
-                      : view === "import"
-                        ? "Import specifications"
-                        : view === "reading"
-                          ? "Reading room"
-                          : "Component registry"}
+                    : view === "queue"
+                      ? "Review queue"
+                      : view === "review"
+                        ? "Readiness reviews"
+                        : view === "import"
+                          ? "Import specifications"
+                          : view === "reading"
+                            ? "Reading room"
+                            : "Component registry"}
               </h1>
               <p className="lede">A place to make the systems useful.</p>
             </div>
@@ -460,6 +471,7 @@ function App() {
             ["reading", "Reading room"],
             ["import", "Import specifications"],
             ["review", "Readiness reviews"],
+            ["queue", "Review queue"],
           ].map(([key, label]) => (
             <a
               key={key}
@@ -492,6 +504,19 @@ function App() {
             <Notice kind="error">{loadError}</Notice>
             <Button onClick={() => void load()}>Retry loading</Button>
           </div>
+        ) : view === "queue" ? (
+          <ReviewQueue
+            onLocationChange={setQueueSearch}
+            onOpen={(id) =>
+              guard(() => {
+                setSelectedId(id);
+                setView("review");
+                setEditing(false);
+                clearFeedback();
+                pendingFocus.current = "main";
+              })
+            }
+          />
         ) : view === "review" ? (
           <ReadinessReviews
             records={records}

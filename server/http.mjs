@@ -1,3 +1,4 @@
+import { reviewQueue } from "./review-queue.mjs";
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { resolve, extname, sep } from "node:path";
@@ -76,6 +77,8 @@ export function createWorkbenchServer({ store, dist, middleware }) {
           const data = await body(req);
           return json(res, 200, store.applyInventory(data.token));
         }
+        if (req.method === "GET" && path === "/api/reviews/queue")
+          return json(res, 200, reviewQueue(store.list()));
         if (req.method === "GET" && path === "/api/components")
           return json(res, 200, store.list());
         if (req.method === "GET" && path === "/api/export") {

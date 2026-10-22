@@ -423,3 +423,51 @@ export function Radio({
     </label>
   );
 }
+
+export function Pagination({
+  page,
+  pageCount,
+  onPageChange,
+  disabled = false,
+  label = "Pagination",
+  className = "",
+  ...props
+}: Omit<ComponentPropsWithRef<"nav">, "children"> & {
+  page: number;
+  pageCount: number;
+  onPageChange: (page: number) => void;
+  disabled?: boolean;
+  label?: string;
+}) {
+  const count = Number.isFinite(pageCount)
+    ? Math.max(1, Math.trunc(pageCount))
+    : 1;
+  const current = Number.isFinite(page)
+    ? Math.min(count, Math.max(1, Math.trunc(page)))
+    : 1;
+  return (
+    <nav
+      {...props}
+      aria-label={label}
+      className={`krigsvold-pagination ${className}`}
+    >
+      <Button
+        variant="secondary"
+        disabled={disabled || current === 1}
+        onClick={() => onPageChange(current - 1)}
+      >
+        Previous page
+      </Button>
+      <p aria-live="polite" aria-atomic="true">
+        Page {current} of {count}
+      </p>
+      <Button
+        variant="secondary"
+        disabled={disabled || current === count}
+        onClick={() => onPageChange(current + 1)}
+      >
+        Next page
+      </Button>
+    </nav>
+  );
+}
