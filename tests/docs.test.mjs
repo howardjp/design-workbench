@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile, writeFile, mkdtemp, rm, readdir } from "node:fs/promises";
+import { readFile, writeFile, mkdtemp, mkdir, rm, readdir } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { resolve, join } from "node:path";
 import { transformSync } from "rolldown/utils";
@@ -9,6 +9,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 const contracts = JSON.parse(
   await readFile("docs-app/src/contracts.json", "utf8"),
 );
+await mkdir(resolve("test-results"), { recursive: true });
 function compile(source, name) {
   const r = transformSync(name + ".tsx", source, {
     lang: "tsx",

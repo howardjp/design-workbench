@@ -9,7 +9,7 @@ The shared documentation source now builds two independent static React applicat
 | Martlet | https://martlet-react-reference.k3jph.chatgpt.site | https://react.martletdesign.dev | docs-dist/martlet |
 | Krigsvold | https://krigsvold-react-reference.k3jph.chatgpt.site | https://react.krigsvolddesign.org | docs-dist/krigsvold |
 
-The review destinations are separate private Sites. Consult the current PR/deployment result for confirmed live versions; a registered address alone does not establish deployment success. Public domains and DNS are not configured by this change. Neither npm publication nor changes to the originating websites are implied.
+Both review destinations are separate private Sites with terminal successful deployments from workbench implementation f0fdfe22991910deea6a1e03f9b603c620801407; exact Site source/deployment IDs are recorded in docs/verification.md. Public domains and DNS are not configured by this change. Neither npm publication nor changes to the originating websites are implied.
 
 ## Build and separation
 
