@@ -1,4 +1,10 @@
-import type { ComponentRecord, Draft, HistoryEntry } from "./types";
+import type {
+  ComponentRecord,
+  Draft,
+  HistoryEntry,
+  InventoryPreview,
+  InventoryResult,
+} from "./types";
 export class ApiError extends Error {
   constructor(
     public status: number,
@@ -23,6 +29,12 @@ async function request<T>(url: string, options?: RequestInit): Promise<T> {
   return data;
 }
 export const api = {
+  previewInventory: () => request<InventoryPreview>("/api/inventory/preview"),
+  applyInventory: (token: string) =>
+    request<InventoryResult>("/api/inventory/apply", {
+      method: "POST",
+      body: JSON.stringify({ token }),
+    }),
   list: () => request<ComponentRecord[]>("/api/components"),
   get: (id: string) =>
     request<ComponentRecord>(`/api/components/${encodeURIComponent(id)}`),

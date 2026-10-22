@@ -38,7 +38,7 @@ try {
   }
   writeFileSync(
     join(directory, "consumer.mjs"),
-    `import {createElement as h} from 'react';import {renderToStaticMarkup} from 'react-dom/server';import * as Martlet from '@martlet/react';import * as Krigsvold from '@krigsvold/react';for(const UI of [Martlet,Krigsvold]){if(Object.keys(UI).length!==13)throw new Error('Missing component exports');const html=renderToStaticMarkup(h(UI.Field,{label:'Name'},props=>h(UI.TextInput,{...props,name:'name'})));if(!html.includes('name="name"'))throw new Error('Consumer render failed');}console.log('Both packed packages installed and rendered outside the workspace.');`,
+    `import {createElement as h} from 'react';import {renderToStaticMarkup} from 'react-dom/server';import * as Martlet from '@martlet/react';import * as Krigsvold from '@krigsvold/react';for(const UI of [Martlet,Krigsvold]){if(Object.keys(UI).length!==14)throw new Error('Missing component exports');const html=renderToStaticMarkup(h(UI.Field,{label:'Name'},props=>h(UI.TextInput,{...props,name:'name'})));if(!html.includes('name="name"'))throw new Error('Consumer render failed');const errors=renderToStaticMarkup(h(UI.ErrorSummary,{title:'Check the form',errors:[{message:'Enter a name.',targetId:'name'}]}));if(!errors.includes('href="#name"')||!errors.includes('role="alert"'))throw new Error('Consumer error summary failed');}console.log('Both packed packages installed and rendered outside the workspace.');`,
   );
   execFileSync(process.execPath, ["consumer.mjs"], {
     cwd: directory,

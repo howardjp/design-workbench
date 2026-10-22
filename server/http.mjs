@@ -56,6 +56,12 @@ export function createWorkbenchServer({ store, dist, middleware }) {
       const url = new URL(req.url, `http://${host}`);
       const path = url.pathname;
       if (path.startsWith("/api/")) {
+        if (req.method === "GET" && path === "/api/inventory/preview")
+          return json(res, 200, store.previewInventory());
+        if (req.method === "POST" && path === "/api/inventory/apply") {
+          const data = await body(req);
+          return json(res, 200, store.applyInventory(data.token));
+        }
         if (req.method === "GET" && path === "/api/components")
           return json(res, 200, store.list());
         if (req.method === "GET" && path === "/api/export") {

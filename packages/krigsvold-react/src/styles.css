@@ -366,3 +366,21 @@
   min-block-size: 2.8rem;
   padding: 0.6rem 0.25rem;
 }
+
+.krigsvold-error-summary {
+  padding: 1rem;
+  border-inline-start: 3px solid var(--krigsvold-danger);
+  background: var(--krigsvold-danger-bg);
+  color: var(--krigsvold-danger-text);
+  display: grid;
+  gap: 1rem;
+  min-inline-size: 0;
+}
+.krigsvold-error-summary ul {
+  margin: 0;
+  padding-inline-start: 1.25rem;
+}
+.krigsvold-error-summary a {
+  color: inherit;
+  text-decoration: underline;
+}

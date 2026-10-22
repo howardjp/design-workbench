@@ -9,6 +9,7 @@ import {
 import { createRoot } from "react-dom/client";
 import { family, title, UI } from "./family";
 import { ReadinessDashboard } from "./readiness";
+import { InventoryUpdates } from "./inventory-updates";
 import { RevisionReview } from "./revisions";
 import "@martlet/react/styles.css";
 import "@krigsvold/react/styles.css";
@@ -41,6 +42,7 @@ const {
   Dialog,
   Checkbox,
   Fieldset,
+  ErrorSummary,
 } = UI;
 const initialRecordId = new URLSearchParams(location.search).get("record");
 function storedMode(): "light" | "dark" {
@@ -60,8 +62,10 @@ function App() {
   const [maturity, setMaturity] = useState("");
   const [platform, setPlatform] = useState("");
   const [view, setView] = useState(
-    new URLSearchParams(location.search).get("view") === "overview"
-      ? "overview"
+    ["overview", "updates"].includes(
+      new URLSearchParams(location.search).get("view") ?? "",
+    )
+      ? new URLSearchParams(location.search).get("view")!
       : "inventory",
   );
   const [evidence, setEvidence] = useState("");
@@ -332,7 +336,7 @@ function App() {
     hint?: string,
     rows?: number,
   ) => (
-    <Field label={label} hint={hint} error={errors[key]}>
+    <Field id={`spec-${key}`} label={label} hint={hint} error={errors[key]}>
       {(props) =>
         rows ? (
           <Textarea
@@ -404,7 +408,11 @@ function App() {
           <div className="intro-line">
             <div>
               <h1>
-                {view === "overview" ? "System overview" : "Component registry"}
+                {view === "overview"
+                  ? "System overview"
+                  : view === "updates"
+                    ? "Inventory updates"
+                    : "Component registry"}
               </h1>
               <p className="lede">A place to make the systems useful.</p>
             </div>
@@ -424,6 +432,7 @@ function App() {
           {[
             ["overview", "Overview"],
             ["inventory", "Inventory"],
+            ["updates", "Inventory updates"],
           ].map(([key, label]) => (
             <a
               key={key}
@@ -456,6 +465,8 @@ function App() {
             <Notice kind="error">{loadError}</Notice>
             <Button onClick={() => void load()}>Retry loading</Button>
           </div>
+        ) : view === "updates" ? (
+          <InventoryUpdates onApplied={setRecords} onBusy={setSaving} />
         ) : view === "overview" ? (
           <ReadinessDashboard
             records={records}
@@ -739,19 +750,14 @@ function App() {
               </div>
               {message && <Notice kind="success">{message}</Notice>}
               {(Object.keys(errors).length > 0 || failure) && (
-                <div ref={summaryRef} tabIndex={-1} className="error-summary">
-                  <Notice kind="error">
-                    <strong>
-                      {failure || "The specification needs a few changes."}
-                    </strong>
-                    {Object.keys(errors).length > 0 && (
-                      <ul>
-                        {Object.entries(errors).map(([key, value]) => (
-                          <li key={key}>{value}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </Notice>
+                <ErrorSummary
+                  ref={summaryRef}
+                  title={failure || "The specification needs a few changes."}
+                  errors={Object.entries(errors).map(([key, value]) => ({
+                    message: value,
+                    targetId: `spec-${key}`,
+                  }))}
+                >
                   {conflict && (
                     <Button
                       variant="secondary"
@@ -760,7 +766,7 @@ function App() {
                       Reload saved record
                     </Button>
                   )}
-                </div>
+                </ErrorSummary>
               )}
               {editing ? (
                 <form
@@ -789,7 +795,11 @@ function App() {
                     3,
                   )}
                   <div className="form-pair">
-                    <Field label="Category" error={errors.category}>
+                    <Field
+                      id="spec-category"
+                      label="Category"
+                      error={errors.category}
+                    >
                       {(props) => (
                         <Select
                           {...props}
@@ -806,6 +816,7 @@ function App() {
                       )}
                     </Field>
                     <Field
+                      id="spec-maturity"
                       label="Maturity stage"
                       hint="Stable requires evidence; deprecated requires migration guidance."
                       error={errors.maturity}
@@ -830,6 +841,8 @@ function App() {
                     </Field>
                   </div>
                   <Fieldset
+                    id="spec-targets"
+                    tabIndex={-1}
                     legend="Target platforms"
                     hint="Planned reach. Released implementations are recorded separately."
                     error={errors.targets}
@@ -931,7 +944,7 @@ function App() {
                     {currentImplementations.length ? (
                       <ul className="implementations">
                         {currentImplementations.map((item) => (
-                          <li key={item.platform}>
+                          <li key={`${item.platform}/${item.package}`}>
                             <strong>{item.platform}</strong>
                             <span>
                               {item.package} {item.version}

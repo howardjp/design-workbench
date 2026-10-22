@@ -29,3 +29,28 @@ export interface HistoryEntry {
   at: string;
   snapshot: ComponentRecord;
 }
+
+export interface InventoryChange {
+  id: string;
+  name: string;
+  kind: "add" | "implementations";
+  revision: number | null;
+  before: Implementation[];
+  after: Implementation[];
+  record?: Draft & { id: string; implementations: Implementation[] };
+}
+export interface InventoryPreview {
+  schemaVersion: 1;
+  source: string;
+  inventoryVersion: string;
+  token: string;
+  changes: InventoryChange[];
+  conflicts: { id: string; name: string; message: string }[];
+  retained: { id: string; name: string; implementations: Implementation[] }[];
+  unchanged: number;
+}
+export interface InventoryResult {
+  applied: number;
+  components: ComponentRecord[];
+  preview: InventoryPreview;
+}

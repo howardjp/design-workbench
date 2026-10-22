@@ -46,17 +46,20 @@ export type FieldControl = {
   "aria-invalid"?: true;
 };
 export function Field({
+  id: providedId,
   label,
   hint,
   error,
   children,
 }: {
+  id?: string;
   label: string;
   hint?: string;
   error?: string;
   children: (props: FieldControl) => ReactNode;
 }) {
-  const id = useId();
+  const generatedId = useId();
+  const id = providedId ?? generatedId;
   const descriptions =
     [hint && `${id}-hint`, error && `${id}-error`].filter(Boolean).join(" ") ||
     undefined;
@@ -255,5 +258,55 @@ export function Disclosure({
       <summary>{summary}</summary>
       {children}
     </details>
+  );
+}
+
+export type SummaryError = { message: string; targetId?: string };
+export function ErrorSummary({
+  title,
+  errors = [],
+  children,
+  className = "",
+  ...props
+}: Omit<ComponentPropsWithRef<"div">, "title"> & {
+  title: ReactNode;
+  errors?: SummaryError[];
+}) {
+  const titleId = useId();
+  return (
+    <div
+      {...props}
+      tabIndex={-1}
+      role="alert"
+      aria-labelledby={titleId}
+      className={`martlet-error-summary ${className}`}
+    >
+      <strong id={titleId}>{title}</strong>
+      {errors.length > 0 && (
+        <ul>
+          {errors.map((error, index) => (
+            <li key={index}>
+              {error.targetId ? (
+                <a
+                  href={`#${error.targetId}`}
+                  onClick={(event) => {
+                    const target = document.getElementById(error.targetId!);
+                    if (target) {
+                      event.preventDefault();
+                      target.focus();
+                    }
+                  }}
+                >
+                  {error.message}
+                </a>
+              ) : (
+                error.message
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+      {children}
+    </div>
   );
 }

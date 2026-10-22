@@ -387,6 +387,37 @@
     ]
   },
   {
+    "id": "error-summary",
+    "name": "ErrorSummary",
+    "category": "Feedback",
+    "summary": "Explain validation or operation failures, link field errors to their controls, and offer a clear recovery action.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "Errors are announced as an alert with an accessible title.\nThe caller can focus the summary through its native div ref.\nActivating a field link moves keyboard focus to the named control or focusable group.\nFailures preserve the entered draft and expose a recovery action when available.\nLong errors and links wrap at 320 CSS pixels in both light and dark modes.",
+    "evidence": "",
+    "martletNotes": "Group errors in an editorial panel with a strong top rule and generous spacing; keep recovery near the explanation.",
+    "krigsvoldNotes": "Use a compact aligned panel with a precise leading rule; keep field links and recovery actions in reading order.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
+  },
+  {
     "id": "field",
     "name": "Field",
     "category": "Input",

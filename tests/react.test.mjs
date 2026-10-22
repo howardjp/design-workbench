@@ -113,3 +113,39 @@ for (const [family, UI] of [
     assert.match(disclosure, /<summary>History<\/summary>Revision 1/);
   });
 }
+for (const [family, UI] of [
+  ["martlet", Martlet],
+  ["krigsvold", Krigsvold],
+]) {
+  test(`${family} error summaries name failures and link to explicit field IDs`, () => {
+    const html = renderToStaticMarkup(
+      h(
+        UI.ErrorSummary,
+        {
+          title: "Check this specification",
+          errors: [
+            { message: "Enter a summary.", targetId: "spec-summary" },
+            { message: "The server is unavailable." },
+          ],
+        },
+        h(UI.Button, null, "Retry"),
+      ),
+    );
+    assert.match(html, /role="alert"/);
+    assert.match(html, /tabindex="-1"/);
+    assert.match(html, /aria-labelledby="[^"]+"/);
+    assert.match(html, /href="#spec-summary"/);
+    assert.match(html, /The server is unavailable\./);
+    assert.match(html, />Retry<\/button>/);
+    const field = renderToStaticMarkup(
+      h(
+        UI.Field,
+        { id: "spec-summary", label: "Summary", error: "Enter a summary." },
+        (props) => h(UI.TextInput, props),
+      ),
+    );
+    assert.match(field, /for="spec-summary"/);
+    assert.match(field, /id="spec-summary"/);
+    assert.match(field, /aria-describedby="spec-summary-error"/);
+  });
+}

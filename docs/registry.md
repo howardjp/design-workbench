@@ -21,7 +21,7 @@ Both family views call the same API and edit the same SQLite database. There is 
 | implementations | Read-only inventory of family, platform, package, version, and published/workspace availability |
 | revision / updatedAt | Server-assigned integer revision and UTC timestamp |
 
-The server validates every mutation independently of the client. Creation ignores supplied inventory/revision/id metadata. Editing preserves implementation metadata; changes to target platforms never assert that an implementation exists. Evidence is human-authored, not machine-certified. The initial 29 records combine the 17 Astro exports with the 13 React exports (Button overlaps), with both families represented. New records start without implementation claims.
+The server validates every mutation independently of the client. Creation ignores supplied inventory/revision/id metadata. Editing preserves implementation metadata; changes to target platforms never assert that an implementation exists. Evidence is human-authored, not machine-certified. The initial 30 records combine the 17 Astro exports with the 14 React exports (Button overlaps), with both families represented. New records start without implementation claims.
 
 ## API
 
@@ -32,9 +32,11 @@ The server validates every mutation independently of the client. Creation ignore
 | POST /api/components | Create from `{record: draft}` |
 | PUT /api/components/:id | Save `{record: draft, revision: expectedRevision}` |
 | GET /api/components/:id/history | Latest 20 snapshots, newest first |
+| GET /api/inventory/preview | Read-only bundled-inventory update preview |
+| POST /api/inventory/apply | Apply a current preview token transactionally |
 | GET /api/export | Schema-versioned JSON of latest records; no history |
 
-Writes return the saved record. Validation uses 422 with field errors; stale revision uses 409; malformed JSON/revision uses 400; an unknown record uses 404. Only successful writes append history. Record and history commit in a single SQLite transaction. SQLite schema version 1 is recorded with user_version. Newer schemas are refused. Initial seeding occurs only at schema creation; upgrades must never overwrite user records implicitly.
+Writes return the saved record. Validation uses 422 with field errors; stale revision uses 409; malformed JSON/revision uses 400; an unknown record uses 404. Only successful writes append history. Record and history commit in a single SQLite transaction. SQLite schema version 1 is recorded with user_version. Newer schemas are refused. Initial seeding occurs only at schema creation; upgrades must never overwrite user records implicitly. [Explicit bundled-inventory updates](inventory-updates.md) preserve edited contracts and append history only for changed records.
 
 The overview derives actual counts and per-family/platform coverage from the same saved records. Its missing-evidence action opens a filtered inventory. It records no synthetic adoption or activity metrics.
 
@@ -50,5 +52,6 @@ The overview derives actual counts and per-family/platform coverage from the sam
 8. At 320 CSS pixels, fields and actions wrap and the document does not overflow. Tables can scroll in a named keyboard-focusable region. Both light and dark modes use the same semantic structure.
 9. Reduced-motion preference removes transitions. Visible keyboard focus, labels, landmarks, and skip navigation remain usable. Automated accessibility checks supplement manual review.
 10. Export contains a schema version and actual saved records. Full backups preserve SQLite and history through the documented stop/copy/restore procedure.
+11. Bundled-inventory updates show exact additions and metadata changes for both families; name conflicts block the entire batch. Any concurrent saved change invalidates the preview. Storage failure rolls back records and history together. Refresh after an uncertain response reveals the saved result without replaying it.
 
-Known boundaries: no authentication, remote deployment, JSON import, package publishing, source-site mutation, automated inventory synchronization, or claims of sustained production usage. These are explicit subsequent work, not hidden effects of Save.
+Known boundaries: no authentication, remote deployment, JSON import, package publishing, source-site mutation, live package discovery, or claims of sustained production usage. These are explicit subsequent work, not hidden effects of Save.

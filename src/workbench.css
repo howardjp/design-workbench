@@ -558,3 +558,65 @@ body {
 .revision-diff dd p {
   white-space: pre-wrap;
 }
+.inventory-updates {
+  max-inline-size: 76rem;
+}
+.update-guidance {
+  padding: 1.5rem;
+  background: var(--ui-surface);
+}
+.inventory-changes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2rem;
+}
+.inventory-changes > li {
+  min-inline-size: 0;
+  padding-block: 1.5rem;
+  border-block-start: 1px solid var(--ui-line);
+}
+.inventory-changes .section-heading {
+  margin: 0;
+}
+.update-comparison {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+}
+.update-comparison > * {
+  min-inline-size: 0;
+}
+.initial-specification {
+  display: grid;
+  gap: 1rem;
+}
+.initial-specification dt {
+  font-weight: 700;
+  margin-block-end: 0.5rem;
+}
+.initial-specification dd {
+  margin: 0;
+  white-space: pre-wrap;
+}
+.martlet .update-guidance {
+  border-block-start: 3px solid var(--martlet-color-gold-500);
+  max-inline-size: 58rem;
+}
+.martlet .inventory-changes > li {
+  padding: 1.5rem;
+  background: var(--ui-surface);
+}
+.krigsvold .update-guidance {
+  border-inline-start: 3px solid var(--ui-accent);
+}
+.krigsvold .inventory-changes > li {
+  border-block-start: 2px solid var(--ui-line);
+}
+@media (max-width: 45rem) {
+  .update-comparison {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

@@ -203,3 +203,19 @@ export function compareDrafts(current, previous) {
     )
     .map((key) => ({ key, current: current[key], previous: previous[key] }));
 }
+
+export function implementationsDiffer(current, previous) {
+  const normalize = (items) =>
+    items
+      .map(({ family, platform, package: packageName, version, state }) => [
+        family,
+        platform,
+        packageName,
+        version,
+        state,
+      ])
+      .sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b), "en"));
+  return (
+    JSON.stringify(normalize(current)) !== JSON.stringify(normalize(previous))
+  );
+}

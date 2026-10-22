@@ -1,6 +1,7 @@
 import { DatabaseSync } from "node:sqlite";
 import { readFileSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
+import { inventorySnapshot, previewInventory } from "./inventory.mjs";
 import { cleanDraft, validateDraft } from "../src/contract.mjs";
 export class RegistryError extends Error {
   constructor(status, message, fields = {}) {
@@ -10,6 +11,9 @@ export class RegistryError extends Error {
   }
 }
 export function openRegistry(path) {
+  const inventory = inventorySnapshot(
+    JSON.parse(readFileSync(new URL("./seed.json", import.meta.url), "utf8")),
+  );
   if (path !== ":memory:") mkdirSync(dirname(path), { recursive: true });
   const db = new DatabaseSync(path);
   db.exec("PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000;");
@@ -24,9 +28,7 @@ export function openRegistry(path) {
       db.exec(
         "CREATE TABLE components (id TEXT PRIMARY KEY, revision INTEGER NOT NULL, document TEXT NOT NULL); CREATE TABLE history (id TEXT NOT NULL, revision INTEGER NOT NULL, at TEXT NOT NULL, snapshot TEXT NOT NULL, PRIMARY KEY(id,revision)); PRAGMA user_version=1;",
       );
-      const seed = JSON.parse(
-        readFileSync(new URL("./seed.json", import.meta.url), "utf8"),
-      );
+      const seed = inventory.records;
       const at = new Date().toISOString();
       for (const entry of seed) {
         const record = { ...entry, revision: 1, updatedAt: at };
@@ -56,15 +58,66 @@ export function openRegistry(path) {
     if (!row) throw new RegistryError(404, "Component not found.");
     return JSON.parse(row.document);
   };
+  const list = () =>
+    db
+      .prepare(
+        "SELECT document FROM components ORDER BY json_extract(document,'$.name') COLLATE NOCASE, id",
+      )
+      .all()
+      .map((row) => JSON.parse(row.document));
+  const write = (record) => {
+    db.prepare(
+      "INSERT INTO components VALUES (?,?,?) ON CONFLICT(id) DO UPDATE SET revision=excluded.revision, document=excluded.document",
+    ).run(record.id, record.revision, JSON.stringify(record));
+    db.prepare("INSERT INTO history VALUES (?,?,?,?)").run(
+      record.id,
+      record.revision,
+      record.updatedAt,
+      JSON.stringify(record),
+    );
+  };
   return {
     close: () => db.close(),
-    list: () =>
-      db
-        .prepare(
-          "SELECT document FROM components ORDER BY json_extract(document,'$.name') COLLATE NOCASE, id",
-        )
-        .all()
-        .map((row) => JSON.parse(row.document)),
+    list,
+    previewInventory: () => previewInventory(list(), inventory),
+    applyInventory(token) {
+      if (typeof token !== "string" || !/^[a-f0-9]{64}$/.test(token))
+        throw new RegistryError(
+          400,
+          "A valid inventory preview token is required.",
+        );
+      db.exec("BEGIN IMMEDIATE");
+      try {
+        const preview = previewInventory(list(), inventory);
+        if (preview.token !== token)
+          throw new RegistryError(
+            409,
+            "The registry or bundled inventory changed after this preview. Refresh the preview and review it again.",
+          );
+        if (preview.conflicts.length)
+          throw new RegistryError(
+            409,
+            "Resolve the listed name conflicts before applying inventory updates.",
+          );
+        const at = new Date().toISOString();
+        for (const change of preview.changes) {
+          const previous = change.kind === "add" ? null : get(change.id);
+          write({
+            ...(previous ?? change.record),
+            implementations: change.after,
+            revision: (previous?.revision ?? 0) + 1,
+            updatedAt: at,
+          });
+        }
+        const components = list();
+        const next = previewInventory(components, inventory);
+        db.exec("COMMIT");
+        return { applied: preview.changes.length, components, preview: next };
+      } catch (error) {
+        db.exec("ROLLBACK");
+        throw error;
+      }
+    },
     get,
     history: (id) => {
       get(id);

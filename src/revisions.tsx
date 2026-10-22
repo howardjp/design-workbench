@@ -1,5 +1,6 @@
 import { UI } from "./family";
-import { compareDrafts } from "./contract.mjs";
+import { ImplementationList } from "./implementations";
+import { compareDrafts, implementationsDiffer } from "./contract.mjs";
 import type { ComponentRecord, Draft, HistoryEntry } from "./types";
 const { Disclosure, Button } = UI;
 const labels: Record<keyof Draft, string> = {
@@ -91,6 +92,35 @@ export function RevisionReview({
                       </>
                     ) : (
                       <p>This matches the saved contract.</p>
+                    )}
+                    {implementationsDiffer(
+                      current.implementations,
+                      entry.snapshot.implementations,
+                    ) && (
+                      <section
+                        className="stack compact"
+                        aria-label={`Implementation changes in revision ${entry.revision}`}
+                      >
+                        <h3>Implementation inventory changed</h3>
+                        <div className="update-comparison">
+                          <div className="stack compact">
+                            <h4>Saved now</h4>
+                            <ImplementationList
+                              items={current.implementations}
+                            />
+                          </div>
+                          <div className="stack compact">
+                            <h4>Revision {entry.revision}</h4>
+                            <ImplementationList
+                              items={entry.snapshot.implementations}
+                            />
+                          </div>
+                        </div>
+                        <p>
+                          Using this revision as a draft keeps the current
+                          implementation inventory.
+                        </p>
+                      </section>
                     )}
                     {entry.revision < current.revision && (
                       <Button variant="secondary" onClick={() => onUse(entry)}>

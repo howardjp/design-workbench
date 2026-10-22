@@ -315,3 +315,21 @@
 .martlet :where(h1, h2, h3) {
   font-weight: 400;
 }
+
+.martlet-error-summary {
+  padding: 1.25rem 1.5rem;
+  border-block-start: 3px solid var(--martlet-danger);
+  background: var(--martlet-danger-bg);
+  color: var(--martlet-danger-text);
+  display: grid;
+  gap: 1rem;
+  min-inline-size: 0;
+}
+.martlet-error-summary ul {
+  margin: 0;
+  padding-inline-start: 1.25rem;
+}
+.martlet-error-summary a {
+  color: inherit;
+  text-decoration: underline;
+}
