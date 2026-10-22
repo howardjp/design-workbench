@@ -1,0 +1,823 @@
+import { StrictMode, useEffect, useRef, useState, type FormEvent } from "react";
+import { createRoot } from "react-dom/client";
+import * as Martlet from "@martlet/react";
+import * as Krigsvold from "@krigsvold/react";
+import "@martlet/react/styles.css";
+import "@krigsvold/react/styles.css";
+import "@martlet/theme/fonts.css";
+import "@krigsvold/theme/fonts.css";
+import {
+  categories,
+  maturities,
+  platforms,
+  filterRecords,
+  newDraft,
+  toDraft,
+  validateDraft,
+} from "./contract.mjs";
+import { api, ApiError } from "./api";
+import type { ComponentRecord, Draft, HistoryEntry } from "./types";
+import "./workbench.css";
+
+const family = location.pathname.startsWith("/krigsvold")
+  ? "krigsvold"
+  : "martlet";
+const title = family === "martlet" ? "Martlet" : "Krigsvold";
+const UI = family === "martlet" ? Martlet : Krigsvold;
+const {
+  AppShell,
+  Button,
+  Field,
+  TextInput,
+  Select,
+  Textarea,
+  Notice,
+  Badge,
+  DataTable,
+  Dialog,
+} = UI;
+const initialRecordId = new URLSearchParams(location.search).get("record");
+function storedMode(): "light" | "dark" {
+  try {
+    return localStorage.getItem("workbench-mode") === "dark" ? "dark" : "light";
+  } catch {
+    return "light";
+  }
+}
+function App() {
+  const [mode, setMode] = useState(storedMode);
+  const [records, setRecords] = useState<ComponentRecord[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [query, setQuery] = useState("");
+  const [maturity, setMaturity] = useState("");
+  const [platform, setPlatform] = useState("");
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState<Draft>(newDraft() as Draft);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [failure, setFailure] = useState("");
+  const [conflict, setConflict] = useState(false);
+  const [message, setMessage] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [pending, setPending] = useState<(() => void) | null>(null);
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [historyError, setHistoryError] = useState("");
+  const summaryRef = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<HTMLElement>(null);
+  const selected = records.find((record) => record.id === selectedId) ?? null;
+  const dirty =
+    editing &&
+    JSON.stringify(draft) !==
+      JSON.stringify(selected ? toDraft(selected) : newDraft());
+  const filtered = filterRecords(
+    records,
+    query,
+    maturity,
+    platform,
+  ) as ComponentRecord[];
+
+  async function load() {
+    setLoading(true);
+    setLoadError("");
+    try {
+      const result = await api.list();
+      setRecords(result);
+      setSelectedId(
+        result.find((record) => record.id === initialRecordId)?.id ??
+          result[0]?.id ??
+          null,
+      );
+    } catch {
+      setLoadError(
+        "The registry could not be loaded. Check that the local server is running, then retry.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+  useEffect(() => {
+    void load();
+  }, []);
+  useEffect(() => {
+    document.title = `${title} · Component registry`;
+    try {
+      localStorage.setItem("workbench-mode", mode);
+    } catch {
+      /* Appearance is optional; data is stored on the server. */
+    }
+    document.documentElement.style.colorScheme = mode;
+  }, [mode]);
+  useEffect(() => {
+    const url = new URL(location.href);
+    selectedId
+      ? url.searchParams.set("record", selectedId)
+      : url.searchParams.delete("record");
+    window.history.replaceState(null, "", url);
+    setHistory([]);
+    setHistoryError("");
+    if (!selectedId) return;
+    let active = true;
+    api
+      .history(selectedId)
+      .then((result) => {
+        if (active) setHistory(result);
+      })
+      .catch(() => {
+        if (active) setHistoryError("Revision history could not be loaded.");
+      });
+    return () => {
+      active = false;
+    };
+  }, [selectedId, selected?.revision]);
+  useEffect(() => {
+    if (!dirty) return;
+    const guard = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    window.addEventListener("beforeunload", guard);
+    return () => window.removeEventListener("beforeunload", guard);
+  }, [dirty]);
+  useEffect(() => {
+    if (Object.keys(errors).length || failure) summaryRef.current?.focus();
+  }, [errors, failure]);
+  function clearFeedback() {
+    setErrors({});
+    setFailure("");
+    setConflict(false);
+    setMessage("");
+  }
+  function guard(action: () => void) {
+    if (saving) return;
+    if (dirty) setPending(() => action);
+    else action();
+  }
+  function selectRecord(record: ComponentRecord) {
+    guard(() => {
+      setSelectedId(record.id);
+      setEditing(false);
+      clearFeedback();
+      requestAnimationFrame(() => editorRef.current?.focus());
+    });
+  }
+  function startNew() {
+    guard(() => {
+      setSelectedId(null);
+      setDraft(newDraft() as Draft);
+      setEditing(true);
+      clearFeedback();
+      requestAnimationFrame(() => editorRef.current?.focus());
+    });
+  }
+  function edit() {
+    if (selected) {
+      setDraft(toDraft(selected) as Draft);
+      setEditing(true);
+      clearFeedback();
+      requestAnimationFrame(() => editorRef.current?.focus());
+    }
+  }
+  function update<K extends keyof Draft>(key: K, value: Draft[K]) {
+    setDraft((previous) => ({ ...previous, [key]: value }));
+    setMessage("");
+  }
+  async function reloadRecord() {
+    if (!selectedId) return;
+    try {
+      const record = await api.get(selectedId);
+      setRecords((previous) =>
+        previous.map((item) => (item.id === record.id ? record : item)),
+      );
+      setDraft(toDraft(record) as Draft);
+      setEditing(false);
+      clearFeedback();
+      setMessage("Loaded the latest saved revision.");
+    } catch {
+      setFailure(
+        "The saved record could not be loaded. Your draft is still here.",
+      );
+    }
+  }
+  async function save(event: FormEvent) {
+    event.preventDefault();
+    if (saving) return;
+    setFailure("");
+    setConflict(false);
+    setMessage("");
+    const fields = validateDraft(draft);
+    setErrors(fields);
+    if (Object.keys(fields).length) return;
+    setSaving(true);
+    try {
+      const record = await api.save(draft, selected);
+      setRecords((previous) =>
+        [...previous.filter((item) => item.id !== record.id), record].sort(
+          (a, b) => a.name.localeCompare(b.name),
+        ),
+      );
+      setSelectedId(record.id);
+      setEditing(false);
+      setErrors({});
+      setMessage(
+        `${record.name} saved. Revision ${record.revision} is stored in the registry.`,
+      );
+      requestAnimationFrame(() => editorRef.current?.focus());
+    } catch (error) {
+      if (error instanceof ApiError) {
+        setErrors(error.fields);
+        setConflict(error.status === 409);
+        setFailure(error.message);
+      } else
+        setFailure(
+          "The save failed. Your draft is still here. Check the server and try again.",
+        );
+    } finally {
+      setSaving(false);
+    }
+  }
+  const currentImplementations =
+    selected?.implementations.filter((item) => item.family === family) ?? [];
+  const field = (
+    key: keyof Draft,
+    label: string,
+    hint?: string,
+    rows?: number,
+  ) => (
+    <Field label={label} hint={hint} error={errors[key]}>
+      {(props) =>
+        rows ? (
+          <Textarea
+            {...props}
+            name={key}
+            rows={rows}
+            value={draft[key] as string}
+            disabled={saving}
+            onChange={(event) => update(key, event.target.value)}
+          />
+        ) : (
+          <TextInput
+            {...props}
+            name={key}
+            value={draft[key] as string}
+            disabled={saving}
+            onChange={(event) => update(key, event.target.value)}
+          />
+        )
+      }
+    </Field>
+  );
+
+  return (
+    <div className={family} {...{ [`data-${family}`]: mode }}>
+      <AppShell
+        brand={
+          <>
+            <span className="brand-mark" aria-hidden="true">
+              {family === "martlet" ? "M" : "K"}
+            </span>
+            {title}
+          </>
+        }
+        navigation={
+          <>
+            <a
+              href={`/martlet/${selectedId ? `?record=${selectedId}` : ""}`}
+              aria-current={family === "martlet" ? "page" : undefined}
+            >
+              Martlet
+            </a>
+            <a
+              href={`/krigsvold/${selectedId ? `?record=${selectedId}` : ""}`}
+              aria-current={family === "krigsvold" ? "page" : undefined}
+            >
+              Krigsvold
+            </a>
+          </>
+        }
+        utilities={
+          <>
+            <a className="export-link" href="/api/export" download>
+              Export registry ↗
+            </a>
+            <Button
+              variant="quiet"
+              onClick={() =>
+                setMode((previous) => (previous === "light" ? "dark" : "light"))
+              }
+            >
+              Use {mode === "light" ? "dark" : "light"} mode
+            </Button>
+          </>
+        }
+      >
+        <div className="page-intro">
+          <p className="eyebrow">Design workbench / 01</p>
+          <div className="intro-line">
+            <div>
+              <h1>Component registry</h1>
+              <p className="lede">A place to make the systems useful.</p>
+            </div>
+            <Button
+              onClick={startNew}
+              disabled={loading || !!loadError || saving}
+            >
+              Add component
+            </Button>
+          </div>
+          <p className="intro-copy">
+            Keep specifications, implementation coverage, and decisions
+            together. Both family views share this registry.
+          </p>
+        </div>
+        <div className="registry-meta">
+          <p>
+            <strong>{records.length}</strong> components{" "}
+            <span aria-hidden="true">/</span>{" "}
+            <strong>
+              {records.filter((record) => record.maturity === "stable").length}
+            </strong>{" "}
+            stable
+          </p>
+          <p>Local SQLite registry · Experimental application</p>
+        </div>
+        {loading ? (
+          <Notice>Loading the component registry…</Notice>
+        ) : loadError ? (
+          <div className="stack">
+            <Notice kind="error">{loadError}</Notice>
+            <Button onClick={() => void load()}>Retry loading</Button>
+          </div>
+        ) : (
+          <div className="workspace">
+            <section className="collection" aria-labelledby="collection-title">
+              <div className="section-heading">
+                <h2 id="collection-title">The inventory</h2>
+                <p>Find a component, then review its contract.</p>
+              </div>
+              <div className="filters">
+                <Field label="Search components">
+                  {(props) => (
+                    <TextInput
+                      {...props}
+                      type="search"
+                      value={query}
+                      onChange={(event) => setQuery(event.target.value)}
+                      placeholder="Name, purpose, or category"
+                    />
+                  )}
+                </Field>
+                <Field label="Maturity">
+                  {(props) => (
+                    <Select
+                      {...props}
+                      value={maturity}
+                      onChange={(event) => setMaturity(event.target.value)}
+                    >
+                      <option value="">All stages</option>
+                      {maturities.map((value) => (
+                        <option key={value}>{value}</option>
+                      ))}
+                    </Select>
+                  )}
+                </Field>
+                <Field
+                  label="Target platform"
+                  hint="Targets describe intent, not released support."
+                >
+                  {(props) => (
+                    <Select
+                      {...props}
+                      value={platform}
+                      onChange={(event) => setPlatform(event.target.value)}
+                    >
+                      <option value="">All platforms</option>
+                      {platforms.map((value) => (
+                        <option key={value}>{value}</option>
+                      ))}
+                    </Select>
+                  )}
+                </Field>
+              </div>
+              <p className="result-count" role="status">
+                {filtered.length} of {records.length} components
+              </p>
+              {filtered.length ? (
+                <DataTable caption="Component specifications">
+                  <thead>
+                    <tr>
+                      <th scope="col">Component</th>
+                      <th scope="col">Stage</th>
+                      <th scope="col">Targets</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filtered.map((record) => (
+                      <tr
+                        key={record.id}
+                        data-selected={record.id === selectedId}
+                      >
+                        <th scope="row">
+                          <button
+                            className="record-link"
+                            type="button"
+                            aria-label={`Inspect ${record.name}`}
+                            aria-current={
+                              record.id === selectedId ? "true" : undefined
+                            }
+                            onClick={() => selectRecord(record)}
+                            disabled={saving}
+                          >
+                            <span className="record-name">{record.name}</span>
+                            <span className="record-category">
+                              {record.category}
+                            </span>
+                          </button>
+                        </th>
+                        <td>
+                          <Badge>{record.maturity}</Badge>
+                        </td>
+                        <td className="target-cell">
+                          {record.targets.join(", ")}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </DataTable>
+              ) : (
+                <div className="empty">
+                  <h3>No components match</h3>
+                  <p>Try a broader search or clear the filters.</p>
+                  <Button
+                    variant="secondary"
+                    onClick={() => {
+                      setQuery("");
+                      setMaturity("");
+                      setPlatform("");
+                    }}
+                  >
+                    Clear filters
+                  </Button>
+                </div>
+              )}
+            </section>
+            <section
+              className="editor stack"
+              aria-labelledby="editor-title"
+              tabIndex={-1}
+              ref={editorRef}
+            >
+              <div className="editor-heading">
+                <div>
+                  <p className="eyebrow">
+                    {editing
+                      ? selected
+                        ? "Edit specification"
+                        : "New specification"
+                      : "Component specification"}
+                  </p>
+                  <h2 id="editor-title">
+                    {editing
+                      ? draft.name || "New component"
+                      : (selected?.name ?? "Choose a component")}
+                  </h2>
+                </div>
+                {selected && !editing && (
+                  <Button variant="secondary" onClick={edit}>
+                    Edit specification
+                  </Button>
+                )}
+              </div>
+              {message && <Notice kind="success">{message}</Notice>}
+              {(Object.keys(errors).length > 0 || failure) && (
+                <div ref={summaryRef} tabIndex={-1} className="error-summary">
+                  <Notice kind="error">
+                    <strong>
+                      {failure || "The specification needs a few changes."}
+                    </strong>
+                    {Object.keys(errors).length > 0 && (
+                      <ul>
+                        {Object.entries(errors).map(([key, value]) => (
+                          <li key={key}>{value}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </Notice>
+                  {conflict && (
+                    <Button
+                      variant="secondary"
+                      onClick={() => guard(() => void reloadRecord())}
+                    >
+                      Reload saved record
+                    </Button>
+                  )}
+                </div>
+              )}
+              {editing ? (
+                <form
+                  noValidate
+                  onSubmit={save}
+                  className="stack"
+                  aria-busy={saving}
+                >
+                  <p className="muted">
+                    {selected
+                      ? `Editing revision ${selected.revision}.`
+                      : "Create a shared component contract."}{" "}
+                    {dirty
+                      ? "You have unsaved changes."
+                      : "Name, summary, target platforms, and acceptance criteria are required."}
+                  </p>
+                  {field(
+                    "name",
+                    "Component name",
+                    "Use the public API name, for example TextInput.",
+                  )}
+                  {field(
+                    "summary",
+                    "Summary",
+                    "Describe the task this component helps someone complete.",
+                    3,
+                  )}
+                  <div className="form-pair">
+                    <Field label="Category" error={errors.category}>
+                      {(props) => (
+                        <Select
+                          {...props}
+                          value={draft.category}
+                          disabled={saving}
+                          onChange={(event) =>
+                            update("category", event.target.value)
+                          }
+                        >
+                          {categories.map((value) => (
+                            <option key={value}>{value}</option>
+                          ))}
+                        </Select>
+                      )}
+                    </Field>
+                    <Field
+                      label="Maturity stage"
+                      hint="Stable requires evidence; deprecated requires migration guidance."
+                      error={errors.maturity}
+                    >
+                      {(props) => (
+                        <Select
+                          {...props}
+                          value={draft.maturity}
+                          disabled={saving}
+                          onChange={(event) =>
+                            update(
+                              "maturity",
+                              event.target.value as Draft["maturity"],
+                            )
+                          }
+                        >
+                          {maturities.map((value) => (
+                            <option key={value}>{value}</option>
+                          ))}
+                        </Select>
+                      )}
+                    </Field>
+                  </div>
+                  <fieldset
+                    className="platforms"
+                    aria-invalid={errors.targets ? true : undefined}
+                    aria-describedby={
+                      errors.targets ? "targets-error" : undefined
+                    }
+                  >
+                    <legend>Target platforms</legend>
+                    <p className="muted">
+                      Planned reach. Released implementations are recorded
+                      separately.
+                    </p>
+                    <div>
+                      {platforms.map((value) => (
+                        <label key={value}>
+                          <input
+                            type="checkbox"
+                            name="targets"
+                            checked={draft.targets.includes(value)}
+                            disabled={saving}
+                            onChange={(event) =>
+                              update(
+                                "targets",
+                                event.target.checked
+                                  ? [...draft.targets, value]
+                                  : draft.targets.filter(
+                                      (item) => item !== value,
+                                    ),
+                              )
+                            }
+                          />
+                          {value}
+                        </label>
+                      ))}
+                    </div>
+                    {errors.targets && (
+                      <p id="targets-error" className="field-error">
+                        {errors.targets}
+                      </p>
+                    )}
+                  </fieldset>
+                  {field(
+                    "acceptanceCriteria",
+                    "Acceptance criteria",
+                    "One verifiable requirement per line. These are requirements, not claims that checks passed.",
+                    5,
+                  )}
+                  {field(
+                    "evidence",
+                    "Usage and verification evidence",
+                    "Record real consumers, tasks, check results, and known limitations before marking stable.",
+                    4,
+                  )}
+                  <div className="family-notes">
+                    <h3>Family decisions</h3>
+                    <p className="muted">
+                      Shared behavior can support different composition and
+                      emphasis.
+                    </p>
+                    {field("martletNotes", "Martlet notes", undefined, 3)}
+                    {field("krigsvoldNotes", "Krigsvold notes", undefined, 3)}
+                  </div>
+                  {field(
+                    "migration",
+                    "Migration guidance",
+                    "Required when deprecating a contract. Identify the replacement and the transition.",
+                    3,
+                  )}
+                  <div className="actions">
+                    <Button type="submit" disabled={saving}>
+                      {saving ? "Saving…" : "Save specification"}
+                    </Button>
+                    <Button
+                      variant="quiet"
+                      disabled={saving}
+                      onClick={() =>
+                        guard(() => {
+                          setEditing(false);
+                          clearFeedback();
+                          if (!selected) setSelectedId(records[0]?.id ?? null);
+                        })
+                      }
+                    >
+                      Cancel editing
+                    </Button>
+                  </div>
+                </form>
+              ) : selected ? (
+                <>
+                  <div className="record-state">
+                    <Badge>{selected.maturity}</Badge>
+                    <span>
+                      {selected.category} · Revision {selected.revision}
+                    </span>
+                  </div>
+                  <p className="spec-summary">{selected.summary}</p>
+                  <dl className="spec-details">
+                    <div>
+                      <dt>Target platforms</dt>
+                      <dd>{selected.targets.join(", ")}</dd>
+                    </div>
+                    <div>
+                      <dt>Last recorded</dt>
+                      <dd>
+                        <time dateTime={selected.updatedAt}>
+                          {new Date(selected.updatedAt).toLocaleString("en-US")}
+                        </time>
+                      </dd>
+                    </div>
+                  </dl>
+                  <section className="stack compact">
+                    <h3>{title} implementations</h3>
+                    {currentImplementations.length ? (
+                      <ul className="implementations">
+                        {currentImplementations.map((item) => (
+                          <li key={item.platform}>
+                            <strong>{item.platform}</strong>
+                            <span>
+                              {item.package} {item.version}
+                            </span>
+                            <span className="muted">
+                              {item.state === "published"
+                                ? "Published package"
+                                : "Experimental workspace package; unpublished"}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="muted">
+                        No implementation is recorded yet.
+                      </p>
+                    )}
+                    <p className="small muted">
+                      Availability records the current package inventory.
+                      Maturity requires separate evidence.
+                    </p>
+                  </section>
+                  <section className="stack compact">
+                    <h3>Acceptance criteria</h3>
+                    <ul className="criteria">
+                      {selected.acceptanceCriteria
+                        .split("\n")
+                        .filter(Boolean)
+                        .map((line, index) => (
+                          <li key={index}>{line}</li>
+                        ))}
+                    </ul>
+                  </section>
+                  <section className="stack compact">
+                    <h3>Usage and verification evidence</h3>
+                    <p className="multiline">
+                      {selected.evidence ||
+                        "No usage evidence recorded yet. This contract remains experimental."}
+                    </p>
+                  </section>
+                  <section className="stack compact">
+                    <h3>{title} decisions</h3>
+                    <p className="multiline">
+                      {family === "martlet"
+                        ? selected.martletNotes
+                        : selected.krigsvoldNotes}
+                    </p>
+                  </section>
+                  {selected.migration && (
+                    <section className="stack compact">
+                      <h3>Migration guidance</h3>
+                      <p className="multiline">{selected.migration}</p>
+                    </section>
+                  )}
+                  <details className="history">
+                    <summary>Revision history</summary>
+                    {historyError ? (
+                      <p>{historyError}</p>
+                    ) : (
+                      <ol>
+                        {history.map((entry) => (
+                          <li key={entry.revision}>
+                            <strong>Revision {entry.revision}</strong>
+                            <time dateTime={entry.at}>
+                              {new Date(entry.at).toLocaleString("en-US")}
+                            </time>
+                            <span>
+                              {entry.snapshot.name} · {entry.snapshot.maturity}
+                            </span>
+                          </li>
+                        ))}
+                      </ol>
+                    )}
+                  </details>
+                </>
+              ) : (
+                <p>Choose a component from the inventory or add a new one.</p>
+              )}
+            </section>
+          </div>
+        )}
+        <footer className="workbench-footer">
+          <p>Martlet & Krigsvold · Free software, shared in full.</p>
+          <p>
+            Specifications are working contracts. Real use decides what
+            survives.
+          </p>
+        </footer>
+      </AppShell>
+      <Dialog
+        open={pending !== null}
+        title="Discard unsaved changes?"
+        onDismiss={() => setPending(null)}
+      >
+        <p>
+          Your changes have not been saved. Keep editing, or discard this draft
+          to continue.
+        </p>
+        <div className="actions">
+          <Button
+            variant="secondary"
+            autoFocus
+            onClick={() => setPending(null)}
+          >
+            Keep editing
+          </Button>
+          <Button
+            onClick={() => {
+              const action = pending;
+              setPending(null);
+              action?.();
+            }}
+          >
+            Discard changes
+          </Button>
+        </div>
+      </Dialog>
+    </div>
+  );
+}
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);

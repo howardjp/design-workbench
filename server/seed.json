@@ -1,0 +1,823 @@
+[
+  {
+    "id": "app-shell",
+    "name": "AppShell",
+    "category": "Layout",
+    "summary": "Compose an administration workspace with a skip link, navigation, utilities, and main content.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "AppShell exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
+  },
+  {
+    "id": "article-layout",
+    "name": "ArticleLayout",
+    "category": "Layout",
+    "summary": "Compose a complete reading experience with article content and page chrome.",
+    "maturity": "experimental",
+    "targets": [
+      "Astro"
+    ],
+    "acceptanceCriteria": "ArticleLayout exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "Astro",
+        "package": "@martlet/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "Astro",
+        "package": "@krigsvold/astro",
+        "version": "1.1.0",
+        "state": "published"
+      }
+    ]
+  },
+  {
+    "id": "badge",
+    "name": "Badge",
+    "category": "Data",
+    "summary": "Show a concise textual status that remains understandable without color.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "Badge exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
+  },
+  {
+    "id": "button",
+    "name": "Button",
+    "category": "Input",
+    "summary": "Expose a clearly labelled action with an explicit primary or secondary emphasis.",
+    "maturity": "experimental",
+    "targets": [
+      "Astro",
+      "React"
+    ],
+    "acceptanceCriteria": "Button exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "Astro",
+        "package": "@martlet/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "Astro",
+        "package": "@krigsvold/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
+  },
+  {
+    "id": "card",
+    "name": "Card",
+    "category": "Content",
+    "summary": "Group a short editorial item with a title and supporting information.",
+    "maturity": "experimental",
+    "targets": [
+      "Astro"
+    ],
+    "acceptanceCriteria": "Card exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "Astro",
+        "package": "@martlet/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "Astro",
+        "package": "@krigsvold/astro",
+        "version": "1.1.0",
+        "state": "published"
+      }
+    ]
+  },
+  {
+    "id": "cluster",
+    "name": "Cluster",
+    "category": "Layout",
+    "summary": "Wrap related actions or metadata into a coherent horizontal group.",
+    "maturity": "experimental",
+    "targets": [
+      "Astro"
+    ],
+    "acceptanceCriteria": "Cluster exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "Astro",
+        "package": "@martlet/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "Astro",
+        "package": "@krigsvold/astro",
+        "version": "1.1.0",
+        "state": "published"
+      }
+    ]
+  },
+  {
+    "id": "container",
+    "name": "Container",
+    "category": "Layout",
+    "summary": "Bound content to a reading, content, or archive measure.",
+    "maturity": "experimental",
+    "targets": [
+      "Astro"
+    ],
+    "acceptanceCriteria": "Container exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "Astro",
+        "package": "@martlet/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "Astro",
+        "package": "@krigsvold/astro",
+        "version": "1.1.0",
+        "state": "published"
+      }
+    ]
+  },
+  {
+    "id": "data-table",
+    "name": "DataTable",
+    "category": "Data",
+    "summary": "Present comparable records in a semantic table with a caption and contained scrolling.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "DataTable exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
+  },
+  {
+    "id": "dialog",
+    "name": "Dialog",
+    "category": "Overlay",
+    "summary": "Request a focused decision in a named native modal with Escape dismissal and focus restoration.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "Dialog exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
+  },
+  {
+    "id": "documentation-layout",
+    "name": "DocumentationLayout",
+    "category": "Layout",
+    "summary": "Compose documentation navigation, article content, and page chrome.",
+    "maturity": "experimental",
+    "targets": [
+      "Astro"
+    ],
+    "acceptanceCriteria": "DocumentationLayout exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "Astro",
+        "package": "@martlet/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "Astro",
+        "package": "@krigsvold/astro",
+        "version": "1.1.0",
+        "state": "published"
+      }
+    ]
+  },
+  {
+    "id": "field",
+    "name": "Field",
+    "category": "Input",
+    "summary": "Associate a visible label, hint, and error with a form control.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "Field exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
+  },
+  {
+    "id": "grid",
+    "name": "Grid",
+    "category": "Layout",
+    "summary": "Lay out a bounded number of responsive columns using content minima.",
+    "maturity": "experimental",
+    "targets": [
+      "Astro"
+    ],
+    "acceptanceCriteria": "Grid exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "Astro",
+        "package": "@martlet/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "Astro",
+        "package": "@krigsvold/astro",
+        "version": "1.1.0",
+        "state": "published"
+      }
+    ]
+  },
+  {
+    "id": "landing-layout",
+    "name": "LandingLayout",
+    "category": "Layout",
+    "summary": "Compose a complete introduction with supporting sections and page chrome.",
+    "maturity": "experimental",
+    "targets": [
+      "Astro"
+    ],
+    "acceptanceCriteria": "LandingLayout exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "Astro",
+        "package": "@martlet/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "Astro",
+        "package": "@krigsvold/astro",
+        "version": "1.1.0",
+        "state": "published"
+      }
+    ]
+  },
+  {
+    "id": "layout",
+    "name": "Layout",
+    "category": "Layout",
+    "summary": "Document shell with metadata, a main landmark, and a family foundation.",
+    "maturity": "experimental",
+    "targets": [
+      "Astro"
+    ],
+    "acceptanceCriteria": "Layout exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "Astro",
+        "package": "@martlet/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "Astro",
+        "package": "@krigsvold/astro",
+        "version": "1.1.0",
+        "state": "published"
+      }
+    ]
+  },
+  {
+    "id": "notice",
+    "name": "Notice",
+    "category": "Feedback",
+    "summary": "Announce a save result or blocking failure in text with the appropriate live-region priority.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "Notice exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
+  },
+  {
+    "id": "page-header",
+    "name": "PageHeader",
+    "category": "Content",
+    "summary": "Establish a page title, summary, and optional metadata or media.",
+    "maturity": "experimental",
+    "targets": [
+      "Astro"
+    ],
+    "acceptanceCriteria": "PageHeader exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "Astro",
+        "package": "@martlet/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "Astro",
+        "package": "@krigsvold/astro",
+        "version": "1.1.0",
+        "state": "published"
+      }
+    ]
+  },
+  {
+    "id": "section",
+    "name": "Section",
+    "category": "Layout",
+    "summary": "Separate a substantive page region with intentional vertical spacing.",
+    "maturity": "experimental",
+    "targets": [
+      "Astro"
+    ],
+    "acceptanceCriteria": "Section exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "Astro",
+        "package": "@martlet/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "Astro",
+        "package": "@krigsvold/astro",
+        "version": "1.1.0",
+        "state": "published"
+      }
+    ]
+  },
+  {
+    "id": "section-heading",
+    "name": "SectionHeading",
+    "category": "Content",
+    "summary": "Introduce a related section with a heading and optional supporting copy.",
+    "maturity": "experimental",
+    "targets": [
+      "Astro"
+    ],
+    "acceptanceCriteria": "SectionHeading exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "Astro",
+        "package": "@martlet/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "Astro",
+        "package": "@krigsvold/astro",
+        "version": "1.1.0",
+        "state": "published"
+      }
+    ]
+  },
+  {
+    "id": "select",
+    "name": "Select",
+    "category": "Input",
+    "summary": "Choose one value using a labelled native select control.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "Select exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
+  },
+  {
+    "id": "sidebar",
+    "name": "Sidebar",
+    "category": "Layout",
+    "summary": "Place supporting navigation or context beside a primary region.",
+    "maturity": "experimental",
+    "targets": [
+      "Astro"
+    ],
+    "acceptanceCriteria": "Sidebar exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "Astro",
+        "package": "@martlet/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "Astro",
+        "package": "@krigsvold/astro",
+        "version": "1.1.0",
+        "state": "published"
+      }
+    ]
+  },
+  {
+    "id": "site-footer",
+    "name": "SiteFooter",
+    "category": "Navigation",
+    "summary": "Provide consistent supplementary navigation and closing information.",
+    "maturity": "experimental",
+    "targets": [
+      "Astro"
+    ],
+    "acceptanceCriteria": "SiteFooter exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "Astro",
+        "package": "@martlet/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "Astro",
+        "package": "@krigsvold/astro",
+        "version": "1.1.0",
+        "state": "published"
+      }
+    ]
+  },
+  {
+    "id": "site-header",
+    "name": "SiteHeader",
+    "category": "Navigation",
+    "summary": "Provide a consistent site identity and primary navigation.",
+    "maturity": "experimental",
+    "targets": [
+      "Astro"
+    ],
+    "acceptanceCriteria": "SiteHeader exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "Astro",
+        "package": "@martlet/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "Astro",
+        "package": "@krigsvold/astro",
+        "version": "1.1.0",
+        "state": "published"
+      }
+    ]
+  },
+  {
+    "id": "split",
+    "name": "Split",
+    "category": "Layout",
+    "summary": "Compose two related regions that wrap in source order on narrow screens.",
+    "maturity": "experimental",
+    "targets": [
+      "Astro"
+    ],
+    "acceptanceCriteria": "Split exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "Astro",
+        "package": "@martlet/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "Astro",
+        "package": "@krigsvold/astro",
+        "version": "1.1.0",
+        "state": "published"
+      }
+    ]
+  },
+  {
+    "id": "stack",
+    "name": "Stack",
+    "category": "Layout",
+    "summary": "Place related content in a vertical sequence with a controlled gap.",
+    "maturity": "experimental",
+    "targets": [
+      "Astro"
+    ],
+    "acceptanceCriteria": "Stack exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "Astro",
+        "package": "@martlet/astro",
+        "version": "1.1.0",
+        "state": "published"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "Astro",
+        "package": "@krigsvold/astro",
+        "version": "1.1.0",
+        "state": "published"
+      }
+    ]
+  },
+  {
+    "id": "text-input",
+    "name": "TextInput",
+    "category": "Input",
+    "summary": "Collect a single line of text with native form attributes and a visible focus state.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "TextInput exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
+  },
+  {
+    "id": "textarea",
+    "name": "Textarea",
+    "category": "Input",
+    "summary": "Collect substantial free text while preserving resizing and native form semantics.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "Textarea exposes meaningful semantics and a clear accessible name where required.\nKeyboard and reading order follow the task at 320 CSS pixels and 400% zoom.\nLoading, empty, error, disabled, and focus states are documented where applicable.\nBoth family presentations pass the same relevant behavioral checks.",
+    "evidence": "",
+    "martletNotes": "Use welcoming grouping and editorial hierarchy; keep labels and actions explicit.",
+    "krigsvoldNotes": "Use precise alignment and restrained surfaces; keep errors helpful and actionable.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
+  }
+]

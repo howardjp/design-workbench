@@ -1,0 +1,336 @@
+@import "@krigsvold/theme/css";
+@import "@krigsvold/theme/foundation.css";
+/* Application roles are experimental; existing theme values stay intact. */
+.krigsvold {
+  --ui-bg: var(--krigsvold-surface-canvas);
+  --ui-surface: var(--krigsvold-surface-subtle);
+  --ui-text: var(--krigsvold-text);
+  --ui-muted: var(--krigsvold-text-subtle);
+  --ui-line: var(--krigsvold-border-subtle);
+  --ui-accent: var(--krigsvold-accent);
+  --krigsvold-field-gap: 0.5rem;
+  --krigsvold-group-gap: 1.5rem;
+  --krigsvold-region-gap: 2.5rem;
+  --krigsvold-page-gutter: clamp(1rem, 3vw, 3rem);
+  --krigsvold-row-padding: 0.75rem;
+  background: var(--ui-bg);
+  color: var(--ui-text);
+  font: 1rem/1.55 var(--krigsvold-font-sans);
+  min-block-size: 100vh;
+  overflow-wrap: anywhere;
+}
+.krigsvold * {
+  box-sizing: border-box;
+}
+.krigsvold :where(button, input, select, textarea) {
+  font: inherit;
+}
+.krigsvold :where(a) {
+  color: var(--krigsvold-link);
+  text-underline-offset: 0.2em;
+}
+.krigsvold
+  :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: var(--krigsvold-focus-width) solid var(--krigsvold-focus-ring);
+  outline-offset: var(--krigsvold-focus-gap);
+}
+.krigsvold :where(h1, h2, h3, p) {
+  margin-block: 0;
+}
+.krigsvold :where(h1, h2, h3) {
+  font-family: var(--krigsvold-font-serif);
+  line-height: 1.2;
+}
+.krigsvold :where(h1) {
+  font-size: clamp(2.1rem, 3.5vw, 3.2rem);
+}
+.krigsvold :where(h2) {
+  font-size: 1.65rem;
+}
+.krigsvold :where(h3) {
+  font-size: 1.15rem;
+}
+.krigsvold-button {
+  min-block-size: 2.8rem;
+  min-inline-size: 2.8rem;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--ui-accent);
+  border-radius: var(--krigsvold-radius-control);
+  background: var(--ui-accent);
+  color: var(--krigsvold-on-accent);
+  cursor: pointer;
+  font-weight: 700;
+  transition: background-color var(--krigsvold-motion-duration);
+}
+.krigsvold-button:hover:not(:disabled) {
+  background: var(--krigsvold-accent-hover);
+}
+.krigsvold-button--secondary {
+  background: var(--krigsvold-button-secondary-bg);
+  color: var(--krigsvold-button-secondary-text);
+  border-color: var(--krigsvold-border-strong);
+}
+.krigsvold-button--secondary:hover:not(:disabled) {
+  background: var(--krigsvold-button-secondary-hover);
+}
+.krigsvold-button--quiet {
+  background: transparent;
+  color: var(--krigsvold-link);
+  border-color: transparent;
+}
+.krigsvold-button--quiet:hover:not(:disabled) {
+  background: var(--krigsvold-hover-bg);
+}
+.krigsvold-button:disabled {
+  background: var(--krigsvold-disabled-bg);
+  color: var(--krigsvold-disabled-text);
+  border-color: var(--krigsvold-border-subtle);
+  cursor: default;
+}
+.krigsvold-input {
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 2.8rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--krigsvold-input-border);
+  border-radius: var(--krigsvold-radius-control);
+  background: var(--krigsvold-input-bg);
+  color: var(--krigsvold-input-text);
+}
+.krigsvold textarea {
+  resize: vertical;
+  min-block-size: 7rem;
+}
+.krigsvold-input[aria-invalid] {
+  border-color: var(--krigsvold-danger);
+}
+.krigsvold-field {
+  display: grid;
+  gap: var(--krigsvold-field-gap);
+  min-inline-size: 0;
+  align-content: start;
+}
+.krigsvold-field label {
+  font-weight: 700;
+}
+.krigsvold-hint {
+  color: var(--ui-muted);
+  font-size: 0.875rem;
+}
+.krigsvold-error {
+  color: var(--krigsvold-danger);
+}
+.krigsvold-notice {
+  padding: 1rem 1.25rem;
+  border-inline-start: 3px solid var(--krigsvold-info);
+  background: var(--krigsvold-info-bg);
+  color: var(--krigsvold-info-text);
+}
+.krigsvold-notice--success {
+  border-color: var(--krigsvold-success);
+  background: var(--krigsvold-success-bg);
+  color: var(--krigsvold-success-text);
+}
+.krigsvold-notice--error {
+  border-color: var(--krigsvold-danger);
+  background: var(--krigsvold-danger-bg);
+  color: var(--krigsvold-danger-text);
+}
+.krigsvold-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--krigsvold-border-strong);
+  color: var(--ui-text);
+}
+.krigsvold-table-scroll {
+  overflow: auto;
+  max-inline-size: 100%;
+}
+.krigsvold-table {
+  border-collapse: collapse;
+  inline-size: 100%;
+  text-align: start;
+}
+.krigsvold-table caption {
+  text-align: start;
+  padding-block: 0 1rem;
+  font-size: 0.875rem;
+  color: var(--ui-muted);
+}
+.krigsvold-table :where(th, td) {
+  padding: var(--krigsvold-row-padding) 0.75rem;
+  border-block-end: 1px solid var(--ui-line);
+  vertical-align: middle;
+  text-align: start;
+}
+.krigsvold-table th {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.krigsvold-table td:first-child {
+  padding-inline-start: 0;
+}
+.krigsvold-table th:first-child {
+  padding-inline-start: 0;
+}
+.krigsvold-table tr[data-selected="true"] {
+  background: var(--krigsvold-active-bg);
+}
+.krigsvold-skip {
+  position: fixed;
+  inset-block-start: -5rem;
+  inset-inline-start: 1rem;
+  z-index: 20;
+  background: var(--ui-bg);
+  padding: 1rem;
+}
+.krigsvold-skip:focus {
+  inset-block-start: 1rem;
+}
+.krigsvold-app {
+  min-block-size: 100vh;
+}
+.krigsvold-app main {
+  min-inline-size: 0;
+  padding: var(--krigsvold-page-gutter);
+}
+.krigsvold-app-header {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1rem var(--krigsvold-page-gutter);
+  border-block-end: 1px solid var(--ui-line);
+  align-items: center;
+}
+.krigsvold-app-brand {
+  font-family: var(--krigsvold-font-serif);
+  font-size: 1.5rem;
+}
+.krigsvold-app-header nav {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.krigsvold-app-header nav a {
+  padding: 0.65rem 0.75rem;
+  min-block-size: 2.8rem;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+.krigsvold-app-header nav a[aria-current] {
+  border-block-end: 2px solid var(--ui-accent);
+  font-weight: 700;
+}
+.krigsvold-app-utilities {
+  margin-inline-start: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+.krigsvold-app-colophon {
+  display: none;
+}
+.krigsvold-dialog {
+  border: 1px solid var(--krigsvold-border-strong);
+  padding: 2rem;
+  background: var(--krigsvold-surface-overlay);
+  color: var(--ui-text);
+  inline-size: min(32rem, calc(100vw - 2rem));
+  max-block-size: calc(100vh - 2rem);
+}
+.krigsvold-dialog::backdrop {
+  background: var(--krigsvold-overlay-scrim);
+}
+.krigsvold-dialog h2 {
+  margin-block-end: 1rem;
+}
+.krigsvold-dialog .actions {
+  margin-block-start: 1.5rem;
+}
+@media (max-width: 60rem) {
+  .krigsvold-app-header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .krigsvold-app-utilities {
+    margin-inline-start: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .krigsvold *,
+  .krigsvold *::before,
+  .krigsvold *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.krigsvold {
+  --krigsvold-field-gap: 0.5rem;
+  --krigsvold-group-gap: 1.5rem;
+  --krigsvold-region-gap: 3rem;
+  --krigsvold-row-padding: 0.55rem;
+}
+.krigsvold-app {
+  display: grid;
+  grid-template-columns: 13.5rem minmax(0, 1fr);
+}
+.krigsvold-app-header {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 2rem 1.5rem;
+  border-block-end: 0;
+  border-inline-end: 1px solid var(--ui-line);
+  background: var(--krigsvold-panel);
+}
+.krigsvold-app-header nav {
+  flex-direction: column;
+  margin-block-start: 2rem;
+  gap: 0.5rem;
+}
+.krigsvold-app-header nav a[aria-current] {
+  border-block-end: 0;
+  border-inline-start: 3px solid var(--ui-accent);
+  background: var(--krigsvold-active-bg);
+}
+.krigsvold-app-utilities {
+  margin: 1rem 0 0;
+  flex-direction: column;
+  align-items: stretch;
+}
+.krigsvold-app-colophon {
+  display: block;
+  margin-block-start: auto;
+  padding-block-start: 4rem;
+  color: var(--ui-muted);
+  font-size: 0.8rem;
+}
+@media (max-width: 55rem) {
+  .krigsvold-app {
+    display: block;
+  }
+  .krigsvold-app-header {
+    padding: 1rem;
+    gap: 0.75rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-inline-end: 0;
+    border-block-end: 1px solid var(--ui-line);
+  }
+  .krigsvold-app-header nav {
+    flex-direction: row;
+    margin: 0;
+  }
+  .krigsvold-app-utilities {
+    flex-direction: row;
+    margin: 0;
+  }
+  .krigsvold-app-colophon {
+    display: none;
+  }
+}

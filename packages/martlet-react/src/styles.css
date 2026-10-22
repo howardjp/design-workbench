@@ -1,0 +1,281 @@
+@import "@martlet/theme/css";
+@import "@martlet/theme/foundation.css";
+/* Application roles are experimental; existing theme values stay intact. */
+.martlet {
+  --ui-bg: var(--martlet-surface-canvas);
+  --ui-surface: var(--martlet-surface-subtle);
+  --ui-text: var(--martlet-text);
+  --ui-muted: var(--martlet-text-subtle);
+  --ui-line: var(--martlet-border-subtle);
+  --ui-accent: var(--martlet-accent);
+  --martlet-field-gap: 0.5rem;
+  --martlet-group-gap: 1.5rem;
+  --martlet-region-gap: 2.5rem;
+  --martlet-page-gutter: clamp(1rem, 3vw, 3rem);
+  --martlet-row-padding: 0.75rem;
+  background: var(--ui-bg);
+  color: var(--ui-text);
+  font: 1rem/1.55 var(--martlet-font-sans);
+  min-block-size: 100vh;
+  overflow-wrap: anywhere;
+}
+.martlet * {
+  box-sizing: border-box;
+}
+.martlet :where(button, input, select, textarea) {
+  font: inherit;
+}
+.martlet :where(a) {
+  color: var(--martlet-link);
+  text-underline-offset: 0.2em;
+}
+.martlet :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: var(--martlet-focus-width) solid var(--martlet-focus-ring);
+  outline-offset: var(--martlet-focus-gap);
+}
+.martlet :where(h1, h2, h3, p) {
+  margin-block: 0;
+}
+.martlet :where(h1, h2, h3) {
+  font-family: var(--martlet-font-serif);
+  line-height: 1.2;
+}
+.martlet :where(h1) {
+  font-size: clamp(2.1rem, 3.5vw, 3.2rem);
+}
+.martlet :where(h2) {
+  font-size: 1.65rem;
+}
+.martlet :where(h3) {
+  font-size: 1.15rem;
+}
+.martlet-button {
+  min-block-size: 2.8rem;
+  min-inline-size: 2.8rem;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--ui-accent);
+  border-radius: var(--martlet-radius-control);
+  background: var(--ui-accent);
+  color: var(--martlet-on-accent);
+  cursor: pointer;
+  font-weight: 700;
+  transition: background-color var(--martlet-motion-duration);
+}
+.martlet-button:hover:not(:disabled) {
+  background: var(--martlet-accent-hover);
+}
+.martlet-button--secondary {
+  background: var(--martlet-button-secondary-bg);
+  color: var(--martlet-button-secondary-text);
+  border-color: var(--martlet-border-strong);
+}
+.martlet-button--secondary:hover:not(:disabled) {
+  background: var(--martlet-button-secondary-hover);
+}
+.martlet-button--quiet {
+  background: transparent;
+  color: var(--martlet-link);
+  border-color: transparent;
+}
+.martlet-button--quiet:hover:not(:disabled) {
+  background: var(--martlet-hover-bg);
+}
+.martlet-button:disabled {
+  background: var(--martlet-disabled-bg);
+  color: var(--martlet-disabled-text);
+  border-color: var(--martlet-border-subtle);
+  cursor: default;
+}
+.martlet-input {
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 2.8rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--martlet-input-border);
+  border-radius: var(--martlet-radius-control);
+  background: var(--martlet-input-bg);
+  color: var(--martlet-input-text);
+}
+.martlet textarea {
+  resize: vertical;
+  min-block-size: 7rem;
+}
+.martlet-input[aria-invalid] {
+  border-color: var(--martlet-danger);
+}
+.martlet-field {
+  display: grid;
+  gap: var(--martlet-field-gap);
+  min-inline-size: 0;
+  align-content: start;
+}
+.martlet-field label {
+  font-weight: 700;
+}
+.martlet-hint {
+  color: var(--ui-muted);
+  font-size: 0.875rem;
+}
+.martlet-error {
+  color: var(--martlet-danger);
+}
+.martlet-notice {
+  padding: 1rem 1.25rem;
+  border-inline-start: 3px solid var(--martlet-info);
+  background: var(--martlet-info-bg);
+  color: var(--martlet-info-text);
+}
+.martlet-notice--success {
+  border-color: var(--martlet-success);
+  background: var(--martlet-success-bg);
+  color: var(--martlet-success-text);
+}
+.martlet-notice--error {
+  border-color: var(--martlet-danger);
+  background: var(--martlet-danger-bg);
+  color: var(--martlet-danger-text);
+}
+.martlet-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--martlet-border-strong);
+  color: var(--ui-text);
+}
+.martlet-table-scroll {
+  overflow: auto;
+  max-inline-size: 100%;
+}
+.martlet-table {
+  border-collapse: collapse;
+  inline-size: 100%;
+  text-align: start;
+}
+.martlet-table caption {
+  text-align: start;
+  padding-block: 0 1rem;
+  font-size: 0.875rem;
+  color: var(--ui-muted);
+}
+.martlet-table :where(th, td) {
+  padding: var(--martlet-row-padding) 0.75rem;
+  border-block-end: 1px solid var(--ui-line);
+  vertical-align: middle;
+  text-align: start;
+}
+.martlet-table th {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.martlet-table td:first-child {
+  padding-inline-start: 0;
+}
+.martlet-table th:first-child {
+  padding-inline-start: 0;
+}
+.martlet-table tr[data-selected="true"] {
+  background: var(--martlet-active-bg);
+}
+.martlet-skip {
+  position: fixed;
+  inset-block-start: -5rem;
+  inset-inline-start: 1rem;
+  z-index: 20;
+  background: var(--ui-bg);
+  padding: 1rem;
+}
+.martlet-skip:focus {
+  inset-block-start: 1rem;
+}
+.martlet-app {
+  min-block-size: 100vh;
+}
+.martlet-app main {
+  min-inline-size: 0;
+  padding: var(--martlet-page-gutter);
+}
+.martlet-app-header {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1rem var(--martlet-page-gutter);
+  border-block-end: 1px solid var(--ui-line);
+  align-items: center;
+}
+.martlet-app-brand {
+  font-family: var(--martlet-font-serif);
+  font-size: 1.5rem;
+}
+.martlet-app-header nav {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.martlet-app-header nav a {
+  padding: 0.65rem 0.75rem;
+  min-block-size: 2.8rem;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+.martlet-app-header nav a[aria-current] {
+  border-block-end: 2px solid var(--ui-accent);
+  font-weight: 700;
+}
+.martlet-app-utilities {
+  margin-inline-start: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+.martlet-app-colophon {
+  display: none;
+}
+.martlet-dialog {
+  border: 1px solid var(--martlet-border-strong);
+  padding: 2rem;
+  background: var(--martlet-surface-overlay);
+  color: var(--ui-text);
+  inline-size: min(32rem, calc(100vw - 2rem));
+  max-block-size: calc(100vh - 2rem);
+}
+.martlet-dialog::backdrop {
+  background: var(--martlet-overlay-scrim);
+}
+.martlet-dialog h2 {
+  margin-block-end: 1rem;
+}
+.martlet-dialog .actions {
+  margin-block-start: 1.5rem;
+}
+@media (max-width: 60rem) {
+  .martlet-app-header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .martlet-app-utilities {
+    margin-inline-start: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .martlet *,
+  .martlet *::before,
+  .martlet *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.martlet {
+  --martlet-region-gap: 2.5rem;
+  --martlet-row-padding: 1rem;
+}
+.martlet-app-header {
+  border-block-start: 4px solid var(--martlet-color-gold-500);
+}
+.martlet-app-brand {
+  font-family: var(--martlet-font-display);
+  font-weight: 600;
+}
