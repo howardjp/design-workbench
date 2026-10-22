@@ -42,7 +42,7 @@ The overview derives actual counts and per-family/platform coverage from the sam
 
 1. Both family routes expose identical records, filtering behavior, fields, and validation rules.
 2. Search matches component name, purpose, or category; maturity, intended-platform, and usage-evidence filters intersect. Name, lifecycle stage, and update date columns support explicit sort order; changing filters or ordering resets bounded pagination. No-match results explain recovery and offer Clear filters.
-3. Inspecting a record shows its requirements, selected-family implementation inventory, family decisions, and revision history. Availability and maturity remain separate.
+3. Inspecting a record shows its requirements, selected-family implementation inventory, family decisions, and revision history with field comparisons. An earlier snapshot can be opened as a draft and saved as a new revision; current implementation inventory and all previous snapshots remain. Availability and maturity remain separate.
 4. Editing preserves entered values after validation, transport, server, and revision-conflict failures. Invalid fields have associated errors and a focused summary; successful writes have a polite status.
 5. Creating a component requires a valid unique name and complete specification. Reload confirms creation without fabricated availability.
 6. Saved changes survive browser reload and complete store close/reopen. Stale concurrent edits cannot overwrite a newer saved revision.
@@ -51,4 +51,4 @@ The overview derives actual counts and per-family/platform coverage from the sam
 9. Reduced-motion preference removes transitions. Visible keyboard focus, labels, landmarks, and skip navigation remain usable. Automated accessibility checks supplement manual review.
 10. Export contains a schema version and actual saved records. Full backups preserve SQLite and history through the documented stop/copy/restore procedure.
 
-Known boundaries: no authentication, remote deployment, history restoration UI, JSON import, package publishing, source-site mutation, automated inventory synchronization, or claims of sustained production usage. These are explicit subsequent work, not hidden effects of Save.
+Known boundaries: no authentication, remote deployment, JSON import, package publishing, source-site mutation, automated inventory synchronization, or claims of sustained production usage. These are explicit subsequent work, not hidden effects of Save.

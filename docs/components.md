@@ -32,7 +32,7 @@ The inventory composes a labelled search, maturity/target/evidence filters, sort
 
 The overview derives counts, implementation coverage, and recent records from the same saved inventory. Recorded targets and availability remain separate. Coverage includes platforms that appear in target or implementation metadata. A missing-evidence action opens the corresponding inventory filter; it does not promote, certify, or publish any contract. No seeded adoption, productivity, revenue, or performance statistics appear.
 
-The revision disclosure currently exposes the latest 20 snapshots' revision, timestamp, name, and maturity. Comparing or restoring full snapshots is subsequent work. A save result records an actual committed revision. Failure and conflict states do not pretend success.
+The revision disclosure exposes the latest 20 snapshots and compares editable fields with the opened saved revision. Target selection order does not count as a contract difference. An older snapshot can be opened as a draft, reviewed, and saved as a new revision through the normal validation/conflict path. Existing snapshots and current implementation metadata are retained. History-loading failures have an explicit retry action. A save result records an actual committed revision. Failure and conflict states do not pretend success.
 
 ## Verification and promotion
 

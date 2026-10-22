@@ -534,3 +534,27 @@ body {
     margin-inline-start: 0;
   }
 }
+.revision-review {
+  padding: 1rem;
+  border-inline-start: 2px solid var(--ui-line);
+}
+.revision-review > button {
+  justify-self: start;
+}
+.revision-diff {
+  margin: 0;
+}
+.revision-diff > div {
+  padding-block: 1rem;
+  border-block-start: 1px solid var(--ui-line);
+}
+.revision-diff dt {
+  font-weight: 700;
+  margin-block-end: 0.75rem;
+}
+.revision-diff dd {
+  margin: 0 0 1rem;
+}
+.revision-diff dd p {
+  white-space: pre-wrap;
+}

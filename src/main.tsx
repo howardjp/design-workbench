@@ -1,7 +1,15 @@
-import { StrictMode, useEffect, useRef, useState, type FormEvent } from "react";
+import {
+  StrictMode,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type FormEvent,
+} from "react";
 import { createRoot } from "react-dom/client";
 import { family, title, UI } from "./family";
 import { ReadinessDashboard } from "./readiness";
+import { RevisionReview } from "./revisions";
 import "@martlet/react/styles.css";
 import "@krigsvold/react/styles.css";
 import "@martlet/theme/fonts.css";
@@ -33,7 +41,6 @@ const {
   Dialog,
   Checkbox,
   Fieldset,
-  Disclosure,
 } = UI;
 const initialRecordId = new URLSearchParams(location.search).get("record");
 function storedMode(): "light" | "dark" {
@@ -74,8 +81,18 @@ function App() {
   const [pending, setPending] = useState<(() => void) | null>(null);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [historyError, setHistoryError] = useState("");
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [historyRetry, setHistoryRetry] = useState(0);
+  const [draftSource, setDraftSource] = useState<number | null>(null);
   const summaryRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLElement>(null);
+  const pendingFocus = useRef<"editor" | "main" | null>(null);
+  useLayoutEffect(() => {
+    const target = pendingFocus.current;
+    if (target === "editor") editorRef.current?.focus();
+    if (target === "main") document.getElementById("main")?.focus();
+    pendingFocus.current = null;
+  });
   const selected = records.find((record) => record.id === selectedId) ?? null;
   const dirty =
     editing &&
@@ -144,7 +161,11 @@ function App() {
     window.history.replaceState(null, "", url);
     setHistory([]);
     setHistoryError("");
-    if (!selectedId) return;
+    if (!selectedId) {
+      setHistoryLoading(false);
+      return;
+    }
+    setHistoryLoading(true);
     let active = true;
     api
       .history(selectedId)
@@ -153,11 +174,14 @@ function App() {
       })
       .catch(() => {
         if (active) setHistoryError("Revision history could not be loaded.");
+      })
+      .finally(() => {
+        if (active) setHistoryLoading(false);
       });
     return () => {
       active = false;
     };
-  }, [selectedId, selected?.revision, view]);
+  }, [selectedId, selected?.revision, view, historyRetry]);
   useEffect(() => {
     if (!dirty) return;
     const guard = (event: BeforeUnloadEvent) => {
@@ -167,10 +191,11 @@ function App() {
     window.addEventListener("beforeunload", guard);
     return () => window.removeEventListener("beforeunload", guard);
   }, [dirty]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (Object.keys(errors).length || failure) summaryRef.current?.focus();
   }, [errors, failure]);
   function clearFeedback() {
+    setDraftSource(null);
     setErrors({});
     setFailure("");
     setConflict(false);
@@ -185,8 +210,9 @@ function App() {
     guard(() => {
       setSelectedId(record.id);
       setEditing(false);
+      setDraftSource(null);
       clearFeedback();
-      requestAnimationFrame(() => editorRef.current?.focus());
+      pendingFocus.current = "editor";
     });
   }
   function navigateView(next: string) {
@@ -194,7 +220,7 @@ function App() {
       setView(next);
       setEditing(false);
       clearFeedback();
-      requestAnimationFrame(() => document.getElementById("main")?.focus());
+      pendingFocus.current = "main";
     });
   }
   function review(
@@ -218,7 +244,7 @@ function App() {
       setDraft(newDraft() as Draft);
       setEditing(true);
       clearFeedback();
-      requestAnimationFrame(() => editorRef.current?.focus());
+      pendingFocus.current = "editor";
     });
   }
   function edit() {
@@ -226,8 +252,17 @@ function App() {
       setDraft(toDraft(selected) as Draft);
       setEditing(true);
       clearFeedback();
-      requestAnimationFrame(() => editorRef.current?.focus());
+      pendingFocus.current = "editor";
     }
+  }
+  function useRevision(entry: HistoryEntry) {
+    guard(() => {
+      setDraft(toDraft(entry.snapshot) as Draft);
+      setEditing(true);
+      clearFeedback();
+      setDraftSource(entry.revision);
+      pendingFocus.current = "editor";
+    });
   }
   function update<K extends keyof Draft>(key: K, value: Draft[K]) {
     setDraft((previous) => ({ ...previous, [key]: value }));
@@ -269,11 +304,12 @@ function App() {
       );
       setSelectedId(record.id);
       setEditing(false);
+      setDraftSource(null);
       setErrors({});
       setMessage(
         `${record.name} saved. Revision ${record.revision} is stored in the registry.`,
       );
-      requestAnimationFrame(() => editorRef.current?.focus());
+      pendingFocus.current = "editor";
     } catch (error) {
       if (error instanceof ApiError) {
         setErrors(error.fields);
@@ -734,7 +770,7 @@ function App() {
                 >
                   <p className="muted">
                     {selected
-                      ? `Editing revision ${selected.revision}.`
+                      ? `Editing saved revision ${selected.revision}${draftSource ? ` using revision ${draftSource} as a draft` : ""}.`
                       : "Create a shared component contract."}{" "}
                     {dirty
                       ? "You have unsaved changes."
@@ -948,25 +984,14 @@ function App() {
                       <p className="multiline">{selected.migration}</p>
                     </section>
                   )}
-                  <Disclosure className="history" summary="Revision history">
-                    {historyError ? (
-                      <p>{historyError}</p>
-                    ) : (
-                      <ol>
-                        {history.map((entry) => (
-                          <li key={entry.revision}>
-                            <strong>Revision {entry.revision}</strong>
-                            <time dateTime={entry.at}>
-                              {new Date(entry.at).toLocaleString("en-US")}
-                            </time>
-                            <span>
-                              {entry.snapshot.name} · {entry.snapshot.maturity}
-                            </span>
-                          </li>
-                        ))}
-                      </ol>
-                    )}
-                  </Disclosure>
+                  <RevisionReview
+                    current={selected}
+                    entries={history}
+                    loading={historyLoading}
+                    error={historyError}
+                    onRetry={() => setHistoryRetry((value) => value + 1)}
+                    onUse={useRevision}
+                  />
                 </>
               ) : (
                 <p>Choose a component from the inventory or add a new one.</p>

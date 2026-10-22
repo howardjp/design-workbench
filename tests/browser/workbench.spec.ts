@@ -125,7 +125,7 @@ for (const family of ["martlet", "krigsvold"]) {
     await page
       .getByRole("button", { name: "Discard changes", exact: true })
       .click();
-    await expect(page.getByText(concurrent, { exact: true })).toBeVisible();
+    await expect(page.locator(".spec-summary")).toHaveText(concurrent);
   });
   test(`${family}: modal keyboard dismissal and unsaved navigation`, async ({
     page,
@@ -354,6 +354,89 @@ for (const family of ["martlet", "krigsvold"]) {
       .click();
     await expect(
       page.getByRole("button", { name: "Edit specification", exact: true }),
+    ).toBeVisible();
+  });
+}
+
+for (const family of ["martlet", "krigsvold"]) {
+  test(`${family}: compare an old contract and restore through a new saved draft`, async ({
+    page,
+    request,
+  }) => {
+    const previous = await (await request.get("/api/components/card")).json();
+    const updated = await (
+      await request.put("/api/components/card", {
+        data: {
+          record: {
+            ...previous,
+            summary: `The ${family} review replaces this later text with a historical contract.`,
+          },
+          revision: previous.revision,
+        },
+      })
+    ).json();
+    await page.goto(`/${family}/?record=card`);
+    await page.getByText("Revision history", { exact: true }).click();
+    const revision = page.locator(
+      `details[data-revision="${previous.revision}"]`,
+    );
+    await revision.locator("summary").click();
+    await expect(
+      revision.getByText(previous.summary, { exact: true }),
+    ).toBeVisible();
+    await page.setViewportSize({ width: 320, height: 1000 });
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
+    ).toBeTruthy();
+    expect(
+      (
+        await new AxeBuilder({ page })
+          .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+          .analyze()
+      ).violations,
+    ).toEqual([]);
+    await page
+      .getByRole("button", {
+        name: `Use revision ${previous.revision} as draft`,
+        exact: true,
+      })
+      .click();
+    await expect(page.getByLabel("Summary", { exact: true })).toHaveValue(
+      previous.summary,
+    );
+    await expect(
+      page.getByText(
+        new RegExp(`using revision ${previous.revision} as a draft`),
+      ),
+    ).toBeVisible();
+    await page
+      .getByRole("button", { name: "Save specification", exact: true })
+      .click();
+    await expect(
+      page.getByRole("status").filter({ hasText: "Card saved." }),
+    ).toBeVisible();
+    const restored = await (await request.get("/api/components/card")).json();
+    expect(restored.revision).toBe(updated.revision + 1);
+    expect(restored.implementations).toEqual(updated.implementations);
+    await page.reload();
+    await expect(page.locator(".spec-summary")).toHaveText(previous.summary);
+  });
+  test(`${family}: revision failure has a working retry`, async ({ page }) => {
+    let failures = 1;
+    await page.route("**/api/components/button/history", (route) =>
+      failures-- > 0
+        ? route.fulfill({ status: 503, json: { message: "Unavailable" } })
+        : route.continue(),
+    );
+    await page.goto(`/${family}/?record=button`);
+    await page.getByText("Revision history", { exact: true }).click();
+    await page
+      .getByRole("button", { name: "Retry revision history", exact: true })
+      .click();
+    await expect(
+      page.locator('details[data-revision="1"] > summary'),
     ).toBeVisible();
   });
 }

@@ -191,3 +191,15 @@ export function summarizeRegistry(records) {
     ),
   };
 }
+
+export function compareDrafts(current, previous) {
+  const normalize = (value) =>
+    Array.isArray(value) ? [...value].sort() : value;
+  return draftKeys
+    .filter(
+      (key) =>
+        JSON.stringify(normalize(current[key])) !==
+        JSON.stringify(normalize(previous[key])),
+    )
+    .map((key) => ({ key, current: current[key], previous: previous[key] }));
+}

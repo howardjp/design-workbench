@@ -20,7 +20,7 @@ Review coverage and missing evidence in the overview; search, sort, or paginate 
 
 This is an **experimental, single-user local application**. It binds only to 127.0.0.1, rejects unexpected Host/Origin requests, and has no account or authentication model. It is usable for actual registry work now. Public or team hosting requires authentication, authorization, operational backups, persistent storage, and a deployment review. Do not expose the local service through a public tunnel. It is not a production multi-user administration service.
 
-Edits update the local registry and its revision history. They do not publish packages, alter GitHub, modify either source site, or automatically certify a component. Implementation availability is the checked-in inventory snapshot; user-editable target platforms express intended reach. Stable maturity requires human-reviewed usage and verification evidence; deprecation requires migration guidance. A text field is a record of a decision, not an automated certification.
+Edits update the local registry and its revision history. Earlier contracts can be reviewed and opened as drafts; saving them appends a new revision. They do not publish packages, alter GitHub, modify either source site, or automatically certify a component. Implementation availability is the checked-in inventory snapshot; user-editable target platforms express intended reach. Stable maturity requires human-reviewed usage and verification evidence; deprecation requires migration guidance. A text field is a record of a decision, not an automated certification.
 
 ## React packages
 

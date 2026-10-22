@@ -361,3 +361,50 @@ test("evidence filtering distinguishes blank text from recorded observations", (
     ["Observed"],
   );
 });
+
+test("revision comparisons ignore target ordering but retain real field differences", async () => {
+  const { compareDrafts } = await import("../src/contract.mjs");
+  const current = {
+    ...newDraft(),
+    name: "Button",
+    targets: ["Astro", "React"],
+  };
+  const historical = {
+    ...current,
+    targets: ["React", "Astro"],
+    summary: "An earlier purpose.",
+  };
+  assert.deepEqual(compareDrafts(current, historical), [
+    { key: "summary", current: "", previous: "An earlier purpose." },
+  ]);
+});
+test("restoring a historical draft creates a revision and retains current availability and history", () => {
+  const store = openRegistry(":memory:");
+  try {
+    const original = store.get("button");
+    const next = store.save(
+      original.id,
+      {
+        ...toDraft(original),
+        summary:
+          "A later specification that is retained in history after restoration.",
+      },
+      original.revision,
+    );
+    const restored = store.save(original.id, toDraft(original), next.revision);
+    assert.equal(restored.revision, 3);
+    assert.equal(restored.summary, original.summary);
+    assert.deepEqual(restored.implementations, next.implementations);
+    assert.deepEqual(
+      store.history(original.id).map((x) => x.revision),
+      [3, 2, 1],
+    );
+    assert.equal(store.history(original.id)[1].snapshot.summary, next.summary);
+    assert.throws(
+      () => store.save(original.id, toDraft(original), next.revision),
+      (error) => error.status === 409,
+    );
+  } finally {
+    store.close();
+  }
+});
