@@ -21,8 +21,12 @@ const requestedViews = process.argv.slice(2);
 const views = requestedViews.length
   ? requestedViews
   : ["inventory", "overview", "reading"];
-if (views.some((view) => !["inventory", "overview", "reading"].includes(view)))
-  throw new Error("Choose inventory, overview, or reading.");
+if (
+  views.some(
+    (view) => !["inventory", "overview", "reading", "import"].includes(view),
+  )
+)
+  throw new Error("Choose inventory, overview, reading, or import.");
 try {
   const page = await browser.newPage({
     viewport: { width: 1440, height: 1100 },
@@ -36,17 +40,48 @@ try {
         page.getByRole("button", { name: "Add component", exact: true }),
       ).toBeEnabled();
       await page.evaluate(() => document.fonts.ready);
-      if (view === "reading") {
+      if (view === "import") {
+        await page.setViewportSize({ width: 1440, height: 2400 });
+        const source = JSON.stringify({
+          schemaVersion: 1,
+          exportedAt: "2026-10-22T06:00:00.000Z",
+          components: [
+            {
+              ...store.get("button"),
+              summary:
+                "Expose a clearly labelled action with explicit emphasis and keyboard-operable pending, success, and recovery states.",
+              evidence:
+                "Source assertion for review: native activation and disabled behavior were checked; manual screen-reader review remains open.",
+            },
+          ],
+        });
+        await page
+          .getByLabel("Registry JSON export", { exact: true })
+          .setInputFiles({
+            name: "component-review.json",
+            mimeType: "application/json",
+            buffer: Buffer.from(source),
+          });
+        await page
+          .getByRole("button", { name: "Preview import", exact: true })
+          .click();
+        await expect(
+          page.getByRole("region", { name: "Import review", exact: true }),
+        ).toBeVisible();
+        await page.locator(".registry-import").screenshot({
+          path: resolve(root, `docs/qa/${family}-${view}.jpg`),
+          type: "jpeg",
+          quality: 82,
+        });
+      } else if (view === "reading") {
         await expect(
           page.getByRole("article", { name: "Button", exact: true }),
         ).toBeVisible();
-        await page
-          .locator("article")
-          .screenshot({
-            path: resolve(root, `docs/qa/${family}-${view}.jpg`),
-            type: "jpeg",
-            quality: 82,
-          });
+        await page.locator("article").screenshot({
+          path: resolve(root, `docs/qa/${family}-${view}.jpg`),
+          type: "jpeg",
+          quality: 82,
+        });
       } else
         await page.screenshot({
           path: resolve(root, `docs/qa/${family}-${view}.jpg`),

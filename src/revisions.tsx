@@ -69,6 +69,32 @@ export function RevisionReview({
                     <p>
                       {entry.snapshot.name} · {entry.snapshot.maturity}
                     </p>
+                    {entry.snapshot.change?.kind === "json-import" && (
+                      <aside
+                        className="import-provenance stack compact"
+                        aria-label="Import provenance"
+                      >
+                        <strong>Imported specification</strong>
+                        <p>File label: {entry.snapshot.change.fileName}</p>
+                        <p>
+                          Export time stated in file:{" "}
+                          {new Date(
+                            entry.snapshot.change.exportedAt,
+                          ).toLocaleString("en-US", {
+                            timeZone: "America/New_York",
+                            timeZoneName: "short",
+                          })}
+                        </p>
+                        <p>
+                          Submitted text fingerprint:{" "}
+                          <code>{entry.snapshot.change.documentHash}</code>
+                        </p>
+                        <p>
+                          The label and export time are supplied by the file;
+                          they do not verify authorship.
+                        </p>
+                      </aside>
+                    )}
                     {changes.length ? (
                       <>
                         <p>Compared with saved revision {current.revision}:</p>

@@ -10,6 +10,7 @@ import { createRoot } from "react-dom/client";
 import { family, title, UI } from "./family";
 import { ReadinessDashboard } from "./readiness";
 import { InventoryUpdates } from "./inventory-updates";
+import { ImportRegistry } from "./import-registry";
 import { ReadingRoom } from "./reading-room";
 import { RevisionReview } from "./revisions";
 import "@martlet/react/styles.css";
@@ -63,7 +64,7 @@ function App() {
   const [maturity, setMaturity] = useState("");
   const [platform, setPlatform] = useState("");
   const [view, setView] = useState(
-    ["overview", "updates", "reading"].includes(
+    ["overview", "updates", "reading", "import"].includes(
       new URLSearchParams(location.search).get("view") ?? "",
     )
       ? new URLSearchParams(location.search).get("view")!
@@ -426,9 +427,11 @@ function App() {
                   ? "System overview"
                   : view === "updates"
                     ? "Inventory updates"
-                    : view === "reading"
-                      ? "Reading room"
-                      : "Component registry"}
+                    : view === "import"
+                      ? "Import specifications"
+                      : view === "reading"
+                        ? "Reading room"
+                        : "Component registry"}
               </h1>
               <p className="lede">A place to make the systems useful.</p>
             </div>
@@ -450,6 +453,7 @@ function App() {
             ["inventory", "Inventory"],
             ["updates", "Inventory updates"],
             ["reading", "Reading room"],
+            ["import", "Import specifications"],
           ].map(([key, label]) => (
             <a
               key={key}
@@ -482,6 +486,8 @@ function App() {
             <Notice kind="error">{loadError}</Notice>
             <Button onClick={() => void load()}>Retry loading</Button>
           </div>
+        ) : view === "import" ? (
+          <ImportRegistry onApplied={setRecords} onBusy={setSaving} />
         ) : view === "reading" ? (
           <ReadingRoom
             records={records}

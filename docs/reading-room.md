@@ -28,13 +28,13 @@ Both use a bounded text measure, native links, semantic headings/lists/tables, a
 
 ## Reusable packages
 
-Both packages now export `Article` and `TableOfContents`, bringing each to sixteen runtime components. See [component contracts](components.md) and package READMEs for the typed surface.
+Both packages now export `Article` and `TableOfContents`, added in the sixteen-component checkpoint (the packages now include FileInput as their seventeenth export). See [component contracts](components.md) and package READMEs for the typed surface.
 
 `Article` owns its accessible title, introduction, metadata, optional context, body measure, and footer. The caller owns content and routing. `titleLevel` defaults to 1 for a standalone document; the workbench uses 2 below its page heading. Callers choose a coherent level for subsequent headings and supply valid, unique section IDs. `TableOfContents` uses an ordered list inside a named navigation region and native fragment anchors. Focusable heading targets use `tabIndex={-1}`. Neither component embeds registry state, fetches data, parses Markdown, or renders untrusted HTML.
 
 The presentation components can render as static HTML, as verified in the isolated package consumer. Their native fragment links remain useful without hydration when valid heading targets are present. The current workbench is a client-rendered application: loading records, selecting contracts, refreshing, editing, and printing from its action button require JavaScript. It has no server-rendered/no-JavaScript route fallback.
 
-The initial seed now contains 32 records. Existing databases receive the new component records only through the explicit bundled-inventory preview and application workflow. Restarting never replaces saved contracts.
+The initial seed now contains 33 records. Existing databases receive the new component records only through the explicit bundled-inventory preview and application workflow. Restarting never replaces saved contracts.
 
 ## Printing and verification limits
 

@@ -211,3 +211,40 @@ for (const [family, UI] of [
     assert.doesNotMatch(markup, /role="(menu|tablist)"/);
   });
 }
+for (const [family, UI] of [
+  ["martlet", Martlet],
+  ["krigsvold", Krigsvold],
+]) {
+  test(`${family} file input retains native chooser, hint, invalid, disabled, and multiple contracts`, () => {
+    const markup = renderToStaticMarkup(
+      h(
+        UI.Field,
+        {
+          id: "registry-file",
+          label: "Registry export",
+          hint: "JSON only",
+          error: "Choose a valid file.",
+        },
+        (props) =>
+          h(UI.FileInput, {
+            ...props,
+            accept: ".json,application/json",
+            name: "registry-file",
+            multiple: true,
+            disabled: true,
+          }),
+      ),
+    );
+    assert.match(markup, /type="file"/);
+    assert.match(markup, /accept=".json,application\/json"/);
+    assert.match(markup, /name="registry-file"/);
+    assert.match(markup, /multiple=""/);
+    assert.match(markup, /disabled=""/);
+    assert.match(markup, /aria-invalid="true"/);
+    assert.match(
+      markup,
+      /aria-describedby="registry-file-hint registry-file-error"/,
+    );
+    assert.doesNotMatch(markup, /value="/);
+  });
+}

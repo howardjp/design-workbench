@@ -2,7 +2,7 @@
 
 Schema 1 · Experimental
 
-Both family views call the same API and edit the same SQLite database. There is no browser-local data replica. Only the light/dark preference uses localStorage. The default local service listens on 127.0.0.1:4173 and rejects unexpected Host and Origin headers and cross-site requests. JSON writes are bounded to 64 KiB. The server is local-only and unauthenticated; team hosting is future work.
+Both family views call the same API and edit the same SQLite database. There is no browser-local data replica. Only the light/dark preference uses localStorage. The default local service listens on 127.0.0.1:4173 and rejects unexpected Host and Origin headers and cross-site requests. Normal record JSON writes are bounded to 64 KiB. Import wrapper requests allow 2 MiB + 4096 bytes to accommodate JSON-escaped source text; decoded source is independently bounded to 1 MiB and 500 components. The server is local-only and unauthenticated; team hosting is future work.
 
 ## Record
 
@@ -21,7 +21,7 @@ Both family views call the same API and edit the same SQLite database. There is 
 | implementations | Read-only inventory of family, platform, package, version, and published/workspace availability |
 | revision / updatedAt | Server-assigned integer revision and UTC timestamp |
 
-The server validates every mutation independently of the client. Creation ignores supplied inventory/revision/id metadata. Editing preserves implementation metadata; changes to target platforms never assert that an implementation exists. Evidence is human-authored, not machine-certified. The initial 32 records combine the 17 Astro exports with the 16 React exports (Button overlaps), with both families represented. New records start without implementation claims.
+The server validates every mutation independently of the client. Creation ignores supplied inventory/revision/id metadata. Editing preserves implementation metadata; changes to target platforms never assert that an implementation exists. Evidence is human-authored, not machine-certified. The initial 33 records combine the 17 Astro exports with the 17 React exports (Button overlaps), with both families represented. New records start without implementation claims.
 
 ## API
 
@@ -34,9 +34,11 @@ The server validates every mutation independently of the client. Creation ignore
 | GET /api/components/:id/history | Latest 20 snapshots, newest first |
 | GET /api/inventory/preview | Read-only bundled-inventory update preview |
 | POST /api/inventory/apply | Apply a current preview token transactionally |
+| POST /api/import/preview | Validate `{source: JSON text, fileName: label}` and return a read-only policy/version/token/diff/conflict preview |
+| POST /api/import/apply | Apply `{source, fileName, token}` atomically after current-state checks; return applied count, records, and refreshed preview |
 | GET /api/export | Schema-versioned JSON of latest records; no history |
 
-Writes return the saved record. Validation uses 422 with field errors; stale revision uses 409; malformed JSON/revision uses 400; an unknown record uses 404. Only successful writes append history. Record and history commit in a single SQLite transaction. SQLite schema version 1 is recorded with user_version. Newer schemas are refused. Initial seeding occurs only at schema creation; upgrades must never overwrite user records implicitly. [Explicit bundled-inventory updates](inventory-updates.md) preserve edited contracts and append history only for changed records.
+Writes return the saved record. Validation uses 422 with field errors; stale revision uses 409; malformed JSON/revision uses 400; an unknown record uses 404. Only successful changes append history. Imported snapshots may contain optional change provenance metadata; current records and regular saves do not inherit it. Record and history commit in a single SQLite transaction. SQLite schema version 1 is recorded with user_version. Newer schemas are refused. Initial seeding occurs only at schema creation; upgrades must never overwrite user records implicitly. [Explicit bundled-inventory updates](inventory-updates.md) preserve edited contracts and append history only for changed records.
 
 The overview derives actual counts and per-family/platform coverage from the same saved records. Its missing-evidence action opens a filtered inventory. It records no synthetic adoption or activity metrics.
 
@@ -56,4 +58,6 @@ The overview derives actual counts and per-family/platform coverage from the sam
 
 12. Reading shows a full saved specification with identical content across families. Keyboard fragment links restore section focus on reload. Failed refresh retains the loaded revision; editing from reading keeps normal validation, conflict, and unsaved-draft protections. Print media retains the loaded contract.
 
-Known boundaries: no authentication, remote deployment, JSON import, package publishing, source-site mutation, live package discovery, or claims of sustained production usage. These are explicit subsequent work, not hidden effects of Save.
+13. JSON specification import validates file identity and draft fields, previews exact changes, retains lifecycle/implementation decisions, and creates new proposed contracts without implementation claims. Stale revisions and final name conflicts block all writes. Every changed history snapshot records the selected label, stated export time, and submitted-text fingerprint; this is provenance metadata, not authorship verification. See [the import policy](import.md).
+
+Known boundaries: no authentication, remote deployment, package publishing, source-site mutation, live package discovery, or claims of sustained production usage. These are explicit subsequent work, not hidden effects of Save.

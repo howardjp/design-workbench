@@ -4,6 +4,8 @@ import type {
   HistoryEntry,
   InventoryPreview,
   InventoryResult,
+  ImportPreview,
+  ImportResult,
 } from "./types";
 export class ApiError extends Error {
   constructor(
@@ -29,6 +31,16 @@ async function request<T>(url: string, options?: RequestInit): Promise<T> {
   return data;
 }
 export const api = {
+  previewImport: (source: string, fileName: string) =>
+    request<ImportPreview>("/api/import/preview", {
+      method: "POST",
+      body: JSON.stringify({ source, fileName }),
+    }),
+  applyImport: (source: string, fileName: string, token: string) =>
+    request<ImportResult>("/api/import/apply", {
+      method: "POST",
+      body: JSON.stringify({ source, fileName, token }),
+    }),
   previewInventory: () => request<InventoryPreview>("/api/inventory/preview"),
   applyInventory: (token: string) =>
     request<InventoryResult>("/api/inventory/apply", {

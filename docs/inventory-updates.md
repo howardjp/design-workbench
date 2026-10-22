@@ -28,7 +28,7 @@ If a response is lost, the UI cannot know whether the transaction committed. It 
 | No inventory changes remain | No writes, timestamps, or history entries change |
 | Name conflict, stale preview, or storage failure | Apply nothing |
 
-A changed bundled initial specification does not replace an existing specification. This is intentionally an additive inventory update, not a destructive reconciliation or a general-purpose import. Removed exports, retired implementations, arbitrary JSON import, export round trips, per-entry selection, audit actors, and provenance beyond the bundled snapshot remain subsequent work. No update promotes maturity, publishes a package, fetches a remote inventory, or changes the source sites.
+A changed bundled initial specification does not replace an existing specification. This is intentionally an additive inventory update, not a destructive reconciliation or a general-purpose import. Removed exports, retired implementations, per-entry selection, and audit actors remain subsequent work. Reviewed JSON specification import and current-state export round trips now have a separate [file-validation, provenance, and conflict policy](import.md); the bundled-inventory API never accepts arbitrary source files. No update promotes maturity, publishes a package, fetches a remote inventory, or changes the source sites.
 
 The SQLite schema remains version 1. Stop/copy/restore backups still preserve the complete database and history. Export remains a current-state JSON snapshot without full history.
 

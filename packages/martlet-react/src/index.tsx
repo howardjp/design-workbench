@@ -389,3 +389,16 @@ export function Article({
     </article>
   );
 }
+
+export function FileInput({
+  className = "",
+  ...props
+}: Omit<ComponentPropsWithRef<"input">, "type" | "value" | "defaultValue">) {
+  return (
+    <input
+      {...props}
+      type="file"
+      className={`martlet-file-input ${className}`}
+    />
+  );
+}

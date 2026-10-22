@@ -2,6 +2,7 @@ import { DatabaseSync } from "node:sqlite";
 import { readFileSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { inventorySnapshot, previewInventory } from "./inventory.mjs";
+import { parseImport, previewImport, ImportDocumentError } from "./import.mjs";
 import { cleanDraft, validateDraft } from "../src/contract.mjs";
 export class RegistryError extends Error {
   constructor(status, message, fields = {}) {
@@ -65,7 +66,7 @@ export function openRegistry(path) {
       )
       .all()
       .map((row) => JSON.parse(row.document));
-  const write = (record) => {
+  const write = (record, change) => {
     db.prepare(
       "INSERT INTO components VALUES (?,?,?) ON CONFLICT(id) DO UPDATE SET revision=excluded.revision, document=excluded.document",
     ).run(record.id, record.revision, JSON.stringify(record));
@@ -73,12 +74,72 @@ export function openRegistry(path) {
       record.id,
       record.revision,
       record.updatedAt,
-      JSON.stringify(record),
+      JSON.stringify(change ? { ...record, change } : record),
     );
+  };
+  const importDocument = (source, fileName) => {
+    try {
+      return parseImport(source, fileName);
+    } catch (error) {
+      if (error instanceof ImportDocumentError)
+        throw new RegistryError(422, error.message, error.fields);
+      throw error;
+    }
   };
   return {
     close: () => db.close(),
     list,
+    previewImport: (source, fileName) =>
+      previewImport(list(), importDocument(source, fileName)),
+    applyImport(source, fileName, token) {
+      if (typeof token !== "string" || !/^[a-f0-9]{64}$/.test(token))
+        throw new RegistryError(
+          400,
+          "A valid import preview token is required.",
+        );
+      const document = importDocument(source, fileName);
+      db.exec("BEGIN IMMEDIATE");
+      try {
+        const preview = previewImport(list(), document);
+        if (preview.token !== token)
+          throw new RegistryError(
+            409,
+            "The registry or selected file changed after this preview. Preview the import again and review the result.",
+          );
+        if (preview.conflicts.length)
+          throw new RegistryError(
+            409,
+            "Resolve the import conflicts before applying any records.",
+          );
+        const at = new Date().toISOString();
+        const provenance = {
+          kind: "json-import",
+          fileName: document.fileName,
+          documentHash: document.documentHash,
+          exportedAt: document.exportedAt,
+        };
+        for (const change of preview.changes) {
+          const previous = change.kind === "add" ? null : get(change.id);
+          write(
+            {
+              ...change.after,
+              id: change.id,
+              revision: (previous?.revision ?? 0) + 1,
+              updatedAt: at,
+              implementations: previous?.implementations ?? [],
+            },
+            provenance,
+          );
+        }
+        const components = list();
+        const next = previewImport(components, document);
+        db.exec("COMMIT");
+        return { applied: preview.changes.length, components, preview: next };
+      } catch (error) {
+        db.exec("ROLLBACK");
+        throw error;
+      }
+    },
     previewInventory: () => previewInventory(list(), inventory),
     applyInventory(token) {
       if (typeof token !== "string" || !/^[a-f0-9]{64}$/.test(token))

@@ -39,7 +39,7 @@ for (const family of ["martlet", "krigsvold"]) {
       page.getByRole("status").filter({ hasText: "Button saved." }),
     ).toBeVisible();
     await page.reload();
-    await expect(page.getByText(summary, { exact: true })).toBeVisible();
+    await expect(page.locator(".spec-summary")).toHaveText(summary);
     await page
       .getByRole("button", { name: "Add component", exact: true })
       .click();

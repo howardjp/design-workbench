@@ -27,7 +27,14 @@ export interface ComponentRecord extends Draft {
 export interface HistoryEntry {
   revision: number;
   at: string;
-  snapshot: ComponentRecord;
+  snapshot: ComponentRecord & {
+    change?: {
+      kind: "json-import";
+      fileName: string;
+      documentHash: string;
+      exportedAt: string;
+    };
+  };
 }
 
 export interface InventoryChange {
@@ -53,4 +60,36 @@ export interface InventoryResult {
   applied: number;
   components: ComponentRecord[];
   preview: InventoryPreview;
+}
+
+export interface ImportChange {
+  id: string;
+  name: string;
+  kind: "add" | "update";
+  revision: number | null;
+  after: Draft;
+  differences: { key: string; before: unknown; after: unknown }[];
+}
+export interface ImportPreview {
+  schemaVersion: 1;
+  policyVersion: 1;
+  fileName: string;
+  documentHash: string;
+  exportedAt: string;
+  token: string;
+  changes: ImportChange[];
+  conflicts: { id: string; name: string; message: string }[];
+  retainedMaturity: {
+    id: string;
+    name: string;
+    requested: string;
+    applied: string;
+  }[];
+  total: number;
+  unchanged: number;
+}
+export interface ImportResult {
+  applied: number;
+  components: ComponentRecord[];
+  preview: ImportPreview;
 }

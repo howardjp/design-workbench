@@ -1,6 +1,7 @@
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { resolve, extname, sep } from "node:path";
+import { IMPORT_MAX_BYTES } from "./import.mjs";
 import { RegistryError } from "./store.mjs";
 const mime = {
   ".html": "text/html; charset=utf-8",
@@ -18,14 +19,14 @@ function json(res, status, body) {
   });
   res.end(JSON.stringify(body));
 }
-async function body(req) {
+async function body(req, limit = 65536) {
   if (req.headers["content-type"]?.split(";")[0].trim() !== "application/json")
     throw new RegistryError(415, "Use application/json.");
   let size = 0;
   const chunks = [];
   for await (const chunk of req) {
     size += chunk.length;
-    if (size > 65536) throw new RegistryError(413, "The record is too large.");
+    if (size > limit) throw new RegistryError(413, "The request is too large.");
     chunks.push(chunk);
   }
   try {
@@ -56,6 +57,19 @@ export function createWorkbenchServer({ store, dist, middleware }) {
       const url = new URL(req.url, `http://${host}`);
       const path = url.pathname;
       if (path.startsWith("/api/")) {
+        if (
+          req.method === "POST" &&
+          ["/api/import/preview", "/api/import/apply"].includes(path)
+        ) {
+          const data = await body(req, 2 * IMPORT_MAX_BYTES + 4096);
+          return json(
+            res,
+            200,
+            path.endsWith("/preview")
+              ? store.previewImport(data?.source, data?.fileName)
+              : store.applyImport(data?.source, data?.fileName, data?.token),
+          );
+        }
         if (req.method === "GET" && path === "/api/inventory/preview")
           return json(res, 200, store.previewInventory());
         if (req.method === "POST" && path === "/api/inventory/apply") {

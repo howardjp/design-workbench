@@ -44,3 +44,13 @@ export const articleContracts = [Martlet, Krigsvold].map((UI) => (
     </h3>
   </UI.Article>
 ));
+export const fileContracts = [Martlet, Krigsvold].map((UI) => (
+  <UI.FileInput
+    ref={createRef<HTMLInputElement>()}
+    name="registry-file"
+    accept=".json"
+    multiple
+    disabled
+    aria-invalid="true"
+  />
+));

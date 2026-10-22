@@ -511,6 +511,37 @@
     ]
   },
   {
+    "id": "file-input",
+    "name": "FileInput",
+    "category": "Input",
+    "summary": "Choose local files with a labelled native file control while preserving keyboard access, browser selection, and validation feedback.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "A visible associated label and hint identify the requested files.\nThe native file chooser remains keyboard accessible.\nAccept is a chooser hint; the consumer validates content, size, and supported schema independently.\nDisabled and invalid states retain native attributes and a visible focus indicator.\nLong file names reflow at 320 CSS pixels in light and dark modes.\nThe public API does not accept a controlled value or defaultValue.",
+    "evidence": "",
+    "martletNotes": "Group the native file button and selected filename in a clear, generous field; keep requirements and recovery close.",
+    "krigsvoldNotes": "Align the native file control and filename within a bounded field; keep format limits and validation precise.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
+  },
+  {
     "id": "grid",
     "name": "Grid",
     "category": "Layout",
