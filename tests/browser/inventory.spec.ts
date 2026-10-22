@@ -19,7 +19,11 @@ const test = base.extend<{
         base: `http://127.0.0.1:${(server.address() as { port: number }).port}`,
       });
     } finally {
-      await new Promise<void>((done) => server.close(() => done()));
+      await new Promise<void>((done) => {
+        // Assertions are finished; pending browser responses must not hold teardown open.
+        server.close(() => done());
+        server.closeAllConnections();
+      });
       registry.close();
     }
   },
