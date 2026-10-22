@@ -23,10 +23,11 @@ const views = requestedViews.length
   : ["inventory", "overview", "reading"];
 if (
   views.some(
-    (view) => !["inventory", "overview", "reading", "import"].includes(view),
+    (view) =>
+      !["inventory", "overview", "reading", "import", "review"].includes(view),
   )
 )
-  throw new Error("Choose inventory, overview, reading, or import.");
+  throw new Error("Choose inventory, overview, reading, import, or review.");
 try {
   const page = await browser.newPage({
     viewport: { width: 1440, height: 1100 },
@@ -40,7 +41,23 @@ try {
         page.getByRole("button", { name: "Add component", exact: true }),
       ).toBeEnabled();
       await page.evaluate(() => document.fonts.ready);
-      if (view === "import") {
+      if (view === "review") {
+        await page.setViewportSize({ width: 1440, height: 1600 });
+        await expect(
+          page.getByRole("group", { name: "Real consumer", exact: true }),
+        ).toBeVisible();
+        await page
+          .getByText("Specification and implementation context", {
+            exact: true,
+          })
+          .click();
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.screenshot({
+          path: resolve(root, `docs/qa/${family}-${view}.jpg`),
+          type: "jpeg",
+          quality: 82,
+        });
+      } else if (view === "import") {
         await page.setViewportSize({ width: 1440, height: 2400 });
         const source = JSON.stringify({
           schemaVersion: 1,

@@ -1,6 +1,6 @@
 # Registry contract
 
-Schema 1 · Experimental
+API/export schema 1 · SQLite schema 2 · Experimental
 
 Both family views call the same API and edit the same SQLite database. There is no browser-local data replica. Only the light/dark preference uses localStorage. The default local service listens on 127.0.0.1:4173 and rejects unexpected Host and Origin headers and cross-site requests. Normal record JSON writes are bounded to 64 KiB. Import wrapper requests allow 2 MiB + 4096 bytes to accommodate JSON-escaped source text; decoded source is independently bounded to 1 MiB and 500 components. The server is local-only and unauthenticated; team hosting is future work.
 
@@ -19,9 +19,10 @@ Both family views call the same API and edit the same SQLite database. There is 
 | martletNotes / krigsvoldNotes | Up to 4000 characters each; independent design decisions |
 | migration | Up to 4000 characters; deprecation requires at least 20 characters explaining the transition |
 | implementations | Read-only inventory of family, platform, package, version, and published/workspace availability |
+| review | Optional structured readiness observations; editable only through the review endpoint; server-bound to the specification and both implementation inventories |
 | revision / updatedAt | Server-assigned integer revision and UTC timestamp |
 
-The server validates every mutation independently of the client. Creation ignores supplied inventory/revision/id metadata. Editing preserves implementation metadata; changes to target platforms never assert that an implementation exists. Evidence is human-authored, not machine-certified. The initial 33 records combine the 17 Astro exports with the 17 React exports (Button overlaps), with both families represented. New records start without implementation claims.
+The server validates every mutation independently of the client. Creation ignores supplied inventory/revision/id metadata. Editing preserves implementation metadata; changes to target platforms never assert that an implementation exists. Evidence is human-authored, not machine-certified. The initial 34 records combine the 17 Astro exports with the 18 React exports (Button overlaps), with both families represented. New records start without implementation claims.
 
 ## API
 
@@ -36,9 +37,11 @@ The server validates every mutation independently of the client. Creation ignore
 | POST /api/inventory/apply | Apply a current preview token transactionally |
 | POST /api/import/preview | Validate `{source: JSON text, fileName: label}` and return a read-only policy/version/token/diff/conflict preview |
 | POST /api/import/apply | Apply `{source, fileName, token}` atomically after current-state checks; return applied count, records, and refreshed preview |
+| GET /api/components/:id/review | Current record, review-basis fingerprint, freshness flag, and recorded outcome counts |
+| PUT /api/components/:id/review | Save `{checks, revision, confirmed: true}`; append one revision/history transaction, without changing specification or maturity |
 | GET /api/export | Schema-versioned JSON of latest records; no history |
 
-Writes return the saved record. Validation uses 422 with field errors; stale revision uses 409; malformed JSON/revision uses 400; an unknown record uses 404. Only successful changes append history. Imported snapshots may contain optional change provenance metadata; current records and regular saves do not inherit it. Record and history commit in a single SQLite transaction. SQLite schema version 1 is recorded with user_version. Newer schemas are refused. Initial seeding occurs only at schema creation; upgrades must never overwrite user records implicitly. [Explicit bundled-inventory updates](inventory-updates.md) preserve edited contracts and append history only for changed records.
+Writes return the saved record. Validation uses 422 with field errors; stale revision uses 409; malformed JSON/revision uses 400; an unknown record uses 404. Only successful changes append history. Imported snapshots may contain optional change provenance metadata; current records and regular saves do not inherit it. Record and history commit in a single SQLite transaction. SQLite user_version 2 is current; version 1 upgrades its marker transactionally without reseeding or replacing any record/history. Unknown newer versions are refused. Stop and back up before upgrading. Older builds refuse version 2 to protect structured metadata. Initial seeding occurs only at schema creation. [Explicit bundled-inventory updates](inventory-updates.md) preserve edited contracts and append history only for changed records.
 
 The overview derives actual counts and per-family/platform coverage from the same saved records. Its missing-evidence action opens a filtered inventory. It records no synthetic adoption or activity metrics.
 
@@ -59,5 +62,7 @@ The overview derives actual counts and per-family/platform coverage from the sam
 12. Reading shows a full saved specification with identical content across families. Keyboard fragment links restore section focus on reload. Failed refresh retains the loaded revision; editing from reading keeps normal validation, conflict, and unsaved-draft protections. Print media retains the loaded contract.
 
 13. JSON specification import validates file identity and draft fields, previews exact changes, retains lifecycle/implementation decisions, and creates new proposed contracts without implementation claims. Stale revisions and final name conflicts block all writes. Every changed history snapshot records the selected label, stated export time, and submitted-text fingerprint; this is provenance metadata, not authorship verification. See [the import policy](import.md).
+
+14. Structured readiness reviews retain six observations without promoting maturity. Conflicting revisions block writes; changed specifications or implementation inventories require renewed outcomes. Existing local reviews survive specification imports/edits; source review claims never transfer through JSON import. See [the review and upgrade policy](readiness-reviews.md).
 
 Known boundaries: no authentication, remote deployment, package publishing, source-site mutation, live package discovery, or claims of sustained production usage. These are explicit subsequent work, not hidden effects of Save.

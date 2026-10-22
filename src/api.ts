@@ -1,5 +1,7 @@
 import type {
   ComponentRecord,
+  ReviewCheck,
+  ReviewState,
   Draft,
   HistoryEntry,
   InventoryPreview,
@@ -31,6 +33,20 @@ async function request<T>(url: string, options?: RequestInit): Promise<T> {
   return data;
 }
 export const api = {
+  getReview: (id: string, signal?: AbortSignal) =>
+    request<ReviewState>(`/api/components/${encodeURIComponent(id)}/review`, {
+      signal,
+    }),
+  saveReview: (
+    id: string,
+    checks: ReviewCheck[],
+    revision: number,
+    confirmed: boolean,
+  ) =>
+    request<ReviewState>(`/api/components/${encodeURIComponent(id)}/review`, {
+      method: "PUT",
+      body: JSON.stringify({ checks, revision, confirmed }),
+    }),
   previewImport: (source: string, fileName: string) =>
     request<ImportPreview>("/api/import/preview", {
       method: "POST",

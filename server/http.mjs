@@ -93,6 +93,24 @@ export function createWorkbenchServer({ store, dist, middleware }) {
           const data = await body(req);
           return json(res, 201, store.save(null, data.record));
         }
+        const reviewMatch = path.match(
+          /^\/api\/components\/([a-z0-9-]+)\/review$/,
+        );
+        if (reviewMatch && req.method === "GET")
+          return json(res, 200, store.getReview(reviewMatch[1]));
+        if (reviewMatch && req.method === "PUT") {
+          const data = await body(req);
+          return json(
+            res,
+            200,
+            store.saveReview(
+              reviewMatch[1],
+              data.checks,
+              data.revision,
+              data.confirmed,
+            ),
+          );
+        }
         const match = path.match(
           /^\/api\/components\/([a-z0-9-]+)(\/history)?$/,
         );

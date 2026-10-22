@@ -1036,5 +1036,36 @@
         "state": "workspace"
       }
     ]
+  },
+  {
+    "id": "radio",
+    "name": "Radio",
+    "category": "Input",
+    "summary": "Choose one outcome within a named group using native mutually exclusive radio inputs.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "A shared name gives the group its native arrow-key and Space behavior.\nEach option has a visible associated label and supports checked, disabled, and native ref/ARIA attributes.\nThe caller supplies a fieldset and legend and keeps group errors visible.\nLabels and controls reflow in light and dark modes at narrow widths.",
+    "evidence": "",
+    "martletNotes": "Use comfortable label spacing and editorial fieldset grouping; retain the native circular control.",
+    "krigsvoldNotes": "Align option rows and labels precisely within the fieldset; retain the native circular control.",
+    "migration": "",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
   }
 ]

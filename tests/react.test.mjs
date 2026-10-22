@@ -248,3 +248,38 @@ for (const [family, UI] of [
     assert.doesNotMatch(markup, /value="/);
   });
 }
+
+for (const family of ["martlet", "krigsvold"])
+  test(`${family} radio options retain labels, group names, native state and fieldset descriptions`, async () => {
+    const UI = await import(`../packages/${family}-react/dist/index.js`);
+    const html = renderToStaticMarkup(
+      h(
+        UI.Fieldset,
+        { legend: "Outcome", hint: "Choose one result", disabled: true },
+        h(UI.Radio, {
+          id: "passed",
+          label: "Passed",
+          name: "outcome",
+          value: "passed",
+          checked: true,
+          readOnly: true,
+          "aria-describedby": "observation",
+        }),
+        h(UI.Radio, {
+          id: "needs-work",
+          label: "Needs work",
+          name: "outcome",
+          value: "needs-work",
+          checked: false,
+          readOnly: true,
+        }),
+      ),
+    );
+    assert.match(html, /<legend>Outcome<\/legend>/);
+    assert.match(html, /for="passed"/);
+    assert.match(html, /type="radio"/);
+    assert.match(html, /name="outcome"/);
+    assert.match(html, /aria-describedby="observation"/);
+    assert.match(html, /disabled=""/);
+    assert.match(html, /checked=""/);
+  });

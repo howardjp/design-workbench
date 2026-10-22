@@ -54,3 +54,28 @@ export const fileContracts = [Martlet, Krigsvold].map((UI) => (
     aria-invalid="true"
   />
 ));
+
+const radioRef = createRef<HTMLInputElement>();
+const martletRadio = (
+  <Martlet.Radio
+    label="Outcome"
+    name="martlet-outcome"
+    value="passed"
+    checked
+    ref={radioRef}
+    onChange={() => {}}
+    aria-invalid={true}
+  />
+);
+const krigsvoldRadio = (
+  <Krigsvold.Radio
+    label="Outcome"
+    name="krigsvold-outcome"
+    value="passed"
+    checked
+    ref={radioRef}
+    onChange={() => {}}
+    disabled
+  />
+);
+void [martletRadio, krigsvoldRadio];

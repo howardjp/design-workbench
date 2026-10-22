@@ -557,3 +557,21 @@
   background: var(--martlet-disabled-bg);
   color: var(--martlet-disabled-text);
 }
+
+.martlet-radio {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  min-block-size: 2.8rem;
+  cursor: pointer;
+}
+.martlet-radio input {
+  inline-size: 1.2rem;
+  block-size: 1.2rem;
+  accent-color: var(--ui-accent);
+  flex: none;
+}
+.martlet-radio:has(input:disabled) {
+  cursor: default;
+  color: var(--martlet-disabled-text);
+}

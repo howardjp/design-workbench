@@ -1,3 +1,4 @@
+import { reviewAreas } from "./review.mjs";
 import { UI } from "./family";
 import { ImplementationList } from "./implementations";
 import { compareDrafts, implementationsDiffer } from "./contract.mjs";
@@ -69,6 +70,36 @@ export function RevisionReview({
                     <p>
                       {entry.snapshot.name} · {entry.snapshot.maturity}
                     </p>
+                    {entry.snapshot.change?.kind === "readiness-review" &&
+                      entry.snapshot.review && (
+                        <aside
+                          className="review-history stack compact"
+                          aria-label="Readiness review observations"
+                        >
+                          <strong>Readiness observations saved</strong>
+                          <p>
+                            Recorded against specification revision{" "}
+                            {entry.snapshot.review.basedOnRevision}. These
+                            assertions did not change maturity or publish a
+                            package.
+                          </p>
+                          <ul>
+                            {entry.snapshot.review.checks.map((check) => (
+                              <li key={check.id}>
+                                <strong>
+                                  {
+                                    reviewAreas.find(
+                                      (area) => area.id === check.id,
+                                    )?.label
+                                  }
+                                  : {check.outcome}
+                                </strong>
+                                <p>{check.notes || "None recorded"}</p>
+                              </li>
+                            ))}
+                          </ul>
+                        </aside>
+                      )}
                     {entry.snapshot.change?.kind === "json-import" && (
                       <aside
                         className="import-provenance stack compact"

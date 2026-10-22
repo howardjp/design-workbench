@@ -712,3 +712,42 @@ body {
     gap: 1rem;
   }
 }
+
+.readiness-review {
+  max-inline-size: 76rem;
+}
+.review-outcomes {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-block-end: 1rem;
+}
+.review-context {
+  padding-block: 1rem;
+}
+.review-context dl {
+  margin: 0;
+  display: grid;
+  gap: 1rem;
+}
+.review-context dt {
+  font-weight: 700;
+}
+.review-context dd {
+  margin: 0;
+  white-space: pre-wrap;
+}
+.review-progress,
+.review-status,
+.review-history {
+  padding: 1rem;
+  background: var(--ui-surface);
+  border-inline-start: 2px solid var(--ui-accent);
+}
+.review-prior p,
+.review-history p {
+  white-space: pre-wrap;
+}
+.review-confirmation-error {
+  font-weight: 700;
+}

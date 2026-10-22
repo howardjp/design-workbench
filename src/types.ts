@@ -23,17 +23,20 @@ export interface ComponentRecord extends Draft {
   revision: number;
   updatedAt: string;
   implementations: Implementation[];
+  review?: ReadinessReview;
 }
 export interface HistoryEntry {
   revision: number;
   at: string;
   snapshot: ComponentRecord & {
-    change?: {
-      kind: "json-import";
-      fileName: string;
-      documentHash: string;
-      exportedAt: string;
-    };
+    change?:
+      | { kind: "readiness-review"; basisHash: string }
+      | {
+          kind: "json-import";
+          fileName: string;
+          documentHash: string;
+          exportedAt: string;
+        };
   };
 }
 
@@ -92,4 +95,23 @@ export interface ImportResult {
   applied: number;
   components: ComponentRecord[];
   preview: ImportPreview;
+}
+
+export interface ReviewCheck {
+  id: string;
+  outcome: "not-reviewed" | "needs-work" | "passed";
+  notes: string;
+}
+export interface ReadinessReview {
+  policyVersion: 1;
+  basisHash: string;
+  basedOnRevision: number;
+  recordedAt: string;
+  checks: ReviewCheck[];
+}
+export interface ReviewState {
+  record: ComponentRecord;
+  basisHash: string;
+  current: boolean;
+  summary: { passed: number; needsWork: number; unreviewed: number };
 }

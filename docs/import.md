@@ -18,7 +18,7 @@ Each component must have a unique exported slug ID (up to 160 characters), a pos
 | New ID | Preserve the supplied valid ID; create server revision 1 with maturity proposed and no implementations |
 | Maturity | Retain the saved stage for an existing ID; explain any different source stage in the preview |
 | Specification fields | Name, summary, category, targets, acceptance criteria, evidence, both family decisions, migration guidance |
-| Implementations, source revision/save time, unknown metadata | Never copied into the current record; server assigns the next revision and save time |
+| Implementations, readiness reviews, source revision/save time, unknown metadata | Never copied from the source; existing local review metadata is retained and can become stale after specification changes; server assigns the next revision and save time |
 | Record absent from file | Retain without a write or new history entry |
 | Unchanged specification | No write, even if the source revision is older; target order alone is not a change |
 

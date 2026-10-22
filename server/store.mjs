@@ -1,3 +1,5 @@
+import { reviewState, reviewBasis } from "./review.mjs";
+import { validateReview, cleanReview } from "../src/review.mjs";
 import { DatabaseSync } from "node:sqlite";
 import { readFileSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
@@ -19,7 +21,7 @@ export function openRegistry(path) {
   const db = new DatabaseSync(path);
   db.exec("PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000;");
   const version = db.prepare("PRAGMA user_version").get().user_version;
-  if (version > 1) {
+  if (version > 2) {
     db.close();
     throw new Error("Database schema is newer than this application.");
   }
@@ -27,7 +29,7 @@ export function openRegistry(path) {
     db.exec("BEGIN IMMEDIATE");
     try {
       db.exec(
-        "CREATE TABLE components (id TEXT PRIMARY KEY, revision INTEGER NOT NULL, document TEXT NOT NULL); CREATE TABLE history (id TEXT NOT NULL, revision INTEGER NOT NULL, at TEXT NOT NULL, snapshot TEXT NOT NULL, PRIMARY KEY(id,revision)); PRAGMA user_version=1;",
+        "CREATE TABLE components (id TEXT PRIMARY KEY, revision INTEGER NOT NULL, document TEXT NOT NULL); CREATE TABLE history (id TEXT NOT NULL, revision INTEGER NOT NULL, at TEXT NOT NULL, snapshot TEXT NOT NULL, PRIMARY KEY(id,revision)); PRAGMA user_version=2;",
       );
       const seed = inventory.records;
       const at = new Date().toISOString();
@@ -46,6 +48,17 @@ export function openRegistry(path) {
         );
       }
       db.exec("COMMIT");
+    } catch (error) {
+      db.exec("ROLLBACK");
+      db.close();
+      throw error;
+    }
+  }
+  // Schema 2 protects structured review metadata from older writers that discard unknown fields.
+  if (version === 1) {
+    db.exec("BEGIN IMMEDIATE");
+    try {
+      db.exec("PRAGMA user_version=2; COMMIT");
     } catch (error) {
       db.exec("ROLLBACK");
       db.close();
@@ -127,6 +140,7 @@ export function openRegistry(path) {
               revision: (previous?.revision ?? 0) + 1,
               updatedAt: at,
               implementations: previous?.implementations ?? [],
+              ...(previous?.review ? { review: previous.review } : {}),
             },
             provenance,
           );
@@ -180,6 +194,58 @@ export function openRegistry(path) {
       }
     },
     get,
+    getReview: (id) => reviewState(get(id)),
+    saveReview(id, checks, revision, confirmed) {
+      const fields = validateReview(checks);
+      if (confirmed !== true)
+        fields.confirmation =
+          "Confirm that these observations were reviewed against the displayed specification and inventory.";
+      if (Object.keys(fields).length)
+        throw new RegistryError(
+          422,
+          "The readiness review needs a few changes.",
+          fields,
+        );
+      if (!Number.isSafeInteger(revision) || revision < 1)
+        throw new RegistryError(400, "A valid revision is required.");
+      db.exec("BEGIN IMMEDIATE");
+      try {
+        const previous = get(id);
+        if (previous.revision !== revision)
+          throw new RegistryError(
+            409,
+            "This component changed in another window. Your review draft is preserved. Load the latest specification and review it before saving again.",
+          );
+        const basisHash = reviewBasis(previous),
+          clean = cleanReview(checks);
+        if (
+          previous.review?.basisHash === basisHash &&
+          JSON.stringify(previous.review.checks) === JSON.stringify(clean)
+        ) {
+          db.exec("COMMIT");
+          return reviewState(previous);
+        }
+        const at = new Date().toISOString();
+        const record = {
+          ...previous,
+          revision: revision + 1,
+          updatedAt: at,
+          review: {
+            policyVersion: 1,
+            basisHash,
+            basedOnRevision: revision,
+            recordedAt: at,
+            checks: clean,
+          },
+        };
+        write(record, { kind: "readiness-review", basisHash });
+        db.exec("COMMIT");
+        return reviewState(record);
+      } catch (error) {
+        db.exec("ROLLBACK");
+        throw error;
+      }
+    },
     history: (id) => {
       get(id);
       return db
@@ -234,6 +300,7 @@ export function openRegistry(path) {
           revision: (previous?.revision ?? 0) + 1,
           updatedAt: new Date().toISOString(),
           implementations: previous?.implementations ?? [],
+          ...(previous?.review ? { review: previous.review } : {}),
         };
         if (previous)
           db.prepare(

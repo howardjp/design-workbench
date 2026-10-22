@@ -610,3 +610,21 @@
   background: var(--krigsvold-disabled-bg);
   color: var(--krigsvold-disabled-text);
 }
+
+.krigsvold-radio {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  min-block-size: 2.8rem;
+  cursor: pointer;
+}
+.krigsvold-radio input {
+  inline-size: 1.2rem;
+  block-size: 1.2rem;
+  accent-color: var(--ui-accent);
+  flex: none;
+}
+.krigsvold-radio:has(input:disabled) {
+  cursor: default;
+  color: var(--krigsvold-disabled-text);
+}

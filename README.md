@@ -14,7 +14,7 @@ npm start
 
 Open **http://127.0.0.1:4173/martlet/** or **http://127.0.0.1:4173/krigsvold/**. Both views edit the same database. The default database is `var/registry.sqlite`; set `REGISTRY_DB` to choose another path and `PORT` to choose another loopback port. For development, build once, then run `npm run dev` and reload after changes. Dev mode deliberately disables HMR. Node's bundled SQLite may print an experimental-feature warning on the supported Node version.
 
-Read and print full saved specifications in the reading room, including both families’ decisions; review coverage and missing evidence in the overview; search, sort, or paginate the inventory; inspect a component, edit its specification, save, and reload. Add components as work expands. Failed writes preserve drafts, stale revisions produce an explicit conflict, and unsaved navigation offers a choice. The initial 33 records reflect the exported Astro and React component inventory, with published Astro implementations distinguished from unpublished React workspace implementations. All seed maturity stages remain experimental and evidence starts empty. Seed records are installed once when the database is created; restarting never replaces edits.
+Read and print full saved specifications in the reading room, including both families’ decisions; review coverage and missing evidence in the overview; search, sort, or paginate the inventory; inspect a component, edit its specification, save, and reload. Record six structured readiness observations, review gaps, and renewed outcomes after specification changes. Saving observations does not promote maturity or publish packages. Add components as work expands. Failed writes preserve drafts, stale revisions produce an explicit conflict, and unsaved navigation offers a choice. The initial 34 records reflect the exported Astro and React component inventory, with published Astro implementations distinguished from unpublished React workspace implementations. All seed maturity stages remain experimental and evidence starts empty. Seed records are installed once when the database is created; restarting never replaces edits.
 
 ## Boundaries of this first release
 
@@ -27,7 +27,7 @@ Edits update the local registry and its revision history. Earlier contracts can 
 - [@martlet/react](packages/martlet-react/README.md): warm editorial hierarchy, horizontal navigation, spacious grouping, Cambo/Lato/Cinzel typography.
 - [@krigsvold/react](packages/krigsvold-react/README.md): precise workspace hierarchy, side navigation, aligned regions, Roboto/Roboto Slab typography.
 
-Both export AppShell, Button, TextInput, Select, Textarea, Field, Notice, Badge, DataTable, Dialog, Checkbox, Fieldset, Disclosure, ErrorSummary, Article, TableOfContents, and FileInput. They consume the existing `@martlet/theme` / `@krigsvold/theme` 2.1.0 tokens and work in light and dark modes. Package APIs are experimental and unpublished. `npm run pack:react` produces tarballs for local installation. `private: true` prevents accidental registry publication until release contracts and trusted publishing are ready.
+Both export AppShell, Button, TextInput, Select, Textarea, Field, Notice, Badge, DataTable, Dialog, Checkbox, Fieldset, Disclosure, ErrorSummary, Article, TableOfContents, FileInput, and Radio. They consume the existing `@martlet/theme` / `@krigsvold/theme` 2.1.0 tokens and work in light and dark modes. Package APIs are experimental and unpublished. `npm run pack:react` produces tarballs for local installation. `private: true` prevents accidental registry publication until release contracts and trusted publishing are ready.
 
 ## Specifications and direction
 
@@ -36,6 +36,7 @@ Both export AppShell, Button, TextInput, Select, Textarea, Field, Notice, Badge,
 - [Explicit inventory updates](docs/inventory-updates.md)
 - [Specification reading room](docs/reading-room.md)
 - [Reviewed JSON specification import](docs/import.md)
+- [Structured readiness reviews](docs/readiness-reviews.md)
 - [Martlet foundations specification PR](https://github.com/martlettheme/npm/pull/4)
 - [Krigsvold foundations specification PR](https://github.com/krigsvoldtheme/npm/pull/4)
 - [Component contracts and states](docs/components.md)
@@ -57,6 +58,8 @@ npm run pack:react
 Node tests cover validation, real SQLite reopen persistence, revision conflicts, creation, immutable availability, export, and HTTP request boundaries. Browser tests exercise both families through the same workflow and check light/dark accessibility and 320/1440-pixel reflow. Automated checks do not replace manual screen-reader, text-spacing, zoom, or sustained-use review. See [the review record](docs/verification.md) for the checks actually completed in this change.
 
 ## Data and backups
+
+Before starting this version against an existing registry, stop the server and copy the complete SQLite database. It upgrades database schema 1 to 2 transactionally without reseeding; older builds refuse schema 2. API/export schema 1 remains unchanged. See [the upgrade and review contract](docs/readiness-reviews.md).
 
 “Export registry” downloads a schema-versioned JSON snapshot of the latest records. This portable snapshot contains current specifications and availability, without revision history. Import specifications validates a selected schema 1 file and shows exact changes before atomic application. Existing maturity and implementation inventory stay under local control; new contracts start proposed without implementation claims. Stale revisions and name conflicts block the entire import. See [the import policy and provenance contract](docs/import.md). To preserve the complete database, stop the server, copy `var/registry.sqlite` to a safe location, then restart. To restore, stop the server and point `REGISTRY_DB` at the saved database (keep the old one). WAL/SHM sidecars may exist while the server is running; do not copy a live database file alone. The database and exports are never committed to git. Seed changes do not silently migrate existing inventories. Use Inventory updates to preview and explicitly apply bundled additions and implementation metadata, retaining edited specifications and history. See [the update contract](docs/inventory-updates.md).
 
@@ -84,3 +87,9 @@ Reviewed import uses identical source content and exact field changes in both fa
 | Martlet | Krigsvold |
 | --- | --- |
 | ![Martlet import review](docs/qa/martlet-import.jpg) | ![Krigsvold import review](docs/qa/krigsvold-import.jpg) |
+
+Readiness-review workspace captures use the same unreviewed Button contract and collapsed specification context; the remaining review areas continue below the viewport:
+
+| Martlet | Krigsvold |
+| --- | --- |
+| ![Martlet readiness review](docs/qa/martlet-review.jpg) | ![Krigsvold readiness review](docs/qa/krigsvold-review.jpg) |

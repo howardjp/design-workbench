@@ -402,3 +402,19 @@ export function FileInput({
     />
   );
 }
+
+export function Radio({
+  label,
+  id,
+  className = "",
+  ...props
+}: Omit<ComponentPropsWithRef<"input">, "type"> & { label: ReactNode }) {
+  const generatedId = useId();
+  const controlId = id ?? generatedId;
+  return (
+    <label className={`martlet-radio ${className}`} htmlFor={controlId}>
+      <input {...props} id={controlId} type="radio" />
+      {label}
+    </label>
+  );
+}

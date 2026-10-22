@@ -10,6 +10,7 @@ import { createRoot } from "react-dom/client";
 import { family, title, UI } from "./family";
 import { ReadinessDashboard } from "./readiness";
 import { InventoryUpdates } from "./inventory-updates";
+import { ReadinessReviews } from "./readiness-review";
 import { ImportRegistry } from "./import-registry";
 import { ReadingRoom } from "./reading-room";
 import { RevisionReview } from "./revisions";
@@ -64,7 +65,7 @@ function App() {
   const [maturity, setMaturity] = useState("");
   const [platform, setPlatform] = useState("");
   const [view, setView] = useState(
-    ["overview", "updates", "reading", "import"].includes(
+    ["overview", "updates", "reading", "import", "review"].includes(
       new URLSearchParams(location.search).get("view") ?? "",
     )
       ? new URLSearchParams(location.search).get("view")!
@@ -78,6 +79,7 @@ function App() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [editing, setEditing] = useState(false);
+  const [reviewDirty, setReviewDirty] = useState(false);
   const [draft, setDraft] = useState<Draft>(newDraft() as Draft);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [failure, setFailure] = useState("");
@@ -101,9 +103,10 @@ function App() {
   });
   const selected = records.find((record) => record.id === selectedId) ?? null;
   const dirty =
-    editing &&
-    JSON.stringify(draft) !==
-      JSON.stringify(selected ? toDraft(selected) : newDraft());
+    reviewDirty ||
+    (editing &&
+      JSON.stringify(draft) !==
+        JSON.stringify(selected ? toDraft(selected) : newDraft()));
   const filtered = filterRecords(
     records,
     query,
@@ -427,11 +430,13 @@ function App() {
                   ? "System overview"
                   : view === "updates"
                     ? "Inventory updates"
-                    : view === "import"
-                      ? "Import specifications"
-                      : view === "reading"
-                        ? "Reading room"
-                        : "Component registry"}
+                    : view === "review"
+                      ? "Readiness reviews"
+                      : view === "import"
+                        ? "Import specifications"
+                        : view === "reading"
+                          ? "Reading room"
+                          : "Component registry"}
               </h1>
               <p className="lede">A place to make the systems useful.</p>
             </div>
@@ -454,6 +459,7 @@ function App() {
             ["updates", "Inventory updates"],
             ["reading", "Reading room"],
             ["import", "Import specifications"],
+            ["review", "Readiness reviews"],
           ].map(([key, label]) => (
             <a
               key={key}
@@ -486,6 +492,26 @@ function App() {
             <Notice kind="error">{loadError}</Notice>
             <Button onClick={() => void load()}>Retry loading</Button>
           </div>
+        ) : view === "review" ? (
+          <ReadinessReviews
+            records={records}
+            record={selected}
+            onSelect={selectRecord}
+            onUpdated={(record) =>
+              setRecords((previous) =>
+                previous.map((item) => (item.id === record.id ? record : item)),
+              )
+            }
+            onEdit={() =>
+              guard(() => {
+                setView("inventory");
+                edit();
+              })
+            }
+            onDirty={setReviewDirty}
+            onBusy={setSaving}
+            onGuard={guard}
+          />
         ) : view === "import" ? (
           <ImportRegistry onApplied={setRecords} onBusy={setSaving} />
         ) : view === "reading" ? (
@@ -787,6 +813,12 @@ function App() {
                   <div className="actions">
                     <Button variant="secondary" onClick={openReading}>
                       Read specification
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      onClick={() => navigateView("review")}
+                    >
+                      Review readiness
                     </Button>
                     <Button variant="secondary" onClick={edit}>
                       Edit specification
