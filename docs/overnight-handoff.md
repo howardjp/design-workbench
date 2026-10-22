@@ -56,6 +56,8 @@ The next slice after inventory updates was the shared-content article experience
 
 ## Continuation: specification reading room
 
+Implementation checkpoint: `01dd06adb461affd34685216dc6515dc183f9940` on `work/registry-foundations`, extending PR #1. The handoff-only follow-up pins this exact tested implementation; read the current PR head and CI before continuing.
+
 Starting remote checkpoint `96003effc35c0d04fda7f4279917b46f5e79518d` is unchanged from the preceding run and now has successful CI in `39710720156`. Open PRs and the workbench discussion had no newer instructions or overlapping work. Companion foundation PRs/heads remain the exact SHAs listed above, with their successful CI reconfirmed. The worktree was clean before editing.
 
 The reading room renders an entire saved specification, with both families' implementations and design decisions, from one shared content source. It offers native section links (including focus after direct fragment/reload), a keyboard-friendly record picker, explicit refresh/retry retaining the loaded revision on failure, printing, and entry back into the normal revision-safe editor. Aborted navigation cannot deliver a late refresh into another task. Read/refresh/print do not write records. Saved timestamps explicitly identify Eastern time.
