@@ -41,6 +41,8 @@ A fourth corrective checkpoint follows the third: dialog modal state also change
 
 ## Continuation: explicit inventory updates and linked errors
 
+Implementation checkpoint: `b11e4322b96d5c3fa9bea8c9a66317a0dcd2dd4d` on `work/registry-foundations`, extending PR #1. Its tree passed the local checks below. This handoff-only follow-up pins that implementation SHA; inspect the current remote PR head and its CI before proceeding.
+
 Baseline remote workbench head verified before editing: `2057fc28966d04eda495b87c9501e45ac15bc991`, PR #1, CI success in run `39707756046`. Both companion foundations heads remain `6619f7ad8dd56453fb2145a5fe05365dbeadbf7c` (martlettheme/npm #4, successful run `39704843812`) and `0a25f1ecf6fa608f425c03db6f28feb987fb7e7c` (krigsvoldtheme/npm #4, successful run `39704845497`). Their refs and current workbench PR were read before work; no newer work was overwritten.
 
 The completed slice adds Inventory updates in both family presentations. A validated bundled snapshot produces a read-only preview of new contracts, full initial specifications, changed metadata, retained implementations not confirmed by the bundle, and name conflicts. Explicit application requires review and a token matching the full current registry and source snapshot. A transaction writes all records and history together. Existing editable fields, unrelated implementations, and history remain. Stale previews and conflicts block the full batch. Refresh after a lost response resolves an uncertain result without replaying it. This is not arbitrary JSON import, deletion/reconciliation, or live package discovery. See docs/inventory-updates.md.
