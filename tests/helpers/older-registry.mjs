@@ -14,6 +14,7 @@ export const missing = [
   "file-input",
   "radio",
   "pagination",
+  "definition-list",
 ];
 export function createOlderRegistry(options = {}) {
   const dir = mkdtempSync(join(tmpdir(), "inventory-upgrade-"));

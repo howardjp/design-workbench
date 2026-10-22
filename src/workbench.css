@@ -817,3 +817,43 @@ body {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.conflict-recovery {
+  min-inline-size: 0;
+}
+.recovery-field {
+  min-inline-size: 0;
+}
+.recovery-choices {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-block-start: 1rem;
+}
+.recovery-position {
+  padding: 1rem;
+  background: var(--ui-surface);
+  border-inline-start: 2px solid var(--ui-accent);
+}
+.martlet .recovery-values {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-block: 1rem;
+}
+.krigsvold .recovery-values {
+  margin-block: 1rem;
+}
+@media (max-width: 60rem) {
+  .martlet .recovery-values {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+}
+
+.workspace.workspace--recovery {
+  grid-template-columns: minmax(0, 1fr);
+}
+.workspace--recovery .collection {
+  display: none;
+}

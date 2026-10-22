@@ -313,3 +313,41 @@ for (const [family, UI] of [
     assert.match(render(NaN, Infinity), />Page 1 of 1<\/p>/);
     assert.equal((render(-1, 0).match(/disabled=""/g) || []).length, 2);
   });
+
+for (const [family, UI] of [
+  ["martlet", Martlet],
+  ["krigsvold", Krigsvold],
+])
+  test(`${family} definition lists preserve native term/value structure, descriptions, attributes and escaped text`, () => {
+    const html = renderToStaticMarkup(
+      h(UI.DefinitionList, {
+        "aria-label": "Contract values",
+        id: "values",
+        items: [
+          {
+            id: "name",
+            term: "Name",
+            description: "<script>literal only</script>",
+          },
+          {
+            id: "revision",
+            term: h("strong", null, "Revision"),
+            description: h("span", null, "4"),
+          },
+        ],
+      }),
+    );
+    assert.match(html, /<dl[^>]*aria-label="Contract values"/);
+    assert.match(html, /id="values"/);
+    assert.match(
+      html,
+      /<div><dt>Name<\/dt><dd>&lt;script&gt;literal only&lt;\/script&gt;<\/dd><\/div>/,
+    );
+    assert.match(
+      html,
+      /<dt><strong>Revision<\/strong><\/dt><dd><span>4<\/span><\/dd>/,
+    );
+    assert.doesNotMatch(html, /<script>/);
+    const empty = renderToStaticMarkup(h(UI.DefinitionList, { items: [] }));
+    assert.doesNotMatch(empty, /<dt>/);
+  });

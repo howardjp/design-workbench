@@ -466,3 +466,27 @@ export function Pagination({
     </nav>
   );
 }
+
+export type DefinitionItem = {
+  id: string;
+  term: ReactNode;
+  description: ReactNode;
+};
+export function DefinitionList({
+  items,
+  className = "",
+  ...props
+}: Omit<ComponentPropsWithRef<"dl">, "children"> & {
+  items: readonly DefinitionItem[];
+}) {
+  return (
+    <dl {...props} className={`martlet-definitions ${className}`}>
+      {items.map((item) => (
+        <div key={item.id}>
+          <dt>{item.term}</dt>
+          <dd>{item.description}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}

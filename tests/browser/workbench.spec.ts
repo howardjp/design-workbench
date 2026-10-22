@@ -96,6 +96,29 @@ for (const family of ["martlet", "krigsvold"]) {
       draft,
     );
     await page.unroute("**/api/components/field");
+    await expect(
+      page.getByRole("button", { name: "Save specification", exact: true }),
+    ).toBeDisabled();
+    await page
+      .getByRole("button", {
+        name: "Compare with latest saved record",
+        exact: true,
+      })
+      .click();
+    await expect(
+      page.getByRole("group", { name: "Summary", exact: true }),
+    ).toBeVisible();
+    await page
+      .getByRole("group", { name: "Summary", exact: true })
+      .getByRole("radio", { name: "Use my draft", exact: true })
+      .check();
+    await page
+      .getByRole("button", {
+        name: "Use choices as editing draft",
+        exact: true,
+      })
+      .click();
+
     const before = await (await request.get("/api/components/field")).json();
     const concurrent =
       "A different window saved this field specification while the editor stayed open.";

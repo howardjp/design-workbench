@@ -1098,5 +1098,36 @@
         "state": "workspace"
       }
     ]
+  },
+  {
+    "id": "definition-list",
+    "name": "DefinitionList",
+    "category": "Data",
+    "summary": "Present related terms and values in a native description list with coherent family spacing and narrow reflow.",
+    "maturity": "experimental",
+    "targets": [
+      "React"
+    ],
+    "acceptanceCriteria": "Native dl, dt and dd preserve term/value semantics and caller attributes/ref. Each entry has a stable id. Long multiline values wrap; both light/dark compositions reflow. The real conflict comparison shows base, retained draft and latest saved values.",
+    "evidence": "",
+    "martletNotes": "Stacked terms and roomy descriptions support editorial comparison groups.",
+    "krigsvoldNotes": "Leading term columns and aligned values provide precise comparison rows.",
+    "migration": "Experimental items with id, term, description; native dl props/ref. No implicit headings, fetching, ordering or rich text parsing.",
+    "implementations": [
+      {
+        "family": "martlet",
+        "platform": "React",
+        "package": "@martlet/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      },
+      {
+        "family": "krigsvold",
+        "platform": "React",
+        "package": "@krigsvold/react",
+        "version": "0.1.0",
+        "state": "workspace"
+      }
+    ]
   }
 ]

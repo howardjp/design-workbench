@@ -92,3 +92,18 @@ export const paginationContracts = [Martlet, Krigsvold].map((UI) => (
     aria-describedby="results"
   />
 ));
+
+export const definitionContracts = [Martlet, Krigsvold].map((UI) => (
+  <UI.DefinitionList
+    ref={createRef<HTMLDListElement>()}
+    id="context"
+    aria-label="Saved context"
+    items={[
+      {
+        id: "version",
+        term: "Version",
+        description: <strong>Experimental</strong>,
+      },
+    ]}
+  />
+));

@@ -589,3 +589,23 @@
   margin: 0;
   font-variant-numeric: tabular-nums;
 }
+
+.martlet-definitions {
+  margin: 0;
+}
+.martlet-definitions > div {
+  padding-block: 0.75rem;
+  border-block-start: 1px solid var(--ui-line);
+  min-inline-size: 0;
+}
+.martlet-definitions dt {
+  font-weight: 700;
+}
+.martlet-definitions dd {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.martlet-definitions dd {
+  margin-block-start: 0.5rem;
+}

@@ -22,7 +22,7 @@ Both family views call the same API and edit the same SQLite database. There is 
 | review | Optional structured readiness observations; editable only through the review endpoint; server-bound to the specification and both implementation inventories |
 | revision / updatedAt | Server-assigned integer revision and UTC timestamp |
 
-The server validates every mutation independently of the client. Creation ignores supplied inventory/revision/id metadata. Editing preserves implementation metadata; changes to target platforms never assert that an implementation exists. Evidence is human-authored, not machine-certified. The initial 34 records combine the 17 Astro exports with the 18 React exports (Button overlaps), with both families represented. New records start without implementation claims.
+The server validates every mutation independently of the client. Creation ignores supplied inventory/revision/id metadata. Editing preserves implementation metadata; changes to target platforms never assert that an implementation exists. Evidence is human-authored, not machine-certified. The initial 36 records combine the 17 Astro exports with the 20 React exports (Button overlaps), with both families represented. New records start without implementation claims.
 
 ## API
 
@@ -37,6 +37,7 @@ The server validates every mutation independently of the client. Creation ignore
 | POST /api/inventory/apply | Apply a current preview token transactionally |
 | POST /api/import/preview | Validate `{source: JSON text, fileName: label}` and return a read-only policy/version/token/diff/conflict preview |
 | POST /api/import/apply | Apply `{source, fileName, token}` atomically after current-state checks; return applied count, records, and refreshed preview |
+| GET /api/reviews/queue | One-read saved snapshot of server-derived review positions/current outcomes and counts; no mutation |
 | GET /api/components/:id/review | Current record, review-basis fingerprint, freshness flag, and recorded outcome counts |
 | PUT /api/components/:id/review | Save `{checks, revision, confirmed: true}`; append one revision/history transaction, without changing specification or maturity |
 | GET /api/export | Schema-versioned JSON of latest records; no history |
@@ -64,5 +65,7 @@ The overview derives actual counts and per-family/platform coverage from the sam
 13. JSON specification import validates file identity and draft fields, previews exact changes, retains lifecycle/implementation decisions, and creates new proposed contracts without implementation claims. Stale revisions and final name conflicts block all writes. Every changed history snapshot records the selected label, stated export time, and submitted-text fingerprint; this is provenance metadata, not authorship verification. See [the import policy](import.md).
 
 14. Structured readiness reviews retain six observations without promoting maturity. Conflicting revisions block writes; changed specifications or implementation inventories require renewed outcomes. Existing local reviews survive specification imports/edits; source review claims never transfer through JSON import. See [the review and upgrade policy](readiness-reviews.md).
+
+15. Existing-record conflict or uncertain-save recovery compares base/draft/latest values. Every difference requires an explicit source choice; applying choices writes nothing and uses the latest comparison revision as the editing base. Normal validation and stale-write checking remain mandatory. Matching saved content returns without duplicate history. Failed refresh retains choices and requires a successful retry; late reads cannot populate another task. See [recovery contract](conflict-recovery.md).
 
 Known boundaries: no authentication, remote deployment, package publishing, source-site mutation, live package discovery, or claims of sustained production usage. These are explicit subsequent work, not hidden effects of Save.

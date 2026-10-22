@@ -14,6 +14,7 @@ import { ReviewQueue } from "./review-queue";
 import { ReadinessReviews } from "./readiness-review";
 import { ImportRegistry } from "./import-registry";
 import { ReadingRoom } from "./reading-room";
+import { ConflictRecovery } from "./conflict-recovery";
 import { RevisionReview } from "./revisions";
 import "@martlet/react/styles.css";
 import "@krigsvold/react/styles.css";
@@ -28,6 +29,8 @@ import {
   newDraft,
   toDraft,
   validateDraft,
+  cleanDraft,
+  compareDrafts,
 } from "./contract.mjs";
 import { api, ApiError } from "./api";
 import type { ComponentRecord, Draft, HistoryEntry } from "./types";
@@ -86,6 +89,8 @@ function App() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [failure, setFailure] = useState("");
   const [conflict, setConflict] = useState(false);
+  const [uncertain, setUncertain] = useState(false);
+  const [recoveryOpen, setRecoveryOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [saving, setSaving] = useState(false);
   const [pending, setPending] = useState<(() => void) | null>(null);
@@ -106,6 +111,7 @@ function App() {
   const selected = records.find((record) => record.id === selectedId) ?? null;
   const dirty =
     reviewDirty ||
+    recoveryOpen ||
     (editing &&
       JSON.stringify(draft) !==
         JSON.stringify(selected ? toDraft(selected) : newDraft()));
@@ -215,6 +221,8 @@ function App() {
     setErrors({});
     setFailure("");
     setConflict(false);
+    setUncertain(false);
+    setRecoveryOpen(false);
     setMessage("");
   }
   function guard(action: () => void) {
@@ -312,7 +320,7 @@ function App() {
   }
   async function save(event: FormEvent) {
     event.preventDefault();
-    if (saving) return;
+    if (saving || conflict || uncertain) return;
     setFailure("");
     setConflict(false);
     setMessage("");
@@ -339,11 +347,16 @@ function App() {
       if (error instanceof ApiError) {
         setErrors(error.fields);
         setConflict(error.status === 409);
+        setUncertain(!!selected && error.status >= 500);
         setFailure(error.message);
-      } else
+      } else {
+        setUncertain(!!selected);
         setFailure(
-          "The save failed. Your draft is still here. Check the server and try again.",
+          selected
+            ? "The save could not be confirmed. Your draft is still here. Compare with the latest saved record before saving again."
+            : "The save failed. Your draft is still here. Check the server and try again.",
         );
+      }
     } finally {
       setSaving(false);
     }
@@ -569,7 +582,9 @@ function App() {
             }}
           />
         ) : (
-          <div className="workspace">
+          <div
+            className={`workspace ${recoveryOpen ? "workspace--recovery" : ""}`}
+          >
             <section className="collection" aria-labelledby="collection-title">
               <div className="section-heading">
                 <h2 id="collection-title">The inventory</h2>
@@ -852,7 +867,7 @@ function App() {
                 )}
               </div>
               {message && <Notice kind="success">{message}</Notice>}
-              {(Object.keys(errors).length > 0 || failure) && (
+              {!recoveryOpen && (Object.keys(errors).length > 0 || failure) && (
                 <ErrorSummary
                   ref={summaryRef}
                   title={failure || "The specification needs a few changes."}
@@ -861,7 +876,15 @@ function App() {
                     targetId: `spec-${key}`,
                   }))}
                 >
-                  {conflict && (
+                  {editing && selected && (conflict || uncertain) && (
+                    <Button
+                      variant="secondary"
+                      onClick={() => setRecoveryOpen(true)}
+                    >
+                      Compare with latest saved record
+                    </Button>
+                  )}
+                  {(conflict || uncertain) && (
                     <Button
                       variant="secondary"
                       onClick={() => guard(() => void reloadRecord())}
@@ -871,7 +894,34 @@ function App() {
                   )}
                 </ErrorSummary>
               )}
-              {editing ? (
+              {recoveryOpen && selected ? (
+                <ConflictRecovery
+                  base={selected}
+                  draft={draft}
+                  onReturn={() => {
+                    setRecoveryOpen(false);
+                    pendingFocus.current = "editor";
+                  }}
+                  onAccept={(latest, resolved) => {
+                    setRecords((previous) =>
+                      previous.map((item) =>
+                        item.id === latest.id ? latest : item,
+                      ),
+                    );
+                    setDraft(resolved);
+                    clearFeedback();
+                    const changed =
+                      compareDrafts(latest, cleanDraft(resolved)).length > 0;
+                    setEditing(changed);
+                    setMessage(
+                      changed
+                        ? `Choices prepared as a draft based on revision ${latest.revision}. Review the fields, then save; nothing has been written yet.`
+                        : `Your draft matches saved revision ${latest.revision}. No new save was made.`,
+                    );
+                    pendingFocus.current = "editor";
+                  }}
+                />
+              ) : editing ? (
                 <form
                   noValidate
                   onSubmit={save}
@@ -1000,7 +1050,10 @@ function App() {
                     3,
                   )}
                   <div className="actions">
-                    <Button type="submit" disabled={saving}>
+                    <Button
+                      type="submit"
+                      disabled={saving || conflict || uncertain}
+                    >
                       {saving ? "Saving…" : "Save specification"}
                     </Button>
                     <Button

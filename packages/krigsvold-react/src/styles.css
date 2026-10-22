@@ -642,3 +642,31 @@
   margin: 0;
   font-variant-numeric: tabular-nums;
 }
+
+.krigsvold-definitions {
+  margin: 0;
+}
+.krigsvold-definitions > div {
+  padding-block: 0.75rem;
+  border-block-start: 1px solid var(--ui-line);
+  min-inline-size: 0;
+}
+.krigsvold-definitions dt {
+  font-weight: 700;
+}
+.krigsvold-definitions dd {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.krigsvold-definitions > div {
+  display: grid;
+  grid-template-columns: minmax(0, 0.6fr) minmax(0, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 45rem) {
+  .krigsvold-definitions > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+}

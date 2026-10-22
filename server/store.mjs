@@ -267,7 +267,7 @@ export function openRegistry(path) {
         if (previous && previous.revision !== revision)
           throw new RegistryError(
             409,
-            "This record changed in another window. Your draft is preserved. Reload the saved record before trying again.",
+            "This record changed in another window. Your draft is preserved. Compare with the latest saved record or reload it before trying again.",
           );
         const data = cleanDraft(draft);
         const slug =
