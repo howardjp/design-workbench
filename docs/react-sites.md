@@ -2,7 +2,7 @@
 
 October 23, 2026 · Experimental 0.1.0 · MIT
 
-The two reference applications have independent family layouts, original system marks, native theme palettes, and separately authored application grammars. They now demonstrate a complete collection/reading/editor pattern in each language alongside all 22 component specimens, API and keyboard contracts, standalone JSX examples, and agent-tooling setup.
+The two reference applications have separate experimental layouts, existing system marks, theme semantic palettes, and proposed application grammars. They demonstrate a collection/reading/editor pattern in each language alongside all 22 component specimens, API and keyboard contracts, standalone JSX examples, and agent-tooling setup. The [October 23 origin audit](qa/origin-audit-2026-10-23.md) finds substantial drift from the live origin objects. Neither grammar is locked; source fidelity must be reconciled before broader application acceptance.
 
 | Family | Private review site | Proposed public home | Output |
 | --- | --- | --- | --- |
@@ -17,7 +17,7 @@ Martlet's Commonplace composition uses a folder shelf, grouped collection entrie
 
 Both patterns use identical fictional note content and shared domain invariants. Finding, creating, reading, editing, title validation, changed-draft departure, pending saves, deliberately failed saves and retry, and reversible removal work in the session. Reload restores the examples; no durable storage or backend retrieval is claimed. A clearly separated failure-inspection control is documentation tooling. Width inspection uses an independent document at full, 768px, or 320px available width; changing width or mode preserves its draft. Focused workspace links open the same pattern without the documentation navigation.
 
-Original theme-site SVGs are retained byte-for-byte, with repository paths and Git blob hashes in docs-app/brand/provenance.json. Family CSS uses native semantic theme tokens rather than a new literal palette. Both light/dark modes bind the actual data-family attribute. The contained Krigsvold top navbar follows the originating site's horizontal framing; its workbench consumer can still use a side rail.
+Original theme-site SVGs are retained byte-for-byte, with repository paths and Git blob hashes in docs-app/brand/provenance.json. Family CSS uses semantic theme tokens and both light/dark modes bind the actual data-family attribute. Those facts do not establish origin fidelity: semantic role assignments, submenu surfaces, TOC anatomy and other source objects differ. The contained Krigsvold top navbar borrows the originating site's horizontal framing but does not yet reproduce its complete anatomy or behavior; its workbench consumer can still use a side rail. See the audit for recommended dispositions.
 
 ## Agent access
 

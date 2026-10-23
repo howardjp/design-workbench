@@ -2,6 +2,8 @@
 
 October 23, 2026 · Experimental foundation review
 
+**Review status:** the [origin-site audit](qa/origin-audit-2026-10-23.md) identifies substantial source drift and an unfinished grammar. Use this walkthrough to inspect the experiments, with the audit beside them. It is not evidence of CEO-ready source fidelity or a ratified design language. Reconcile existing source objects and justify the new application extensions before advancing the demonstration's claims.
+
 Start with the language, then the work. Martlet and Krigsvold have their own original identity, native theme vocabulary, application grammar, component implementations, reference composition, and agent-facing knowledge. Neither language is limited to a particular content genre or navigation orientation. The purpose of this demonstration is to review a working foundation and the evidence behind its decisions, not to declare a complete, stable design system.
 
 ## A five-part demonstration
