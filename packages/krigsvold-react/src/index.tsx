@@ -125,23 +125,31 @@ export function DataTable({
 }
 export function AppShell({
   brand,
+  navigationLabel = "Workbench",
+  navigationPlacement = "default",
+  headerMode,
   navigation,
   utilities,
   children,
 }: {
   brand: ReactNode;
+  navigationLabel?: string;
+  navigationPlacement?: "default" | "top" | "side" | "none";
+  headerMode?: "light" | "dark";
   navigation: ReactNode;
   utilities: ReactNode;
   children: ReactNode;
 }) {
   return (
-    <div className="krigsvold-app">
+    <div className="krigsvold-app" data-navigation={navigationPlacement}>
       <a className="krigsvold-skip" href="#main">
         Skip to content
       </a>
-      <header className="krigsvold-app-header">
+      <header className="krigsvold-app-header" data-krigsvold={headerMode}>
         <div className="krigsvold-app-brand">{brand}</div>
-        <nav aria-label="Workbench">{navigation}</nav>
+        {navigationPlacement !== "none" && (
+          <nav aria-label={navigationLabel}>{navigation}</nav>
+        )}
         <div className="krigsvold-app-utilities">{utilities}</div>
         <p className="krigsvold-app-colophon">
           A working place for

@@ -19,21 +19,28 @@
     "check": "npm run build && npm run build:docs && npm test",
     "pack:react": "npm pack --workspace @martlet/react --workspace @krigsvold/react",
     "test:packages": "npm run pack:react && node scripts/test-packages.mjs",
-    "build:docs": "node scripts/build-docs.mjs"
+    "build:docs": "npm run build:knowledge && node scripts/build-docs.mjs",
+    "build:knowledge": "node scripts/build-knowledge.mjs",
+    "mcp:martlet": "node mcp/martlet.mjs",
+    "mcp:krigsvold": "node mcp/krigsvold.mjs",
+    "test:agents": "node scripts/test-agent-packages.mjs"
   },
   "dependencies": {
-    "@martlet/react": "0.1.0",
     "@krigsvold/react": "0.1.0",
+    "@martlet/react": "0.1.0",
+    "@modelcontextprotocol/server": "2.3.1",
     "react": "19.3.1",
-    "react-dom": "19.3.1"
+    "react-dom": "19.3.1",
+    "zod": "4.3.6"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.11.1",
+    "@modelcontextprotocol/client": "2.3.1",
+    "@playwright/test": "1.64.1",
+    "@types/node": "^24.0.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
-    "@types/node": "^24.0.0",
     "typescript": "7.0.2",
-    "vite": "8.3.5",
-    "@playwright/test": "1.64.1",
-    "@axe-core/playwright": "4.11.1"
+    "vite": "8.3.5"
   }
 }

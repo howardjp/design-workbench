@@ -7,6 +7,7 @@ export type Options = {
   variant: "primary" | "secondary" | "quiet";
   kind: "info" | "success" | "error";
   vertical: boolean;
+  navigation: "default" | "top" | "side" | "none";
 };
 export const defaults: Options = {
   text: "A considered interface",
@@ -15,6 +16,7 @@ export const defaults: Options = {
   variant: "primary",
   kind: "info",
   vertical: false,
+  navigation: "default",
 };
 export function Example({
   name,
@@ -84,7 +86,7 @@ export function Example({
       return (
         <iframe
           title="AppShell isolated document"
-          src={`?shell=1&mode=${mode}`}
+          src={`?shell=1&mode=${mode}&navigation=${o.navigation}`}
           className="shell-frame"
         />
       );
@@ -455,7 +457,7 @@ export function exampleCode(name: string, o: Options, family: string) {
       body = `<Tabs label="Project information" value={tab} onValueChange={setTab} orientation="${o.vertical ? "vertical" : "horizontal"}" items={[{id: 'overview', label: 'Overview', content: <p>{${q(o.text)}}</p>}, {id: 'details', label: 'Details', content: <p>Use Enter or Space to activate a focused tab.</p>}, {id: 'unavailable', label: 'Unavailable', disabled: true, content: null}]} />`;
       break;
     case "AppShell":
-      body = `<AppShell brand="Project journal" navigation={<a href="/" aria-current="page">Overview</a>} utilities={<span>Workspace</span>}><h1>Your project, in view.</h1><p>Use one shell per document.</p></AppShell>`;
+      body = `<AppShell navigationLabel="Project navigation" navigationPlacement=${attr(o.navigation)} brand="Project journal" navigation={<a href="/" aria-current="page">Overview</a>} utilities={<span>Workspace</span>}><h1>Your project, in view.</h1><p>Use one shell per document.</p></AppShell>`;
       break;
   }
   const hooks = state.startsWith("const summary")

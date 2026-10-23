@@ -6,6 +6,8 @@ Martlet and Krigsvold will be complete, freely available design systems: foundat
 
 The two systems share behavioral obligations while preserving independent visual judgment. Martlet welcomes through editorial hierarchy, rhythm, and related groups. Krigsvold clarifies through alignment, composed space, restrained surfaces, and precise hierarchy. A shared accessibility solution need not differ. Distinction must survive the removal of brand colors; a palette swap is insufficient.
 
+The [UI grammar implementation brief](ui-grammars.md) makes this requirement operational: each language independently defines spacing relationships, density, composition, interaction, feedback, and complete task patterns. Shared domain logic and accessibility obligations do not require a shared rendered composition. Both must support the same breadth of applications, including compact working interfaces with top, side, or no primary navigation. The first additional application-pattern test is a Cardfile-like collection using synthetic content; this is a specification target, not an implemented Cardfile replacement.
+
 ## Evidence loop
 
 The original jameshoward.us and krigsvold.org sites provide continuous evidence for reading, public navigation, publishing, and responsive composition. The workbench supplies a real administrative task: maintaining the systems themselves. Capture a failure during actual use, generalize a remedy, verify it, update the reusable system, return the improvement to the source consumer, and observe it again. Source fidelity never excuses retaining a decision that fails when generalized. A new application and passing automated checks are the start of evidence, not proof of sustained use.
@@ -22,6 +24,7 @@ The original jameshoward.us and krigsvold.org sites provide continuous evidence 
 | Component expansion | Forms, navigation, feedback, disclosure, overlays, data | Documented states, keyboard model, acceptance criteria, real consumer | Inventory managed here; expanded controls remain planned |
 | Block and application library | Reusable sections, workflows, full admin reference | Working data operations; compositions assembled from public packages | Registry is the first application, not the full admin catalogue |
 | Broader platforms | Idiomatic integrations and adapters | Build/install/example checks for each claimed platform | CSS and Astro already published; React experimental; other platforms planned |
+| MCP and agent skills | Independently usable Martlet and Krigsvold knowledge servers and companion builder skills | Actual client/server retrieval, family isolation, source/version attribution, verified client setup, evaluated skill application across complete tasks | Experimental local stdio servers and independently installable archives; 52 references each; two skills with bounded independent-agent usage checks; [scope and limits](mcp.md) |
 | Stable releases | Versioned contracts, compatibility tables, migrations, automated publishing | Real usage evidence, manual accessibility review, regression checks | Current theme/Astro release process exists; React release process pending |
 
 ## First working administration slice

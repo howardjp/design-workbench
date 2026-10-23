@@ -125,23 +125,31 @@ export function DataTable({
 }
 export function AppShell({
   brand,
+  navigationLabel = "Workbench",
+  navigationPlacement = "default",
+  headerMode,
   navigation,
   utilities,
   children,
 }: {
   brand: ReactNode;
+  navigationLabel?: string;
+  navigationPlacement?: "default" | "top" | "side" | "none";
+  headerMode?: "light" | "dark";
   navigation: ReactNode;
   utilities: ReactNode;
   children: ReactNode;
 }) {
   return (
-    <div className="martlet-app">
+    <div className="martlet-app" data-navigation={navigationPlacement}>
       <a className="martlet-skip" href="#main">
         Skip to content
       </a>
-      <header className="martlet-app-header">
+      <header className="martlet-app-header" data-martlet={headerMode}>
         <div className="martlet-app-brand">{brand}</div>
-        <nav aria-label="Workbench">{navigation}</nav>
+        {navigationPlacement !== "none" && (
+          <nav aria-label={navigationLabel}>{navigation}</nav>
+        )}
         <div className="martlet-app-utilities">{utilities}</div>
         <p className="martlet-app-colophon">
           A working place for

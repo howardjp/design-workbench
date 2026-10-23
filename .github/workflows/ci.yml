@@ -17,6 +17,7 @@ jobs:
         browser: [chromium, firefox, webkit]
     env:
       WORKBENCH_BROWSER: ${{ matrix.browser }}
+      DESIGN_SOURCE_COMMIT: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -28,4 +29,5 @@ jobs:
       - run: npx playwright install --with-deps ${{ matrix.browser }}
       - run: npm run test:browser
       - run: npm run test:packages
+      - run: npm run test:agents
 

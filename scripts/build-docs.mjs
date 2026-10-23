@@ -1,4 +1,4 @@
-import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir, cp } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 const contracts = (await readFile("docs/components.md", "utf8"))
   .split("## Administration compositions")[0]
@@ -29,4 +29,9 @@ for (const family of ["martlet", "krigsvold"]) {
     { stdio: "inherit" },
   );
   if (result.status) process.exit(result.status ?? 1);
+  await mkdir(`docs-dist/${family}/agents`, { recursive: true });
+  await cp(
+    `agent-dist/${family}-agent-tools.tar.gz`,
+    `docs-dist/${family}/agents/${family}-agent-tools.tar.gz`,
+  );
 }

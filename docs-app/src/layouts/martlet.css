@@ -1,0 +1,261 @@
+.martlet-reference {
+  --reference-font-ui: var(--martlet-font-sans);
+  --reference-font-code: var(--martlet-font-mono);
+  --reference-code-bg: var(--martlet-code-bg);
+  --reference-code-text: var(--martlet-code-text);
+}
+.martlet-reference-width {
+  max-inline-size: var(--martlet-content-width, 78rem);
+  margin-inline: auto;
+}
+.martlet-reference-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-decoration: none;
+  color: var(--martlet-text);
+}
+.martlet-reference-brand > span {
+  font: 600 1.5rem/1.2 var(--martlet-font-display);
+}
+.martlet-reference-brand small {
+  display: block;
+  font: 400 0.8rem/1.5 var(--martlet-font-sans);
+  color: var(--martlet-text-subtle);
+  letter-spacing: 0.08em;
+  margin-block-start: 0.25rem;
+}
+.martlet-reference-index {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 2rem;
+  border-block-end: 1px solid var(--martlet-border-subtle);
+  padding-block-end: 1.5rem;
+  font-family: var(--martlet-font-sans);
+}
+.martlet-reference-index > details {
+  flex: 1;
+}
+.martlet-reference-index > span {
+  font-size: 0.75rem;
+  color: var(--martlet-text-subtle);
+  padding-block-start: 0.8rem;
+}
+.martlet-reference-index .directory-links {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+.martlet-reference-index .directory-links section {
+  margin: 0;
+}
+.martlet-reference-index .directory-links a[aria-current] {
+  background: var(--martlet-active-bg);
+  border-inline-start: 2px solid var(--martlet-accent);
+}
+.martlet-reference .martlet-article-context p {
+  line-height: 1.8;
+}
+.martlet-reference .martlet-article-header {
+  padding-block-start: 2rem;
+}
+.martlet-reference .martlet-article-header h1 {
+  font-size: clamp(2.5rem, 4vw, 4rem);
+}
+.martlet-reference .martlet-article-layout {
+  grid-template-columns: minmax(0, 1fr) minmax(12rem, 15rem);
+  gap: 2.5rem;
+}
+.martlet-reference .martlet-article-layout:not(:has(> aside)) {
+  grid-template-columns: 1fr;
+}
+.martlet-reference-example {
+  font-family: var(--martlet-font-sans);
+}
+.martlet-reference-example > h2 {
+  margin-block: 2rem 1rem;
+}
+.martlet-reference-contract h2 {
+  margin-block: 2.5rem 1rem;
+}
+.martlet-reference-contract p {
+  line-height: 1.9;
+}
+.martlet-reference .martlet-prose {
+  max-inline-size: none;
+}
+.martlet-reference .martlet-prose > .martlet-reference-example {
+  margin: 0;
+}
+.martlet-reference-intro {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 4rem;
+  align-items: end;
+  padding-block: 3.5rem 4rem;
+}
+.martlet-reference-intro h1 {
+  font: 400 clamp(4.5rem, 7vw, 7rem)/1 var(--martlet-font-serif);
+  letter-spacing: -0.045em;
+  margin-block: 1rem;
+}
+.martlet-reference-intro h1 span {
+  color: var(--martlet-accent);
+}
+.martlet-reference-deck {
+  font: 400 1.65rem/1.5 var(--martlet-font-serif);
+}
+.martlet-reference-intro > div:last-child p {
+  font: 1.1rem/1.85 var(--martlet-font-sans);
+  color: var(--martlet-text-subtle);
+  margin-block-end: 1.5rem;
+}
+.martlet-reference-intro a {
+  font: 700 0.95rem/1.5 var(--martlet-font-sans);
+}
+.martlet-reference-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-block-start: 2rem;
+}
+.martlet-reference-collection {
+  padding-block: 3rem;
+}
+.martlet-reference-collection > h2 {
+  font-size: 2.2rem;
+  margin-block: 1rem 2rem;
+}
+.martlet-reference-collection > section {
+  display: grid;
+  grid-template-columns: 12rem minmax(0, 1fr);
+  gap: 2rem;
+  border-block-start: 1px solid var(--martlet-border-subtle);
+  padding-block: 1.5rem;
+}
+.martlet-reference-collection h3 {
+  font: 700 0.85rem/1.6 var(--martlet-font-sans);
+  padding-block-start: 0.75rem;
+}
+.martlet-reference-collection a {
+  display: grid;
+  grid-template-columns: 10rem 1fr 1rem;
+  gap: 1rem;
+  align-items: baseline;
+  text-decoration: none;
+  padding-block: 0.7rem;
+}
+.martlet-reference-collection a strong {
+  font: 400 1.15rem/1.5 var(--martlet-font-serif);
+}
+.martlet-reference-collection a > span {
+  font: 0.88rem/1.7 var(--martlet-font-sans);
+  color: var(--martlet-text-subtle);
+}
+.martlet-reference-collection a:hover strong {
+  text-decoration: underline;
+}
+.martlet-reference-footer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-block-start: 3px solid var(--martlet-color-gold-500);
+  padding-block: 2rem;
+  margin-block-start: 2rem;
+  font-family: var(--martlet-font-sans);
+}
+.martlet-reference-footer strong {
+  font-family: var(--martlet-font-display);
+}
+.martlet-reference-footer p {
+  font-size: 0.8rem;
+  color: var(--martlet-text-subtle);
+  margin-block-start: 0.4rem;
+}
+.martlet-reference-footer > a {
+  margin-inline-start: auto;
+  font-size: 0.85rem;
+}
+@media (max-width: 65rem) {
+  .martlet-reference-intro {
+    gap: 2rem;
+  }
+  .martlet-reference-index .directory-links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .martlet-reference .martlet-article-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(10rem, 12rem);
+    gap: 1.5rem;
+  }
+}
+@media (max-width: 55rem) {
+  .martlet-reference .martlet-article-layout {
+    grid-template-columns: 1fr;
+  }
+  .martlet-reference .martlet-article-context {
+    order: 0;
+  }
+  .martlet-reference-intro {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding-block: 2.5rem;
+  }
+  .martlet-reference-intro h1 {
+    font-size: 5rem;
+  }
+  .martlet-reference-collection > section {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .martlet-reference-collection a {
+    grid-template-columns: 8rem 1fr 1rem;
+  }
+  .martlet-reference-footer {
+    flex-wrap: wrap;
+  }
+  .martlet-reference-footer > a {
+    margin-inline-start: 0;
+  }
+  .martlet-reference-index {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .martlet-reference-index > span {
+    padding: 0;
+  }
+  .martlet-reference-index > details {
+    flex-basis: 100%;
+  }
+}
+@media (max-width: 35rem) {
+  .martlet-reference-index .directory-links {
+    grid-template-columns: 1fr;
+  }
+  .martlet-reference-collection a {
+    grid-template-columns: 1fr auto;
+    gap: 0.25rem;
+  }
+  .martlet-reference-collection a > span:nth-child(2) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .martlet-reference-collection a > span:last-child {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .martlet-reference-footer p {
+    max-inline-size: 25ch;
+  }
+}
+@media print {
+  .martlet-reference-index,
+  .martlet-reference-footer,
+  .martlet-reference .martlet-app-header {
+    display: none;
+  }
+}
+
+.martlet-reference-actions {
+  font-family: var(--martlet-font-sans);
+}

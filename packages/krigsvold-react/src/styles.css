@@ -810,3 +810,44 @@
   background: var(--krigsvold-accent);
   color: var(--krigsvold-on-accent);
 }
+
+/* A top navbar is another native shell composition; the workbench retains its side rail. */
+.krigsvold-app:is([data-navigation="top"], [data-navigation="none"]) {
+  display: block;
+}
+.krigsvold-app:is([data-navigation="top"], [data-navigation="none"])
+  > .krigsvold-app-header {
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  border-inline-end: 0;
+  border-block-end: 1px solid var(--krigsvold-border-subtle);
+}
+.krigsvold-app:is([data-navigation="top"], [data-navigation="none"])
+  > .krigsvold-app-header
+  > nav {
+  flex-direction: row;
+  margin-block-start: 0;
+}
+.krigsvold-app:is([data-navigation="top"], [data-navigation="none"])
+  > .krigsvold-app-header
+  > .krigsvold-app-utilities {
+  flex-direction: row;
+  align-items: center;
+  margin: 0 0 0 auto;
+}
+.krigsvold-app:is([data-navigation="top"], [data-navigation="none"])
+  > .krigsvold-app-header
+  > .krigsvold-app-colophon {
+  display: none;
+}
+
+.krigsvold-app-header[data-krigsvold] {
+  --ui-bg: var(--krigsvold-bg);
+  --ui-surface: var(--krigsvold-surface-subtle);
+  --ui-text: var(--krigsvold-text);
+  --ui-muted: var(--krigsvold-text-subtle);
+  --ui-line: var(--krigsvold-border-subtle);
+  --ui-accent: var(--krigsvold-accent);
+  color: var(--ui-text);
+}

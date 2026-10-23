@@ -45,3 +45,6 @@ Switch adds a native binary checkbox with role=switch and fixed visible label. I
 Tabs provides labelled, controlled, manually activated panels. Supply unique item IDs, labels, content and optional disabled flags, plus value/onValueChange and a label. Horizontal arrows (vertical Up/Down when configured) and Home/End move focus among enabled tabs; Enter/Space select. Panels remain mounted, linked by generated IDs, and hidden when inactive. The first enabled item is the fallback for invalid/disabled selection; provide at least one enabled item. Root div props/ref pass through. Routing, persistence, right-to-left arrow adaptation and automatic activation are not supplied.
 
 Both are experimental and consumed by the workbench Settings workflow. The package now exposes 22 components. See [release preparation](../../docs/release-policy.md) and [independent documentation-site direction](../../docs/react-sites.md).
+
+
+AppShell supports `navigationPlacement="default" | "top" | "side" | "none"`, an explicit `navigationLabel`, and optional `headerMode="light" | "dark"`. Existing defaults remain compatible. Placement is a task composition choice in both languages; none omits primary navigation while retaining the brand, utilities and single main landmark. See [the UI grammar](../../docs/languages/krigsvold/grammar.md) and [MCP and builder skills](../../docs/mcp.md).

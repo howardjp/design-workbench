@@ -1,5 +1,7 @@
 # Design workbench
 
+Martlet and Krigsvold now also have independent language references, original marks and palettes, versioned application grammars, and working collection/editor patterns. Each includes a local MCP server with 52 attributed references and a companion builder skill. Read the [demonstration walkthrough](docs/demo-walkthrough.md), [language brief](docs/ui-grammars.md), [reference apps](docs/react-sites.md), and [agent setup](docs/mcp.md). All remain MIT and experimental; the first task pattern is session-only, and the React packages are not published to npm.
+
 A working component registry for **Martlet** and **Krigsvold**, with independent React presentations and one shared data contract. Use it to manage component requirements, target platforms, family decisions, maturity, and usage evidence. MIT licensed, including the application, specifications, and both component packages.
 
 ## Run it

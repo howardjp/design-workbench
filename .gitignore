@@ -8,3 +8,5 @@ playwright-report/
 
 docs-dist/
 release-candidates/
+mcp/catalogs/
+agent-dist/

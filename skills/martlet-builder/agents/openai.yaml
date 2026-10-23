@@ -1,0 +1,4 @@
+interface:
+  display_name: "Martlet Builder"
+  short_description: "Build coherent Martlet interfaces and task patterns"
+  default_prompt: "Use $martlet-builder to build this app using Martlet’s grammar."

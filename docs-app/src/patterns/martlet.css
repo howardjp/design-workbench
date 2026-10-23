@@ -1,0 +1,149 @@
+.martlet-notebook {
+  --notebook-local: var(--martlet-field-gap);
+  --notebook-group: var(--martlet-group-gap);
+  --notebook-region: var(--martlet-region-gap);
+  max-inline-size: 86rem;
+  margin-inline: auto;
+}
+.martlet-notebook-masthead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--notebook-group);
+  padding-block: var(--notebook-region);
+  border-block-end: 1px solid var(--ui-line);
+}
+.martlet-notebook-masthead h1 {
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  margin-block: 0.5rem;
+}
+.martlet-notebook-masthead p:last-child {
+  font: 1.2rem/1.65 var(--martlet-font-serif);
+}
+.martlet-notebook-orientation {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--notebook-group);
+  align-items: center;
+  flex-wrap: wrap;
+  padding-block: var(--notebook-group);
+}
+.martlet-notebook-orientation nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--notebook-local);
+}
+.martlet-notebook-status {
+  display: flex;
+  gap: var(--notebook-group);
+  align-items: center;
+  flex-wrap: wrap;
+}
+.martlet-notebook-status:has(p:empty):not(:has(button)) {
+  display: none;
+}
+.martlet-notebook-collection {
+  padding-block: var(--notebook-group);
+}
+.martlet-notebook-collection-head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--notebook-region);
+  align-items: end;
+  flex-wrap: wrap;
+  padding-block-end: var(--notebook-group);
+}
+.martlet-notebook-collection-head > div:last-child {
+  min-inline-size: min(100%, 20rem);
+}
+.martlet-notebook-collection-head p {
+  color: var(--ui-muted);
+  margin-block-start: var(--notebook-local);
+}
+.martlet-notebook-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--notebook-region);
+}
+.martlet-notebook-list li {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: var(--notebook-group);
+  border-block-start: 1px solid var(--ui-line);
+  padding-block: var(--notebook-region);
+}
+.martlet-notebook-number {
+  font: 0.85rem/1.6 var(--martlet-font-mono);
+  color: var(--ui-muted);
+}
+.martlet-notebook-list h3 {
+  font-size: 1.5rem;
+  margin-block: var(--notebook-local) 1rem;
+}
+.martlet-notebook-list li > div > p:not(.reference-kicker) {
+  font: 1.05rem/1.75 var(--martlet-font-serif);
+  max-inline-size: 48ch;
+  margin-block-end: 1rem;
+}
+.martlet-notebook-reading {
+  max-inline-size: 68rem;
+  margin-inline: auto;
+  display: grid;
+  gap: var(--notebook-group);
+  padding-block: var(--notebook-group) var(--notebook-region);
+}
+.martlet-notebook-reading > button {
+  justify-self: start;
+}
+.martlet-notebook-reading > h2 {
+  font-size: clamp(1.7rem, 3vw, 2.5rem);
+}
+.martlet-notebook-reading .martlet-article-context {
+  display: grid;
+  gap: var(--notebook-group);
+}
+.martlet-notebook .notebook-fields {
+  display: grid;
+  gap: var(--notebook-group);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+  max-inline-size: 65ch;
+}
+.martlet-notebook form > .martlet-error-summary {
+  margin-block-end: var(--notebook-group);
+}
+.martlet-notebook .notebook-editor-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-block-start: var(--notebook-group);
+}
+.martlet-notebook .notebook-empty {
+  padding-block: var(--notebook-region);
+  display: grid;
+  justify-items: start;
+  gap: var(--notebook-group);
+}
+.martlet-notebook-colophon {
+  border-block-start: 1px solid var(--ui-line);
+  padding-block: var(--notebook-group);
+  display: grid;
+  gap: 1rem;
+  color: var(--ui-muted);
+  font-size: 0.875rem;
+}
+@media (max-width: 50rem) {
+  .martlet-notebook-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .martlet-notebook-masthead {
+    align-items: start;
+    flex-direction: column;
+  }
+}

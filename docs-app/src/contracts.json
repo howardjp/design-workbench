@@ -1,8 +1,8 @@
 [
   {
     "name": "AppShell",
-    "api": "brand, navigation, utilities, children. One header/nav and one main; skip link targets main. One shell per document.",
-    "behavior": "Navigation/current-page content supplied by the caller. Header wraps on narrow screens. Skip link becomes visible on focus and moves to main. Martlet uses a horizontal header; Krigsvold a side rail that becomes a header when space runs out."
+    "api": "brand, navigation, utilities, children; optional navigationLabel (default Workbench), navigationPlacement default/top/side/none, and headerMode light/dark. One header/nav and one main; skip link targets main. One shell per document.",
+    "behavior": "Navigation/current-page content supplied by the caller. Header wraps on narrow screens. Skip link becomes visible on focus and moves to main. Both families support top navigation, side navigation and no primary navigation. Existing defaults retain Martlet's top header and Krigsvold's workbench side rail; these defaults are task compositions, not limitations on either system. Header-only mode scoping preserves each theme's native tokens. Navigation direction is a composition choice, not a family identity rule."
   },
   {
     "name": "Button",

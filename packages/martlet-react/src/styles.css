@@ -746,3 +746,48 @@
 .martlet-tabs [role="tab"][aria-selected="true"] {
   background: var(--martlet-button-secondary-bg);
 }
+
+.martlet-app-header[data-martlet] {
+  --ui-bg: var(--martlet-bg);
+  --ui-surface: var(--martlet-surface-subtle);
+  --ui-text: var(--martlet-text);
+  --ui-muted: var(--martlet-text-subtle);
+  --ui-line: var(--martlet-border-subtle);
+  --ui-accent: var(--martlet-accent);
+  color: var(--ui-text);
+}
+
+.martlet-app[data-navigation="side"] {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr);
+}
+.martlet-app[data-navigation="side"] > .martlet-app-header {
+  flex-direction: column;
+  align-items: stretch;
+  border-block-end: 0;
+  border-inline-end: 1px solid var(--ui-line);
+  padding: 2rem 1.5rem;
+}
+.martlet-app[data-navigation="side"] > .martlet-app-header > nav {
+  flex-direction: column;
+}
+.martlet-app[data-navigation="side"]
+  > .martlet-app-header
+  > .martlet-app-utilities {
+  margin-inline-start: 0;
+}
+@media (max-width: 55rem) {
+  .martlet-app[data-navigation="side"] {
+    display: block;
+  }
+  .martlet-app[data-navigation="side"] > .martlet-app-header {
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-inline-end: 0;
+    border-block-end: 1px solid var(--ui-line);
+    padding: 1rem;
+  }
+  .martlet-app[data-navigation="side"] > .martlet-app-header > nav {
+    flex-direction: row;
+  }
+}

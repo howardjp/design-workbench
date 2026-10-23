@@ -14,56 +14,20 @@ import {
 } from "docs-family";
 import contracts from "./contracts.json";
 import { defaults, Example, exampleCode, type Options } from "./examples";
-import "./site.css";
+import "./shared.css";
+import { CollectionPattern } from "docs-pattern";
+import { LanguageGuide } from "./language-guide";
 
-const repo = "https://github.com/howardjp/design-workbench";
-const groups: Record<string, string[]> = {
-  "Actions & feedback": ["Button", "Notice", "Badge", "Dialog", "ErrorSummary"],
-  "Forms & choices": [
-    "Field",
-    "TextInput",
-    "Textarea",
-    "Select",
-    "FileInput",
-    "Checkbox",
-    "Radio",
-    "Switch",
-    "Fieldset",
-  ],
-  "Structure & reading": [
-    "AppShell",
-    "Article",
-    "TableOfContents",
-    "Disclosure",
-    "Tabs",
-  ],
-  "Data & navigation": ["DataTable", "DefinitionList", "Pagination"],
-};
-const descriptions: Record<string, string> = {
-  Button: "A clear next step.",
-  Notice: "Feedback that explains what happened.",
-  Badge: "A little context, at a glance.",
-  Dialog: "A focused moment in a larger task.",
-  ErrorSummary: "A useful way back from an error.",
-  Field: "A name, a control, and the context between.",
-  TextInput: "An open invitation to enter a detail.",
-  Textarea: "Room for a longer thought.",
-  Select: "A native choice from a known set.",
-  FileInput: "Let the browser handle the file chooser.",
-  Checkbox: "An independent yes or no.",
-  Radio: "One choice among related options.",
-  Switch: "A setting with two clear positions.",
-  Fieldset: "Related controls, held together.",
-  AppShell: "A place for navigation and the work itself.",
-  Article: "A reading rhythm with room for context.",
-  TableOfContents: "A map through longer material.",
-  Disclosure: "Optional detail, available when needed.",
-  Tabs: "Related views in one place.",
-  DataTable: "Relationships that deserve rows and columns.",
-  DefinitionList: "Terms and their meaning, side by side.",
-  Pagination: "A measured way through a collection.",
-};
+import { repo, groups, descriptions } from "./data";
+import {
+  FamilyLayout,
+  ComponentPage,
+  FamilyHome,
+  familyMark,
+} from "docs-layout";
 function initialMode() {
+  const requested = new URLSearchParams(location.search).get("mode");
+  if (requested === "light" || requested === "dark") return requested;
   try {
     return localStorage.getItem(`docs-${family}-mode`) === "dark"
       ? "dark"
@@ -71,6 +35,37 @@ function initialMode() {
   } catch {
     return "light";
   }
+}
+function PatternShowcase({ mode }: { mode: string }) {
+  const [width, setWidth] = useState("full");
+  return (
+    <>
+      <div className="pattern-inspection">
+        <Field label="Available width">
+          {(p) => (
+            <Select
+              {...p}
+              value={width}
+              onChange={(e) => setWidth(e.target.value)}
+            >
+              <option value="full">Use available space</option>
+              <option value="320">320px / narrow workspace</option>
+              <option value="768">768px / medium workspace</option>
+            </Select>
+          )}
+        </Field>
+        <a href={`?workspace=1&mode=${mode}`}>Open a focused workspace ↗</a>
+        <a href="?page=language">Read the pattern’s rules →</a>
+      </div>
+      <iframe
+        data-pattern-preview
+        title={`${familyName} collection working pattern`}
+        className="pattern-frame"
+        style={{ inlineSize: width === "full" ? "100%" : `${width}px` }}
+        src="?workspace=1"
+      />
+    </>
+  );
 }
 function CopyCode({ code }: { code: string }) {
   const [message, setMessage] = useState("");
@@ -143,7 +138,7 @@ function Playground({ name, mode }: { name: string; mode: string }) {
   ].includes(name);
   return (
     <>
-      <div className="playground">
+      <div className="playground" id="playground">
         <div className="preview-label">
           <span>Live specimen</span>
           <span>01 / {familyName}</span>
@@ -165,6 +160,28 @@ function Playground({ name, mode }: { name: string; mode: string }) {
             </Button>
           </div>
           <div className="control-grid">
+            {name === "AppShell" && (
+              <Field label="Navigation placement">
+                {(p) => (
+                  <Select
+                    {...p}
+                    value={o.navigation}
+                    onChange={(e) =>
+                      change(
+                        "navigation",
+                        e.target.value as Options["navigation"],
+                      )
+                    }
+                  >
+                    {["default", "top", "side", "none"].map((value) => (
+                      <option key={value} value={value}>
+                        {value}
+                      </option>
+                    ))}
+                  </Select>
+                )}
+              </Field>
+            )}
             {text && (
               <Field
                 label={
@@ -314,125 +331,22 @@ function Start() {
     </article>
   );
 }
-function Home() {
-  return (
-    <>
-      <section className="hero">
-        <p className="eyebrow">
-          {family === "martlet"
-            ? "The interface collection"
-            : "System reference / React 19"}
-        </p>
-        <h1>
-          {family === "martlet" ? (
-            <>
-              Good work deserves
-              <br />
-              <em>a considered interface.</em>
-            </>
-          ) : (
-            <>
-              Clear structure.
-              <br />
-              <em>Precise interaction.</em>
-            </>
-          )}
-        </h1>
-        <p className="lead">
-          {family === "martlet"
-            ? "An editorial React library for the spaces where people read, think, and make decisions. Warm type. Honest controls. Room to work."
-            : "A deliberate React library for information, decisions, and the tools that connect them. Strong hierarchy. Native behavior. A place for every detail."}
-        </p>
-        <div className="hero-actions">
-          <a className="primary-link" href="?page=start">
-            Start building <span aria-hidden="true">↗</span>
-          </a>
-          <a href="?component=Button">
-            Explore the components <span aria-hidden="true">→</span>
-          </a>
-        </div>
-        <div className="edition">
-          <span>Experimental / 0.1.0</span>
-          <span>22 components / MIT</span>
-        </div>
-      </section>
-      <section className="home-specimens" aria-label="A look at the system">
-        <div className="journal">
-          <p className="eyebrow">Specimen / typography</p>
-          <h2>
-            The quiet details
-            <br />
-            make the difference.
-          </h2>
-          <p>
-            Readable text, familiar behavior, and a clear next step. Small
-            choices that carry through the whole interface.
-          </p>
-          <a href="?component=Article">Read with Article →</a>
-        </div>
-        <div className="mini-workspace">
-          <div className="preview-label">
-            <span>Specimen / interaction</span>
-            <Badge>In progress</Badge>
-          </div>
-          <Field label="Project name" hint="Give this work a place to begin.">
-            {(p) => (
-              <TextInput
-                {...p}
-                defaultValue="A field guide to good interfaces"
-              />
-            )}
-          </Field>
-          <div className="mini-actions">
-            <Button
-              onClick={() => {
-                location.href = "?component=Button";
-              }}
-            >
-              Explore Button
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => {
-                location.href = "?component=Field";
-              }}
-            >
-              Meet Field
-            </Button>
-          </div>
-        </div>
-      </section>
-      <section className="directory" id="components">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">The collection</p>
-            <h2>Built to work together.</h2>
-          </div>
-          <span>01—22</span>
-        </div>
-        {Object.entries(groups).map(([group, names]) => (
-          <div className="component-group" key={group}>
-            <h3>{group}</h3>
-            <div>
-              {names.map((name) => (
-                <a key={name} href={`?component=${name}`}>
-                  <strong>{name}</strong>
-                  <span>{descriptions[name]}</span>
-                  <span aria-hidden="true">↗</span>
-                </a>
-              ))}
-            </div>
-          </div>
-        ))}
-      </section>
-    </>
-  );
-}
 function ShellExample() {
-  const mode = new URLSearchParams(location.search).get("mode") === "dark" ? "dark" : "light";
+  const mode =
+    new URLSearchParams(location.search).get("mode") === "dark"
+      ? "dark"
+      : "light";
   return (
     <div className={family} {...{ [`data-${family}`]: mode }}>
       <AppShell
+        navigationLabel="Project navigation"
+        navigationPlacement={
+          (["top", "side", "none"].includes(
+            new URLSearchParams(location.search).get("navigation") ?? "",
+          )
+            ? new URLSearchParams(location.search).get("navigation")
+            : "default") as Options["navigation"]
+        }
         brand="Project journal"
         navigation={
           <a href="?shell=1" aria-current="page">
@@ -449,22 +363,140 @@ function ShellExample() {
     </div>
   );
 }
+function Agents() {
+  return (
+    <article className="reference-page">
+      <p className="reference-kicker">
+        Authoritative context / Practical method
+      </p>
+      <h1>Build with {familyName}.</h1>
+      <p className="lead">
+        A language for people and agents. Use the same grammar, pattern
+        decisions, and component contracts through a local MCP server and a
+        companion builder skill.
+      </p>
+      <div className="callout">
+        <strong>Working experimental tools. Local stdio.</strong>
+        <p>
+          These tools retrieve documented guidance. They do not certify a
+          design, publish an app, or invent missing platform support. React
+          remains experimental and unpublished.
+        </p>
+      </div>
+      <h2>Take the language with you</h2>
+      <p>
+        <a href={`agents/${family}-agent-tools.tar.gz`} download>
+          Download {familyName} MCP and builder skill ↓
+        </a>
+      </p>
+      <p>
+        The MIT archive contains only {familyName}’s knowledge snapshot, server
+        launcher, dependency lock, and builder skill. It runs independently of
+        this site and the administration workbench.
+      </p>
+      <h2>Start from the source</h2>
+      <CopyCode
+        code={`git clone ${repo}.git\ncd design-workbench\ngit checkout work/registry-foundations\nnpm ci --ignore-scripts\nnpm run build\nnpm run build:knowledge\n\n# Configure your MCP client to launch this command over stdio:\nnode /absolute/path/to/design-workbench/mcp/${family}.mjs`}
+      />
+      <p>
+        For the downloaded archive, extract it, run{" "}
+        <code>npm ci --ignore-scripts</code> in its directory, and point your
+        client at its <code>index.mjs</code> instead. The client starts the
+        process; it is not an HTTP address.
+      </p>
+      <h2>Connect an MCP client</h2>
+      <CopyCode
+        code={JSON.stringify(
+          {
+            mcpServers: {
+              [`${family}-design-language`]: {
+                command: "node",
+                args: [`/absolute/path/to/${family}/index.mjs`],
+              },
+            },
+          },
+          null,
+          2,
+        )}
+      />
+      <p>
+        This is the common stdio configuration shape. Your client may use a
+        different configuration location. Interoperability has been checked with
+        the MCP SDK client; individual desktop client setup remains to be
+        verified.
+      </p>
+      <h2>Find the rules, then compose</h2>
+      <p>
+        Begin with <code>get_manifest</code> and confirm the family. Use{" "}
+        <code>search_guidance</code> for the task, then{" "}
+        <code>get_reference</code> for the complete matching rules, pattern, and
+        API examples. Each result identifies the snapshot and source. This
+        initial release covers React and the collection/editor pattern.
+      </p>
+      <h2>Add the builder skill</h2>
+      <p>
+        Copy the archive’s <code>{family}-builder</code> directory into your
+        agent client’s supported skills location. The skill explains how to
+        retrieve the rules, choose a composition, preserve the host’s identity,
+        handle failures, and verify the complete task. It includes an offline
+        grammar and API snapshot for use when MCP is unavailable.
+      </p>
+      <p>
+        <a href="?page=language">Read the grammar →</a> ·{" "}
+        <a href="?page=collection">Try the working pattern →</a>
+      </p>
+    </article>
+  );
+}
 function App() {
   const params = new URLSearchParams(location.search);
   const name = params.get("component");
   const start = params.get("page") === "start";
+  const pattern =
+    params.get("page") === "collection" || params.has("workspace");
+  const language = params.get("page") === "language";
+  const agents = params.get("page") === "agents";
   const contract = contracts.find((item) => item.name === name);
   const [mode, setMode] = useState(initialMode);
   const [query, setQuery] = useState("");
-  const [menu, setMenu] = useState(false);
   useEffect(() => {
-    document.title = `${contract?.name ?? (start ? "Getting started" : "The collection")} · ${familyName} React`;
+    const followMode = (event: StorageEvent) => {
+      if (
+        event.key === `docs-${family}-mode` &&
+        (event.newValue === "light" || event.newValue === "dark")
+      )
+        setMode(event.newValue);
+    };
+    window.addEventListener("storage", followMode);
+    return () => window.removeEventListener("storage", followMode);
+  }, []);
+  useEffect(() => {
+    let icon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+    if (!icon) {
+      icon = document.createElement("link");
+      icon.rel = "icon";
+      document.head.append(icon);
+    }
+    icon.href = familyMark;
+    document.title = `${contract?.name ?? (agents ? "Agent tools" : pattern ? "Working patterns" : language ? "Design language" : start ? "Getting started" : "The collection")} · ${familyName} React`;
     document.documentElement.style.colorScheme = mode;
     try {
       localStorage.setItem(`docs-${family}-mode`, mode);
     } catch {}
-  }, [mode, contract, start]);
+  }, [mode, contract, start, pattern, language, agents]);
   if (params.has("shell")) return <ShellExample />;
+  if (params.has("workspace"))
+    return (
+      <div
+        className={`${family} focused-pattern`}
+        {...{ [`data-${family}`]: mode }}
+      >
+        <a href="?page=collection">← Pattern reference</a>
+        <main id="main">
+          <CollectionPattern />
+        </main>
+      </div>
+    );
   const filtered = Object.entries(groups)
     .map(
       ([group, names]) =>
@@ -478,180 +510,120 @@ function App() {
         ] as const,
     )
     .filter(([, names]) => names.length);
-  return (
-    <div
-      className={`${family} docs-site`}
-      data-family={family}
-      data-theme={mode}
-      {...{ [`data-${family}`]: mode }}
-    >
-      <a className="skip-link" href="#main">
-        Skip to content
-      </a>
-      <header className="site-header">
-        <a className="wordmark" href="?">
-          <span className="brand-mark" aria-hidden="true">
-            {family === "martlet" ? "m." : "k/"}
-          </span>
-          <span>
-            {familyName}
-            <small>React reference</small>
-          </span>
-        </a>
-        <nav aria-label="Main">
-          <a href="?page=start" aria-current={start ? "page" : undefined}>
-            Getting started
-          </a>
-          <a href="?#components">
-            Components <span className="nav-count">22</span>
-          </a>
-          <a href={repo}>Source ↗</a>
-        </nav>
-        <div className="header-actions">
-          <Button
-            variant="quiet"
-            onClick={() => setMode(mode === "light" ? "dark" : "light")}
-          >
-            {mode === "light" ? "Dark mode" : "Light mode"}
-          </Button>
-          <Button
-            variant="secondary"
-            className="menu-toggle"
-            aria-expanded={menu}
-            onClick={() => setMenu(!menu)}
-          >
-            Browse
-          </Button>
-        </div>
-      </header>
-      <div className="page-grid">
-        <aside
-          className={`sidebar ${menu ? "is-open" : ""}`}
-          aria-label="Component directory"
-        >
-          <div className="sidebar-intro">
-            <span>Reference / 0.1.0</span>
-            <a href="?page=start">Getting started ↗</a>
-          </div>
-          <Field label="Find a component">
-            {(p) => (
-              <TextInput
-                {...p}
-                type="search"
-                value={query}
-                placeholder="Search the collection…"
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            )}
-          </Field>
-          <nav aria-label="Components">
-            {filtered.map(([group, names]) => (
-              <div className="nav-group" key={group}>
-                <h2>{group}</h2>
-                {names.map((item) => (
-                  <a
-                    key={item}
-                    href={`?component=${item}`}
-                    aria-current={name === item ? "page" : undefined}
-                  >
-                    {item}
-                    <span aria-hidden="true">{name === item ? "↗" : ""}</span>
-                  </a>
-                ))}
-              </div>
+  const directory = (
+    <div className="component-directory">
+      <Field label="Find a component">
+        {(p) => (
+          <TextInput
+            {...p}
+            type="search"
+            value={query}
+            placeholder="Search components"
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") setQuery("");
+            }}
+          />
+        )}
+      </Field>
+      <div className="directory-links">
+        {filtered.map(([group, names]) => (
+          <section key={group}>
+            <h2>{group}</h2>
+            {names.map((item) => (
+              <a
+                key={item}
+                href={`?component=${item}`}
+                aria-current={name === item ? "page" : undefined}
+              >
+                {item}
+              </a>
             ))}
-            {!filtered.length && (
-              <p role="status">No components found. Try another name.</p>
-            )}
-          </nav>
-          <p className="sidebar-note">
-            A working collection.
-            <br />
-            Free to use. Open to improve.
-          </p>
-        </aside>
-        <main id="main" tabIndex={-1}>
-          {contract ? (
-            <article className="reference-page">
-              <div className="breadcrumb">
-                <a href="?#components">Components</a>
-                <span>/</span>
-                <span>{contract.name}</span>
-              </div>
-              <header className="component-heading">
-                <p className="eyebrow">
-                  {
-                    Object.entries(groups).find(([, names]) =>
-                      names.includes(contract.name),
-                    )?.[0]
-                  }
-                </p>
-                <h1>{contract.name}</h1>
-                <p className="lead">{descriptions[contract.name]}</p>
-                <Badge>Experimental · 0.1.0</Badge>
-              </header>
-              <Playground key={contract.name} name={contract.name} mode={mode} />
-              <section className="contract-section">
-                <p className="eyebrow">The contract</p>
-                <h2>API & composition</h2>
-                <table className="api-table">
-                  <thead>
-                    <tr>
-                      <th scope="col">Surface</th>
-                      <th scope="col">Contract</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row">{contract.name}</th>
-                      <td>{contract.api}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <h2>States, keyboard & accessibility</h2>
-                <p>{contract.behavior}</p>
-                <p>
-                  Keep visible labels and focus indicators. Check your complete
-                  composition with the content, errors, and assistive technology
-                  your audience uses.
-                </p>
-              </section>
-              <div className="next-component">
-                <span>Continue the collection</span>
-                <a
-                  href={`?component=${contracts[(contracts.indexOf(contract) + 1) % contracts.length].name}`}
-                >
-                  {
-                    contracts[
-                      (contracts.indexOf(contract) + 1) % contracts.length
-                    ].name
-                  }{" "}
-                  →
-                </a>
-              </div>
-            </article>
-          ) : start ? (
-            <Start />
-          ) : name ? (
-            <article className="reference-page">
-              <h1>Component not found</h1>
-              <p>Choose a component from the collection.</p>
-              <a href="?">Back to the collection</a>
-            </article>
-          ) : (
-            <Home />
-          )}
-          <footer className="site-footer">
-            <strong>{familyName} React</strong>
-            <span>Considered in public. Released under MIT.</span>
-            <a
-              href={`${repo}/blob/work/registry-foundations/docs/release-policy.md`}
-            >
-              Experimental release policy ↗
-            </a>
-          </footer>
-        </main>
+          </section>
+        ))}
+        {!filtered.length && (
+          <p role="status">No components found. Try another name.</p>
+        )}
       </div>
+    </div>
+  );
+  const api = (
+    <>
+      <h2 id="api" tabIndex={-1}>
+        API & composition
+      </h2>
+      <p>{contract?.api}</p>
+    </>
+  );
+  const accessibility = (
+    <>
+      <h2 id="accessibility" tabIndex={-1}>
+        States, keyboard & accessibility
+      </h2>
+      <p>{contract?.behavior}</p>
+      <p>
+        Check the complete composition with your content, errors and assistive
+        technology. Every export remains experimental.
+      </p>
+    </>
+  );
+  return (
+    <div className={family} {...{ [`data-${family}`]: mode }}>
+      <FamilyLayout
+        mode={mode}
+        onModeChange={() => setMode(mode === "light" ? "dark" : "light")}
+        directory={directory}
+        page={
+          agents
+            ? "agents"
+            : pattern
+              ? "collection"
+              : language
+                ? "language"
+                : start
+                  ? "start"
+                  : name
+                    ? "component"
+                    : "home"
+        }
+      >
+        {contract ? (
+          <ComponentPage
+            name={contract.name}
+            description={descriptions[contract.name]}
+            category={
+              Object.entries(groups).find(([, names]) =>
+                names.includes(contract.name),
+              )?.[0] ?? "Components"
+            }
+            playground={
+              <Playground
+                key={contract.name}
+                name={contract.name}
+                mode={mode}
+              />
+            }
+            api={api}
+            accessibility={accessibility}
+          />
+        ) : agents ? (
+          <Agents />
+        ) : pattern ? (
+          <PatternShowcase mode={mode} />
+        ) : language ? (
+          <LanguageGuide />
+        ) : start ? (
+          <Start />
+        ) : name ? (
+          <article>
+            <h1>Component not found</h1>
+            <p>Choose a component from the index.</p>
+            <a href="?">Back to the collection</a>
+          </article>
+        ) : (
+          <FamilyHome />
+        )}
+      </FamilyLayout>
     </div>
   );
 }

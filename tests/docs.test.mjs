@@ -1,6 +1,14 @@
 import test from "node:test";
+import { createHash } from "node:crypto";
 import assert from "node:assert/strict";
-import { readFile, writeFile, mkdtemp, mkdir, rm, readdir } from "node:fs/promises";
+import {
+  readFile,
+  writeFile,
+  mkdtemp,
+  mkdir,
+  rm,
+  readdir,
+} from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { resolve, join } from "node:path";
 import { transformSync } from "rolldown/utils";
@@ -103,5 +111,104 @@ for (const family of ["martlet", "krigsvold"]) {
     assert.ok(!js.includes("/api/components"));
     assert.ok(!js.includes("node:sqlite"));
     assert.ok(!js.includes(`@${other}/react`));
+  });
+}
+
+for (const family of ["martlet", "krigsvold"]) {
+  test(`${family} reference uses its native shell, page composition, original mark and token colors`, async () => {
+    const dir = await mkdtemp(resolve("test-results/docs-layout-"));
+    try {
+      await writeFile(
+        join(dir, "data.mjs"),
+        compile(await readFile("docs-app/src/data.ts", "utf8"), "data"),
+      );
+      const source = (
+        await readFile(`docs-app/src/layouts/${family}.tsx`, "utf8")
+      )
+        .replace(/(["'])docs-family\1/g, JSON.stringify(`@${family}/react`))
+        .replace(
+          /^import mark from [^;]+;/m,
+          `const mark = '/${family}-mark.svg';`,
+        )
+        .replace(/from ["']\.\.\/data["']/g, `from './data.mjs'`)
+        .replace(/^import ['"][^'"]+\.css['"];?$/gm, "");
+      await writeFile(join(dir, "layout.mjs"), compile(source, "layout"));
+      const layout = await import(pathToFileURL(join(dir, "layout.mjs")));
+      const h = React.createElement;
+      const html = renderToStaticMarkup(
+        h(
+          layout.FamilyLayout,
+          {
+            mode: "light",
+            onModeChange: () => {},
+            directory: h("p", null, "Index"),
+            page: "component",
+          },
+          h(layout.ComponentPage, {
+            name: "Button",
+            description: "A clear next step",
+            category: "Actions",
+            playground: h("button", null, "Try"),
+            api: h("p", null, "API"),
+            accessibility: h("p", null, "Keyboard"),
+          }),
+        ),
+      );
+      assert.ok(html.includes(`class="${family}-app"`));
+      assert.ok(html.includes('aria-label="Documentation"'));
+      assert.ok(html.includes(`src="/${family}-mark.svg"`));
+      assert.equal((html.match(/<main /g) ?? []).length, 1);
+      assert.ok(
+        html.includes(
+          family === "martlet"
+            ? "martlet-article-layout"
+            : "krigsvold-reference-workspace",
+        ),
+      );
+      const css = await readFile(`docs-app/src/layouts/${family}.css`, "utf8");
+      assert.ok(css.includes(`var(--${family}-`));
+      assert.ok(
+        !/#[0-9a-f]{3,8}\b/i.test(css),
+        "Documentation cannot introduce a new literal palette",
+      );
+      const asset = await readFile(`docs-app/brand/${family}-mark.svg`, "utf8");
+      assert.ok(asset.includes("<svg"));
+      const provenance = JSON.parse(
+        await readFile("docs-app/brand/provenance.json", "utf8"),
+      )[family];
+      assert.equal(
+        createHash("sha1")
+          .update(`blob ${Buffer.byteLength(asset)}\0`)
+          .update(asset)
+          .digest("hex"),
+        provenance.gitBlobSha,
+      );
+      const UI = await import(`@${family}/react`);
+      for (const placement of ["default", "top", "side", "none"]) {
+        const shell = renderToStaticMarkup(
+          h(
+            UI.AppShell,
+            {
+              brand: "A working app",
+              navigationLabel: "Primary",
+              navigationPlacement: placement,
+              headerMode: "dark",
+              navigation: h("a", { href: "/" }, "Workspace"),
+              utilities: h("span", null, "Account"),
+            },
+            h("p", null, "Work"),
+          ),
+        );
+        assert.ok(shell.includes(`data-navigation="${placement}"`));
+        assert.ok(shell.includes(`data-${family}="dark"`));
+        assert.equal(
+          shell.includes('aria-label="Primary"'),
+          placement !== "none",
+        );
+        assert.equal((shell.match(/<main /g) ?? []).length, 1);
+      }
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
   });
 }
