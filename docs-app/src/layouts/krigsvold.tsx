@@ -131,12 +131,42 @@ export function FamilyLayout({
         </div>
       </AppShell>
       <footer className="krigsvold-reference-footer">
+        <div className="krigsvold-reference-footer-inner">
         <div className="krigsvold-reference-footer-grid">
-          <div><h2>The language</h2><a href="?page=language">Principles and decisions</a><a href="?page=collection">Working pattern</a><a href="?component=Article">Reading and context</a></div>
-          <div><h2>Build</h2><a href="?page=start">Getting started</a><a href="?#components">Component reference</a><a href="?page=agents">MCP and builder skill</a></div>
-          <div><h2>Project</h2><a href={repo}>Source repository ↗</a><a href={`${repo}/blob/work/registry-foundations/docs/release-policy.md`}>Release policy ↗</a><a href={`${repo}/blob/work/registry-foundations/docs/qa/origin-reconciliation.md`}>Origin reconciliation ↗</a></div>
+          <div className="krigsvold-reference-footer-identity">
+            <a className="krigsvold-reference-footer-owner" href="?">
+              <img src={mark} alt="" width="58" height="58" />
+              <span className="krigsvold-reference-footer-site">Krigsvold React</span>
+              <span className="krigsvold-reference-footer-byline">A project of James Howard</span>
+            </a>
+            <p>React components, working patterns, and agent guidance grounded in krigsvold.org.</p>
+          </div>
+          <nav aria-label="Footer language"><h2>The language</h2><ul>
+            <li><a href="?page=language">Principles and decisions</a></li>
+            <li><a href="?page=collection">Working patterns</a></li>
+            <li><a href="?component=Article">Reading and context</a></li>
+          </ul></nav>
+          <nav aria-label="Footer build"><h2>Build</h2><ul>
+            <li><a href="?page=start">Getting started</a></li>
+            <li><a href="?#components">Component reference</a></li>
+            <li><a href="?page=agents">MCP and builder skill</a></li>
+          </ul></nav>
+          <nav aria-label="Footer resources"><h2>Resources</h2><ul>
+            <li><a href="https://krigsvoldtheme.dev/">Krigsvold theme ↗</a></li>
+            <li><a href="https://krigsvold.org/">Origin website ↗</a></li>
+            <li><a href={`${repo}/blob/work/registry-foundations/docs/qa/origin-reconciliation.md`}>Origin reconciliation ↗</a></li>
+          </ul></nav>
+          <nav aria-label="Footer project"><h2>Project</h2><ul>
+            <li><a href={repo}>Source repository ↗</a></li>
+            <li><a href={`${repo}/blob/work/registry-foundations/docs/release-policy.md`}>Release policy ↗</a></li>
+            <li><a href={`${repo}/blob/work/registry-foundations/LICENSE`}>MIT license ↗</a></li>
+          </ul></nav>
         </div>
-        <div className="krigsvold-reference-footer-base"><img src={mark} alt="" width="48" height="48" /><span>Krigsvold React · MIT<br />Experimental application extensions</span></div>
+        <div className="krigsvold-reference-footer-base">
+          <p>Copyright © 2026 James P. Howard, II</p>
+          <p><a href="mailto:count@krigsvold.org">count@krigsvold.org</a></p>
+        </div>
+        </div>
       </footer>
     </div>
   );

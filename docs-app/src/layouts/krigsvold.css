@@ -53,11 +53,32 @@
 .krigsvold-reference-catalog { padding-block:3rem; }
 .krigsvold-reference-catalog header h2 { font-size:var(--krigsvold-text-section); margin-block:1rem; }
 .krigsvold-reference-catalog .krigsvold-table-scroll { margin-block-start:2rem; }
-.krigsvold-reference-footer { padding:5rem var(--krigsvold-gutter) 1.5rem; background:var(--krigsvold-color-navy-950); color:rgb(255 255 255/.72); font-family:var(--krigsvold-font-sans); }
-.krigsvold-reference-footer-grid { max-inline-size:var(--krigsvold-content-width); margin-inline:auto; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:2rem; }
-.krigsvold-reference-footer h2 { color:white; font:700 .76rem/1.65 var(--krigsvold-font-sans); letter-spacing:.12em; text-transform:uppercase; }
-.krigsvold-reference-footer a { display:block; color:rgb(255 255 255/.9); margin-block:.55rem; font-size:.88rem; }
-.krigsvold-reference-footer-base { max-inline-size:var(--krigsvold-content-width); margin:2.5rem auto 0; border-block-start:1px solid rgb(255 255 255/.16); padding-block-start:1.5rem; display:flex; align-items:center; gap:1rem; font-size:.8rem; }
+/* SiteFooter/site.css: identity column + four groups, with a separate base row. */
+.krigsvold-reference-footer { --footer-container:100%; padding:5rem 0 1.5rem; background:var(--krigsvold-color-navy-950); color:rgb(255 255 255/.72); font:400 1rem/1.65 var(--krigsvold-font-sans); }
+.krigsvold-reference-footer-inner { inline-size:100%; max-inline-size:var(--footer-container); padding-inline:.75rem; margin-inline:auto; }
+@media(min-width:576px) { .krigsvold-reference-footer { --footer-container:540px; } }
+@media(min-width:768px) { .krigsvold-reference-footer { --footer-container:720px; } }
+@media(min-width:992px) { .krigsvold-reference-footer { --footer-container:960px; } }
+@media(min-width:1200px) { .krigsvold-reference-footer { --footer-container:1140px; } }
+@media(min-width:1400px) { .krigsvold-reference-footer { --footer-container:1320px; } }
+.krigsvold-reference-footer-grid { max-inline-size:var(--krigsvold-content-width); margin-inline:auto; display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); column-gap:3rem; row-gap:3rem; align-items:start; }
+.krigsvold-reference-footer-grid > * { min-inline-size:0; }
+.krigsvold-reference-footer-identity { grid-column:span 2; }
+.krigsvold-reference-footer a { color:rgb(255 255 255/.9); text-decoration:none; }
+.krigsvold-reference-footer a:hover { text-decoration:underline; }
+.krigsvold-reference-footer .krigsvold-reference-footer-owner { display:inline-flex; flex-direction:column; align-items:flex-start; color:white; line-height:1.35; text-decoration:none; }
+.krigsvold-reference-footer-owner img { inline-size:58px; block-size:58px; margin-block-end:1rem; border-radius:3px; }
+.krigsvold-reference-footer-site { font-size:1rem; font-weight:700; }
+.krigsvold-reference-footer-byline { margin-block-start:.18rem; font-size:1.05rem; font-weight:700; }
+.krigsvold-reference-footer-identity > p { margin-block:1.5rem 1rem; }
+.krigsvold-reference-footer h2 { margin:0; color:white; font:700 .76rem/1.65 var(--krigsvold-font-sans); letter-spacing:.12em; text-transform:uppercase; }
+.krigsvold-reference-footer ul { margin:1rem 0 0; padding:0; list-style:none; }
+.krigsvold-reference-footer li { margin-block:.55rem; }
+.krigsvold-reference-footer li a { font-size:.88rem; font-weight:500; }
+.krigsvold-reference-footer-base { max-inline-size:var(--krigsvold-content-width); margin:2.5rem auto 0; border-block-start:1px solid rgb(255 255 255/.16); padding-block-start:1.5rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:0 1.5rem; font-size:.8rem; }
+.krigsvold-reference-footer-base p { margin:0 0 1rem; }
+@media(max-width:991.98px) { .krigsvold-reference-footer-grid { grid-template-columns:repeat(4,minmax(0,1fr)); column-gap:1.5rem; } .krigsvold-reference-footer-identity { grid-column:1/-1; max-inline-size:26rem; } }
+@media(max-width:767.98px) { .krigsvold-reference-footer-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .krigsvold-reference-footer-base { display:block; } }
 @media(max-width:1400px) { .krigsvold-reference .krigsvold-app-header { margin-inline:var(--krigsvold-gutter); } }
 @media(max-width:991.98px) {
  .krigsvold-reference .krigsvold-app { padding-block-start:.75rem; }
@@ -78,7 +99,6 @@
  .krigsvold-reference-search { flex:1; inline-size:auto; min-inline-size:10rem; margin:0; padding:0; border:0; }
  .krigsvold-reference-search .directory-links { inset-inline-start:0; inset-inline-end:auto; }
 }
-@media(max-width:48rem) { .krigsvold-reference-footer-grid { grid-template-columns:minmax(0,1fr); } }
 @media print { .krigsvold-reference .krigsvold-app-header,.krigsvold-reference-register,.krigsvold-reference-footer,.krigsvold-reference-sections { display:none; } }
 
 /* Documentation text roles share the origin's label and reading vocabulary. */

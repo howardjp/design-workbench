@@ -45,7 +45,7 @@ Implementation: `packages/*-react/src/{styles.css,index.tsx}`, `docs-app/src/lay
 | N12 | Retained byte-verified existing theme-site system marks as documentation-only host identities. Consumer apps choose their own identity. |
 | N13 | Simplified lockup to system mark/name using family source font roles; still a host translation, not origin-site branding. |
 | N14 | Simplified covers and source-derived heading/container roles. Documentation content/catalogue remain host compositions, not validated universal templates. |
-| N15 | Removed gold footer stripe; added navy grouped-link footer with separate base line. Ownership/legal content remains host-specific. |
+| N15 | Removed gold footer stripe; Krigsvold now follows SiteFooter's wide identity column plus four link groups, 58px mark, source owner/byline and link typography, responsive columns, and separate copyright/contact row. Documentation retains its existing system mark and relevant destinations; copyright follows its 2026 MIT license. Martlet retains a source-derived navy grouped-link footer. |
 | N16 | Retained discovery/catalogue and component section links for distinct jobs. They are optional docs tools, not required language anatomy. |
 | N17 | Removed component-title leading stripe, bronze API stripe and redundant decorative bands. |
 | N18 | Kept preview, copy, controls, width inspector and downloads as host tools. Removed meaningless shared specimen ordinals. |
@@ -113,3 +113,8 @@ The local browser runtime was restored using temporary @sparticuz/chromium 153.0
 The missing npm cache dependencies were fetched by installing the actual extracted archive with locked dependencies. Both revised standalone archives then passed the official outside-workspace installation and real SDK-client checks locally. Personal skill synchronization still fails HTTP 422 (latest local skill commit 817e9b6); source and archive copies remain usable.
 
 The final source also bounds article metadata, generic disclosure labels, technical summaries, initial specification rows and workbench grid groups. The workbench's boxed M/K initials were removed in favor of the caller's plain title. These are functional reflow/identity corrections, not new family decoration. Managed-preview observations confirm Martlet's changed-draft dialog/Escape preserves the edited title and returns focus to the invoking destination.
+
+
+### Krigsvold footer follow-up
+
+The source SiteFooter identity column/four link groups and copyright/contact base now carry through to the documentation host. The existing system mark remains its identity; documentation destinations and the MIT license's 2026 copyright replace origin-specific content. Source container breakpoints (540/720/960/1140/1320px), 58px mark, owner/byline typography, unadorned resting links, and source spacing are restored. Managed-preview checks find no horizontal overflow in nominal 320px/768px frames (305/305 and 753/753 document/scroll widths). The tablet uses four link columns below the identity, and the narrow layout uses two. [Rendered footer](krigsvold-footer-source-match.jpg).
