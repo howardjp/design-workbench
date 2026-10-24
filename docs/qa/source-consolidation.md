@@ -7,7 +7,7 @@ This is an implementation consolidation, not grammar stabilization. The October 
 | Language | Canonical core | Astro candidate | Main reference |
 | --- | --- | --- | --- |
 | Martlet | [PR 4](https://github.com/martlettheme/npm/pull/4), `7ef42fd241b7cb99014b19bccb1aeec10be0ca89` | [PR 3](https://github.com/martlettheme/astro/pull/3) | [PR 8](https://github.com/martlettheme/martlettheme/pull/8) |
-| Krigsvold | [PR 4](https://github.com/krigsvoldtheme/npm/pull/4), `a52f17b3ccbf6a8ff946bdc13b29347c8ea87963` | [PR 3](https://github.com/krigsvoldtheme/astro/pull/3) | [PR 7](https://github.com/krigsvoldtheme/krigsvoldtheme/pull/7) |
+| Krigsvold | [PR 4](https://github.com/krigsvoldtheme/npm/pull/4), `48e3fb921e549881a35864041cb57dbabcdffe03` | [PR 3](https://github.com/krigsvoldtheme/astro/pull/3) | [PR 7](https://github.com/krigsvoldtheme/krigsvoldtheme/pull/7) |
 
 Core 2.2.0 and Astro 1.2.0 are unreleased candidates. React 0.1.0 remains experimental and unpublished, with its existing theme 2.1.0 dependency. The main theme sites retain installed core 2.0.0 and Astro 1.0.0 until a separate package adoption and release. Their new language pages identify candidate availability separately from the installed-package specification.
 
@@ -23,7 +23,7 @@ Core 2.2.0 and Astro 1.2.0 are unreleased candidates. React 0.1.0 remains experi
 ## Validation
 
 - Core builds and 25 Node tests pass across both families; original light/dark color-contract checks pass.
-- Both Astro packed consumers build. The three package checks per family pass. Chromium covers four routes at six widths (280, 307, 390, 768, 1280, 1600), enlarged text, local fonts, nested grids, source order, skip links and reduced motion. New contents composition and grouped footer pass hierarchy/geometry checks, including 320px and 400% text. CI also exercises Astro 5.18.2 and 7.3.2.
+- Both Astro packed consumers build. The three package checks per family pass. Chromium covers four routes at six widths (280, 307, 390, 768, 1280, 1600), enlarged text, local fonts, nested grids, source order, skip links and reduced motion. New contents composition and grouped footer pass hierarchy/geometry checks, including 320px and 400% text. Krigsvold source controls also retain disabled material and the nearest appearance inside nested Light/Dark scopes. CI also exercises Astro 5.18.2 and 7.3.2.
 - Both main theme sites build and pass their existing Node suites. Browser scenarios pass: 16 Martlet and 18 Krigsvold, including consent regression checks, new guidance at 280/320/768/1440px, one main h1, framework metadata and 200% text. Analytics requests are intercepted during these tests.
 - Workbench TypeScript and all 86 Node tests pass. Seventeen reading browser checks pass, including axe, both appearances, narrow/wide layouts, source order and retained content. Both agent archives install and serve through a real MCP client outside the workbench. Both bundled skills validate.
 
