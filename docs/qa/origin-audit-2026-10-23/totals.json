@@ -1,0 +1,118 @@
+{
+  "auditedImplementation": "594055a647a84fa30bb400c98810f946b66a7c0b",
+  "date": "2026-10-23",
+  "authoredStylesheets": 7,
+  "activeDependencyStylesheets": 4,
+  "rules": 613,
+  "declarations": 2114,
+  "authoredDeclarations": 1600,
+  "dependencyDeclarations": 514,
+  "imports": [
+    {
+      "file": "packages/martlet-react/src/styles.css",
+      "line": 1,
+      "value": "\"@martlet/theme/css\""
+    },
+    {
+      "file": "packages/martlet-react/src/styles.css",
+      "line": 2,
+      "value": "\"@martlet/theme/foundation.css\""
+    },
+    {
+      "file": "packages/krigsvold-react/src/styles.css",
+      "line": 1,
+      "value": "\"@krigsvold/theme/css\""
+    },
+    {
+      "file": "packages/krigsvold-react/src/styles.css",
+      "line": 2,
+      "value": "\"@krigsvold/theme/foundation.css\""
+    }
+  ],
+  "files": [
+    {
+      "file": "packages/martlet-react/src/styles.css",
+      "layer": "authored",
+      "sha256": "446682b8588f63bda8c54dc6362c800a6f1760bf5ca729b5f9191bc0b354b507",
+      "rules": 164,
+      "declarations": 425
+    },
+    {
+      "file": "packages/krigsvold-react/src/styles.css",
+      "layer": "authored",
+      "sha256": "01a42f1f2dfe2d9f1c6111c3dfd53215950c99af72d0e140454e4a2a3a519ac3",
+      "rules": 172,
+      "declarations": 460
+    },
+    {
+      "file": "docs-app/src/layouts/martlet.css",
+      "layer": "authored",
+      "sha256": "ad8a4021b3378bfdda11c282a3b3a0120beaeaa9658e924269339310a7e37d44",
+      "rules": 62,
+      "declarations": 126
+    },
+    {
+      "file": "docs-app/src/layouts/krigsvold.css",
+      "layer": "authored",
+      "sha256": "0269d82efdc6c9043cb6fedb027791894c22a9fa4161c311a5ab88cc7855747f",
+      "rules": 86,
+      "declarations": 224
+    },
+    {
+      "file": "docs-app/src/patterns/martlet.css",
+      "layer": "authored",
+      "sha256": "27280646a979ec33109748162f8c1057033aac1f54f413ac4b4d451d3a987a16",
+      "rules": 28,
+      "declarations": 91
+    },
+    {
+      "file": "docs-app/src/patterns/krigsvold.css",
+      "layer": "authored",
+      "sha256": "5c1a5d0615ecc578e2ecd712198f2e547659691ff8978c66345ebac5d72cc0f4",
+      "rules": 35,
+      "declarations": 121
+    },
+    {
+      "file": "docs-app/src/shared.css",
+      "layer": "authored",
+      "sha256": "9aa1dfdf9484d90a79079e031d03b80f401f2fa8f7a3e31b59e36e52a0d96acd",
+      "rules": 58,
+      "declarations": 153
+    },
+    {
+      "file": "node_modules/@martlet/theme/dist/theme.css",
+      "layer": "active dependency",
+      "sha256": "9073728917f9dbb0d9b99cd41bb9e9a0c951a87968544ce4fb88fd18e2d36f6f",
+      "rules": 2,
+      "declarations": 178
+    },
+    {
+      "file": "node_modules/@martlet/theme/dist/foundation.css",
+      "layer": "active dependency",
+      "sha256": "b57e200b7133726846a1273cc6b19d3e4b2d8023bf0c6fa81b19a7033849d2f0",
+      "rules": 2,
+      "declarations": 76
+    },
+    {
+      "file": "node_modules/@krigsvold/theme/dist/theme.css",
+      "layer": "active dependency",
+      "sha256": "a9d55e6fea9699157c2f8742afd56c99d6e378ffa71f2261e681a3503b229076",
+      "rules": 2,
+      "declarations": 178
+    },
+    {
+      "file": "node_modules/@krigsvold/theme/dist/foundation.css",
+      "layer": "active dependency",
+      "sha256": "593c13d316e9e595d55b7f4b247e0fca024b85d0e246b0cdd9f5e291a3c10da8",
+      "rules": 2,
+      "declarations": 82
+    }
+  ],
+  "componentExports": 44,
+  "compiledBehaviorIdenticalAfterFamilySubstitution": true,
+  "inlineStyleAssignments": 4,
+  "originFiles": 49,
+  "originStyleRules": 6247,
+  "originStyleDeclarations": 12140,
+  "reviewItems": 67
+}

@@ -1,0 +1,112 @@
+[
+  {
+    "name": "AppShell",
+    "api": "brand, navigation, utilities, children; optional navigationLabel (default Workbench), navigationPlacement default/top/side/none, and headerMode light/dark. One header/nav and one main; skip link targets main. One shell per document.",
+    "behavior": "Navigation/current-page content supplied by the caller. Header wraps on narrow screens. Skip link becomes visible on focus and moves to main. Both families support top navigation, side navigation and no primary navigation. Existing defaults retain Martlet's top header and Krigsvold's workbench side rail; these defaults are task compositions, not limitations on either system. Header-only mode scoping preserves each theme's native tokens. Navigation direction is a composition choice, not a family identity rule."
+  },
+  {
+    "name": "Button",
+    "api": "Native button props and ref; variant primary/secondary/quiet. Defaults to type=button.",
+    "behavior": "Default, hover, focus, disabled, pending through caller content/aria-busy. Enter/Space activate a focused button. Disabled cannot activate. A new enabled state or theme change paints its readable colors immediately, avoiding a low-contrast color transition. A form submit requires explicit type=submit."
+  },
+  {
+    "name": "TextInput",
+    "api": "Native input props/ref, including type, required, disabled, readOnly, autocomplete, value and change handlers.",
+    "behavior": "Empty, populated, focus, invalid, disabled, read-only. Labels remain associated; invalid state uses Field errors. Native input behavior and browser autofill remain available. Native read-only permits inspection; disabled is excluded from interaction/submission."
+  },
+  {
+    "name": "FileInput",
+    "api": "Native uncontrolled input props/ref except type, value, defaultValue; fixed type=file. Supports accept, multiple, name, disabled, required, native change events, and ARIA through Field.",
+    "behavior": "Empty/selected, keyboard focus, invalid, disabled. Enter/Space invokes the platform chooser; the browser supplies selected-file text. A caller reads File objects, enforces size/content policy, and clears with an input ref value=\"\". No drag/drop, custom filename replica, upload transport, or fake readOnly behavior. Long labels reflow; native selector button uses family control tokens."
+  },
+  {
+    "name": "Select",
+    "api": "Native select props/ref and option children.",
+    "behavior": "Empty/default selection, selected, focus, invalid, disabled. Use the platform's native keyboard and popup behavior; do not replace it with an untested ARIA listbox. A placeholder choice must clearly explain whether it is valid."
+  },
+  {
+    "name": "Textarea",
+    "api": "Native textarea props/ref, rows, controlled or uncontrolled values. Vertically resizable.",
+    "behavior": "Empty, populated, focus, invalid, disabled, read-only. Newlines survive saving. Long text wraps without widening the document. Resizing cannot cover subsequent controls."
+  },
+  {
+    "name": "Field",
+    "api": "optional explicit id; label string; optional hint/error; render function receives id, aria-describedby, aria-invalid.",
+    "behavior": "Default/hint/error. Visible label points to the rendered control; hint and error are both described. Error text remains visible until resolved or explicitly cleared. The caller spreads supplied attributes onto the actual control and adds required/readOnly/etc."
+  },
+  {
+    "name": "Checkbox",
+    "api": "Native input props/ref except type; label node; optional id; className styles the wrapper. Binary only in this release.",
+    "behavior": "Unchecked, checked, focus, disabled, invalid through caller ARIA/group errors. Clicking the label and pressing Space toggle the same control. Names/values support native form submission. Mixed state is deferred until a real task and a reviewed keyboard/announcement contract require it."
+  },
+  {
+    "name": "Radio",
+    "api": "Native input props/ref except type; required label node; optional explicit id; className styles the label wrapper. Fixed type=radio.",
+    "behavior": "Checked/unchecked, native focus, disabled, invalid/described through consumer attributes. Use one shared name for each exclusive group, distinct names across groups, and Fieldset/legend for group context. Tab/arrow/Space follow browser behavior; no custom radiogroup model or roving tabindex. A visible label activates its input. Caller owns outcome values, validation, persistence, and acknowledgement."
+  },
+  {
+    "name": "Fieldset",
+    "api": "Native fieldset props/ref; legend node; optional hint/error.",
+    "behavior": "Default, invalid group, disabled group. Legend is the first child; descriptions reference hint/error IDs and preserve any consumer description. Disabled reaches descendants natively. Error identifies the group without replacing per-control labels."
+  },
+  {
+    "name": "Notice",
+    "api": "kind info/success/error and children. No automatic dismissal.",
+    "behavior": "Info/success use role=status; blocking errors use role=alert. Copy explains what happened and recovery. Pending/saved/failed state comes from the caller. Do not repeatedly reannounce unchanged messages or use an alert for ordinary progress."
+  },
+  {
+    "name": "Badge",
+    "api": "children, rendered as concise static text.",
+    "behavior": "Text names the actual status. It is not a button and does not claim a live update. Status remains intelligible without color. Do not put lengthy explanations into a badge."
+  },
+  {
+    "name": "DataTable",
+    "api": "Native table props/ref, required caption string, table children. Named, focusable overflow region around a semantic table.",
+    "behavior": "Empty/loading/error belong to caller composition. Captions, scoped headers, and native cells remain intact. A genuinely wide table scrolls inside its region at 320 CSS pixels. Sorting buttons and aria-sort are composed in the workbench; data order changes without losing controls. Pagination is a separate labelled navigation region."
+  },
+  {
+    "name": "Disclosure",
+    "api": "Native details props/ref plus summary node and children.",
+    "behavior": "Closed/open, focus; Enter/Space on summary toggles. No simulated accordion keyboard model. A disclosure must not hide blocking errors or required actions. The workbench uses it for optional revision history."
+  },
+  {
+    "name": "Dialog",
+    "api": "Controlled open boolean, title string, onDismiss callback, children. Uses native dialog.showModal and the browser top layer. Keep mounted.",
+    "behavior": "Closed/open; Escape calls onDismiss. Caller supplies a visible dismissal action and appropriate initial autofocus. Focus stays in the modal, then returns to the trigger if it remains available. Modal opening/closing runs before paint so an application can move focus to the next editor after dismissal without attempting to focus inert content. A destructive draft choice defaults to Keep editing. Clicking the backdrop does not silently discard work."
+  },
+  {
+    "name": "ErrorSummary",
+    "api": "Native div props/ref except title; title node; errors containing message and optional targetId; optional recovery children. Named alert, programmatically focusable.",
+    "behavior": "The caller focuses the summary after an attempted operation fails. Field links focus explicit control IDs or focusable fieldsets; unlinked errors explain transport/operation failures. Long messages wrap. The component never clears drafts or focuses itself on mount. Both use a leading severity rule as an explicit validation extension; their source typography and color roles remain independent."
+  },
+  {
+    "name": "Article",
+    "api": "Native article props/ref except title; required title node; titleLevel 1 (default) or 2; optional eyebrow, inline summary, metadata, contents, aside, contextLabel, footer; body children.",
+    "behavior": "The generated title ID names the article. The caller owns coherent heading levels, native content, and routing. Context and body reflow at narrow widths; long text wraps; print keeps content and removes contents navigation. Martlet restores source serif prose and a left document index; Krigsvold uses source sans-serif editorial prose with an explicitly experimental index extension. Contents and supporting material are separate: contents precede body, aside follows body. Available container width governs reflow. No universal accent rule is added above article titles. No state, fetching, raw-HTML parser, or unsolicited focus is embedded."
+  },
+  {
+    "name": "TableOfContents",
+    "api": "Native nav props/ref except children; required readonly items containing id/label and optional depth 2 or 3 (default 2); optional visible label (default On this page) and variant index (default) or inline.",
+    "behavior": "A named navigation region contains unnumbered native fragment links. Depth 2 identifies primary sections; depth 3 identifies subordinate headings. Index and inline are distinct source-context variants in Martlet; Krigsvold exposes them as application extensions. Caller IDs are unique and headings focusable for keyboard navigation. The consumer handles initial asynchronous fragment restoration. No menu, tablist, or custom arrow-key model. Long labels wrap; the list is omitted from print."
+  },
+  {
+    "name": "Pagination",
+    "api": "Controlled one-based page, pageCount, onPageChange; optional disabled and label (default Pagination); native nav props/ref except children.",
+    "behavior": "Named navigation with native Previous page/Next page secondary buttons and a polite atomic page position. First/last boundaries and disabled prevent movement; Tab/Enter/Space remain native. Finite values truncate and clamp; nonfinite values become one. Wraps at narrow widths. Consumer owns fetching, route/query persistence, count, page size, recovery, and focus. English labels currently fixed; no numbered page links, RTL/localization, jump-to-page, or custom arrow model."
+  },
+  {
+    "name": "DefinitionList",
+    "api": "Readonly items with unique stable id, term and description nodes; native dl props/ref except children; optional layout rows (default), stack or grid in either family.",
+    "behavior": "Native dl/div/dt/dd grouping with escaped React text, caller-provided context/ARIA, long multiline wrapping, and narrow reflow. No automatic headings, landmarks, state, fetching or raw HTML parsing. Empty items render an empty list; consumer supplies empty-state meaning. Choose rows, stack or grid by content and comparison needs, not family identity. Rows follow source label/value alignment; source facts also support stacking."
+  },
+  {
+    "name": "Switch",
+    "api": "Native checkbox props/ref except type/role; required fixed label node; optional explicit id. Input className passes to the input; visual track is decorative.",
+    "behavior": "Native checked/defaultChecked, name/value, change, focus, disabled and described/invalid attributes. Space/label toggle; role=switch supplies binary semantics. Both checked positions and focus remain distinct in forced colors. Settings controls future draft protection; a toggle is not an immediate registry write."
+  },
+  {
+    "name": "Tabs",
+    "api": "Native root div props/ref, unique keyed items with id/label/content/optional disabled, controlled value/onValueChange, required label, optional horizontal/vertical orientation.",
+    "behavior": "Manual activation: arrows wrap among enabled tabs, Home/End focus boundaries, Enter/Space activate. One selected tab has tabindex=0; panels remain mounted, linked and hidden when inactive. Invalid/disabled selection falls back to first enabled tab; callers provide at least one enabled item. Empty lists render no selected panel. No routing, persistence, animation, automatic activation, close buttons, nested tabs or RTL arrow adaptation."
+  }
+]

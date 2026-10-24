@@ -1,0 +1,4946 @@
+[
+  {
+    "family": "martlet",
+    "file": "src/components/ArmoryNav.astro",
+    "line": 19,
+    "selector": ".armory-nav"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ArmoryNav.astro",
+    "line": 20,
+    "selector": ".armory-nav ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ArmoryNav.astro",
+    "line": 21,
+    "selector": ".armory-nav a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ArmoryNav.astro",
+    "line": 22,
+    "selector": ".armory-nav a:hover,.armory-nav a:focus-visible,.armory-nav a[aria-current=page]"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ArmoryNav.astro",
+    "line": 23,
+    "selector": ".armory-nav"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ArmoryNav.astro",
+    "line": 23,
+    "selector": ".armory-nav .container"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ArmoryNav.astro",
+    "line": 23,
+    "selector": ".armory-nav ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DataCard.astro",
+    "line": 18,
+    "selector": ".data-card__visual"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DataCard.astro",
+    "line": 19,
+    "selector": ".data-card__visual img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DataCard.astro",
+    "line": 20,
+    "selector": ".data-card__visual--photo"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DataCard.astro",
+    "line": 21,
+    "selector": ".data-card__visual--photo img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DataCard.astro",
+    "line": 22,
+    "selector": ".data-card__summary, .data-card__credit"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DataCard.astro",
+    "line": 23,
+    "selector": ".data-card__facts"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DataCard.astro",
+    "line": 24,
+    "selector": ".data-card__credit"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DataCard.astro",
+    "line": 25,
+    "selector": ".data-card__credit a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DataCard.astro",
+    "line": 26,
+    "selector": ".jh-card--dark .data-card__facts, .jh-card--dark .data-card__credit"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DataCard.astro",
+    "line": 27,
+    "selector": ".data-card__visual"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DataCard.astro",
+    "line": 27,
+    "selector": ".data-card__visual--photo"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DestinationDirectory.astro",
+    "line": 28,
+    "selector": ".destination-directory"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DestinationDirectory.astro",
+    "line": 29,
+    "selector": ".destination-directory h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DestinationDirectory.astro",
+    "line": 30,
+    "selector": ".destination-directory h3 a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DestinationDirectory.astro",
+    "line": 31,
+    "selector": ".destination-directory h3 a:hover, .destination-directory h3 a:focus-visible"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DestinationDirectory.astro",
+    "line": 32,
+    "selector": ".destination-directory p"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DestinationDirectory.astro",
+    "line": 33,
+    "selector": ".destination-directory--dark h3 a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DestinationDirectory.astro",
+    "line": 34,
+    "selector": ".destination-directory--dark h3 a:hover, .destination-directory--dark h3 a:focus-visible"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DestinationDirectory.astro",
+    "line": 35,
+    "selector": ".destination-directory--dark p"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DestinationDirectory.astro",
+    "line": 36,
+    "selector": ".destination-directory--quiet li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DestinationDirectory.astro",
+    "line": 37,
+    "selector": ".destination-directory--quiet li::before"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DestinationDirectory.astro",
+    "line": 39,
+    "selector": ".destination-directory"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DestinationDirectory.astro",
+    "line": 42,
+    "selector": ".destination-directory > li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DestinationDirectory.astro",
+    "line": 43,
+    "selector": ".destination-directory > li::before"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/DestinationDirectory.astro",
+    "line": 44,
+    "selector": ".destination-directory--dark > li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/EditorialPostList.astro",
+    "line": 35,
+    "selector": ".editorial-post-list"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/EditorialPostList.astro",
+    "line": 36,
+    "selector": ".editorial-post-list__meta"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/EditorialPostList.astro",
+    "line": 37,
+    "selector": ".editorial-post-list h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/EditorialPostList.astro",
+    "line": 38,
+    "selector": ".editorial-post-list h3 a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/EditorialPostList.astro",
+    "line": 39,
+    "selector": ".editorial-post-list p"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/EditorialPostList.astro",
+    "line": 40,
+    "selector": ".editorial-post-list--ordered"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/EditorialPostList.astro",
+    "line": 41,
+    "selector": ".section--navy .editorial-post-list h3 a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/EditorialPostList.astro",
+    "line": 42,
+    "selector": ".section--navy .editorial-post-list p, .section--navy .editorial-post-list__meta"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/EditorialPostList.astro",
+    "line": 44,
+    "selector": ".editorial-post-list > li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/EditorialPostList.astro",
+    "line": 45,
+    "selector": ".editorial-post-list > li::before"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/HistoricalStatus.astro",
+    "line": 35,
+    "selector": ".historical-status"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/HistoricalStatus.astro",
+    "line": 44,
+    "selector": ".historical-status > p"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/HistoricalStatus.astro",
+    "line": 45,
+    "selector": ".historical-status > .historical-status__label"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/HistoricalStatus.astro",
+    "line": 52,
+    "selector": ".historical-status > .historical-status__meta"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/HistoricalStatus.astro",
+    "line": 60,
+    "selector": ".historical-status__meta a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/HistoricalStatus.astro",
+    "line": 62,
+    "selector": ".historical-status"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/HistoricalStatus.astro",
+    "line": 63,
+    "selector": ".historical-status__meta"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/MediaArchive.astro",
+    "line": 87,
+    "selector": ".media-archive__list"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/MediaArchive.astro",
+    "line": 93,
+    "selector": ".media-archive__list > li + li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/MediaArchive.astro",
+    "line": 96,
+    "selector": ".media-record"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/MediaArchive.astro",
+    "line": 100,
+    "selector": ".media-record__meta"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/MediaArchive.astro",
+    "line": 108,
+    "selector": ".media-record__meta strong"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/MediaArchive.astro",
+    "line": 112,
+    "selector": ".media-record h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/MediaArchive.astro",
+    "line": 120,
+    "selector": ".media-record__credit,\n  .media-record__context,\n  .media-record__note"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/MediaArchive.astro",
+    "line": 125,
+    "selector": ".media-record__credit"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/MediaArchive.astro",
+    "line": 129,
+    "selector": ".media-record__context"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/MediaArchive.astro",
+    "line": 132,
+    "selector": ".media-record__links"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/MediaArchive.astro",
+    "line": 135,
+    "selector": ".media-record__status"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/MediaArchive.astro",
+    "line": 139,
+    "selector": ".media-record__note"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/MediaArchive.astro",
+    "line": 144,
+    "selector": ".media-record__meta"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/MediaArchive.astro",
+    "line": 147,
+    "selector": ".media-record__links"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/PageIntro.astro",
+    "line": 11,
+    "selector": ".page-intro"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/PageIntro.astro",
+    "line": 12,
+    "selector": ".page-intro__shade"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/PageIntro.astro",
+    "line": 13,
+    "selector": ".page-intro--compact .page-intro__shade"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/PageIntro.astro",
+    "line": 14,
+    "selector": ".page-intro__content"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/PageIntro.astro",
+    "line": 15,
+    "selector": ".page-intro__content::after"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/PageIntro.astro",
+    "line": 16,
+    "selector": ".page-intro .eyebrow"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/PageIntro.astro",
+    "line": 17,
+    "selector": ".page-intro h1"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/PageIntro.astro",
+    "line": 18,
+    "selector": ".page-intro p:not(.eyebrow)"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/PageIntro.astro",
+    "line": 19,
+    "selector": ".page-intro p a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/PageIntro.astro",
+    "line": 20,
+    "selector": ".page-intro__shade"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/PageIntro.astro",
+    "line": 20,
+    "selector": ".page-intro--compact .page-intro__shade"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ParentNav.astro",
+    "line": 17,
+    "selector": ".parent-nav"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ParentNav.astro",
+    "line": 18,
+    "selector": ".parent-nav a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ParentNav.astro",
+    "line": 19,
+    "selector": ".parent-nav a:hover, .parent-nav a:focus-visible"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 59,
+    "selector": ".project-showcase"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 65,
+    "selector": ".project-showcase__card"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 78,
+    "selector": ".project-showcase__card:hover,\n  .project-showcase__card:focus-visible"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 86,
+    "selector": ".project-showcase__preview"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 100,
+    "selector": ".project-showcase__preview::before,\n  .project-showcase__preview::after"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 109,
+    "selector": ".project-showcase__preview::before"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 117,
+    "selector": ".project-showcase__preview::after"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 127,
+    "selector": ".project-showcase__preview--image::before"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 138,
+    "selector": ".project-showcase__preview--image::after"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 148,
+    "selector": ".project-showcase__image"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 160,
+    "selector": ".project-showcase__card:hover .project-showcase__image,\n  .project-showcase__card:focus-visible .project-showcase__image"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 166,
+    "selector": ".project-showcase__chrome"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 181,
+    "selector": ".project-showcase__chrome > span"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 189,
+    "selector": ".project-showcase__chrome small"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 196,
+    "selector": ".project-showcase__brand"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 207,
+    "selector": ".project-showcase__brand strong"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 214,
+    "selector": ".project-showcase__brand span"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 223,
+    "selector": ".project-showcase__body"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 229,
+    "selector": ".project-showcase__body .eyebrow"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 233,
+    "selector": ".project-showcase__body h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 238,
+    "selector": ".project-showcase__body > p:not(.eyebrow)"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 245,
+    "selector": ".project-showcase__visit"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 252,
+    "selector": ".project-showcase__preview--war1812"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 257,
+    "selector": ".project-showcase__preview--judith"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 262,
+    "selector": ".project-showcase__preview--cmna"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 267,
+    "selector": ".project-showcase__preview--defenseor"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 272,
+    "selector": ".project-showcase__preview--dungeon"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 277,
+    "selector": ".project-showcase__preview--krigsvold"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 283,
+    "selector": ".project-showcase"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 289,
+    "selector": ".project-showcase"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 293,
+    "selector": ".project-showcase__preview"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 297,
+    "selector": ".project-showcase__brand"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ProjectShowcase.astro",
+    "line": 303,
+    "selector": ".project-showcase__card,\n    .project-showcase__image"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/RelatedPosts.astro",
+    "line": 29,
+    "selector": ".related-posts-section"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/RelatedPosts.astro",
+    "line": 30,
+    "selector": ".related-posts-more"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/RelatedPosts.astro",
+    "line": 33,
+    "selector": ".content .related-posts"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ResourceSubjects.astro",
+    "line": 20,
+    "selector": ".resource-subjects h2"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ResourceSubjects.astro",
+    "line": 21,
+    "selector": ".resource-subjects ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ResourceSubjects.astro",
+    "line": 22,
+    "selector": ".resource-subjects li + li::before"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ResourceSubjects.astro",
+    "line": 23,
+    "selector": ".resource-subjects a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ResourceSubjects.astro",
+    "line": 24,
+    "selector": ".resource-subjects a:hover, .resource-subjects a:focus-visible"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ResourceSubjects.astro",
+    "line": 26,
+    "selector": ".resource-subjects ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/ResourceSubjects.astro",
+    "line": 27,
+    "selector": ".resource-subjects li + li::before"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SectionNav.astro",
+    "line": 9,
+    "selector": ".section-nav"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SectionNav.astro",
+    "line": 10,
+    "selector": "ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SectionNav.astro",
+    "line": 11,
+    "selector": "a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SectionNav.astro",
+    "line": 12,
+    "selector": "a:hover"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SeriesContext.astro",
+    "line": 31,
+    "selector": ".series-context"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SeriesContext.astro",
+    "line": 32,
+    "selector": ".series-context__title"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SeriesContext.astro",
+    "line": 33,
+    "selector": ".series-context__title a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SeriesContext.astro",
+    "line": 34,
+    "selector": ".series-context .metadata"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SeriesContext.astro",
+    "line": 35,
+    "selector": ".series-context__links"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SeriesContext.astro",
+    "line": 36,
+    "selector": ".series-context__links :last-child"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SeriesContext.astro",
+    "line": 38,
+    "selector": ".series-context"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SeriesContext.astro",
+    "line": 39,
+    "selector": ".series-context__links"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteFooter.astro",
+    "line": 16,
+    "selector": ".site-footer"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteFooter.astro",
+    "line": 16,
+    "selector": ".footer-grid"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteFooter.astro",
+    "line": 16,
+    "selector": "h2"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteFooter.astro",
+    "line": 16,
+    "selector": "ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteFooter.astro",
+    "line": 16,
+    "selector": "li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteFooter.astro",
+    "line": 16,
+    "selector": ".social-list"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteFooter.astro",
+    "line": 16,
+    "selector": ".site-footer a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteFooter.astro",
+    "line": 16,
+    "selector": ".site-footer a:hover,.site-footer a:focus-visible"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteFooter.astro",
+    "line": 16,
+    "selector": ".footer-bottom"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteFooter.astro",
+    "line": 16,
+    "selector": ".footer-identity"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteFooter.astro",
+    "line": 16,
+    "selector": ".footer-identity img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteFooter.astro",
+    "line": 16,
+    "selector": ".footer-identity strong"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteFooter.astro",
+    "line": 16,
+    "selector": ".footer-grid"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteFooter.astro",
+    "line": 16,
+    "selector": ".social-list"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteFooter.astro",
+    "line": 16,
+    "selector": ".footer-bottom"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 66,
+    "selector": ".site-header"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 66,
+    "selector": ".site-header.is-ready"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 66,
+    "selector": ".site-header.is-scrolled,.site-header.is-menu-open"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 66,
+    "selector": ".header-inner"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 66,
+    "selector": ".brand"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 66,
+    "selector": ".brand img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 66,
+    "selector": "nav ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 66,
+    "selector": "nav a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 66,
+    "selector": "nav a::after"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 66,
+    "selector": "nav a:is([aria-current=page],.is-active-section),nav a:hover"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 66,
+    "selector": "nav a:is([aria-current=page],.is-active-section)::after,nav a:hover::after"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 66,
+    "selector": ".menu-button"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 67,
+    "selector": ".menu-button"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 67,
+    "selector": "nav"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 67,
+    "selector": "nav.is-open"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 67,
+    "selector": "nav ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 67,
+    "selector": "nav a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 67,
+    "selector": "nav a::after"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SiteHeader.astro",
+    "line": 68,
+    "selector": ".site-header,nav a::after"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectDirectory.astro",
+    "line": 23,
+    "selector": ".subject-directory"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectDirectory.astro",
+    "line": 24,
+    "selector": ".subject-directory :is(h2, h3)"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectDirectory.astro",
+    "line": 25,
+    "selector": ".subject-directory :is(h2, h3) a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectDirectory.astro",
+    "line": 26,
+    "selector": ".subject-directory p"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectDirectory.astro",
+    "line": 27,
+    "selector": ".subject-directory__families"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectDirectory.astro",
+    "line": 28,
+    "selector": ".subject-directory--compact"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectDirectory.astro",
+    "line": 29,
+    "selector": ".subject-directory--compact :is(h2, h3)"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectDirectory.astro",
+    "line": 30,
+    "selector": ".subject-directory--compact p"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectDirectory.astro",
+    "line": 31,
+    "selector": ".subject-directory"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectDirectory.astro",
+    "line": 33,
+    "selector": ".subject-directory > li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectDirectory.astro",
+    "line": 34,
+    "selector": ".subject-directory > li::before"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectLinks.astro",
+    "line": 28,
+    "selector": ".subject-links"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectLinks.astro",
+    "line": 29,
+    "selector": ":global(.section > .container > .subject-links:first-child), :global(.section > .reading-container > .subject-links:first-child)"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectLinks.astro",
+    "line": 30,
+    "selector": ".subject-links h2"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectLinks.astro",
+    "line": 31,
+    "selector": ".subject-links > p:not(.eyebrow)"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectLinks.astro",
+    "line": 32,
+    "selector": ".subject-links ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectLinks.astro",
+    "line": 33,
+    "selector": ".subject-links a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectLinks.astro",
+    "line": 35,
+    "selector": ".subject-links ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectLinks.astro",
+    "line": 36,
+    "selector": ".subject-links li + li::before"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectResourceGroup.astro",
+    "line": 25,
+    "selector": ".subject-resource-list"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectResourceGroup.astro",
+    "line": 26,
+    "selector": ".subject-resource-list h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectResourceGroup.astro",
+    "line": 27,
+    "selector": ".subject-resource-list h3 a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectResourceGroup.astro",
+    "line": 28,
+    "selector": ".subject-resource-list p"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectResourceGroup.astro",
+    "line": 29,
+    "selector": ".subject-resource-list__companion"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectResourceGroup.astro",
+    "line": 30,
+    "selector": ".subject-resource-list__meta"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectResourceGroup.astro",
+    "line": 32,
+    "selector": ".subject-resource-list > li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/SubjectResourceGroup.astro",
+    "line": 33,
+    "selector": ".subject-resource-list > li::before"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TableOfContents.astro",
+    "line": 6,
+    "selector": ".toc"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TableOfContents.astro",
+    "line": 6,
+    "selector": ".toc ol"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TableOfContents.astro",
+    "line": 6,
+    "selector": ".toc .depth-3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 33,
+    "selector": ".teaching-institution"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 34,
+    "selector": ".teaching-institution:first-of-type"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 35,
+    "selector": "h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 36,
+    "selector": "header .metadata"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 37,
+    "selector": "details"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 38,
+    "selector": "summary"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 39,
+    "selector": "summary::-webkit-details-marker"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 40,
+    "selector": ".course-heading"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 41,
+    "selector": ".course-code"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 42,
+    "selector": "strong"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 43,
+    "selector": ".course-documents"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 44,
+    "selector": ".course-toggle"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 45,
+    "selector": ".course-toggle::before"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 46,
+    "selector": "details[open] .course-toggle::before"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 47,
+    "selector": ".course-body"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 48,
+    "selector": ".course-body p"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 49,
+    "selector": ".course-body ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 50,
+    "selector": ".course-body a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 51,
+    "selector": ".teaching-institution--dark"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 52,
+    "selector": ".teaching-institution--dark h3, .teaching-institution--dark .course-code, .teaching-institution--dark .course-toggle, .teaching-institution--dark a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 53,
+    "selector": ".teaching-institution--dark details"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 54,
+    "selector": ".teaching-institution--dark strong"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 55,
+    "selector": ".teaching-institution--dark .metadata, .teaching-institution--dark .course-documents"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 56,
+    "selector": ".teaching-institution"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TeachingInstitution.astro",
+    "line": 57,
+    "selector": ".course-body ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 40,
+    "selector": ".tlmo-feature"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 41,
+    "selector": ".tlmo-feature__art"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 42,
+    "selector": ".tlmo-feature__curves"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 43,
+    "selector": ".tlmo-feature__art img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 44,
+    "selector": ".tlmo-feature__copy"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 45,
+    "selector": ".tlmo-feature__eyebrow"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 46,
+    "selector": ".tlmo-feature__title"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 47,
+    "selector": ".tlmo-feature__credit"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 48,
+    "selector": ".tlmo-feature__description"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 49,
+    "selector": ".tlmo-feature__actions"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 50,
+    "selector": ".tlmo-feature__button"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 51,
+    "selector": ".tlmo-feature__button:hover"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 52,
+    "selector": ".tlmo-feature__button span"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 53,
+    "selector": ".tlmo-feature__record"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 54,
+    "selector": ".tlmo-feature__record:hover"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 55,
+    "selector": ".tlmo-feature--compact"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 56,
+    "selector": ".tlmo-feature--compact .tlmo-feature__art"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 57,
+    "selector": ".tlmo-feature--compact .tlmo-feature__art img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 58,
+    "selector": ".tlmo-feature--compact .tlmo-feature__title"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 60,
+    "selector": ".tlmo-feature, .tlmo-feature--compact"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 61,
+    "selector": ".tlmo-feature__art"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 62,
+    "selector": ".tlmo-feature__art img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 63,
+    "selector": ".tlmo-feature__copy"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 66,
+    "selector": ".tlmo-feature"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 67,
+    "selector": ".tlmo-feature__art, .tlmo-feature--compact .tlmo-feature__art"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 68,
+    "selector": ".tlmo-feature__art img, .tlmo-feature--compact .tlmo-feature__art img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 69,
+    "selector": ".tlmo-feature__title"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/TLMOFeature.astro",
+    "line": 70,
+    "selector": ".tlmo-feature__actions"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingDirectory.astro",
+    "line": 24,
+    "selector": ".writing-directory"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingDirectory.astro",
+    "line": 25,
+    "selector": ".writing-directory :is(h2, h3)"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingDirectory.astro",
+    "line": 26,
+    "selector": ".writing-directory :is(h2, h3) a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingDirectory.astro",
+    "line": 27,
+    "selector": ".writing-directory p"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingDirectory.astro",
+    "line": 28,
+    "selector": ".writing-directory .metadata"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingDirectory.astro",
+    "line": 29,
+    "selector": ".writing-directory--light :is(h2, h3) a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingDirectory.astro",
+    "line": 30,
+    "selector": ".writing-directory--light p"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingDirectory.astro",
+    "line": 31,
+    "selector": ".writing-directory--light .metadata"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingDirectory.astro",
+    "line": 32,
+    "selector": ".writing-directory"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingDirectory.astro",
+    "line": 34,
+    "selector": ".writing-directory > li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingDirectory.astro",
+    "line": 35,
+    "selector": ".writing-directory > li::before"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingDirectory.astro",
+    "line": 36,
+    "selector": ".writing-directory--light > li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingLinks.astro",
+    "line": 21,
+    "selector": ".writing-links"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingLinks.astro",
+    "line": 22,
+    "selector": ".writing-links ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingLinks.astro",
+    "line": 23,
+    "selector": ".writing-links a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingLinks.astro",
+    "line": 24,
+    "selector": ".writing-links a:hover, .writing-links a:focus-visible, .writing-links a[aria-current='page'], .writing-links a.is-active-section"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingLinks.astro",
+    "line": 26,
+    "selector": ".writing-links .container"
+  },
+  {
+    "family": "martlet",
+    "file": "src/components/WritingLinks.astro",
+    "line": 27,
+    "selector": ".writing-links ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 1,
+    "selector": ".article-shell"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 2,
+    "selector": ".article-shell--flush"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 3,
+    "selector": ".content"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 4,
+    "selector": ".article-shell--wide .content"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 5,
+    "selector": ".content > :first-child"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 6,
+    "selector": ".content h2"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 7,
+    "selector": ".content h2::after"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 8,
+    "selector": ".content h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 9,
+    "selector": ".content img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 10,
+    "selector": ".content::after"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 11,
+    "selector": ".content table"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 12,
+    "selector": ".content hr"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 13,
+    "selector": ".content :not(pre) > code"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 15,
+    "selector": ".toc, .page-toc"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 16,
+    "selector": ".toc h2, .page-toc h2"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 17,
+    "selector": ".toc ol, .page-toc ol, .page-toc ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 19,
+    "selector": ".toc li, .page-toc li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 20,
+    "selector": ".toc a, .page-toc a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 22,
+    "selector": ".content .section-heading"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 23,
+    "selector": ".content .section-heading h2, .content .section-heading h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 24,
+    "selector": ".content .section-heading h2::after"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 25,
+    "selector": ".content .jh-card h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 26,
+    "selector": ".content .section-heading--left"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 27,
+    "selector": ".content :is(h2, h3), .content .section-heading"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 29,
+    "selector": ".content .content-figure"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 30,
+    "selector": ".content .content-figure--left"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 31,
+    "selector": ".content .content-figure--right"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 32,
+    "selector": ".content .content-figure img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 33,
+    "selector": ".content .image-border"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 34,
+    "selector": ".content figcaption"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 35,
+    "selector": ".content-figure--w-25"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 36,
+    "selector": ".content-figure--w-30"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 37,
+    "selector": ".content-figure--w-33"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 38,
+    "selector": ".content-figure--w-40"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 39,
+    "selector": ".content-figure--w-50"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 40,
+    "selector": ".content-figure--w-67"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 41,
+    "selector": ".content-figure--w-75"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 42,
+    "selector": ".content-figure--w-100"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 43,
+    "selector": ".content .content-figure--primary"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 44,
+    "selector": ".content .content-figure--documentary"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 45,
+    "selector": ".content .content-figure--supporting"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 46,
+    "selector": ".content .content-figure--emblem"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 47,
+    "selector": ".content .content-figure--portrait"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 48,
+    "selector": ".content .content-figure--gallery"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 50,
+    "selector": ".embed"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 51,
+    "selector": ".embed--video"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 52,
+    "selector": ".embed--video iframe, .embed--document iframe"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 53,
+    "selector": ".embed--document"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 54,
+    "selector": ".inset"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 55,
+    "selector": ".related-posts"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 56,
+    "selector": ".related-posts h2"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 57,
+    "selector": ".related-posts h2::after"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 58,
+    "selector": ".related-posts p"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 59,
+    "selector": ".document-action, .embed-link"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 60,
+    "selector": ".document-embed"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 61,
+    "selector": ".document-embed iframe"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 62,
+    "selector": ".content-callout"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 63,
+    "selector": ".content-callout h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 65,
+    "selector": ".book-detail-hero"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 66,
+    "selector": ".book-detail-hero > img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 67,
+    "selector": ".facts"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 68,
+    "selector": ".facts div"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 69,
+    "selector": ".facts dd"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 71,
+    "selector": ".content-section"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 72,
+    "selector": ".content-section::after"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 73,
+    "selector": ".content-grid"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 74,
+    "selector": ".content-grid--center"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 75,
+    "selector": ".content-grid__item"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 76,
+    "selector": ".content-grid__item--full"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 77,
+    "selector": ".content-grid__item--wide"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 78,
+    "selector": ".content-grid__item--half"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 79,
+    "selector": ".content-grid__item--third"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 80,
+    "selector": ".content-grid__item--quarter"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 81,
+    "selector": ".content-grid__item--narrow"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 82,
+    "selector": ".content-float-right"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 83,
+    "selector": ".content-float-left"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 85,
+    "selector": ".content-float-right.content-grid__item--wide, .content-float-left.content-grid__item--wide"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 86,
+    "selector": ".content-float-right.content-grid__item--half, .content-float-left.content-grid__item--half"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 87,
+    "selector": ".content-float-right.content-grid__item--third, .content-float-left.content-grid__item--third"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 88,
+    "selector": ".content-float-right.content-grid__item--quarter, .content-float-left.content-grid__item--quarter"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 89,
+    "selector": ".content-float-right.content-grid__item--narrow, .content-float-left.content-grid__item--narrow"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 90,
+    "selector": ".figure-group"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 91,
+    "selector": ".figure-group--one"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 92,
+    "selector": ".figure-group--two"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 93,
+    "selector": ".figure-group--three"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 94,
+    "selector": ".figure-group--third-wide"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 95,
+    "selector": ".content .figure-group > figure, .content .figure-group > .content-figure"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 96,
+    "selector": ".content .figure-group > figure figcaption, .content .figure-group > .content-figure figcaption"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 97,
+    "selector": ".figure-group--framed > figure, .figure-group--framed > .content-figure"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 98,
+    "selector": ".figure-group--uniform img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 99,
+    "selector": ".figure-group--landscape img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 102,
+    "selector": ".content-flow"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 103,
+    "selector": ".content-flow [id]"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 104,
+    "selector": ".content-flow > :is(.content-preface, .content-chapter, .content-band)"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 105,
+    "selector": ".content-flow .content-section"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 106,
+    "selector": ".content-flow :is(.content-preface, .content-chapter, .content-band) > .section-heading:first-child,\n.content-flow :is(.content-preface, .content-chapter, .content-band) > .content-section > .section-heading:first-child"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 108,
+    "selector": ".content-preface"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 109,
+    "selector": ".content-lead"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 110,
+    "selector": ".content-band"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 111,
+    "selector": ".content-band--navy"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 112,
+    "selector": ".content-band--cream"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 113,
+    "selector": ".content-band--soft"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 114,
+    "selector": ".content-band--navy :is(h2, h3, h4, a)"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 115,
+    "selector": ".content-band--navy .section-heading--gold :is(h2, h3)"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 116,
+    "selector": ".content-band--navy .section-heading__description, .content-band--navy .metadata"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 117,
+    "selector": ".content-band--navy figcaption"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 118,
+    "selector": ".content-band--navy .jh-card:not(.jh-card--dark) :is(h2, h3, h4)"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 119,
+    "selector": ".content-band--navy .jh-card:not(.jh-card--dark) a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 120,
+    "selector": ".content-band--navy .jh-card:not(.jh-card--dark) .metadata"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 121,
+    "selector": ".content-band::after, .content-chapter::after, .content-preface::after"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 122,
+    "selector": ".page-toc--inline"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 123,
+    "selector": ".page-toc--inline ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 124,
+    "selector": ".page-toc--inline li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 125,
+    "selector": ".media-fact-grid"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 126,
+    "selector": ".media-fact-grid__media"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 127,
+    "selector": ".media-fact-grid__media > figure"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 128,
+    "selector": ".content .media-fact-grid__media > .content-figure"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 129,
+    "selector": ".fact-panel"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 130,
+    "selector": ".fact-panel h2"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 131,
+    "selector": ".fact-panel h2::after"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 132,
+    "selector": ".fact-panel .link-row"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 133,
+    "selector": ".details-list--grid"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 134,
+    "selector": ".details-list--grid > div"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 135,
+    "selector": ".details-list--grid dd"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 136,
+    "selector": ".timeline"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 137,
+    "selector": ".timeline > div"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 138,
+    "selector": ".timeline dt"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 139,
+    "selector": ".content-band--navy .timeline dt"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 140,
+    "selector": ".timeline dd"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 141,
+    "selector": ".document-grid, .content-columns"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 142,
+    "selector": ".content-stack"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 143,
+    "selector": ".content-stack > section"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 144,
+    "selector": ".content-stack > section > h3:first-child"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 145,
+    "selector": ".document-record"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 146,
+    "selector": ".document-record h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 147,
+    "selector": ".document-figure"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 148,
+    "selector": ".document-figure img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 149,
+    "selector": ".document-figure--compact"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 150,
+    "selector": ".document-figure--centered"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 151,
+    "selector": ".back-link"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 152,
+    "selector": ".fragment-target"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 153,
+    "selector": ".supporting-figure"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 154,
+    "selector": ".documentary-figure"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 155,
+    "selector": ".content-center"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 156,
+    "selector": ".content-image"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 157,
+    "selector": ".credential-grid"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 158,
+    "selector": ".text-center"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 159,
+    "selector": ".color-swatch"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 160,
+    "selector": ".color-swatch--white"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 161,
+    "selector": ".color-swatch--light-blue"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 162,
+    "selector": ".color-swatch--medium-blue"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 163,
+    "selector": ".color-swatch--dark-blue"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 164,
+    "selector": ".color-swatch--gold"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 165,
+    "selector": ".color-swatch--dark-gold"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 166,
+    "selector": ".color-swatch--light-yellow"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 168,
+    "selector": ".ribbonrack"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 169,
+    "selector": ".ribbon-grid"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 170,
+    "selector": ".ribbon-grid .ribbon"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 171,
+    "selector": ".ribbon-grid img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 173,
+    "selector": ".content-lightbox"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 174,
+    "selector": ".content-lightbox::backdrop"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 175,
+    "selector": ".content-lightbox button"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 176,
+    "selector": ".content-lightbox figure"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 177,
+    "selector": ".content-lightbox img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 178,
+    "selector": ".content-lightbox figcaption"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 179,
+    "selector": ".content [data-gallery-src]"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 180,
+    "selector": ".footnotes"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 181,
+    "selector": ".katex-display"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 184,
+    "selector": ".content .content-figure--left, .content .content-figure--right, .inset, .content .content-float-right, .content .content-float-left"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 185,
+    "selector": ".content .content-figure--gallery"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 186,
+    "selector": ".toc ol, .page-toc ol, .page-toc ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 187,
+    "selector": ".book-detail-hero, .facts, .credential-grid, .media-fact-grid, .details-list--grid, .document-grid, .content-columns"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 188,
+    "selector": ".content-grid__item"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 189,
+    "selector": ".figure-group--two, .figure-group--three, .figure-group--third-wide"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 190,
+    "selector": ".timeline > div"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 191,
+    "selector": ".ribbon-grid"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 195,
+    "selector": ".book-detail-hero, .credential-grid, .media-fact-grid, .document-grid, .content-columns, .figure-group--two, .figure-group--three, .figure-group--third-wide"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 196,
+    "selector": ".content-grid__item"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 197,
+    "selector": ".content .content-figure--left, .content .content-figure--right, .inset, .content .content-float-right, .content .content-float-left"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/content.css",
+    "line": 198,
+    "selector": ".book-detail-hero > img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 1,
+    "selector": ".document-layout"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 8,
+    "selector": ".document-reading"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 9,
+    "selector": ".page-index"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 19,
+    "selector": ".page-index ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 20,
+    "selector": ".page-index li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 21,
+    "selector": ".page-index a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 22,
+    "selector": ".page-index a:hover"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 23,
+    "selector": ".page-index .page-index__section"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 24,
+    "selector": ".page-index .page-index__section:first-child"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 27,
+    "selector": ".content--document > :is(p, ul, ol)"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 28,
+    "selector": ".content--document > :is(h2, h3)"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 29,
+    "selector": ".content--document .section-heading"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 30,
+    "selector": ".content--document .section-heading__description"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 31,
+    "selector": ".content--document .section-heading .heading-divider"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 32,
+    "selector": ".content--document .section-heading .heading-divider img,\n.content--document .section-heading .heading-divider__rule:last-child"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 34,
+    "selector": ".content--document .section-heading .heading-divider__rule"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 35,
+    "selector": ".content--document .content-figure--documentary,\n.content--document .documentary-figure"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 37,
+    "selector": ".content--document .content-preface"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 38,
+    "selector": ".content--document .content-lead"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 39,
+    "selector": ".content--document :is(h4, h5)"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 40,
+    "selector": ".content--document .page-toc"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 41,
+    "selector": ".content--document .page-toc > a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 42,
+    "selector": ".content--document .page-toc > :is(ul, ol)"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 43,
+    "selector": ".content--document .page-toc--inline, .content--document .page-toc--inline ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 45,
+    "selector": ".content--about .about-introduction"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 51,
+    "selector": ".content--about .about-introduction > .content-figure"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 58,
+    "selector": ".content--about .about-introduction > p"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 59,
+    "selector": ".content--about .about-introduction > p:first-of-type"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 60,
+    "selector": ".content--about .about-introduction img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 61,
+    "selector": ".content--about .about-credentials"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 62,
+    "selector": ".content--about .about-credentials > h2"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 63,
+    "selector": ".content--about .about-credentials li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 64,
+    "selector": ".content--about .about-credentials li li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 65,
+    "selector": ".content--about .credential-grid"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 66,
+    "selector": ".content--about .credential-grid > section"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 67,
+    "selector": ".content--about .credential-grid h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 68,
+    "selector": ".content--about .credential-grid ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 69,
+    "selector": ".content--about .figure-group"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 70,
+    "selector": ".content--consulting .consulting-capabilities"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 71,
+    "selector": ".content--consulting .consulting-capabilities > h2"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 72,
+    "selector": ".content--consulting .consulting-capabilities h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 73,
+    "selector": ".content--consulting .consulting-contact"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 74,
+    "selector": ".content--consulting .consulting-contact h2"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 75,
+    "selector": ".content--consulting .consulting-contact a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 76,
+    "selector": ".content--consulting .consulting-contact a:hover"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 79,
+    "selector": ".document-layout"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 80,
+    "selector": ".page-index"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 81,
+    "selector": ".page-index ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 82,
+    "selector": ".page-index li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 85,
+    "selector": ".content--about .about-introduction"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 86,
+    "selector": ".content--about .about-introduction > .content-figure"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 87,
+    "selector": ".content--about .figure-group img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 90,
+    "selector": ".page-index ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/document-pages.css",
+    "line": 91,
+    "selector": ".content--consulting .consulting-capabilities"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 3,
+    "selector": "*, *::before, *::after"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 4,
+    "selector": "html"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 5,
+    "selector": "body, body.martlet"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 6,
+    "selector": "img, svg, video, iframe"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 7,
+    "selector": "img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 8,
+    "selector": "a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 9,
+    "selector": "a:hover"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 10,
+    "selector": ":focus-visible"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 11,
+    "selector": "h1, h2, h3, h4, h5, h6"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 12,
+    "selector": "h1, h2, h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 13,
+    "selector": "h1"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 14,
+    "selector": "h2"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 15,
+    "selector": "h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 16,
+    "selector": "p, li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 17,
+    "selector": "code, pre, kbd, samp"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 18,
+    "selector": "pre"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 19,
+    "selector": "table"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 20,
+    "selector": "th, td"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 21,
+    "selector": "thead th"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 22,
+    "selector": "blockquote"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 23,
+    "selector": "label"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 24,
+    "selector": "input, select, textarea"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 25,
+    "selector": "button"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 27,
+    "selector": ".container, .reading-container, .archive-container"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 28,
+    "selector": ".reading-container"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 29,
+    "selector": ".archive-container"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 30,
+    "selector": ".skip-link"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 31,
+    "selector": ".skip-link:focus"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 32,
+    "selector": ".eyebrow"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 33,
+    "selector": ".metadata"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 34,
+    "selector": ".section"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 35,
+    "selector": ".section--navy"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 36,
+    "selector": ".section--navy h2, .section--navy h3, .section--navy a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 37,
+    "selector": ".section--soft"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 38,
+    "selector": ".section--cream"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 40,
+    "selector": ".section-heading"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 41,
+    "selector": ".section-heading h2, .section-heading h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 42,
+    "selector": ".section-heading--left"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 43,
+    "selector": ".section-heading--left .section-heading__description"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 44,
+    "selector": ".section-heading--left .heading-divider"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 45,
+    "selector": ".section-heading--left .heading-divider img, .section-heading--left .heading-divider__rule:last-child"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 46,
+    "selector": ".section-heading--left .heading-divider__rule"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 47,
+    "selector": ".section-heading--light .eyebrow"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 48,
+    "selector": ".section-heading__description"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 49,
+    "selector": ".section-heading--light h2, .section-heading--light h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 50,
+    "selector": ".section-heading--light .section-heading__description"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 51,
+    "selector": ".heading-divider"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 52,
+    "selector": ".heading-divider__rule"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 53,
+    "selector": ".heading-divider img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 54,
+    "selector": ".heading-divider--gold"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 55,
+    "selector": ".heading-divider--light"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 56,
+    "selector": ".heading-divider--compact"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 57,
+    "selector": ".heading-divider--compact img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 59,
+    "selector": ".card-grid, .record-grid, .book-grid"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 60,
+    "selector": ".record-grid, .book-grid"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 61,
+    "selector": ".jh-card"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 62,
+    "selector": ".jh-card__media"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 63,
+    "selector": ".jh-card__media img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 64,
+    "selector": ".jh-card:hover .jh-card__media img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 65,
+    "selector": ".jh-card__body"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 66,
+    "selector": ".jh-card :is(h2, h3)"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 67,
+    "selector": ".jh-card__body > :last-child"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 68,
+    "selector": ".jh-card :is(h2, h3) a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 69,
+    "selector": ".jh-card :is(h2, h3) a:hover, .jh-card :is(h2, h3) a:focus-visible"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 70,
+    "selector": ".data-card"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 71,
+    "selector": ".jh-card--compact .jh-card__body"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 72,
+    "selector": ".jh-card--featured"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 73,
+    "selector": ".jh-card--dark"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 74,
+    "selector": ".jh-card--dark :is(h2, h3), .jh-card--dark :is(h2, h3) a, .jh-card--dark a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 75,
+    "selector": ".jh-card--dark :is(h2, h3) a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 76,
+    "selector": ".data-card.jh-card--dark"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 77,
+    "selector": ".jh-card--dark .metadata"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 78,
+    "selector": ".book-card"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 79,
+    "selector": ".book-card .jh-card__media"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 80,
+    "selector": ".book-card .jh-card__media img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 81,
+    "selector": ".book-card .jh-card__body"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 83,
+    "selector": ".blog-archive"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 84,
+    "selector": ".blog-archive .post-card"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 85,
+    "selector": ".blog-archive .jh-card__body"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 86,
+    "selector": ".blog-archive .post-card--lead"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 87,
+    "selector": ".blog-archive .post-card--lead .jh-card__media"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 88,
+    "selector": ".blog-archive .post-card--lead :is(h2, h3)"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 89,
+    "selector": ".blog-archive .post-card--lead .jh-card__body"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 91,
+    "selector": ".link-row"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 92,
+    "selector": ".pill-list"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 93,
+    "selector": ".pill-list a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 94,
+    "selector": ".button"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 95,
+    "selector": ".button:hover"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 96,
+    "selector": ".control-grid"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 97,
+    "selector": ".control-grid > div"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 98,
+    "selector": ".details-list"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 99,
+    "selector": ".details-list > div"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 100,
+    "selector": ".details-list dt"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 101,
+    "selector": ".details-list dd"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 102,
+    "selector": ".pagination"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 103,
+    "selector": ".visually-hidden"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 106,
+    "selector": ".card-grid"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 109,
+    "selector": "body"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 110,
+    "selector": ".section"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 111,
+    "selector": ".card-grid, .record-grid, .book-grid, .control-grid"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 112,
+    "selector": ".book-card"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 113,
+    "selector": ".blog-archive .post-card--lead"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 114,
+    "selector": ".details-list > div"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 115,
+    "selector": ".pagination"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 118,
+    "selector": ".book-card"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 119,
+    "selector": ".book-card .jh-card__media"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 120,
+    "selector": ".book-card .jh-card__media img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 123,
+    "selector": ".card-grid, .record-grid, .book-grid, .control-grid"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 124,
+    "selector": ".blog-archive .post-card--lead"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 127,
+    "selector": "html"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 128,
+    "selector": "*, *::before, *::after"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 132,
+    "selector": ".section-heading.martlet-section-heading"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/global.css",
+    "line": 133,
+    "selector": ".section-heading--left.martlet-section-heading"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 1,
+    "selector": ".content .scholarship-selected"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 2,
+    "selector": ".content .scholarship-selected > h2"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 3,
+    "selector": ".content .scholarship-topic"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 9,
+    "selector": ".content .scholarship-topic h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 14,
+    "selector": ".content .scholarship-topic p"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 15,
+    "selector": ".content .scholarship-topic > :last-child"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 16,
+    "selector": ".content .scholarship-topic strong > a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 17,
+    "selector": ".content .scholarship-topic strong > a:hover"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 18,
+    "selector": ".content .scholarship-cover"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 23,
+    "selector": ".content .scholarship-cover a"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 24,
+    "selector": ".content .scholarship-cover img"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 25,
+    "selector": ".content .scholarship-topic:has(.scholarship-cover) > p ~ p"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 27,
+    "selector": ".content .scholarship-record"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 32,
+    "selector": ".content .scholarship-record > h2"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 33,
+    "selector": ".content .scholarship-record h3"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 34,
+    "selector": ".content .scholarship-record h4"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 38,
+    "selector": ".content .scholarship-record ul"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 39,
+    "selector": ".content .scholarship-record li"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 40,
+    "selector": ".content .scholarship-record li::marker"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 43,
+    "selector": ".content .scholarship-selected"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 44,
+    "selector": ".content .scholarship-topic"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 45,
+    "selector": ".content .scholarship-cover"
+  },
+  {
+    "family": "martlet",
+    "file": "src/styles/scholarship.css",
+    "line": 46,
+    "selector": ".content .scholarship-record"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 3,
+    "selector": "html"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 4,
+    "selector": "body"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 12,
+    "selector": "p, li"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 13,
+    "selector": "a"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 14,
+    "selector": "a:hover"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 15,
+    "selector": "img"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 17,
+    "selector": ".skip-link"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 26,
+    "selector": ".skip-link:focus"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 28,
+    "selector": ".nav-shell"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 34,
+    "selector": ".site-navbar"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 43,
+    "selector": ".site-navbar .navbar-brand"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 52,
+    "selector": ".site-navbar .navbar-brand img"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 53,
+    "selector": ".site-navbar .nav-link,\n.site-navbar button.nav-link"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 63,
+    "selector": ".site-navbar .nav-link:hover,\n.site-navbar .nav-link:focus"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 65,
+    "selector": ".site-navbar .nav-caret"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 66,
+    "selector": ".site-navbar .navbar-toggler"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 67,
+    "selector": ".site-navbar .navbar-toggler .navbar-toggler-bar"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 68,
+    "selector": ".site-navbar .dropdown-menu"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 75,
+    "selector": ".site-navbar .dropdown-menu::before"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 91,
+    "selector": ".site-navbar .dropdown-item"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 97,
+    "selector": ".site-navbar .dropdown-item:hover"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 98,
+    "selector": ".site-search"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 105,
+    "selector": ".site-search input"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 117,
+    "selector": ".site-search input::placeholder"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 118,
+    "selector": ".site-search input:focus"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 119,
+    "selector": ".site-search button"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 120,
+    "selector": ".site-search button svg"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 122,
+    "selector": ".eyebrow"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 130,
+    "selector": ".home-hero"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 139,
+    "selector": ".home-hero__veil"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 144,
+    "selector": ".home-hero__content"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 145,
+    "selector": ".home-hero h1"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 156,
+    "selector": ".home-hero__lede"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 163,
+    "selector": ".home-hero__identity"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 169,
+    "selector": ".home-hero__arms"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 170,
+    "selector": ".home-hero__title"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 180,
+    "selector": ".home-hero__title span"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 181,
+    "selector": ".btn"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 182,
+    "selector": ".btn-ice"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 183,
+    "selector": ".btn-ice:hover"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 184,
+    "selector": ".btn-dark-blue"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 185,
+    "selector": ".btn-dark-blue:hover"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 188,
+    "selector": ".home-hero .btn-outline-light"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 189,
+    "selector": ".home-hero .btn-outline-light:hover,\n.home-hero .btn-outline-light:focus-visible"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 192,
+    "selector": ".status-note"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 193,
+    "selector": ".status-note .lead"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 194,
+    "selector": ".quiet-link"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 195,
+    "selector": ".section-block"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 196,
+    "selector": ".section-heading h2,\n.section-block h2,\n.fellow-feature h2"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 205,
+    "selector": ".work-card"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 206,
+    "selector": ".work-card__number"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 207,
+    "selector": ".work-card h3"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 208,
+    "selector": ".work-card p"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 210,
+    "selector": ".fellow-feature"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 211,
+    "selector": ".fellow-feature .container"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 212,
+    "selector": ".fellow-feature__image"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 213,
+    "selector": ".fellow-feature__body"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 214,
+    "selector": ".fellow-feature__body .lead"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 216,
+    "selector": ".evidence"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 217,
+    "selector": ".metric"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 218,
+    "selector": ".metric__value"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 219,
+    "selector": ".metric h3"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 220,
+    "selector": ".metric p"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 221,
+    "selector": ".metric__source"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 223,
+    "selector": ".geography"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 224,
+    "selector": ".geography img"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 225,
+    "selector": ".geography h2, .geography .quiet-link"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 226,
+    "selector": ".geography .eyebrow"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 227,
+    "selector": ".record-preview"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 228,
+    "selector": ".record-preview__figure"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 229,
+    "selector": ".record-preview hr"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 231,
+    "selector": ".page-masthead"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 241,
+    "selector": ".page-masthead--plain"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 242,
+    "selector": ".page-masthead__veil"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 243,
+    "selector": ".page-masthead .container"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 244,
+    "selector": ".page-masthead h1"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 245,
+    "selector": ".page-masthead__subtitle"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 246,
+    "selector": ".page-shell"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 247,
+    "selector": ".editorial-content"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 248,
+    "selector": ".editorial-content > p:first-of-type"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 249,
+    "selector": ".editorial-content h2"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 250,
+    "selector": ".editorial-content h3"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 251,
+    "selector": ".editorial-content p, .editorial-content li"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 252,
+    "selector": ".editorial-content a"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 253,
+    "selector": ".editorial-content blockquote"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 254,
+    "selector": ".editorial-content blockquote p"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 255,
+    "selector": ".editorial-content table"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 256,
+    "selector": ".editorial-content th, .editorial-content td"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 257,
+    "selector": ".editorial-content th"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 258,
+    "selector": ".review-note"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 259,
+    "selector": ".featured-img"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 260,
+    "selector": "article figure"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 261,
+    "selector": ".figure-img"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 262,
+    "selector": ".img-border"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 263,
+    "selector": ".images-caption"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 264,
+    "selector": ".pull-right"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 266,
+    "selector": ".briefing-grid"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 267,
+    "selector": ".briefing-card"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 268,
+    "selector": ".briefing-card img"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 269,
+    "selector": ".briefing-card h2"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 270,
+    "selector": ".briefing-card h2 a"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 271,
+    "selector": ".fellows-list"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 272,
+    "selector": ".fellow-listing"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 273,
+    "selector": ".fellow-listing__year"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 274,
+    "selector": ".fellow-listing h2"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 275,
+    "selector": ".fellow-facts"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 276,
+    "selector": ".fellow-facts dt"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 277,
+    "selector": ".fellow-facts dd"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 278,
+    "selector": ".news-list"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 279,
+    "selector": ".news-listing"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 280,
+    "selector": ".news-listing__image img"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 281,
+    "selector": ".news-listing h2"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 282,
+    "selector": ".news-listing h2 a"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 283,
+    "selector": ".pagination"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 284,
+    "selector": ".site-search-input"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 285,
+    "selector": ".result-line"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 286,
+    "selector": ".result-line h2"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 287,
+    "selector": ".search-meta"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 288,
+    "selector": ".search-preview b"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 290,
+    "selector": ".site-footer"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 291,
+    "selector": ".site-footer a"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 292,
+    "selector": ".footer-owner"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 293,
+    "selector": ".footer-owner__badge"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 294,
+    "selector": ".footer-owner__site"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 295,
+    "selector": ".footer-owner__byline"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 296,
+    "selector": ".site-footer h2"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 297,
+    "selector": ".site-footer ul"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 298,
+    "selector": ".site-footer li"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 299,
+    "selector": ".site-footer li a"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 300,
+    "selector": ".site-footer__base"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 302,
+    "selector": ".accordion"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 303,
+    "selector": ".search-box"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 304,
+    "selector": ".title-area"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 305,
+    "selector": ".title-area h2"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 306,
+    "selector": ".basu-howard-flag"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 309,
+    "selector": ".nav-shell"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 310,
+    "selector": ".site-navbar"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 311,
+    "selector": ".site-navbar .navbar-toggler"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 318,
+    "selector": ".site-navbar .navbar-toggler-icon"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 324,
+    "selector": ".site-navbar .navbar-toggler .navbar-toggler-bar"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 332,
+    "selector": ".site-navbar .navbar-toggler .bar1"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 333,
+    "selector": ".site-navbar .navbar-toggler .bar2"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 334,
+    "selector": ".site-navbar .navbar-toggler .bar3"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 335,
+    "selector": ".site-navbar .navbar-toggler[aria-expanded=\"true\"] .bar1"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 336,
+    "selector": ".site-navbar .navbar-toggler[aria-expanded=\"true\"] .bar2"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 337,
+    "selector": ".site-navbar .navbar-toggler[aria-expanded=\"true\"] .bar3"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 338,
+    "selector": ".site-navbar .navbar-collapse"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 339,
+    "selector": ".site-navbar .nav-link, .site-navbar button.nav-link"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 340,
+    "selector": ".site-navbar .navbar-collapse .navbar-nav .nav-item.dropdown .dropdown-menu"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 353,
+    "selector": ".site-navbar .navbar-collapse .dropdown-menu::before"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 354,
+    "selector": ".site-navbar .navbar-collapse .dropdown-item"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 360,
+    "selector": ".site-navbar .navbar-collapse .dropdown-item:hover,\n  .site-navbar .navbar-collapse .dropdown-item:focus"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 365,
+    "selector": ".site-search"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 366,
+    "selector": ".home-hero"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 367,
+    "selector": ".fellow-feature__image"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 370,
+    "selector": ".home-hero h1"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 371,
+    "selector": ".status-note, .section-block"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 372,
+    "selector": ".briefing-card"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 373,
+    "selector": ".briefing-card img"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 374,
+    "selector": ".fellow-listing"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 375,
+    "selector": ".news-listing"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 376,
+    "selector": ".page-masthead"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 377,
+    "selector": ".pull-right"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 378,
+    "selector": ".site-footer__base"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 381,
+    "selector": ".site-navbar"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 382,
+    "selector": ".site-navbar .navbar-brand"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 387,
+    "selector": ".site-navbar .navbar-brand img"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 388,
+    "selector": ".site-navbar .navbar-toggler"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 394,
+    "selector": "html"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 395,
+    "selector": "*, *::before, *::after"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 399,
+    "selector": "body.krigsvold"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 400,
+    "selector": ".krigsvold-faq summary"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 401,
+    "selector": ".krigsvold-faq summary::after"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 402,
+    "selector": ".krigsvold-faq[open] summary::after"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 403,
+    "selector": ".krigsvold-faq summary::-webkit-details-marker"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 404,
+    "selector": ".krigsvold-faq summary"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 405,
+    "selector": ".krigsvold-faq[open] .accordion-body"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 406,
+    "selector": ".nav-shell, .nav-shell .container, .site-navbar, .navbar-brand, .navbar-brand span, .navbar-collapse, main, article"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 407,
+    "selector": ".site-navbar .navbar-brand span"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 408,
+    "selector": ".site-navbar .navbar-brand"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 409,
+    "selector": ".site-navbar .navbar-toggler"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 410,
+    "selector": ".editorial-content :where(pre, table)"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 411,
+    "selector": ".editorial-content pre"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 412,
+    "selector": ".editorial-content table"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 413,
+    "selector": ".page-masthead h1"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 413,
+    "selector": ".home-hero h1"
+  },
+  {
+    "family": "krigsvold",
+    "file": "src/styles/site.css",
+    "line": 413,
+    "selector": ".site-footer a"
+  }
+]

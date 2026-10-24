@@ -1,0 +1,10 @@
+/* Task composition only. Source article, contents, field and control anatomy stay in the package. */
+.field-guide-main { max-inline-size: 86rem; margin-inline: auto; padding: var(--martlet-page-gutter); }
+.field-guide-annotation { margin-block: var(--martlet-group-gap); padding: var(--martlet-group-gap); background: var(--ui-surface); font: .94rem/1.65 var(--martlet-font-sans); }
+.field-guide-annotation > * + * { margin-block-start: var(--martlet-field-gap); }
+.field-guide-form { display: grid; gap: var(--martlet-group-gap); font: 1rem/1.5 var(--martlet-font-sans); }
+.field-guide-fields { display: grid; gap: var(--martlet-group-gap); max-inline-size: 32rem; }
+.field-guide-actions { display: flex; flex-wrap: wrap; gap: var(--martlet-field-gap); }
+.field-guide[data-text-size="large"] .martlet-prose { font-size: 1.25rem; }
+.field-guide :where(h2, h3, aside, sup a) { scroll-margin-block-start: 6rem; }
+@media print { .field-guide-form { display: none; } }

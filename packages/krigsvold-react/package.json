@@ -1,0 +1,44 @@
+{
+  "name": "@krigsvold/react",
+  "version": "0.1.0",
+  "description": "Krigsvold experimental React components, developed in a working component registry",
+  "type": "module",
+  "license": "MIT",
+  "private": true,
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "NOTICE.md",
+    "CHANGELOG.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
+  "dependencies": {
+    "@krigsvold/theme": "2.1.0"
+  },
+  "scripts": {
+    "build": "node ../../scripts/clean-package.mjs krigsvold && tsc -p tsconfig.json && node ../../scripts/copy-styles.mjs krigsvold"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/howardjp/design-workbench.git",
+    "directory": "packages/krigsvold-react"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "next",
+    "provenance": true
+  }
+}

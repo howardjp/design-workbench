@@ -1,0 +1,27 @@
+{
+  "browser": "Playwright Firefox 1555",
+  "checks": [
+    "axe: collection light, 1366px, zero violations",
+    "Actual AppShell renders side rail; native keyboard skip link focuses main",
+    "axe: record reading, zero violations",
+    "Scoped search excludes other groups; no-match recovery and reading/back retain query and focus",
+    "axe: validation summary and field errors, zero violations",
+    "Validation retains input, names invalid fields, focuses linked error summary",
+    "axe: recoverable failed save, zero violations",
+    "Pending disables controls; failed save retains draft and focuses recovery; retry commits and announces success",
+    "Draft guard defaults to Keep editing; Escape/Keep retain draft; explicit discard restores saved data and completes navigation",
+    "Empty group has distinct explanation and working recovery",
+    "axe: collection light, 320px, zero violations",
+    "axe: collection dark, 320px, zero violations",
+    "axe: editor dark, 320px, 200% base text, zero violations",
+    "320px light/dark reflow, 200% text and long/unbroken content stay within viewport; reduced-motion path saves",
+    "No browser page errors"
+  ],
+  "pageErrors": [],
+  "limits": [
+    "No manual screen-reader testing",
+    "No real backend or durable persistence",
+    "No cross-browser checks",
+    "MCP catalogue unavailable; used bundled skill references"
+  ]
+}

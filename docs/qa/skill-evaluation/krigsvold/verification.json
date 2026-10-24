@@ -1,0 +1,37 @@
+{
+  "checks": [
+    "Initial render: top navigation, four synthetic contacts, one main landmark",
+    "Scoped search, result counts, no matches, reset",
+    "Opening is separate from editing; heading receives focus",
+    "Required name and email validation, error summary focus, field link focus",
+    "Dirty record switch opens safe-default dialog; Escape retains draft",
+    "Top navigation protects dirty draft",
+    "Pending prevents duplicate save; failed save retains every draft field and focuses recovery",
+    "Retry succeeds; committed reading state and multiline notes preserved",
+    "Discard continues to requested record and preserves previously committed values",
+    "Dark appearance renders and retains record state",
+    "320px: result/detail reflow, focused opening and return, no horizontal overflow",
+    "320px enlarged text, long draft name, reduced motion: no horizontal overflow",
+    "Mobile return protects unsaved changes",
+    "Top navigation destinations and return focus work",
+    "Reload resets session-only fixture data",
+    "Keyboard search, Tab order, Enter record activation"
+  ],
+  "pageErrors": [],
+  "axe": [
+    {
+      "state": "failed-save-light",
+      "violations": []
+    },
+    {
+      "state": "reading-dark",
+      "violations": []
+    }
+  ],
+  "screenshots": [
+    "wide.png",
+    "failed-save.png",
+    "dark.png",
+    "narrow-enlarged.png"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "typecheck": "passed: tsc --noEmit against installed package declarations",
+  "productionBuild": "passed: isolated Vite production bundle",
+  "staticRender": "passed: actual package integration, main/heading hierarchy, subordinate contents, native select/number/checkbox, labels and fragment targets",
+  "browser": {
+    "status": "blocked",
+    "reason": "No Playwright Chromium/headless-shell executable or system Chrome/Chromium is installed. No dependencies were installed.",
+    "pending": "Interaction, responsive screenshots, keyboard/focus, axe, enlarged-text, reduced-motion and visual cascade review."
+  }
+}
