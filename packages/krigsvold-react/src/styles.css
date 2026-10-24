@@ -229,3 +229,6 @@
 .krigsvold-checkbox > span, .krigsvold-radio > span, .krigsvold-switch > span:not(.krigsvold-switch-control) { min-inline-size:0; }
 .krigsvold-field, .krigsvold-fieldset, .krigsvold-notice, .krigsvold-error-summary, .krigsvold-badge { overflow-wrap:anywhere; }
 .krigsvold-tabs [role="tab"] { max-inline-size:100%; min-inline-size:0; }
+
+.krigsvold-field, .krigsvold-error-summary { grid-template-columns:minmax(0,1fr); }
+.krigsvold-field > *, .krigsvold-error-summary > * { min-inline-size:0; }

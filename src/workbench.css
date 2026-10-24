@@ -1,15 +1,7 @@
 body {
   margin: 0;
 }
-.brand-mark {
-  display: inline-grid;
-  place-items: center;
-  inline-size: 2rem;
-  block-size: 2rem;
-  font-size: 1rem;
-  margin-inline-end: 0.65rem;
-  border: 1px solid currentColor;
-}
+
 .page-intro {
   display: grid;
   gap: 0.75rem;
@@ -881,3 +873,7 @@ body {
   overflow-wrap:anywhere;
 }
 .import-source > *, .import-differences dd > * { min-inline-size:0; }
+
+/* Single-column task groups must size from available space, not a child's word width. */
+.page-intro, .stack, .section-heading { grid-template-columns:minmax(0,1fr); min-inline-size:0; }
+.page-intro > *, .stack > *, .section-heading > *, .intro-line > * { min-inline-size:0; max-inline-size:100%; }

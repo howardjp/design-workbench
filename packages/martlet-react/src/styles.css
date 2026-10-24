@@ -226,3 +226,12 @@
 .martlet-checkbox > span, .martlet-radio > span, .martlet-switch > span:not(.martlet-switch-control) { min-inline-size:0; }
 .martlet-field, .martlet-fieldset, .martlet-notice, .martlet-error-summary, .martlet-badge { overflow-wrap:anywhere; }
 .martlet-tabs [role="tab"] { max-inline-size:100%; min-inline-size:0; }
+
+.martlet-field, .martlet-error-summary { grid-template-columns:minmax(0,1fr); }
+.martlet-field > *, .martlet-error-summary > * { min-inline-size:0; }
+
+/* Existing darker gold improves small-label contrast on the source cream inset. */
+.martlet-contents[data-variant="inline"] > strong { color:var(--martlet-color-gold-700); }
+@container martlet-article (max-width:74rem) { .martlet-contents[data-variant="index"] > strong { color:var(--martlet-color-gold-700); } }
+@media(max-aspect-ratio:4/5) { .martlet-contents[data-variant="index"] > strong { color:var(--martlet-color-gold-700); } }
+.martlet[data-martlet="dark"] .martlet-contents > strong { color:var(--martlet-color-gold-300); }

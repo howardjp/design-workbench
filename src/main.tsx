@@ -656,14 +656,7 @@ function App() {
   return (
     <div className={family} {...{ [`data-${family}`]: mode }}>
       <AppShell
-        brand={
-          <>
-            <span className="brand-mark" aria-hidden="true">
-              {family === "martlet" ? "M" : "K"}
-            </span>
-            {title}
-          </>
-        }
+        brand={title}
         navigation={
           <>
             <a
