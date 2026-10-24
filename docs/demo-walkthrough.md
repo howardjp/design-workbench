@@ -2,7 +2,7 @@
 
 October 23, 2026 · Experimental foundation review
 
-**Review status:** the [origin-site audit](qa/origin-audit-2026-10-23.md) identifies substantial source drift and an unfinished grammar. Use this walkthrough to inspect the experiments, with the audit beside them. It is not evidence of CEO-ready source fidelity or a ratified design language. Reconcile existing source objects and justify the new application extensions before advancing the demonstration's claims.
+**Review status:** the [origin audit](qa/origin-audit-2026-10-23.md) is the fixed baseline; the [reconciliation ledger](qa/origin-reconciliation.md) records the implemented cleanup and unresolved boundaries. Inspect source decisions alongside the experiments. Grammar 0.2 remains experimental: this is a reviewable implementation, not a claim of CEO-ready completeness or a ratified design language.
 
 Start with the language, then the work. Martlet and Krigsvold have their own original identity, native theme vocabulary, application grammar, component implementations, reference composition, and agent-facing knowledge. Neither language is limited to a particular content genre or navigation orientation. The purpose of this demonstration is to review a working foundation and the evidence behind its decisions, not to declare a complete, stable design system.
 
@@ -16,7 +16,7 @@ Start with the language, then the work. Martlet and Krigsvold have their own ori
 
 ## What is working
 
-Each family has 22 experimental React exports and all-component live examples, a versioned first application grammar, a complete session-only collection/editor specimen, a local MCP server with 52 references, and an independently usable builder skill and distribution archive. Both archives have been installed and queried outside the workbench. Independent skill-use evaluations produced contact-directory demos in a Martlet side-navigation frame and a Krigsvold top-navigation frame; source, observations and limits are retained under qa/skill-evaluation.
+Each family has 22 experimental React exports and all-component live examples, a versioned first application grammar, a complete session-only collection/editor specimen, a local MCP server with 53 references, and an independently usable builder skill and distribution archive. The previous archives were installed and queried outside the workbench; current-head CI separately verifies the revised 53-resource archives. Independent skill-use evaluations produced contact-directory demos in a Martlet side-navigation frame and a Krigsvold top-navigation frame; source, observations and limits are retained under qa/skill-evaluation.
 
 The local registry remains a separate, functional administration consumer. It is not included in either static reference or agent archive. Its revision history, conflict recovery, readiness observations and browser draft/settings behavior remain subject to their existing regression suite.
 

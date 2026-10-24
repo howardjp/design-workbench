@@ -1,8 +1,8 @@
 # Independent React language references
 
-October 23, 2026 · Experimental 0.1.0 · MIT
+October 24, 2026 · Experimental 0.1.0 · MIT
 
-The two reference applications have separate experimental layouts, existing system marks, theme semantic palettes, and proposed application grammars. They demonstrate a collection/reading/editor pattern in each language alongside all 22 component specimens, API and keyboard contracts, standalone JSX examples, and agent-tooling setup. The [October 23 origin audit](qa/origin-audit-2026-10-23.md) finds substantial drift from the live origin objects. Neither grammar is locked; source fidelity must be reconciled before broader application acceptance.
+The two reference applications have separate experimental layouts, existing system marks, theme semantic palettes, and proposed application grammars. They demonstrate a collection/reading/editor pattern in each language alongside all 22 component specimens, API and keyboard contracts, standalone JSX examples, and agent-tooling setup. The [October 23 origin audit](qa/origin-audit-2026-10-23.md) is a fixed baseline. Its [67-item reconciliation ledger](qa/origin-reconciliation.md) now records restored source objects, removed unsupported decoration, explicit application extensions and remaining vocabulary. Neither grammar is locked.
 
 | Family | Private review site | Proposed public home | Output |
 | --- | --- | --- | --- |
@@ -17,7 +17,7 @@ Martlet's Commonplace composition uses a folder shelf, grouped collection entrie
 
 Both patterns use identical fictional note content and shared domain invariants. Finding, creating, reading, editing, title validation, changed-draft departure, pending saves, deliberately failed saves and retry, and reversible removal work in the session. Reload restores the examples; no durable storage or backend retrieval is claimed. A clearly separated failure-inspection control is documentation tooling. Width inspection uses an independent document at full, 768px, or 320px available width; changing width or mode preserves its draft. Focused workspace links open the same pattern without the documentation navigation.
 
-Original theme-site SVGs are retained byte-for-byte, with repository paths and Git blob hashes in docs-app/brand/provenance.json. Family CSS uses semantic theme tokens and both light/dark modes bind the actual data-family attribute. Those facts do not establish origin fidelity: semantic role assignments, submenu surfaces, TOC anatomy and other source objects differ. The contained Krigsvold top navbar borrows the originating site's horizontal framing but does not yet reproduce its complete anatomy or behavior; its workbench consumer can still use a side rail. See the audit for recommended dispositions.
+Original theme-site SVGs remain byte-for-byte verified, with paths and Git blob hashes in docs-app/brand/provenance.json. React light roles now follow source object use rather than relying on token membership alone. Martlet restores its left hierarchical index and separate inline contents. Krigsvold restores the white desktop popup and transparent mobile submenu. Both documentation frames use source-derived navigation/footer anatomy with explicit host translations. Full-page dark mode and application controls remain extensions. See the source-decision profiles on each language page and the reconciliation ledger for exact limits.
 
 ## Agent access
 

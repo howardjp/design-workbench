@@ -89,3 +89,14 @@ Managed-preview browser observations directly confirm Martlet's missing top stri
 Two fresh skill-use tasks produced technical reading pages with subordinate links, annotations and native preferences forms. Their TSX, local CSS, rationale and bounded verification results are preserved in `skill-evaluation/origin-reconciliation`. Both pass isolated strict types/build. Martlet additionally passed actual-package static rendering. Neither task ran its prepared browser checks: the local Playwright Chromium executable is absent. These results establish guidance transfer and API/build use, not visual/interaction certification.
 
 Open gates include source-matched code/Martlet-button specimens, remaining source vocabulary, manual assistive technology, localization/RTL, complete forced-color/print and sustained consumer trials. Full-page dark mode, generic application controls and working notebooks remain extensions. Broader form/dashboard trials should exercise these explicit decisions before grammar stability is considered.
+
+
+### Additional rendered observations
+
+Krigsvold's desktop popup computes white with dark ink, 240px width, 8.8px padding, 4.8px radius and rgba(6,19,37,.18) 0 18px 44px shadow. It remains white after page mode changes. Native Escape collapses the disclosure and retains summary focus. At nominal 320px and 768px frames, document widths/scroll widths are equal (305/305 and 753/753). The narrow open submenu is transparent, static and shadowless, with no pointer; Menu Escape closes and returns focus. In the actual notebook, changing a title, simulating failure, retaining the title, retrying and restoring reading focus after a successful session save were observed.
+
+Screenshots: [Martlet](martlet-origin-reconciled.jpg), [Krigsvold desktop popup](krigsvold-origin-reconciled.jpg). These capture the implementation build at source commit `4905c0f87c72bdb44f44c4a86fd8eb8c04770479`, before deployment. They are bounded object observations, not exhaustive visual acceptance.
+
+Local packed React installation/rendering passed for both families. The revised agent-archive check could not complete locally because the npm offline cache lacks zod 4.3.6; CI is a separate check. The personal skills workspace contains revised commit `6470f19`, but synchronization again failed with HTTP 422. Source and distributable skill copies are preserved; personal installation is not claimed.
+
+The first reconciliation CI run found enlarged-text/long-label overflow in the local administration consumer. The follow-up bounds application controls and permits identifier wrapping in provenance/contract metadata, while ordinary prose keeps natural word boundaries. Existing overflow assertions remain intact; settings failures now include element diagnostics. Deployment waits for the corrected implementation checks.

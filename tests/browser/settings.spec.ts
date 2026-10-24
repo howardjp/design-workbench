@@ -213,11 +213,11 @@ for (const family of ["martlet", "krigsvold"]) {
         expect((await new AxeBuilder({ page }).analyze()).violations).toEqual(
           [],
         );
-        expect(
-          await page.evaluate(
-            () => document.documentElement.scrollWidth <= innerWidth + 1,
-          ),
-        ).toBe(true);
+        const overflow = await page.evaluate(() => ({
+          fits: document.documentElement.scrollWidth <= innerWidth + 1,
+          elements: [...document.querySelectorAll("body *")].filter((e) => e.getBoundingClientRect().right > innerWidth + 1).slice(0, 12).map((e) => ({tag:e.tagName, class:e.className, text:e.textContent?.slice(0,80), width:e.getBoundingClientRect().width})),
+        }));
+        expect(overflow.fits, JSON.stringify(overflow.elements)).toBe(true);
         await page.evaluate(() => {
           document.documentElement.style.fontSize = "200%";
           for (const element of document.querySelectorAll<HTMLElement>("*")) {
@@ -226,11 +226,11 @@ for (const family of ["martlet", "krigsvold"]) {
             element.style.wordSpacing = ".16em";
           }
         });
-        expect(
-          await page.evaluate(
-            () => document.documentElement.scrollWidth <= innerWidth + 1,
-          ),
-        ).toBe(true);
+        const overflow = await page.evaluate(() => ({
+          fits: document.documentElement.scrollWidth <= innerWidth + 1,
+          elements: [...document.querySelectorAll("body *")].filter((e) => e.getBoundingClientRect().right > innerWidth + 1).slice(0, 12).map((e) => ({tag:e.tagName, class:e.className, text:e.textContent?.slice(0,80), width:e.getBoundingClientRect().width})),
+        }));
+        expect(overflow.fits, JSON.stringify(overflow.elements)).toBe(true);
         await page.emulateMedia({ forcedColors: "active" });
         await expect(
           page.getByRole("switch", {

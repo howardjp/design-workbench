@@ -217,3 +217,12 @@
 
 /* Technical identifiers may wrap locally; ordinary prose keeps natural word boundaries. */
 .martlet :is(h1,h2,h3,a,dd) { overflow-wrap:break-word; }
+
+/* Bounded application labels must shrink at enlarged text sizes. Prose is separate. */
+.martlet-app-header > *, .martlet-app-utilities > * { min-inline-size:0; max-inline-size:100%; }
+.martlet-app-brand, .martlet-app-header nav a { overflow-wrap:anywhere; }
+.martlet-button { max-inline-size:100%; overflow-wrap:anywhere; white-space:normal; }
+.martlet-checkbox, .martlet-radio, .martlet-switch { max-inline-size:100%; overflow-wrap:anywhere; }
+.martlet-checkbox > span, .martlet-radio > span, .martlet-switch > span:not(.martlet-switch-control) { min-inline-size:0; }
+.martlet-field, .martlet-fieldset, .martlet-notice, .martlet-error-summary, .martlet-badge { overflow-wrap:anywhere; }
+.martlet-tabs [role="tab"] { max-inline-size:100%; min-inline-size:0; }

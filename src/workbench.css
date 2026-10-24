@@ -873,3 +873,11 @@ body {
   border-inline-start: 3px solid var(--ui-accent);
   padding-inline-start: 1.25rem;
 }
+
+/* Contract text and provenance may contain unbroken identifiers and filenames. */
+.multiline, .implementations, .criteria, .registry-meta, .import-source,
+.import-differences, .import-provenance, .revision-diff, .review-context,
+.review-status, .review-history, .recovery-values, .draft-recovery {
+  overflow-wrap:anywhere;
+}
+.import-source > *, .import-differences dd > * { min-inline-size:0; }
