@@ -1,7 +1,8 @@
 import grammar from "docs-grammar";
 import decisions from "docs-decisions";
 import { family, familyName, DataTable } from "docs-family";
-import { repo } from "./data";
+import martletSource from "../../docs/languages/martlet/canonical.json";
+import krigsvoldSource from "../../docs/languages/krigsvold/canonical.json";
 function inline(text: string) {
   return text.split(/(`[^`]+`)/g).map((part, i) => part.startsWith("`") ? <code key={i}>{part.slice(1, -1)}</code> : part);
 }
@@ -21,12 +22,14 @@ function blocks(text: string, demote = false) {
   });
 }
 export function LanguageGuide() {
+  const source = family === 'martlet' ? martletSource : krigsvoldSource;
   return <article className="language-guide">
     <nav className="language-guide-links" aria-label="Language resources">
       <a href="#source-decisions">Source decisions</a>
       <a href="?page=collection">Try the working pattern →</a>
       <a href="?page=agents">Build with an agent →</a>
-      <a href={`${repo}/blob/work/registry-foundations/docs/languages/${family}/decisions.md`}>Versioned decisions ↗</a>
+      <a href={`https://${family}theme.dev/design-system/`}>Main package reference ↗</a>
+      <a href={`https://github.com/${source.repository}/blob/${source.commit}/docs/source-decisions.md`}>Canonical decisions candidate ↗</a>
     </nav>
     <section className="language-guide-rules">{blocks(grammar)}</section>
     <section id="source-decisions" className="language-guide-decisions">{blocks(decisions, true)}</section>

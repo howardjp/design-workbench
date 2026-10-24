@@ -1,6 +1,6 @@
 # Krigsvold: a grammar of clear regions
 
-Experimental application grammar 0.2 · Theme 2.1.0 · React 0.1.0
+Experimental grammar 0.2 · Core 2.2.0 candidate · Astro 1.2.0 candidate · React 0.1.0
 
 Krigsvold makes complex work legible through purposeful regions, stable alignment, controlled contrast, and precise state. Its clarity must remain approachable when a person is uncertain or an operation fails. Its adopted charter supplies the criteria for these experimental application rules.
 
@@ -12,7 +12,7 @@ Existing origin objects are the baseline. Read the `decisions` MCP reference or 
 
 Identify orientation, scope, work, supporting information, and commands. Align related information so that a person can compare it without reconstructing the layout. Use a boundary when purpose or context changes; use local proximity inside a working region. A border around every field does not explain the larger structure, and a large empty gap does not automatically make it clear.
 
-The React implementation exposes `--krigsvold-field-gap`, `--krigsvold-group-gap`, and `--krigsvold-region-gap`. This pattern maps local grouping to the existing 0.5rem scale step, groups to 1.5rem, and distinct regions to the existing 3rem scale step. These experimental application roles explain relationships rather than replacing the foundation's reference scale. Regional space and compact local rows can coexist. Density is a region-level decision; keep readable text, visible focus, and usable targets.
+The optional source profile exposes `--krigsvold-field-gap`, `--krigsvold-group-gap`, and `--krigsvold-region-gap`. This pattern maps local grouping to the existing 0.5rem scale step, groups to 1.5rem, and distinct regions to the existing 3rem scale step. These experimental application roles explain relationships rather than replacing the foundation's reference scale. Regional space and compact local rows can coexist. Density is a region-level decision; keep readable text, visible focus, and usable targets.
 
 ## Make hierarchy exact
 

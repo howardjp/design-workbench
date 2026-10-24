@@ -1,6 +1,6 @@
 # Martlet: a grammar of related things
 
-Experimental application grammar 0.2 · Theme 2.1.0 · React 0.1.0
+Experimental grammar 0.2 · Core 2.2.0 candidate · Astro 1.2.0 candidate · React 0.1.0
 
 Martlet makes substantial work approachable through proportion, proximity, readable sequence, and continuity. Its warmth must survive a compact collection, an error, or a page without its mark. The adopted charter supplies the criteria; these rules turn them into an application vocabulary to exercise and revise.
 
@@ -12,7 +12,7 @@ Existing origin objects are the baseline. Read the `decisions` MCP reference or 
 
 Decide what belongs together before drawing containers. A label, control, and useful explanation form a field. Related fields form a group. Groups participating in one decision form a task region. Use progressively stronger separation to express those changes of relationship. Do not give every paragraph or field its own card.
 
-The current React roles are `--martlet-field-gap` at 0.5rem, `--martlet-group-gap` at 1.5rem, and `--martlet-region-gap` at 2.5rem. They map to existing foundation scale steps 2, 4, and 5. These are experimental application defaults, not a requirement to space every adjacent element equally. Use the field role inside a relationship, the group role between related units, and the region role between different purposes. A compact composition may reduce local padding while retaining the relationship hierarchy.
+The optional source profile exposes `--martlet-field-gap` at 0.5rem, `--martlet-group-gap` at 1.5rem, and `--martlet-region-gap` at 2.5rem. They map to existing foundation scale steps 2, 4, and 5. These are experimental application defaults, not a requirement to space every adjacent element equally. Use the field role inside a relationship, the group role between related units, and the region role between different purposes. A compact composition may reduce local padding while retaining the relationship hierarchy.
 
 ## Give the work a readable sequence
 

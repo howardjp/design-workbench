@@ -42,6 +42,10 @@ for (const family of ["martlet", "krigsvold"])
         assert.equal(manifest.family, family);
         assert.equal(manifest.references.length, 53);
         assert.equal(manifest.platforms.React.published, false);
+        assert.equal(manifest.platforms.Astro.published, false);
+        assert.equal(manifest.platforms.Astro.examples, false);
+        assert.equal(manifest.canonicalGuidance.repository, `${family}theme/npm`);
+        assert.match(manifest.canonicalGuidance.commit, /^[a-f0-9]{40}$/);
         assert.ok(manifest.sourceDigest.length === 64);
         const found = (
           await call("search_guidance", {
@@ -51,6 +55,8 @@ for (const family of ["martlet", "krigsvold"])
         assert.equal(found.results[0].id, "pattern:collection-editor");
         const grammar = (await call("get_reference", { id: "grammar" })).value;
         assert.equal(grammar.family, family);
+        assert.equal(grammar.source, `https://github.com/${family}theme/npm/blob/${manifest.canonicalGuidance.commit}/docs/grammar.md`);
+        assert.equal(grammar.contentSha256, manifest.canonicalGuidance.files['grammar.md'].sha256);
         assert.equal(
           createHash("sha256").update(grammar.content).digest("hex"),
           grammar.contentSha256,

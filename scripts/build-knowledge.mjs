@@ -4,6 +4,8 @@ import { resolve, join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { spawnSync } from "node:child_process";
 import { transformSync } from "rolldown/utils";
+const guidanceCheck = spawnSync(process.execPath, ['scripts/sync-language.mjs', '--check'], {stdio:'inherit'});
+if (guidanceCheck.status) throw new Error('Canonical guidance check failed');
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const commit = process.env.DESIGN_SOURCE_COMMIT ?? null;
 if (commit !== null && !/^[a-f0-9]{40}$/.test(commit))
@@ -23,6 +25,9 @@ await mkdir("mcp/catalogs", { recursive: true });
 await mkdir("agent-dist", { recursive: true });
 await mkdir("test-results", { recursive: true });
 for (const family of ["martlet", "krigsvold"]) {
+  const canonical = JSON.parse(await readFile(`docs/languages/${family}/canonical.json`, 'utf8'));
+  const implementations = JSON.parse(await readFile(`docs/languages/${family}/implementation.json`, 'utf8'));
+  const canonicalUrl = path => `https://github.com/${canonical.repository}/blob/${canonical.commit}/${path}`;
   const entries = [];
   function add(
     id,
@@ -39,7 +44,7 @@ for (const family of ["martlet", "krigsvold"]) {
       title,
       tags,
       maturity,
-      source: path.startsWith("npm:") ? path : `${repo}/blob/${ref}/${path}`,
+      source: /^(npm:|https:\/\/)/.test(path) ? path : `${repo}/blob/${ref}/${path}`,
       sourcePath: path,
       contentSha256: hash(content),
       content,
@@ -51,7 +56,7 @@ for (const family of ["martlet", "krigsvold"]) {
     "grammar",
     `${family} application grammar`,
     grammar,
-    `docs/languages/${family}/grammar.md`,
+    canonicalUrl('docs/grammar.md'),
     [
       "spacing",
       "density",
@@ -74,7 +79,7 @@ for (const family of ["martlet", "krigsvold"]) {
   add(
     "decisions", "grammar", `${family} source decisions and application extensions`,
     await readFile(`docs/languages/${family}/decisions.md`, "utf8"),
-    `docs/languages/${family}/decisions.md`,
+    canonicalUrl('docs/source-decisions.md'),
     ["origin", "source", "typography", "navigation", "contents", "provenance"],
   );
   add(
@@ -82,7 +87,7 @@ for (const family of ["martlet", "krigsvold"]) {
     "pattern",
     `${family} collection, reading and editing pattern`,
     grammar.slice(grammar.indexOf("## Working pattern:")),
-    `docs/languages/${family}/grammar.md`,
+    canonicalUrl('docs/grammar.md'),
     [
       "Cardfile",
       "notebook",
@@ -160,7 +165,7 @@ for (const family of ["martlet", "krigsvold"]) {
     "compatibility",
     "compatibility",
     `${family} support and compatibility`,
-    `React 0.1.0 is experimental and unpublished; React 19 and @${family}/theme 2.1.0. Theme 2.1.0 is published. CSS and Astro exist; this server supplies React examples only. Vue, Svelte, native, and web-component APIs are not implemented here. The collection specimen is fictional and session-only. Manual assistive technology, localization, RTL, and sustained use remain open.`,
+    `React 0.1.0 is experimental and unpublished; React 19 and @${family}/theme 2.1.0. Theme 2.1.0 and Astro 1.1.0 are published. Core 2.2.0 and Astro 1.2.0 are unreleased consolidation candidates; new Astro contents/footer contracts require the paired candidate packages. This server supplies React examples only. Do not translate React event or focus props into Astro APIs. Canonical migration guide: ${canonicalUrl('docs/consolidation.md')}. Vue, Svelte, native, and web-component APIs are not implemented here. The collection specimen is fictional and session-only. Manual assistive technology, localization, RTL, and sustained use remain open.\n\n${JSON.stringify(implementations, null, 2)}`,
     "docs/maturity.md",
     ["platform", "version", "support", "migration"],
   );
@@ -176,7 +181,9 @@ for (const family of ["martlet", "krigsvold"]) {
     sourceDigest,
     platforms: {
       React: { version: "0.1.0", maturity: "experimental", published: false },
+      Astro: { version: "1.2.0", maturity: "experimental", published: false, examples: false, core: "^2.2.0" },
     },
+    canonicalGuidance: canonical,
     limitations: [
       "Local stdio only; no hosted MCP endpoint.",
       "Search and exact retrieval; no code audit or migration automation.",

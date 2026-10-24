@@ -42,6 +42,7 @@ export function createLanguageServer(catalog) {
       reply({
         ...provenance,
         platforms: catalog.platforms,
+        canonicalGuidance: catalog.canonicalGuidance,
         limitations: catalog.limitations,
         references: catalog.entries.map(({ content, ...metadata }) => metadata),
       }),

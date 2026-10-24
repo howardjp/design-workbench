@@ -15,6 +15,8 @@ Discover the Krigsvold MCP tools and call `get_manifest`. Confirm `family` is `k
 
 If MCP is unavailable, read [the bundled grammar](references/grammar.md) and relevant [component contracts](references/components.md). Their offline snapshot applies to experimental React 0.1.0 and theme 2.1.0. Consult [source and setup](references/source.md) for provenance. State missing/unsupported capabilities; do not silently use Martlet or a fictional API.
 
+Read [framework availability](references/implementation.json) before choosing imports. Core 2.2.0 and Astro 1.2.0 are unreleased candidates; React examples retain theme 2.1.0. Shared grammar does not imply shared props or state/focus APIs.
+
 ## Trace existing objects first
 
 Retrieve the `decisions` reference alongside grammar and API guidance. Offline, read [source decisions](references/decisions.md). Treat actual origin use and its rendered cascade as the baseline. Classify each choice as a source rule, a contextual translation, or a new application extension with a task purpose. Remove unsupported decoration. Do not infer provenance from a token existing or from a passing component test. Keep full-page dark mode and unobserved application objects explicitly experimental.

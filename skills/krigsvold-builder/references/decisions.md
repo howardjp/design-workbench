@@ -1,6 +1,6 @@
 # Krigsvold source decisions
 
-Origin reconciliation 0.2 · React 0.1.0 candidate · Theme 2.1.0 unchanged
+Origin reconciliation 0.2 · Consolidation candidate · Original palette and existing defaults retained
 
 Use krigsvold.org as the authority for existing objects. This profile distinguishes restored source roles from application extensions. The full grammar remains experimental. Original source commit: `a3cf072c516c59ed35814e0fa153028cc91ceecd`, repository `basuhoward/krigsvold.org`. Review `src/styles/site.css`, `src/components/SiteHeader.astro`, `SiteFooter.astro`, `src/layouts/Page.astro` and active Material Kit styles. The audit and reconciliation ledger record evidence and remaining limits.
 
@@ -22,7 +22,7 @@ Use krigsvold.org as the authority for existing objects. This profile distinguis
 | Input | Native control and own small radius, theme/source padding; keep visible labels. | Source control vocabulary; site-search is not the default general form geometry. |
 | Table | .95rem UI type, .85rem/.7rem cells, top alignment, source rule; no arbitrary compact-family default. | Editorial source table. Explicit compact density remains future task-specific work. |
 | Quote | 4px blue leading rule, Slab quotation text. | Editorial blockquote. |
-| Footer | Navy grouped links with separate ownership/base line. | SiteFooter/site.css. The adopting host owns identities, organizations and destinations. |
+| Footer | Navy identity column spanning two tracks, four link groups, and a separate ownership/contact base line; 5rem/1.5rem vertical padding, 48px desktop gap. | SiteFooter/site.css. The adopting host owns identities, organizations and destinations. |
 
 ## Explicit application extensions
 
@@ -41,3 +41,7 @@ Dark mode keeps the source object hierarchy and existing semantic contrast roles
 The theme-site crystal is the existing system mark used by documentation. It does not replace an adopting application's own identity or the origin institution's snowflake badge. Docs preview, finder, copy/download controls, simulated failure and session-only notes are host tooling.
 
 Polar imagery, title/arms, award content, legal policy and analytics remain host responsibilities. Origin masthead, evidence/fellow/card/figure/FAQ variants outside the current 22 exports remain named vocabulary gaps, not silently shipped components. Full accessibility, RTL/localization and sustained-use evidence remain open. Read this profile with the grammar/API references; catalogue hashes do not ratify design choices.
+
+## Framework consolidation
+
+Core 2.2.0 and Astro 1.2.0 are unreleased candidates. The source profile is an opt-in import and class; existing core defaults and existing Astro slots remain compatible. New TableOfContents and grouped SiteFooter anatomy are available in the paired candidate packages. React 0.1.0 retains its existing theme 2.1.0 dependency and React-specific events and focus contracts. Framework support is recorded in language.json. These additions do not make the grammar stable.

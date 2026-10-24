@@ -1,6 +1,6 @@
 # Martlet source decisions
 
-Origin reconciliation 0.2 · React 0.1.0 candidate · Theme 2.1.0 unchanged
+Origin reconciliation 0.2 · Consolidation candidate · Original palette and existing defaults retained
 
 Use jameshoward.us as the authority for existing objects. This profile distinguishes restored source roles from application extensions. The full grammar remains experimental. Original source commit: `32b7166a629ea696147d0d779d911b713e4baf7e`, repository `k3jph/k3jph.github.io`. Review `src/styles/global.css`, `content.css`, `document-pages.css`, and `src/components/{SiteHeader,SiteFooter,PageIndex,TableOfContents,PageIntro}.astro` at that commit. The audit and reconciliation ledger record evidence and remaining limits.
 
@@ -39,3 +39,7 @@ Dark mode preserves source anatomy using existing theme semantic contrast roles.
 The theme-site bird is an existing system mark used by documentation; adopting apps supply their own brand. The documentation component finder, preview frames, copy controls, failure simulator and local-only saves are host tools. Source imagery, seasonal treatments, personal identity, analytics and legal policy do not become global language requirements.
 
 Full media/figure/footnote/maths, source card/archive variants and complete application pattern breadth are not shipped contracts merely because their CSS exists at the origin. Accessibility, localization/RTL, forced colors across complete pages and sustained use still require evidence. Retrieve this decision profile alongside grammar and API references; a source hash identifies content, not design correctness.
+
+## Framework consolidation
+
+Core 2.2.0 and Astro 1.2.0 are unreleased candidates. The source profile is an opt-in import and class; existing core defaults and existing Astro slots remain compatible. New TableOfContents and grouped SiteFooter anatomy are available in the paired candidate packages. React 0.1.0 retains its existing theme 2.1.0 dependency and React-specific events and focus contracts. Framework support is recorded in language.json. These additions do not make the grammar stable.
