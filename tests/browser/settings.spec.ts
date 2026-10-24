@@ -213,7 +213,7 @@ for (const family of ["martlet", "krigsvold"]) {
         expect((await new AxeBuilder({ page }).analyze()).violations).toEqual(
           [],
         );
-        const overflow = await page.evaluate(() => ({
+        let overflow = await page.evaluate(() => ({
           fits: document.documentElement.scrollWidth <= innerWidth + 1,
           elements: [...document.querySelectorAll("body *")].filter((e) => e.getBoundingClientRect().right > innerWidth + 1).slice(0, 12).map((e) => ({tag:e.tagName, class:e.className, text:e.textContent?.slice(0,80), width:e.getBoundingClientRect().width})),
         }));
@@ -226,7 +226,7 @@ for (const family of ["martlet", "krigsvold"]) {
             element.style.wordSpacing = ".16em";
           }
         });
-        const overflow = await page.evaluate(() => ({
+        overflow = await page.evaluate(() => ({
           fits: document.documentElement.scrollWidth <= innerWidth + 1,
           elements: [...document.querySelectorAll("body *")].filter((e) => e.getBoundingClientRect().right > innerWidth + 1).slice(0, 12).map((e) => ({tag:e.tagName, class:e.className, text:e.textContent?.slice(0,80), width:e.getBoundingClientRect().width})),
         }));
