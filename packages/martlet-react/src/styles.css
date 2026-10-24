@@ -216,7 +216,7 @@
 @media(max-width:48rem) { .martlet-definitions[data-layout="grid"] { grid-template-columns:minmax(0,1fr); } }
 
 /* Technical identifiers may wrap locally; ordinary prose keeps natural word boundaries. */
-.martlet :is(h1,h2,h3,a,dd) { overflow-wrap:break-word; }
+.martlet :is(h1,h2,h3,h4,h5,h6,a,dd) { overflow-wrap:break-word; }
 
 /* Bounded application labels must shrink at enlarged text sizes. Prose is separate. */
 .martlet-app-header > *, .martlet-app-utilities > * { min-inline-size:0; max-inline-size:100%; }
