@@ -8,6 +8,7 @@ export type Options = {
   kind: "info" | "success" | "error";
   vertical: boolean;
   navigation: "default" | "top" | "side" | "none";
+  tocVariant: "index" | "inline";
 };
 export const defaults: Options = {
   text: "A considered interface",
@@ -17,6 +18,7 @@ export const defaults: Options = {
   kind: "info",
   vertical: false,
   navigation: "default",
+  tocVariant: "index",
 };
 export function Example({
   name,
@@ -300,14 +302,15 @@ export function Example({
       return (
         <>
           <UI.TableOfContents
+            variant={o.tocVariant}
             items={[
               { id: "example-purpose", label: "Purpose" },
-              { id: "example-practice", label: "Practice" },
+              { id: "example-practice", label: "Practice", depth: 3 },
             ]}
           />
-          <h3 id="example-purpose" tabIndex={-1}>
+          <h2 id="example-purpose" tabIndex={-1}>
             Purpose
-          </h3>
+          </h2>
           <p>A small set of explicit choices.</p>
           <h3 id="example-practice" tabIndex={-1}>
             Practice
@@ -443,7 +446,7 @@ export function exampleCode(name: string, o: Options, family: string) {
       body = `<Article title=${attr(o.text)} titleLevel={2} eyebrow="Field notes / 001" summary="Good interfaces give careful work room to breathe." metadata="Design journal · 4 min read" aside={<p>A note on making things understandable.</p>}><h3>A place for the work</h3><p>Start with a clear purpose and readable text.</p></Article>`;
       break;
     case "TableOfContents":
-      body = `<><TableOfContents items={[{id: 'purpose', label: 'Purpose'}, {id: 'practice', label: 'Practice'}]} /><h2 id="purpose" tabIndex={-1}>Purpose</h2><p>A small set of explicit choices.</p><h2 id="practice" tabIndex={-1}>Practice</h2><p>Build, observe, and refine.</p></>`;
+      body = `<><TableOfContents variant=${attr(o.tocVariant)} items={[{id: 'purpose', label: 'Purpose'}, {id: 'practice', label: 'Practice', depth: 3}]} /><h2 id="purpose" tabIndex={-1}>Purpose</h2><p>A small set of explicit choices.</p><h3 id="practice" tabIndex={-1}>Practice</h3><p>Build, observe, and refine.</p></>`;
       break;
     case "Pagination":
       state = "const [page, setPage] = useState(1);";

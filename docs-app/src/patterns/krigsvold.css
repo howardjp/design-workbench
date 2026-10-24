@@ -2,7 +2,7 @@
   --notebook-local: var(--krigsvold-field-gap);
   --notebook-group: var(--krigsvold-group-gap);
   --notebook-region: var(--krigsvold-region-gap);
-  max-inline-size: 96rem;
+  max-inline-size: var(--krigsvold-content-width);
   margin-inline: auto;
 }
 .krigsvold-notebook-heading {
@@ -12,11 +12,11 @@
   flex-wrap: wrap;
   gap: var(--notebook-group);
   padding-block: var(--notebook-region);
-  border-block-end: 3px solid var(--krigsvold-border-strong);
+  border-block-end: 1px solid var(--ui-line);
 }
 .krigsvold-notebook-heading h1 {
   margin-block-start: var(--notebook-local);
-  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-size: var(--krigsvold-text-h1);
 }
 .krigsvold-notebook-command {
   display: grid;
@@ -35,7 +35,7 @@
   flex-wrap: wrap;
   gap: var(--notebook-local);
   padding-inline: var(--notebook-group);
-  font: 0.8rem/1.5 var(--krigsvold-font-mono);
+  font: 0.8rem/1.5 var(--krigsvold-font-sans);
   border-block-end: 1px solid var(--ui-line);
 }
 .krigsvold-notebook-workspace {
@@ -61,7 +61,7 @@
   letter-spacing: 0.05em;
 }
 .krigsvold-notebook-results header span {
-  font: 0.75rem/1.5 var(--krigsvold-font-mono);
+  font: 0.75rem/1.5 var(--krigsvold-font-sans);
 }
 .krigsvold-notebook-results ul {
   margin: 0;
@@ -86,7 +86,7 @@
   font-weight: 600;
 }
 .krigsvold-notebook-row > span:not(.notebook-sr) {
-  font: 0.7rem/1.5 var(--krigsvold-font-mono);
+  font: 0.7rem/1.5 var(--krigsvold-font-sans);
   color: var(--ui-muted);
 }
 .krigsvold-notebook-row p {

@@ -48,3 +48,7 @@ Both are experimental and consumed by the workbench Settings workflow. The packa
 
 
 AppShell supports `navigationPlacement="default" | "top" | "side" | "none"`, an explicit `navigationLabel`, and optional `headerMode="light" | "dark"`. Existing defaults remain compatible. Placement is a task composition choice in both languages; none omits primary navigation while retaining the brand, utilities and single main landmark. See [the UI grammar](../../docs/languages/martlet/grammar.md) and [MCP and builder skills](../../docs/mcp.md).
+
+## Source reconciliation
+
+The October 23 origin audit is being reconciled in this unpublished candidate. TableOfContents accepts optional depth 2/3 per item and variant index/inline; DefinitionList accepts layout rows/stack/grid. Article contents precede body while supporting aside content follows it. AppShell carries neither a decorative top stripe nor a built-in colophon. Existing AppShell navigation defaults are retained for compatibility, with top/side/none available in both families. See docs/languages/martlet/decisions.md for source roles and explicit application extensions. The complete grammar remains experimental; theme 2.1.0 is unchanged.

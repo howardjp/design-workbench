@@ -77,17 +77,17 @@
   {
     "name": "ErrorSummary",
     "api": "Native div props/ref except title; title node; errors containing message and optional targetId; optional recovery children. Named alert, programmatically focusable.",
-    "behavior": "The caller focuses the summary after an attempted operation fails. Field links focus explicit control IDs or focusable fieldsets; unlinked errors explain transport/operation failures. Long messages wrap. The component never clears drafts or focuses itself on mount. Martlet uses a roomier panel with a top rule; Krigsvold uses compact alignment and a leading rule."
+    "behavior": "The caller focuses the summary after an attempted operation fails. Field links focus explicit control IDs or focusable fieldsets; unlinked errors explain transport/operation failures. Long messages wrap. The component never clears drafts or focuses itself on mount. Both use a leading severity rule as an explicit validation extension; their source typography and color roles remain independent."
   },
   {
     "name": "Article",
     "api": "Native article props/ref except title; required title node; titleLevel 1 (default) or 2; optional eyebrow, inline summary, metadata, contents, aside, contextLabel, footer; body children.",
-    "behavior": "The generated title ID names the article. The caller owns coherent heading levels, native content, and routing. Context and body reflow at narrow widths; long text wraps; print keeps content and removes contents navigation. Martlet uses serif prose/right context; Krigsvold uses sans-serif prose/left context. No state, fetching, raw-HTML parser, or unsolicited focus is embedded."
+    "behavior": "The generated title ID names the article. The caller owns coherent heading levels, native content, and routing. Context and body reflow at narrow widths; long text wraps; print keeps content and removes contents navigation. Martlet restores source serif prose and a left document index; Krigsvold uses source sans-serif editorial prose with an explicitly experimental index extension. Contents and supporting material are separate: contents precede body, aside follows body. Available container width governs reflow. No universal accent rule is added above article titles. No state, fetching, raw-HTML parser, or unsolicited focus is embedded."
   },
   {
     "name": "TableOfContents",
-    "api": "Native nav props/ref except children; required readonly items containing id/label; optional visible label (default On this page).",
-    "behavior": "A named navigation region contains ordered native fragment links. Caller IDs are unique and headings focusable for keyboard navigation. The consumer handles initial asynchronous fragment restoration. No menu, tablist, or custom arrow-key model. Long labels wrap; the list is omitted from print."
+    "api": "Native nav props/ref except children; required readonly items containing id/label and optional depth 2 or 3 (default 2); optional visible label (default On this page) and variant index (default) or inline.",
+    "behavior": "A named navigation region contains unnumbered native fragment links. Depth 2 identifies primary sections; depth 3 identifies subordinate headings. Index and inline are distinct source-context variants in Martlet; Krigsvold exposes them as application extensions. Caller IDs are unique and headings focusable for keyboard navigation. The consumer handles initial asynchronous fragment restoration. No menu, tablist, or custom arrow-key model. Long labels wrap; the list is omitted from print."
   },
   {
     "name": "Pagination",
@@ -96,8 +96,8 @@
   },
   {
     "name": "DefinitionList",
-    "api": "Readonly items with unique stable id, term and description nodes; native dl props/ref except children.",
-    "behavior": "Native dl/div/dt/dd grouping with escaped React text, caller-provided context/ARIA, long multiline wrapping, and narrow reflow. No automatic headings, landmarks, state, fetching or raw HTML parsing. Empty items render an empty list; consumer supplies empty-state meaning. Martlet uses stacked editorial terms/descriptions; Krigsvold uses leading term columns/aligned values."
+    "api": "Readonly items with unique stable id, term and description nodes; native dl props/ref except children; optional layout rows (default), stack or grid in either family.",
+    "behavior": "Native dl/div/dt/dd grouping with escaped React text, caller-provided context/ARIA, long multiline wrapping, and narrow reflow. No automatic headings, landmarks, state, fetching or raw HTML parsing. Empty items render an empty list; consumer supplies empty-state meaning. Choose rows, stack or grid by content and comparison needs, not family identity. Rows follow source label/value alignment; source facts also support stacking."
   },
   {
     "name": "Switch",

@@ -21,7 +21,7 @@ Original theme-site SVGs are retained byte-for-byte, with repository paths and G
 
 ## Agent access
 
-Each family has a real local stdio MCP server, 52 attributed references, and its own builder skill. The Agent tools page provides a standalone locked-dependency archive that installs and serves outside the workbench. It includes only that family's catalogue and skill. No hosted MCP endpoint or desktop-client integration is implied by the static review URL. Read [setup, behavior, evidence and limits](mcp.md).
+Each family has a real local stdio MCP server, 53 attributed references, and its own builder skill. The Agent tools page provides a standalone locked-dependency archive that installs and serves outside the workbench. It includes only that family's catalogue and skill. No hosted MCP endpoint or desktop-client integration is implied by the static review URL. Read [setup, behavior, evidence and limits](mcp.md).
 
 ## Build and isolation
 

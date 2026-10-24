@@ -113,12 +113,9 @@ export function CollectionPattern() {
             <Search n={n} />
           </div>
           {results.length ? (
-            <ol className="martlet-notebook-list">
-              {results.map((note, index) => (
+            <ul className="martlet-notebook-list">
+              {results.map((note) => (
                 <li key={note.id}>
-                  <span className="martlet-notebook-number" aria-hidden="true">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
                   <div>
                     <p className="reference-kicker">{note.folder}</p>
                     <h3>{note.title}</h3>
@@ -133,7 +130,7 @@ export function CollectionPattern() {
                   </div>
                 </li>
               ))}
-            </ol>
+            </ul>
           ) : (
             <EmptyResults n={n} />
           )}

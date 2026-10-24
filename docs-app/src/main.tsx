@@ -141,7 +141,7 @@ function Playground({ name, mode }: { name: string; mode: string }) {
       <div className="playground" id="playground">
         <div className="preview-label">
           <span>Live specimen</span>
-          <span>01 / {familyName}</span>
+          <span>{familyName}</span>
         </div>
         <div className="specimen" data-testid="specimen">
           <Example key={reset} name={name} options={o} mode={mode} />
@@ -160,6 +160,14 @@ function Playground({ name, mode }: { name: string; mode: string }) {
             </Button>
           </div>
           <div className="control-grid">
+            {name === "TableOfContents" && (
+              <Field label="Contents layout">
+                {(p) => <Select {...p} value={o.tocVariant} onChange={(e) => change("tocVariant", e.target.value as Options["tocVariant"])}>
+                  <option value="index">Document index</option>
+                  <option value="inline">Inline article contents</option>
+                </Select>}
+              </Field>
+            )}
             {name === "AppShell" && (
               <Field label="Navigation placement">
                 {(p) => (

@@ -151,11 +151,6 @@ export function AppShell({
           <nav aria-label={navigationLabel}>{navigation}</nav>
         )}
         <div className="martlet-app-utilities">{utilities}</div>
-        <p className="martlet-app-colophon">
-          A working place for
-          <br />
-          considered interfaces.
-        </p>
       </header>
       <main id="main" tabIndex={-1}>
         {children}
@@ -319,30 +314,33 @@ export function ErrorSummary({
   );
 }
 
-export type ContentsItem = { id: string; label: ReactNode };
+export type ContentsItem = { id: string; label: ReactNode; depth?: 2 | 3 };
 export function TableOfContents({
   items,
   label = "On this page",
+  variant = "index",
   className = "",
   ...props
 }: Omit<ComponentPropsWithRef<"nav">, "children"> & {
   items: readonly ContentsItem[];
   label?: string;
+  variant?: "index" | "inline";
 }) {
   return (
     <nav
       {...props}
       aria-label={label}
       className={`martlet-contents ${className}`}
+      data-variant={variant}
     >
       <strong>{label}</strong>
-      <ol>
+      <ul>
         {items.map((item) => (
-          <li key={item.id}>
+          <li key={item.id} data-depth={item.depth ?? 2}>
             <a href={`#${encodeURIComponent(item.id)}`}>{item.label}</a>
           </li>
         ))}
-      </ol>
+      </ul>
     </nav>
   );
 }
@@ -384,14 +382,12 @@ export function Article({
         {summary && <p className="martlet-article-summary">{summary}</p>}
         {metadata && <div className="martlet-article-metadata">{metadata}</div>}
       </header>
-      <div className="martlet-article-layout">
-        {(contents || aside) && (
-          <aside className="martlet-article-context" aria-label={contextLabel}>
-            {contents}
-            {aside}
-          </aside>
-        )}
-        <div className="martlet-prose">{children}</div>
+      <div className="martlet-article-layout" data-contents={!!contents}>
+        {contents && <div className="martlet-article-context">{contents}</div>}
+        <div className="martlet-prose">
+          {children}
+          {aside && <aside className="martlet-article-support" aria-label={contextLabel}>{aside}</aside>}
+        </div>
       </div>
       {footer && <footer className="martlet-article-footer">{footer}</footer>}
     </article>
@@ -482,13 +478,15 @@ export type DefinitionItem = {
 };
 export function DefinitionList({
   items,
+  layout = "rows",
   className = "",
   ...props
 }: Omit<ComponentPropsWithRef<"dl">, "children"> & {
   items: readonly DefinitionItem[];
+  layout?: "rows" | "stack" | "grid";
 }) {
   return (
-    <dl {...props} className={`martlet-definitions ${className}`}>
+    <dl {...props} className={`martlet-definitions ${className}`} data-layout={layout}>
       {items.map((item) => (
         <div key={item.id}>
           <dt>{item.term}</dt>

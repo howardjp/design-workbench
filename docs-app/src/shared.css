@@ -34,7 +34,7 @@ a {
 .pattern-frame { display:block; max-inline-size:100%; block-size:55rem; margin:2rem auto; border:1px solid var(--ui-line); background:var(--ui-bg); }
 .focused-pattern { padding:clamp(1rem,3vw,2.5rem); }
 .language-guide {
-  max-inline-size: 76ch;
+  max-inline-size: var(--reference-reading-width);
   margin-inline: auto;
   padding-block: 2rem 4rem;
 }
@@ -59,10 +59,10 @@ a {
   border-block-end: 1px solid var(--ui-line);
 }
 .reference-kicker {
-  font: 700 0.73rem/1.5 var(--reference-font-ui);
-  letter-spacing: 0.12em;
+  font: 700 var(--reference-label-size)/1.5 var(--reference-font-ui);
+  letter-spacing: var(--reference-label-tracking);
   text-transform: uppercase;
-  color: var(--ui-muted);
+  color: var(--reference-label-color);
 }
 .component-directory {
   min-inline-size: 0;
@@ -157,7 +157,7 @@ a {
   gap: 1rem;
   padding: 0.5rem 1rem;
   border-block-end: 1px solid var(--ui-line);
-  font: 0.75rem/1.5 var(--reference-font-code);
+  font: 0.75rem/1.5 var(--reference-font-ui);
 }
 .code-block textarea {
   display: block;
@@ -203,7 +203,7 @@ a {
   font-size: 1.15rem;
 }
 .callout {
-  border-inline-start: 3px solid var(--ui-accent);
+  border-inline-start: 4px solid var(--reference-callout-color);
   padding: 1.25rem 1.5rem;
   background: var(--ui-surface);
   margin-block: 2rem;
@@ -257,3 +257,9 @@ a {
     break-inside: avoid;
   }
 }
+
+:where(h1,h2,h3,h4,[id]) { scroll-margin-block-start:6rem; }
+
+.language-guide :is(.language-guide-rules,.language-guide-decisions) > * + * { margin-block-start:1.25rem; }
+.language-guide .language-guide-decisions { margin-block-start:4rem; }
+.language-guide h3 { margin-block-start:2.5rem; }

@@ -2,7 +2,7 @@
   --notebook-local: var(--martlet-field-gap);
   --notebook-group: var(--martlet-group-gap);
   --notebook-region: var(--martlet-region-gap);
-  max-inline-size: 86rem;
+  max-inline-size: var(--martlet-content-width);
   margin-inline: auto;
 }
 .martlet-notebook-masthead {
@@ -14,7 +14,7 @@
   border-block-end: 1px solid var(--ui-line);
 }
 .martlet-notebook-masthead h1 {
-  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  font-size: var(--martlet-text-h1);
   margin-block: 0.5rem;
 }
 .martlet-notebook-masthead p:last-child {
@@ -70,17 +70,14 @@
 }
 .martlet-notebook-list li {
   display: grid;
-  grid-template-columns: 2rem minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--notebook-group);
   border-block-start: 1px solid var(--ui-line);
   padding-block: var(--notebook-region);
 }
-.martlet-notebook-number {
-  font: 0.85rem/1.6 var(--martlet-font-mono);
-  color: var(--ui-muted);
-}
+
 .martlet-notebook-list h3 {
-  font-size: 1.5rem;
+  font-size: var(--martlet-text-h3);
   margin-block: var(--notebook-local) 1rem;
 }
 .martlet-notebook-list li > div > p:not(.reference-kicker) {
@@ -89,7 +86,7 @@
   margin-block-end: 1rem;
 }
 .martlet-notebook-reading {
-  max-inline-size: 68rem;
+  max-inline-size: var(--martlet-content-width);
   margin-inline: auto;
   display: grid;
   gap: var(--notebook-group);

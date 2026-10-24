@@ -199,16 +199,23 @@ for (const [family, UI] of [
         "data-consumer": "contents",
         items: [
           { id: "purpose", label: "Purpose" },
-          { id: "a section", label: "A section" },
+          { id: "a section", label: "A section", depth: 3 },
         ],
       }),
     );
     assert.match(markup, /<nav[^>]*aria-label="Specification sections"/);
     assert.match(markup, /data-consumer="contents"/);
-    assert.match(markup, /<ol>/);
+    assert.match(markup, /data-variant="index"/);
+    assert.match(markup, /<ul>/);
+    assert.match(markup, /<li data-depth="3">/);
     assert.match(markup, /href="#purpose"/);
     assert.match(markup, /href="#a%20section"/);
     assert.doesNotMatch(markup, /role="(menu|tablist)"/);
+    const inline = renderToStaticMarkup(h(UI.TableOfContents, {
+      variant: "inline", items: [{ id: "purpose", label: "Purpose" }],
+    }));
+    assert.match(inline, /data-variant="inline"/);
+    assert.match(inline, /href="#purpose"/);
   });
 }
 for (const [family, UI] of [

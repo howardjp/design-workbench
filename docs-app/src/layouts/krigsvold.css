@@ -1,420 +1,88 @@
-.krigsvold-reference {
-  --reference-font-ui: var(--krigsvold-font-sans);
-  --reference-font-code: var(--krigsvold-font-mono);
-  --reference-code-bg: var(--krigsvold-code-bg);
-  --reference-code-text: var(--krigsvold-code-text);
+/* Source K-S/K-H: desktop popup and mobile submenu are distinct contexts. */
+.krigsvold-reference { --reference-font-ui:var(--krigsvold-font-sans); --reference-font-code:var(--krigsvold-font-mono); --reference-code-bg:var(--krigsvold-code-bg); --reference-code-text:var(--krigsvold-code-text); }
+.krigsvold-reference .krigsvold-app { min-block-size:0; padding-block-start:1.25rem; }
+.krigsvold-reference-width { max-inline-size:var(--krigsvold-content-width); margin-inline:auto; }
+.krigsvold-reference .krigsvold-app-header { max-inline-size:var(--krigsvold-content-width); margin-inline:auto; min-block-size:68px; padding:.55rem .8rem .55rem 1rem; gap:1rem; border:1px solid rgb(255 255 255/.2); border-radius:var(--krigsvold-radius-lg); background:rgb(6 19 37/.84); box-shadow:var(--krigsvold-shadow-sm); backdrop-filter:blur(14px); }
+.krigsvold-reference-identity,.krigsvold-reference-brand { display:flex; align-items:center; gap:.7rem; }
+.krigsvold-reference-brand { color:white; font:700 1rem/1.5 var(--krigsvold-font-serif); letter-spacing:.01em; text-decoration:none; }
+.krigsvold-reference .krigsvold-app-header > nav { margin-inline-start:auto; }
+.krigsvold-reference-navigation-links { display:flex; align-items:center; gap:.5rem; }
+.krigsvold-reference .krigsvold-app-header nav > div > details { position:relative; }
+.krigsvold-reference .krigsvold-app-header summary { list-style:none; padding:.75rem .4rem; color:rgb(255 255 255/.88); font:700 .83rem/1.5 var(--krigsvold-font-sans); letter-spacing:.045em; text-transform:uppercase; }
+.krigsvold-reference .krigsvold-app-header summary::-webkit-details-marker { display:none; }
+.krigsvold-reference .krigsvold-app-header summary:is(:hover,:focus-visible) { color:var(--krigsvold-color-ice-400); }
+.krigsvold-reference-caret { inline-size:1rem; block-size:1rem; margin-inline-start:.15rem; vertical-align:-.18rem; }
+.krigsvold-reference-menu { position:absolute; inset-block-start:100%; inset-inline-end:0; z-index:20; min-inline-size:15rem; padding:.55rem; border:1px solid var(--krigsvold-color-rule); border-radius:var(--krigsvold-radius-md); background:var(--krigsvold-input-bg); color:var(--krigsvold-color-ink); box-shadow:var(--krigsvold-shadow-md); }
+.krigsvold-reference-menu::before { content:""; position:absolute; inset-block-start:-6px; inset-inline-end:28px; inline-size:12px; block-size:12px; border:1px solid var(--krigsvold-color-rule); border-inline-end:0; border-block-end:0; background:var(--krigsvold-input-bg); transform:rotate(45deg); }
+.krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a { display:block; padding:.62rem .7rem; min-block-size:0; border:0; border-radius:.2rem; color:var(--krigsvold-color-ink); font:.9rem/1.65 var(--krigsvold-font-sans); text-decoration:none; }
+.krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a:hover { background:var(--krigsvold-color-ice-100); }
+.krigsvold-reference .krigsvold-app-utilities { margin:0; }
+.krigsvold-reference-utilities-content { display:flex; align-items:center; gap:.5rem; }
+.krigsvold-reference-toggle { display:none; inline-size:44px; min-block-size:44px; padding:.25rem; color:white; border:1px solid rgb(255 255 255/.5); background:transparent; border-radius:.15rem; font:.75rem/1.5 var(--krigsvold-font-sans); }
+.krigsvold-reference-search { position:relative; inline-size:9rem; margin-inline-start:.65rem; padding-inline-start:.65rem; border-inline-start:1px solid rgb(255 255 255/.25); }
+.krigsvold-reference-search label { position:absolute; inline-size:1px; block-size:1px; overflow:hidden; clip-path:inset(50%); }
+.krigsvold-reference-search input { inline-size:100%; min-block-size:2.5rem; padding:1px 2px; border:0; border-block-end:1px solid rgb(255 255 255/.5); border-radius:0; background:transparent; color:white; font:.86rem/1.5 var(--krigsvold-font-sans); }
+.krigsvold-reference-search input::placeholder { color:rgb(255 255 255/.75); }
+.krigsvold-reference-search .directory-links { display:none; position:absolute; inset-inline-end:0; inset-block-start:100%; inline-size:min(36rem,calc(100vw - 3rem)); max-block-size:60dvh; overflow:auto; margin:0; padding:1rem; z-index:21; background:var(--krigsvold-color-paper); color:var(--krigsvold-color-ink); border:1px solid var(--krigsvold-color-rule); border-radius:var(--krigsvold-radius-md); box-shadow:var(--krigsvold-shadow-md); }
+.krigsvold-reference-search .directory-links :is(a,h2) { color:var(--krigsvold-color-ink); }
+.krigsvold-reference-search:has(input:not(:placeholder-shown)) .directory-links { display:block; }
+.krigsvold-reference-register { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; padding-block:1rem 2rem; font:.88rem/1.65 var(--krigsvold-font-sans); }
+.krigsvold-reference-register > div { display:flex; gap:1rem; flex-wrap:wrap; }
+.krigsvold-reference-register span { color:var(--ui-muted); }
+.krigsvold-reference-heading { max-inline-size:var(--krigsvold-reading-width); padding-block:2rem; }
+.krigsvold-reference-heading h1 { font-size:var(--krigsvold-text-h1); margin-block:1rem; }
+.krigsvold-reference-heading > p:not(.reference-kicker) { font:1.25rem/1.65 var(--krigsvold-font-serif); margin-block:1.4rem 1.5rem; }
+.krigsvold-reference-heading .krigsvold-definitions { font-size:.88rem; }
+.krigsvold-reference-sections { display:flex; gap:1.5rem; flex-wrap:wrap; padding-block:1rem; margin-block-end:2rem; font:.94rem/1.65 var(--krigsvold-font-sans); }
+.krigsvold-reference-sections a { padding-block:.35rem; }
+.krigsvold-reference-workspace { display:block; max-inline-size:var(--krigsvold-reading-width); }
+.krigsvold-reference-workspace h2 { margin-block:3.4rem 1rem; }
+.krigsvold-reference-workspace p { line-height:1.65; }
+.krigsvold-reference-contract { padding-block:1rem; }
+.krigsvold-reference-contract h2 { margin-block:3.4rem 1rem; }
+.krigsvold-reference-contract p + p { margin-block-start:1rem; }
+.krigsvold-reference-cover { max-inline-size:var(--krigsvold-reading-width); padding-block:clamp(3.5rem,7vw,6.5rem); }
+.krigsvold-reference-cover > img { display:none; }
+.krigsvold-reference-cover h1 { margin-block:1rem; font-size:var(--krigsvold-text-h1); }
+.krigsvold-reference-coverline { font:1.25rem/1.65 var(--krigsvold-font-serif); margin-block:1.4rem; }
+.krigsvold-reference-cover > p:last-of-type { margin-block:1.5rem; line-height:1.65; }
+.krigsvold-reference-status { display:flex; align-items:center; gap:2rem; flex-wrap:wrap; padding-block:2rem; }
+.krigsvold-reference-status .krigsvold-definitions { display:flex; gap:2rem; flex-wrap:wrap; }
+.krigsvold-reference-status .krigsvold-definitions > div { display:block; padding:0; border:0; }
+.krigsvold-reference-status .krigsvold-definitions dd { margin-block-start:.5rem; }
+.krigsvold-reference-catalog { padding-block:3rem; }
+.krigsvold-reference-catalog header h2 { font-size:var(--krigsvold-text-section); margin-block:1rem; }
+.krigsvold-reference-catalog .krigsvold-table-scroll { margin-block-start:2rem; }
+.krigsvold-reference-footer { padding:5rem var(--krigsvold-gutter) 1.5rem; background:var(--krigsvold-color-navy-950); color:rgb(255 255 255/.72); font-family:var(--krigsvold-font-sans); }
+.krigsvold-reference-footer-grid { max-inline-size:var(--krigsvold-content-width); margin-inline:auto; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:2rem; }
+.krigsvold-reference-footer h2 { color:white; font:700 .76rem/1.65 var(--krigsvold-font-sans); letter-spacing:.12em; text-transform:uppercase; }
+.krigsvold-reference-footer a { display:block; color:rgb(255 255 255/.9); margin-block:.55rem; font-size:.88rem; }
+.krigsvold-reference-footer-base { max-inline-size:var(--krigsvold-content-width); margin:2.5rem auto 0; border-block-start:1px solid rgb(255 255 255/.16); padding-block-start:1.5rem; display:flex; align-items:center; gap:1rem; font-size:.8rem; }
+@media(max-width:1400px) { .krigsvold-reference .krigsvold-app-header { margin-inline:var(--krigsvold-gutter); } }
+@media(max-width:991.98px) {
+ .krigsvold-reference .krigsvold-app { padding-block-start:.75rem; }
+ .krigsvold-reference .krigsvold-app-header { background:rgb(6 19 37/.96); padding:.55rem .8rem; gap:0; }
+ .krigsvold-reference .krigsvold-app-brand { inline-size:100%; }
+ .krigsvold-reference-identity { justify-content:space-between; }
+ .krigsvold-reference-toggle { display:block; }
+ .krigsvold-reference .krigsvold-app-header > nav,.krigsvold-reference .krigsvold-app-utilities { display:none; }
+ .krigsvold-reference[data-menu-open="true"] .krigsvold-app-header > nav { display:block; inline-size:100%; margin:0; padding-block:1rem .4rem; }
+ .krigsvold-reference[data-menu-open="true"] .krigsvold-app-utilities { display:block; inline-size:100%; }
+ .krigsvold-reference-navigation-links { display:block; }
+ .krigsvold-reference .krigsvold-app-header summary { padding:.7rem .4rem; }
+ .krigsvold-reference-menu { position:static; min-inline-size:0; inline-size:100%; padding:.1rem 0 .45rem .8rem; border:0; background:transparent; box-shadow:none; }
+ .krigsvold-reference-menu::before { display:none; }
+ .krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a { padding:.38rem .45rem; color:rgb(255 255 255/.76); font-size:.86rem; white-space:normal; }
+ .krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a:is(:hover,:focus-visible) { background:rgb(158 213 230/.1); color:var(--krigsvold-color-ice-200); }
+ .krigsvold-reference-utilities-content { flex-wrap:wrap; align-items:end; padding-block:1rem; }
+ .krigsvold-reference-search { flex:1; inline-size:auto; min-inline-size:10rem; margin:0; padding:0; border:0; }
+ .krigsvold-reference-search .directory-links { inset-inline-start:0; inset-inline-end:auto; }
 }
-.krigsvold-reference-width {
-  max-inline-size: var(--krigsvold-content-width, 1320px);
-  margin-inline: auto;
-}
-.krigsvold-reference-register {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  border-block-end: 1px solid var(--krigsvold-border-strong);
-  padding-block: 0 1rem;
-  margin-block-end: 2.5rem;
-  font: 0.68rem/1.6 var(--krigsvold-font-mono);
-  color: var(--krigsvold-text-subtle);
-}
-.krigsvold-reference-heading {
-  border-inline-start: 4px solid var(--krigsvold-accent);
-  padding-inline-start: 1.5rem;
-  margin-block-end: 2rem;
-}
-.krigsvold-reference-heading h1 {
-  font: 500 clamp(2.6rem, 4vw, 4rem)/1.2 var(--krigsvold-font-display);
-  letter-spacing: -0.035em;
-  margin-block: 1rem;
-  overflow-wrap: anywhere;
-}
-.krigsvold-reference-heading > p:not(.reference-kicker) {
-  color: var(--krigsvold-text-subtle);
-  font-size: 1.1rem;
-  margin-block: 1rem 1.5rem;
-}
-.krigsvold-reference-heading .krigsvold-definitions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem 2rem;
-  font-size: 0.78rem;
-}
-.krigsvold-reference-heading .krigsvold-definitions > div {
-  display: block;
-  border: 0;
-  padding: 0;
-}
-.krigsvold-reference-heading .krigsvold-definitions dd {
-  margin-block-start: 0.25rem;
-}
-.krigsvold-reference-sections {
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-  padding: 1rem 0;
-  border-block: 1px solid var(--krigsvold-border-subtle);
-  margin-block-end: 2rem;
-  font: 0.75rem/1.5 var(--krigsvold-font-mono);
-}
-.krigsvold-reference-sections a {
-  padding-block: 0.4rem;
-}
-.krigsvold-reference-workspace {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(15rem, 21rem);
-  gap: 2rem;
-  align-items: start;
-}
-.krigsvold-reference-workspace > section {
-  min-inline-size: 0;
-}
-.krigsvold-reference-workspace h2 {
-  font: 500 1.5rem/1.4 var(--krigsvold-font-display);
-  margin-block: 2rem 1rem;
-}
-.krigsvold-reference-workspace p {
-  font-size: 0.93rem;
-  line-height: 1.85;
-}
-.krigsvold-reference-contract {
-  background: var(--krigsvold-panel);
-  border-block-start: 3px solid var(--krigsvold-accent2);
-  padding: 1.5rem;
-  min-inline-size: 0;
-}
-.krigsvold-reference-contract h2 {
-  margin-block: 0 1rem;
-  font-size: 1.2rem;
-}
-.krigsvold-reference-contract h2:not(:first-child) {
-  margin-block-start: 2rem;
-}
-.krigsvold-reference-contract p {
-  font-size: 0.85rem;
-}
-.krigsvold-reference-contract p + p {
-  margin-block-start: 1rem;
-}
-.krigsvold-reference-cover {
-  position: relative;
-  padding-block: 1rem 3rem;
-  border-block-end: 1px solid var(--krigsvold-border-strong);
-}
-.krigsvold-reference-cover > img {
-  float: inline-end;
-  inline-size: clamp(5rem, 12vw, 10rem);
-  margin: 1rem 0 2rem 2rem;
-}
-.krigsvold-reference-cover h1 {
-  font: 500 clamp(3.5rem, 6vw, 6rem)/1.12 var(--krigsvold-font-display);
-  letter-spacing: -0.05em;
-  margin-block: 1rem;
-}
-.krigsvold-reference-coverline {
-  font: 500 1.5rem/1.6 var(--krigsvold-font-display);
-  color: var(--krigsvold-accent);
-  margin-block: 1rem;
-}
-.krigsvold-reference-cover > p:last-of-type {
-  font-size: 1rem;
-  line-height: 1.85;
-  max-inline-size: 60ch;
-  margin-block: 1rem 1.5rem;
-}
-.krigsvold-reference-cover > a {
-  font-size: 0.9rem;
-}
-.krigsvold-reference-status {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-  padding-block: 2rem;
-  border-block-end: 1px solid var(--krigsvold-border-subtle);
-}
-.krigsvold-reference-status .krigsvold-definitions {
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-  font-size: 0.85rem;
-}
-.krigsvold-reference-status .krigsvold-definitions > div {
-  display: block;
-  padding: 0;
-  border: 0;
-}
-.krigsvold-reference-status .krigsvold-definitions dd {
-  margin-block-start: 0.4rem;
-}
-.krigsvold-reference-catalog {
-  padding-block: 3rem;
-}
-.krigsvold-reference-catalog header h2 {
-  font-size: 2rem;
-  margin-block: 1rem;
-}
-.krigsvold-reference-catalog header p:last-child {
-  color: var(--krigsvold-text-subtle);
-  line-height: 1.8;
-}
-.krigsvold-reference-catalog .krigsvold-table-scroll {
-  margin-block-start: 2rem;
-}
-.krigsvold-reference-catalog .krigsvold-table th:first-child {
-  min-inline-size: 9rem;
-}
-.krigsvold-reference-catalog .krigsvold-table td {
-  font-size: 0.88rem;
-}
-.krigsvold-reference-footer {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  border-block-start: 1px solid var(--krigsvold-border-strong);
-  padding-block: 1.5rem;
-  margin-block-start: 3rem;
-  font: 0.75rem/1.6 var(--krigsvold-font-sans);
-  color: var(--krigsvold-text-subtle);
-}
-.krigsvold-reference-footer > a {
-  margin-inline-start: auto;
-}
-@media (max-width: 75rem) {
-  .krigsvold-reference-workspace {
-    grid-template-columns: 1fr;
-  }
-}
-@media (max-width: 55rem) {
-  .krigsvold-reference-heading h1 {
-    font-size: 2.7rem;
-  }
-  .krigsvold-reference-cover h1 {
-    font-size: 3.7rem;
-  }
-  .krigsvold-reference-cover > img {
-    inline-size: 5rem;
-    margin: 1rem 0 1rem 1rem;
-  }
-  .krigsvold-reference-sections {
-    gap: 1rem;
-  }
-  .krigsvold-reference-register {
-    flex-wrap: wrap;
-    font-size: 0.65rem;
-  }
-}
-@media (max-width: 35rem) {
-  .krigsvold-reference-cover > img {
-    float: none;
-    margin: 0 0 1.5rem;
-  }
-  .krigsvold-reference-cover h1 {
-    font-size: 3.5rem;
-  }
-  .krigsvold-reference-heading h1 {
-    font-size: 2.3rem;
-  }
-  .krigsvold-reference-footer > a {
-    margin-inline-start: 0;
-  }
-}
-@media print {
-  .krigsvold-reference .krigsvold-app-header,
-  .krigsvold-reference-register,
-  .krigsvold-reference-footer,
-  .krigsvold-reference-sections {
-    display: none;
-  }
-  .krigsvold-reference .krigsvold-app,
-  .krigsvold-reference-workspace {
-    display: block;
-  }
-  .krigsvold-reference-contract {
-    margin-block-start: 2rem;
-  }
-}
+@media(max-width:48rem) { .krigsvold-reference-footer-grid { grid-template-columns:minmax(0,1fr); } }
+@media print { .krigsvold-reference .krigsvold-app-header,.krigsvold-reference-register,.krigsvold-reference-footer,.krigsvold-reference-sections { display:none; } }
 
-.krigsvold-reference .krigsvold-app {
-  display: block;
-  padding-block-start: 1.5rem;
-}
-.krigsvold-reference .krigsvold-app-header {
-  max-inline-size: var(--krigsvold-content-width);
-  margin-inline: auto;
-  padding: 0.8rem 1rem;
-  border: 1px solid var(--krigsvold-border-strong);
-  border-radius: var(--krigsvold-radius-md);
-  background: var(--krigsvold-bg);
-  gap: 1.2rem;
-}
-.krigsvold-reference-brand {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font: 500 1.15rem/1.5 var(--krigsvold-font-display);
-  text-decoration: none;
-  white-space: nowrap;
-}
-.krigsvold-reference .krigsvold-app-header > nav {
-  margin-inline-start: auto;
-  gap: 0.9rem;
-  align-items: center;
-}
-.krigsvold-reference .krigsvold-app-header > nav > details {
-  position: relative;
-}
-.krigsvold-reference .krigsvold-app-header > nav > details > summary {
-  font: 600 0.78rem/1.5 var(--krigsvold-font-sans);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 0.75rem 0.25rem;
-  list-style: none;
-}
-.krigsvold-reference .krigsvold-app-header summary::-webkit-details-marker {
-  display: none;
-}
-.krigsvold-reference-menu {
-  position: absolute;
-  inset-block-start: 100%;
-  inset-inline-end: 0;
-  min-inline-size: 13rem;
-  padding: 0.5rem;
-  background: var(--krigsvold-panel);
-  border: 1px solid var(--krigsvold-border-strong);
-  z-index: 10;
-}
-.krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a {
-  display: block;
-  font-size: 0.85rem;
-  padding: 0.6rem 0.8rem;
-  color: var(--krigsvold-text);
-}
-.krigsvold-reference .krigsvold-app-header nav a:hover {
-  background: var(--krigsvold-hover-bg);
-}
-.krigsvold-reference .krigsvold-app-utilities {
-  gap: 0.5rem;
-  font-size: 0.8rem;
-}
-.krigsvold-reference-search {
-  position: relative;
-  inline-size: 13rem;
-  border-inline-start: 1px solid var(--krigsvold-border-strong);
-  padding-inline-start: 0.8rem;
-}
-.krigsvold-reference-search label {
-  position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-}
-.krigsvold-reference-search input {
-  font-size: 0.85rem;
-  min-block-size: 2.5rem;
-  background: transparent;
-  border: 0;
-  border-block-end: 1px solid var(--krigsvold-input-border);
-  border-radius: 0;
-}
-.krigsvold-reference-search .directory-links {
-  display: none;
-  position: absolute;
-  inset-inline-end: 0;
-  inset-block-start: 100%;
-  inline-size: min(36rem, calc(100vw - 3rem));
-  max-block-size: 70dvh;
-  overflow: auto;
-  margin: 0;
-  padding: 1rem;
-  background: var(--krigsvold-panel);
-  border: 1px solid var(--krigsvold-border-strong);
-  z-index: 11;
-}
-.krigsvold-reference-search:has(input:not(:placeholder-shown))
-  .directory-links {
-  display: block;
-}
-.krigsvold-reference-register > div {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-.krigsvold-reference-register a[aria-current] {
-  font-weight: 700;
-}
-@media (max-width: 80rem) {
-  .krigsvold-reference .krigsvold-app-header {
-    margin-inline: 1rem;
-  }
-  .krigsvold-reference .krigsvold-app-header > nav {
-    margin-inline-start: 0;
-  }
-  .krigsvold-reference .krigsvold-app-header > .krigsvold-app-utilities {
-    margin-inline-start: auto;
-  }
-  .krigsvold-reference-search {
-    inline-size: 11rem;
-  }
-}
-@media (max-width: 55rem) {
-  .krigsvold-reference .krigsvold-app-header {
-    gap: 0.5rem 1rem;
-    padding: 0.8rem;
-  }
-  .krigsvold-reference .krigsvold-app-header > nav {
-    order: 3;
-    inline-size: 100%;
-    justify-content: space-between;
-  }
-  .krigsvold-reference .krigsvold-app-header > .krigsvold-app-utilities {
-    margin: 0 0 0 auto;
-  }
-  .krigsvold-reference-search {
-    inline-size: 10rem;
-  }
-  .krigsvold-reference-menu {
-    inset-inline-end: auto;
-    inset-inline-start: 0;
-  }
-  .krigsvold-reference
-    .krigsvold-app-header
-    > nav
-    > details:last-child
-    .krigsvold-reference-menu {
-    inset-inline-start: auto;
-    inset-inline-end: 0;
-  }
-}
-@media (max-width: 35rem) {
-  .krigsvold-reference-brand {
-    font-size: 1rem;
-  }
-  .krigsvold-reference-search {
-    inline-size: 100%;
-    border: 0;
-    padding: 0;
-  }
-  .krigsvold-reference .krigsvold-app-header > .krigsvold-app-utilities {
-    inline-size: 100%;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-  .krigsvold-reference .krigsvold-app-header > nav > details > summary {
-    font-size: 0.7rem;
-  }
-  .krigsvold-reference .krigsvold-app-header > nav {
-    gap: 0.35rem;
-  }
-  .krigsvold-reference-register > div {
-    gap: 1rem;
-  }
-  .krigsvold-reference-search .directory-links {
-    inline-size: calc(100vw - 3.6rem);
-    inset-inline-start: 0;
-    inset-inline-end: auto;
-  }
-}
+/* Documentation text roles share the origin's label and reading vocabulary. */
+.krigsvold { --reference-font-ui:var(--krigsvold-font-sans); --reference-font-code:var(--krigsvold-font-mono); --reference-code-bg:var(--krigsvold-code-bg); --reference-code-text:var(--krigsvold-code-text); --reference-reading-width:var(--krigsvold-reading-width); --reference-label-size:.76rem; --reference-label-tracking:.16em; --reference-label-color:var(--krigsvold-color-blue-600); --reference-callout-color:var(--krigsvold-color-blue-600); }
+.krigsvold[data-krigsvold="dark"] { --reference-label-color:var(--krigsvold-color-ice-400); }
+
+@media(max-width:991.98px) { .krigsvold-reference-menu > a:focus-visible { outline-color:var(--krigsvold-color-ice-400); } }

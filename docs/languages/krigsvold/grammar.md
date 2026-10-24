@@ -1,8 +1,12 @@
 # Krigsvold: a grammar of clear regions
 
-Experimental application grammar 0.1 · Theme 2.1.0 · React 0.1.0
+Experimental application grammar 0.2 · Theme 2.1.0 · React 0.1.0
 
 Krigsvold makes complex work legible through purposeful regions, stable alignment, controlled contrast, and precise state. Its clarity must remain approachable when a person is uncertain or an operation fails. Its adopted charter supplies the criteria for these experimental application rules.
+
+## Source authority and current decisions
+
+Existing origin objects are the baseline. Read the `decisions` MCP reference or the adjacent decisions.md before choosing visual rules. Distinguish observed source roles, a contextual translation, and a new application extension. Do not add a global gold stripe, decorative monospace labels, arbitrary accent rules, or mechanically opposite family layouts. Keep new capabilities only with a stated task purpose. The October 23 audit is a fixed record; the reconciliation ledger records implemented decisions and remaining gaps. This remains an experimental grammar, not a declaration of stability.
 
 ## Assign each region a job
 
@@ -14,7 +18,7 @@ The React implementation exposes `--krigsvold-field-gap`, `--krigsvold-group-gap
 
 Use Roboto for interface and body text, Roboto Slab for heading roles, and Roboto Mono where code or numerical comparison benefits. Establish common edges for related labels, values, and actions. Keep the existing navy, glacier, paper, and bronze vocabulary assigned through semantic roles. Contrast should identify importance and interaction state, not merely alternate decorative sections.
 
-Use surface changes to distinguish purpose or depth. A selected result needs a visible non-color cue as well as contrast. Metadata must remain subordinate without becoming illegible. Truncation is appropriate only when the complete information remains available at a predictable destination.
+Keep the desktop navigation popup white with ink text and source pointer/elevation, even inside a dark header. Below 992px its source mobile submenu becomes transparent and in-flow. Use other surface changes only to distinguish purpose or depth. A selected result needs a visible non-color cue as well as contrast. Metadata must remain subordinate without becoming illegible. Truncation is appropriate only when the complete information remains available at a predictable destination.
 
 ## Make scope visible
 

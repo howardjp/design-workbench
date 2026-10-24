@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import {
   AppShell,
   Article,
@@ -18,20 +19,36 @@ export function FamilyLayout({
   page,
   children,
 }: LayoutProps) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    const close = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && menuOpen) { setMenuOpen(false); menuButton.current?.focus(); }
+    };
+    const media = matchMedia("(max-width:68rem), (max-aspect-ratio:4/5)");
+    const resize = () => setMenuOpen(false);
+    window.addEventListener("keydown", close);
+    media.addEventListener("change", resize);
+    return () => { window.removeEventListener("keydown", close); media.removeEventListener("change", resize); };
+  }, [menuOpen]);
   return (
-    <div className="martlet-reference">
+    <div className="martlet-reference" data-menu-open={menuOpen}>
       <AppShell
         navigationLabel="Documentation"
+        headerMode="dark"
         brand={
-          <a className="martlet-reference-brand" href="?">
-            <img src={mark} alt="" width="48" height="48" />
-            <span>
-              Martlet<small>React</small>
-            </span>
-          </a>
+          <div className="martlet-reference-identity">
+            <a href="?" className="martlet-reference-brand">
+              <img src={mark} alt="" width="42" height="42" />
+              <span>Martlet React</span>
+            </a>
+            <button ref={menuButton} className="martlet-reference-toggle" type="button"
+              aria-expanded={menuOpen} aria-controls="martlet-reference-navigation martlet-reference-utilities"
+              onClick={() => setMenuOpen(!menuOpen)}>Menu</button>
+          </div>
         }
         navigation={
-          <>
+          <div id="martlet-reference-navigation" className="martlet-reference-navigation-links">
             <a
               href="?page=language"
               aria-current={page === "language" ? "page" : undefined}
@@ -57,12 +74,12 @@ export function FamilyLayout({
               Components
             </a>
             <a href="?page=agents">For agents</a>
-          </>
+          </div>
         }
         utilities={
-          <Button variant="quiet" onClick={onModeChange}>
+          <div id="martlet-reference-utilities"><Button variant="quiet" onClick={onModeChange}>
             {mode === "light" ? "Dark mode" : "Light mode"}
-          </Button>
+          </Button></div>
         }
       >
         <div className="martlet-reference-width">
@@ -73,20 +90,17 @@ export function FamilyLayout({
             <span>Experimental · 0.1.0 · MIT</span>
           </div>
           {children}
-          <footer className="martlet-reference-footer">
-            <img src={mark} alt="" width="42" height="42" />
-            <div>
-              <strong>Martlet React</strong>
-              <p>Blue and silver in the light. Navy and gold in the dark.</p>
-            </div>
-            <a
-              href={`${repo}/blob/work/registry-foundations/docs/release-policy.md`}
-            >
-              Release policy ↗
-            </a>
-          </footer>
+
         </div>
       </AppShell>
+      <footer className="martlet-reference-footer">
+        <div className="martlet-reference-footer-grid">
+          <div><h2>The language</h2><a href="?page=language">Principles and decisions</a><a href="?page=collection">Working pattern</a><a href="?component=Article">Reading and context</a></div>
+          <div><h2>Build</h2><a href="?page=start">Getting started</a><a href="?#components">Component reference</a><a href="?page=agents">MCP and builder skill</a></div>
+          <div><h2>Project</h2><a href={repo}>Source repository ↗</a><a href={`${repo}/blob/work/registry-foundations/docs/release-policy.md`}>Release policy ↗</a><a href={`${repo}/blob/work/registry-foundations/docs/qa/origin-reconciliation.md`}>Origin reconciliation ↗</a></div>
+        </div>
+        <div className="martlet-reference-footer-base"><img src={mark} alt="" width="48" height="48" /><span>Martlet React · MIT<br />Experimental application extensions</span></div>
+      </footer>
     </div>
   );
 }
@@ -109,18 +123,13 @@ export function ComponentPage({
         <TableOfContents
           items={[
             { id: "playground", label: "Try the component" },
-            { id: "example", label: "Use it in React" },
+            { id: "example", label: "Use it in React", depth: 3 },
             { id: "api", label: "API & composition" },
             { id: "accessibility", label: "States & accessibility" },
           ]}
         />
       }
-      aside={
-        <p>
-          This reference uses Martlet’s own components, typography and
-          Light/Dark palette.
-        </p>
-      }
+
     >
       <div className="martlet-reference-example">{playground}</div>
       <section className="martlet-reference-contract">

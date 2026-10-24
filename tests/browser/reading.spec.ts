@@ -280,7 +280,7 @@ for (const family of ["martlet", "krigsvold"]) {
       });
     }
 }
-test("both article families use identical saved content and distinct reading composition", async ({
+test("both article families preserve saved content and place contents before reading in the available frame", async ({
   page,
   registry,
 }) => {
@@ -298,13 +298,17 @@ test("both article families use identical saved content and distinct reading com
           text: article.textContent?.replace(/\s+/g, " ").trim(),
           contextX: context.getBoundingClientRect().x,
           proseX: prose.getBoundingClientRect().x,
+          contextY: context.getBoundingClientRect().y,
+          proseY: prose.getBoundingClientRect().y,
           font: getComputedStyle(prose).fontFamily,
         };
       }, family),
     );
   }
   expect(snapshots[0].text).toBe(snapshots[1].text);
-  expect(snapshots[0].contextX).toBeGreaterThan(snapshots[0].proseX);
-  expect(snapshots[1].contextX).toBeLessThan(snapshots[1].proseX);
+  expect(snapshots[0].contextX).toBeLessThan(snapshots[0].proseX);
+  expect(snapshots[1].contextX).toBeLessThanOrEqual(snapshots[1].proseX);
+  expect(snapshots[1].contextY).toBeLessThanOrEqual(snapshots[1].proseY);
   expect(snapshots[0].font).not.toBe(snapshots[1].font);
 });
+

@@ -29,3 +29,7 @@ declare module "docs-grammar" {
   const value: string;
   export default value;
 }
+declare module "docs-decisions" {
+  const decisions: string;
+  export default decisions;
+}

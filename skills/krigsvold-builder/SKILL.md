@@ -15,6 +15,10 @@ Discover the Krigsvold MCP tools and call `get_manifest`. Confirm `family` is `k
 
 If MCP is unavailable, read [the bundled grammar](references/grammar.md) and relevant [component contracts](references/components.md). Their offline snapshot applies to experimental React 0.1.0 and theme 2.1.0. Consult [source and setup](references/source.md) for provenance. State missing/unsupported capabilities; do not silently use Martlet or a fictional API.
 
+## Trace existing objects first
+
+Retrieve the `decisions` reference alongside grammar and API guidance. Offline, read [source decisions](references/decisions.md). Treat actual origin use and its rendered cascade as the baseline. Classify each choice as a source rule, a contextual translation, or a new application extension with a task purpose. Remove unsupported decoration. Do not infer provenance from a token existing or from a passing component test. Keep full-page dark mode and unobserved application objects explicitly experimental.
+
 ## Give regions a purpose
 
 Separate orientation, collection scope, working content, supporting context, and commands. Use stable edges and alignment to support comparison. Assign a boundary or contrasting surface only when it explains a purpose, state, or context. Use generous separation between regions and efficient local spacing inside working regions. Keep density explicit without shrinking readable text, focus indicators, or usable targets.

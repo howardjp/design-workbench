@@ -21,14 +21,14 @@ export default defineConfig(({ mode }) => {
                 ? fileURLToPath(
                     new URL(`src/patterns/${mode}.tsx`, import.meta.url),
                   )
-                : id === "docs-grammar"
-                  ? "\0docs-grammar"
+                : id === "docs-grammar" || id === "docs-decisions"
+                  ? `\0${id}`
                   : undefined,
         load: (id) =>
           id === "\0docs-family"
             ? `export * from '@${mode}/react'; import '@${mode}/react/styles.css'; import '@${mode}/theme/fonts.css'; export const family = '${mode}'; export const familyName = '${name}';`
-            : id === "\0docs-grammar"
-              ? `export default ${JSON.stringify(readFileSync(new URL(`../docs/languages/${mode}/grammar.md`, import.meta.url), "utf8"))}`
+            : id === "\0docs-grammar" || id === "\0docs-decisions"
+              ? `export default ${JSON.stringify(readFileSync(new URL(`../docs/languages/${mode}/${id === "\0docs-grammar" ? "grammar" : "decisions"}.md`, import.meta.url), "utf8"))}`
               : undefined,
       },
       {

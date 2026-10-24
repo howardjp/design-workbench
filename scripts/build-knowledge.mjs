@@ -72,6 +72,12 @@ for (const family of ["martlet", "krigsvold"]) {
     "adopted",
   );
   add(
+    "decisions", "grammar", `${family} source decisions and application extensions`,
+    await readFile(`docs/languages/${family}/decisions.md`, "utf8"),
+    `docs/languages/${family}/decisions.md`,
+    ["origin", "source", "typography", "navigation", "contents", "provenance"],
+  );
+  add(
     "pattern:collection-editor",
     "pattern",
     `${family} collection, reading and editing pattern`,

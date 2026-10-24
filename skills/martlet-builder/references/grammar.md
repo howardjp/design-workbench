@@ -1,8 +1,12 @@
 # Martlet: a grammar of related things
 
-Experimental application grammar 0.1 · Theme 2.1.0 · React 0.1.0
+Experimental application grammar 0.2 · Theme 2.1.0 · React 0.1.0
 
 Martlet makes substantial work approachable through proportion, proximity, readable sequence, and continuity. Its warmth must survive a compact collection, an error, or a page without its mark. The adopted charter supplies the criteria; these rules turn them into an application vocabulary to exercise and revise.
+
+## Source authority and current decisions
+
+Existing origin objects are the baseline. Read the `decisions` MCP reference or the adjacent decisions.md before choosing visual rules. Distinguish observed source roles, a contextual translation, and a new application extension. Do not add a global gold stripe, decorative monospace labels, arbitrary accent rules, or mechanically opposite family layouts. Keep new capabilities only with a stated task purpose. The October 23 audit is a fixed record; the reconciliation ledger records implemented decisions and remaining gaps. This remains an experimental grammar, not a declaration of stability.
 
 ## Begin with relationships
 
@@ -12,7 +16,7 @@ The current React roles are `--martlet-field-gap` at 0.5rem, `--martlet-group-ga
 
 ## Give the work a readable sequence
 
-Establish orientation, the subject, supporting context, and the next useful action. Use a bounded reading measure for sustained text. Interface labels and metadata use Lato; Cambo supports prose and expressive headings; Cinzel remains selective rather than spreading to every control. Existing light and dark semantic tokens carry contrast and meaning. Retain original marks when identifying the system; adopting applications provide their own identity.
+Establish orientation, the subject, supporting context, and the next useful action. Use a bounded reading measure for sustained text. Interface labels and metadata use Lato; Cambo supports prose and expressive headings; Cinzel remains selective rather than spreading to every control. In light mode use the observed source ink, navy heading and cream support roles; keep the actual rendered source link color. Existing dark semantic tokens supply an explicit extension with the same source anatomy. Retain original marks when identifying the system; adopting applications provide their own identity.
 
 Reading hierarchy also applies to forms, tables, and working panels. A toolbar can be compact and a table can contain many rows. Neither requires display-size headings or article-sized spacing inside every control. Preserve an understandable sequence and proximity within each local group.
 
@@ -32,7 +36,7 @@ Unsaved navigation requires a clear choice that keeps the draft available. Cance
 
 Top navigation, side navigation, and focused work without primary navigation are all native possibilities. Use a rail when persistent destinations are valuable. Use a top bar when compact orientation leaves the work more room. Use a focused frame when the task benefits from sustained attention. None defines Martlet by itself.
 
-Change the composition when available space no longer supports its relationships. Reflow supporting context without losing it. Preserve source order, keyboard access, readable controls, and return paths. Long labels and enlarged text are design inputs, not exceptional content to clip away.
+Change the composition when available space no longer supports its relationships. Use the left source document index, with unnumbered parent/child hierarchy and separate supporting material. The inline article TOC is a different named variant. Reflow the index into a cream in-flow block when the available width is insufficient, without losing hierarchy or navigation. Preserve source order, keyboard access, readable controls, and return paths. Long labels and enlarged text are design inputs, not exceptional content to clip away.
 
 ## Working pattern: collection, reading, and editing
 
