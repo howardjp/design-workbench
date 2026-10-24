@@ -877,3 +877,12 @@ body {
 /* Single-column task groups must size from available space, not a child's word width. */
 .page-intro, .stack, .section-heading { grid-template-columns:minmax(0,1fr); min-inline-size:0; }
 .page-intro > *, .stack > *, .section-heading > *, .intro-line > * { min-inline-size:0; max-inline-size:100%; }
+
+.initial-specification { grid-template-columns:minmax(0,1fr); }
+.initial-specification > * { min-inline-size:0; overflow-wrap:anywhere; }
+
+.editor-heading > * { min-inline-size:0; max-inline-size:100%; }
+[aria-labelledby="browser-drafts-title"] { overflow-wrap:anywhere; }
+
+.spec-summary, .spec-details { overflow-wrap:anywhere; }
+.spec-details dd { overflow-wrap:anywhere; }

@@ -235,3 +235,9 @@
 @container martlet-article (max-width:74rem) { .martlet-contents[data-variant="index"] > strong { color:var(--martlet-color-gold-700); } }
 @media(max-aspect-ratio:4/5) { .martlet-contents[data-variant="index"] > strong { color:var(--martlet-color-gold-700); } }
 .martlet[data-martlet="dark"] .martlet-contents > strong { color:var(--martlet-color-gold-300); }
+
+.martlet-article-header { grid-template-columns:minmax(0,1fr); }
+.martlet-article-header > *, .martlet-article-metadata dl > * { min-inline-size:0; max-inline-size:100%; }
+.martlet-article-metadata { overflow-wrap:anywhere; }
+
+.martlet-disclosure > summary { overflow-wrap:anywhere; }

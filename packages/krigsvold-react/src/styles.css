@@ -232,3 +232,9 @@
 
 .krigsvold-field, .krigsvold-error-summary { grid-template-columns:minmax(0,1fr); }
 .krigsvold-field > *, .krigsvold-error-summary > * { min-inline-size:0; }
+
+.krigsvold-article-header { grid-template-columns:minmax(0,1fr); }
+.krigsvold-article-header > *, .krigsvold-article-metadata dl > * { min-inline-size:0; max-inline-size:100%; }
+.krigsvold-article-metadata { overflow-wrap:anywhere; }
+
+.krigsvold-disclosure > summary { overflow-wrap:anywhere; }
