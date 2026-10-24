@@ -102,3 +102,14 @@ Local packed React installation/rendering passed for both families. The revised 
 The first reconciliation CI run found enlarged-text/long-label overflow in the local administration consumer. The follow-up bounds application controls and permits identifier wrapping in provenance/contract metadata, while ordinary prose keeps natural word boundaries. Existing overflow assertions remain intact; settings failures now include element diagnostics. Deployment waits for the corrected implementation checks.
 
 The reflow diagnostics identified intrinsic sizing in the workbench's single-column grid groups and flex introduction, not a need to break every prose word. Their tracks/children now shrink to available width. The legacy boxed M/K workbench mark is removed; the consumer supplies its plain title. Axe also identified source gold-600 small-label contrast on cream at 4.25:1. Narrow/inline cream contents use existing gold-700 as an explicit accessibility improvement; the wide white source index retains gold-600.
+
+
+### Final reflow and distribution follow-up
+
+The complete local Chromium run after the first intrinsic-size corrections passed 176 of 178 cases. The remaining two were long h4 labels in Martlet's inventory preview; applying the existing bounded-heading fallback to h4–h6 passes both targeted cases. A final complete run and pushed-head Chromium/Firefox/WebKit CI are the release gate; consult the PR for terminal results. No acceptance assertions were removed or relaxed. Temporary diagnostic instrumentation in the other test files was restored; the settings failure diagnostics remain.
+
+The local browser runtime was restored using temporary @sparticuz/chromium 153.0.0 from the npm registry. It is test infrastructure outside the repository and is not a project dependency. Official Playwright's local browser download failed; CI installs its own official engines. This does not retroactively turn the fresh builder tasks' unexecuted browser checks into passes.
+
+The missing npm cache dependencies were fetched by installing the actual extracted archive with locked dependencies. Both revised standalone archives then passed the official outside-workspace installation and real SDK-client checks locally. Personal skill synchronization still fails HTTP 422 (latest local skill commit 817e9b6); source and archive copies remain usable.
+
+The final source also bounds article metadata, generic disclosure labels, technical summaries, initial specification rows and workbench grid groups. The workbench's boxed M/K initials were removed in favor of the caller's plain title. These are functional reflow/identity corrections, not new family decoration. Managed-preview observations confirm Martlet's changed-draft dialog/Escape preserves the edited title and returns focus to the invoking destination.
