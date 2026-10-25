@@ -78,3 +78,13 @@
 /* Documentation text roles share the origin's label and reading vocabulary. */
 .martlet { --reference-font-ui:var(--martlet-font-sans); --reference-font-code:var(--martlet-font-mono); --reference-code-bg:var(--martlet-code-bg); --reference-code-text:var(--martlet-code-text); --reference-reading-width:var(--martlet-reading-width); --reference-label-size:.78rem; --reference-label-tracking:.1em; --reference-label-color:var(--martlet-color-gold-600); --reference-callout-color:var(--martlet-color-gold-500); }
 .martlet[data-martlet="dark"] { --reference-label-color:var(--martlet-color-gold-300); }
+
+/* Owner-directed documentation band, 2026-10-25; see documentation-navigation.md. */
+.martlet-reference { --documentation-nav-bg:white; --documentation-nav-text:var(--martlet-color-navy-900); --documentation-nav-rule:var(--martlet-color-gold-700); --documentation-nav-border:var(--martlet-color-slate-150); }
+.martlet[data-martlet="dark"] .martlet-reference { --documentation-nav-bg:var(--documentation-nav-dark-bg); --documentation-nav-text:white; --documentation-nav-rule:var(--martlet-color-gold-300); --documentation-nav-border:rgb(255 255 255/.13); }
+.martlet-reference .martlet-app-header { background:var(--documentation-nav-bg); border-block-end-color:var(--documentation-nav-border); box-shadow:none; }
+.martlet-reference-brand,.martlet-reference .martlet-app-header nav a,.martlet-reference-toggle { color:var(--documentation-nav-text); }
+.martlet-reference-toggle { border-color:currentColor; }
+.martlet-reference .martlet-app-header nav a::after { background:var(--documentation-nav-rule); }
+.martlet-reference .martlet-app-header nav a:is([aria-current],:hover) { color:var(--documentation-nav-rule); }
+.martlet-reference .martlet-app-header :focus-visible { outline-color:var(--documentation-nav-text); box-shadow:0 0 0 6px var(--documentation-nav-bg); }

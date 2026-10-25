@@ -72,3 +72,30 @@ for(const family of ['martlet','krigsvold'])test(`${family}: hosted onboarding e
  await page.evaluate(()=>document.documentElement.style.fontSize='200%');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
+
+for(const family of ['martlet','krigsvold'])test(`${family}: documentation navigation is white in light mode and full-width grey in dark mode`,async({page})=>{
+ await page.setViewportSize({width:1440,height:1000});
+ await page.goto(`http://127.0.0.1:${family==='martlet'?4189:4188}/${family}/?mode=light`);
+ const header=page.locator(`.${family}-app-header`);
+ const inspect=()=>header.evaluate(e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return {background:s.backgroundColor,left:r.left,right:r.right,width:innerWidth,radius:s.borderRadius};});
+ expect((await inspect()).background).toBe('rgb(255, 255, 255)');
+ await page.getByRole('button',{name:'Dark mode',exact:true}).click();
+ await expect.poll(async()=>(await inspect()).background).toBe('rgb(46, 57, 71)');
+ const dark=await inspect();expect(Math.abs(dark.left)).toBeLessThan(1);expect(Math.abs(dark.right-dark.width)).toBeLessThan(1);expect(dark.radius).toBe('0px');
+ for(const mode of ['dark','light']){
+  if(mode==='light')await page.getByRole('button',{name:'Light mode',exact:true}).click();
+  expect((await inspect()).background).toBe(mode==='dark'?'rgb(46, 57, 71)':'rgb(255, 255, 255)');
+  if(family==='krigsvold'){
+   await header.locator('summary').first().click();
+   await expect(header.locator('.krigsvold-reference-menu').first()).toBeVisible();
+   expect(await header.locator('.krigsvold-reference-menu').first().evaluate(e=>getComputedStyle(e).backgroundColor)).toBe('rgb(255, 255, 255)');
+  }
+  const axe=await new AxeBuilder({page}).include(`.${family}-app-header`).analyze();expect(axe.violations).toEqual([]);
+  await page.keyboard.press('Escape');
+  await mkdir('test-results/reference-proof',{recursive:true});await page.screenshot({path:`test-results/reference-proof/${family}-navigation-${mode}.png`});
+ }
+ await page.setViewportSize({width:320,height:1000});
+ await header.getByRole('button',{name:'Menu',exact:true}).click();
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ await page.keyboard.press('Escape');await expect(header.getByRole('button',{name:'Menu',exact:true})).toBeFocused();
+});
