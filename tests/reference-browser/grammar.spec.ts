@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import {mkdir} from 'node:fs/promises';
 for(const family of ['martlet','krigsvold']){
  test(`${family}: form validation, failure, retry, retained input and draft reset`,async({page})=>{
-  await page.goto(`http://127.0.0.1:${family==='martlet'?4189:4190}/${family}/?page=patterns`);
+  await page.goto(`http://127.0.0.1:${family==='martlet'?4189:4188}/${family}/?page=patterns`);
   const form=page.getByRole('form',{name:'Publication request'});
   await form.getByRole('button',{name:'Send request',exact:true}).click();
   const summary=form.getByRole('alert');await expect(summary).toBeFocused();
@@ -25,7 +25,7 @@ for(const family of ['martlet','krigsvold']){
   await mkdir('test-results/reference-proof',{recursive:true});await page.setViewportSize({width:1440,height:1100});await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:`test-results/reference-proof/${family}-form.png`,fullPage:true});
  });
  test(`${family}: results preserve failed scope, selection and recover no-match/empty states`,async({page})=>{
-  await page.goto(`http://127.0.0.1:${family==='martlet'?4189:4190}/${family}/?page=patterns&pattern=results`);
+  await page.goto(`http://127.0.0.1:${family==='martlet'?4189:4188}/${family}/?page=patterns&pattern=results`);
   await page.getByRole('checkbox',{name:'Select AppShell',exact:true}).check();
   await page.getByRole('searchbox',{name:'Search the component catalogue'}).fill('Tabs');await expect(page.locator('.reference-applied-scope').first()).toContainText('All component names');
   await page.getByText('Inspect result states',{exact:true}).click();await page.getByRole('checkbox',{name:'Fail the next result request'}).check();
@@ -41,7 +41,7 @@ for(const family of ['martlet','krigsvold']){
   await mkdir('test-results/reference-proof',{recursive:true});await page.setViewportSize({width:1440,height:1100});await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:`test-results/reference-proof/${family}-results.png`,fullPage:true});
  });
  test(`${family}: modal preparation failure, dismissal and late completion retain selection`,async({page})=>{
-  await page.goto(`http://127.0.0.1:${family==='martlet'?4189:4190}/${family}/?page=patterns&pattern=results`);await page.getByRole('checkbox',{name:'Select AppShell',exact:true}).check();
+  await page.goto(`http://127.0.0.1:${family==='martlet'?4189:4188}/${family}/?page=patterns&pattern=results`);await page.getByRole('checkbox',{name:'Select AppShell',exact:true}).check();
   const trigger=page.getByRole('button',{name:'Review selection'});await trigger.click();const dialog=page.getByRole('dialog',{name:'Review selected components'});await expect(dialog).toBeVisible();
   await dialog.getByRole('checkbox',{name:'Fail the next preparation'}).check();await dialog.getByRole('button',{name:'Prepare comparison'}).click();await expect(dialog.getByRole('alert')).toContainText('selection is retained');
   await dialog.getByRole('button',{name:'Try preparation again'}).click();await expect(dialog.getByRole('button',{name:'Preparing…'})).toBeDisabled();await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();await expect(trigger).toBeFocused();await page.waitForTimeout(650);await expect(page.locator('.reference-selection')).not.toContainText('Prepared 1');await expect(page.getByRole('checkbox',{name:'Select AppShell',exact:true})).toBeChecked();
@@ -49,7 +49,7 @@ for(const family of ['martlet','krigsvold']){
  });
  for(const mode of ['light','dark'])for(const pattern of ['form','results','coverage']){
   test(`${family}: ${pattern} ${mode} reflows and passes automated accessibility`,async({page})=>{
-   await page.setViewportSize({width:320,height:1000});await page.goto(`http://127.0.0.1:${family==='martlet'?4189:4190}/${family}/?page=patterns&pattern=${pattern}&mode=${mode}`);
+   await page.setViewportSize({width:320,height:1000});await page.goto(`http://127.0.0.1:${family==='martlet'?4189:4188}/${family}/?page=patterns&pattern=${pattern}&mode=${mode}`);
    await expect(page.locator('main h1')).toHaveCount(1);
    if(pattern==='coverage')await expect(page.locator('main tbody tr')).toHaveCount(18);
    const fits=()=>page.evaluate(()=>({fits:document.documentElement.scrollWidth<=innerWidth,width:innerWidth,scroll:document.documentElement.scrollWidth,scrollX,internal:[...document.querySelectorAll('body *')].filter(e=>e.scrollWidth>e.clientWidth+1&&getComputedStyle(e).overflowX==='visible').slice(-15).map(e=>({tag:e.tagName,class:e.className,client:e.clientWidth,scroll:e.scrollWidth,text:e.textContent?.slice(0,45)})),overflow:[...document.querySelectorAll('body *')].filter(e=>e.getBoundingClientRect().right>innerWidth+1&&!e.closest('[role=region][tabindex]')).slice(0,8).map(e=>({tag:e.tagName,class:e.className,text:e.textContent?.slice(0,60),width:e.getBoundingClientRect().width}))}));

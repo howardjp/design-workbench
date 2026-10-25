@@ -2,7 +2,7 @@ import {createServer} from 'node:http';
 import {readFile} from 'node:fs/promises';
 import {resolve,extname,sep} from 'node:path';
 const types={'.html':'text/html','.css':'text/css','.js':'text/javascript','.svg':'image/svg+xml','.woff':'font/woff','.woff2':'font/woff2'};
-for(const [family,port] of [['martlet',4189],['krigsvold',4190]]) {
+for(const [family,port] of [['martlet',4189],['krigsvold',4188]]) {
 const root=resolve('docs-dist',family);
 createServer(async(req,res)=>{try{
  const url=new URL(req.url,'http://localhost');
