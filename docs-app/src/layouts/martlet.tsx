@@ -35,7 +35,7 @@ export function FamilyLayout({
     <div className="martlet-reference" data-menu-open={menuOpen}>
       <AppShell
         navigationLabel="Documentation"
-        headerMode="dark"
+        headerMode={mode === "dark" ? "dark" : "light"}
         brand={
           <div className="martlet-reference-identity">
             <a href="?" className="martlet-reference-brand">

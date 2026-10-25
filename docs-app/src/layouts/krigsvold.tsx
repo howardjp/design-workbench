@@ -36,7 +36,7 @@ export function FamilyLayout({
       <AppShell
         navigationLabel="Documentation"
         navigationPlacement="top"
-        headerMode="dark"
+        headerMode={mode === "dark" ? "dark" : "light"}
         brand={
           <div className="krigsvold-reference-identity">
             <a href="?" className="krigsvold-reference-brand">
