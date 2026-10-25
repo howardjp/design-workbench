@@ -1,0 +1,7 @@
+# Source and framework support
+
+Canonical guidance: https://github.com/martlettheme/npm/tree/8190e1ad71788c15bec19eac4875af7e15f4f8cf. The bundled grammar and source decisions are exact copies of that revision; implementation.json records framework availability. Grammar 0.3 remains experimental.
+
+Core and Astro 2.2.x/1.2.x guidance is experimental. Check the separately verified distribution record in the connected MCP manifest and npm dist-tags before selecting exact versions. React 0.1.0 uses theme 2.1.0; copied component examples are React examples. Read astro.md for Astro APIs. Shared grammar does not imply shared props or event/focus APIs.
+
+The hosted read-only endpoint is https://martlettheme.dev/mcp when available. The skill directory contains instructions and references only. The optional full agent archive contains a stdio server for offline/local transport; installing the skill does not install that server or create a remote connection. Check manifest family, sourceCommit and sourceDigest. Manual accessibility, localization/RTL and sustained use remain open.

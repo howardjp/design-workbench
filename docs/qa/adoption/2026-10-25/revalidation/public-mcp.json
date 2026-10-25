@@ -1,0 +1,149 @@
+{
+  "checkedAt": "2026-10-25T17:28:28.347Z",
+  "observations": [
+    {
+      "family": "martlet",
+      "mode": "legacy",
+      "sourceCommit": "95b10df8cd984754e1ed3e6034e29040ea908d0e",
+      "sourceDigest": "57928dfcb46c6392f403e42df26279262cf553cc423bf37a0e24edb72dce1d84",
+      "references": 58,
+      "distribution": {
+        "mcp": {
+          "url": "https://martlettheme.dev/mcp",
+          "published": false
+        },
+        "packages": {
+          "core": {
+            "name": "@martlet/theme",
+            "version": "2.2.1",
+            "published": true,
+            "tag": "next"
+          },
+          "Astro": {
+            "name": "@martlet/astro",
+            "version": "1.2.1",
+            "published": true,
+            "tag": "next"
+          },
+          "React": {
+            "name": "@martlet/react",
+            "version": "0.1.0",
+            "published": false,
+            "tag": "next"
+          }
+        },
+        "reviewedAt": "2026-10-25"
+      },
+      "passed": true
+    },
+    {
+      "family": "martlet",
+      "mode": {
+        "pin": "2026-07-28"
+      },
+      "sourceCommit": "95b10df8cd984754e1ed3e6034e29040ea908d0e",
+      "sourceDigest": "57928dfcb46c6392f403e42df26279262cf553cc423bf37a0e24edb72dce1d84",
+      "references": 58,
+      "distribution": {
+        "mcp": {
+          "url": "https://martlettheme.dev/mcp",
+          "published": false
+        },
+        "packages": {
+          "core": {
+            "name": "@martlet/theme",
+            "version": "2.2.1",
+            "published": true,
+            "tag": "next"
+          },
+          "Astro": {
+            "name": "@martlet/astro",
+            "version": "1.2.1",
+            "published": true,
+            "tag": "next"
+          },
+          "React": {
+            "name": "@martlet/react",
+            "version": "0.1.0",
+            "published": false,
+            "tag": "next"
+          }
+        },
+        "reviewedAt": "2026-10-25"
+      },
+      "passed": true
+    },
+    {
+      "family": "krigsvold",
+      "mode": "legacy",
+      "sourceCommit": "95b10df8cd984754e1ed3e6034e29040ea908d0e",
+      "sourceDigest": "1d0fb8c388d0e613c10fba4f774cb70aca8377df4164e15da353b50840c11374",
+      "references": 58,
+      "distribution": {
+        "mcp": {
+          "url": "https://krigsvoldtheme.dev/mcp",
+          "published": false
+        },
+        "packages": {
+          "core": {
+            "name": "@krigsvold/theme",
+            "version": "2.2.1",
+            "published": true,
+            "tag": "next"
+          },
+          "Astro": {
+            "name": "@krigsvold/astro",
+            "version": "1.2.1",
+            "published": true,
+            "tag": "next"
+          },
+          "React": {
+            "name": "@krigsvold/react",
+            "version": "0.1.0",
+            "published": false,
+            "tag": "next"
+          }
+        },
+        "reviewedAt": "2026-10-25"
+      },
+      "passed": true
+    },
+    {
+      "family": "krigsvold",
+      "mode": {
+        "pin": "2026-07-28"
+      },
+      "sourceCommit": "95b10df8cd984754e1ed3e6034e29040ea908d0e",
+      "sourceDigest": "1d0fb8c388d0e613c10fba4f774cb70aca8377df4164e15da353b50840c11374",
+      "references": 58,
+      "distribution": {
+        "mcp": {
+          "url": "https://krigsvoldtheme.dev/mcp",
+          "published": false
+        },
+        "packages": {
+          "core": {
+            "name": "@krigsvold/theme",
+            "version": "2.2.1",
+            "published": true,
+            "tag": "next"
+          },
+          "Astro": {
+            "name": "@krigsvold/astro",
+            "version": "1.2.1",
+            "published": true,
+            "tag": "next"
+          },
+          "React": {
+            "name": "@krigsvold/react",
+            "version": "0.1.0",
+            "published": false,
+            "tag": "next"
+          }
+        },
+        "reviewedAt": "2026-10-25"
+      },
+      "passed": true
+    }
+  ]
+}

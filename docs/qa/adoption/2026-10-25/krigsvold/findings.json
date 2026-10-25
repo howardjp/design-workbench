@@ -1,0 +1,142 @@
+{
+  "fixture": "Independent local Astro research-reference adoption fixture",
+  "directory": "/workspace/scratch/ea99548f98cf/adoption/krigsvold-astro",
+  "versions": {
+    "@krigsvold/theme": "2.2.0",
+    "@krigsvold/astro": "1.2.0",
+    "astro": "5.18.2"
+  },
+  "package_source": "Registry tarballs at registry.npmjs.org; exact versions and integrity in package-lock.json and evidence/registry-resolution.json; no local package aliases or workbench imports",
+  "guidance": {
+    "skill": "krigsvold-builder",
+    "offline_grammar": "0.3, experimental",
+    "offline_source_commit": "a3cf072c516c59ed35814e0fa153028cc91ceecd",
+    "mcp": "No exposed Krigsvold tools. Hosted initialize returned HTTP 404. No bundled stdio server found in supplied skill directory; offline fallback used."
+  },
+  "verified_apis": {
+    "ArticleLayout": "title/documentTitle/description/summary/eyebrow/bodyClass/sidebarLabel; header/metadata/contents/sidebar/footer slots",
+    "TableOfContents": "items: {href,label,depth?:2|3}[]; label; variant=index. Nested children require preceding depth-2 parent.",
+    "SiteHeader": "name/home",
+    "SiteFooter": "variant=grouped; groups: {label,links:{href,label}[]}[]; identity/base slots",
+    "theme": "Exported source-profile.css import and bodyClass opt-in; Layout internally imports exported Astro styles.css, core full.css and fonts.css"
+  },
+  "checks": {
+    "production_build": "Passed; one static route; raw log retained",
+    "semantic": "24 checks passed; exact assertions and JSON in evidence/semantic-results.json",
+    "checks_cover": [
+      "unique main/article/aside/footer/h1/title",
+      "host title and identity",
+      "focusable main with skip link",
+      "unique IDs and every fragment target",
+      "contents before body before separate named support",
+      "2 parent TOC entries each with nested depth-3 link and correct heading level",
+      "unique nav names and 4 footer groups",
+      "host footer ownership/contact",
+      "no scripts or external HTML URL dependencies",
+      "emitted CSS and font URLs resolve locally",
+      "source-profile/reading/print/focus CSS shipped"
+    ],
+    "distribution": {
+      "files": 194,
+      "bytes": 2515224,
+      "font_files": 192,
+      "css_url_occurrences": 208
+    },
+    "browser": {
+      "engine": "153.0.8010.0",
+      "passed": 11,
+      "viewport_widths": [
+        1440,
+        390
+      ],
+      "enlarged_text": "390px at 200% root font size, no horizontal overflow",
+      "keyboard": "Skip link first stop and main focus; native contents link focuses target heading",
+      "print": "Article and supporting context remain visible; contents also remains visible",
+      "visual": "Wide and narrow screenshots inspected; readable hierarchy, distinct support, grouped footer; package header accent remains",
+      "errors": {
+        "failed_requests": [],
+        "uncaught_browser_errors": []
+      },
+      "evidence": "evidence/browser-results.json; browser-1440.png; browser-390.png"
+    }
+  },
+  "onboarding_frictions": [
+    {
+      "id": "F1",
+      "observation": "Skill requests hosted or bundled MCP; no discoverable Krigsvold tool, hosted initialize returned HTTP 404, and supplied skill has no stdio server or command.",
+      "impact": "Could not obtain get_manifest, builder-skill, guidance search, source digest or live publication status; used stated fallback."
+    },
+    {
+      "id": "F2",
+      "observation": "Offline implementation/source references label theme 2.2.0 and Astro 1.2.0 unreleased candidates; exact registry install succeeds.",
+      "impact": "Publication metadata in supplied skill is stale relative to installed registry evidence."
+    },
+    {
+      "id": "F3",
+      "observation": "Installed Astro README heading says Consolidation candidate (unreleased); installed consolidation.md says do not install an unpublished version and recommends review branches/archives, while later text explains next-tag publication.",
+      "impact": "Published package onboarding remains internally inconsistent. No assumption made about current dist-tags."
+    },
+    {
+      "id": "F4",
+      "observation": "Bundled components.md is React-specific and TableOfContents uses id/label; actual Astro export uses href/label and nested lists. Skill points to canonical consolidation docs but does not bundle the Astro API reference.",
+      "impact": "Consumer must inspect installed Astro source/docs to avoid wrong prop names."
+    },
+    {
+      "id": "F5",
+      "observation": "Installed README layout-system section describes theme ^2.1.0 for version 1.1; installed 1.2.0 package peer is ^2.2.0.",
+      "impact": "Version-specific prose must be reconciled with actual package metadata."
+    },
+    {
+      "id": "F6",
+      "observation": "npm warns Unknown env config http-proxy; transitive tsconfck@3.1.6 is deprecated as unmaintained.",
+      "impact": "Install and build still succeed; environment warning and transitive package warning preserved separately from design-system behavior."
+    },
+    {
+      "id": "F7",
+      "observation": "Default Layout fonts.css path emits 192 font files; total static output is 2,515,224 bytes for this short single page.",
+      "impact": "Broad bundled font coverage is an observed adoption cost; actual browser download selection and performance were not measured."
+    },
+    {
+      "id": "F8",
+      "observation": "Source-profile docs promise removal of page-header accent; screenshot and computed style show the full-width header bottom border remains. layout.css sets border-block-end on .krigsvold-page-header; source-profile.css only hides .krigsvold-page-header__copy::after.",
+      "impact": "Documented opt-in does not remove actual package rule. No local visual override added; evidence preserves registry behavior.",
+      "computed": {
+        "borderBottomWidth": "3px",
+        "borderBottomStyle": "solid",
+        "borderBottomColor": "rgb(40, 106, 157)",
+        "background": "rgba(0, 0, 0, 0)",
+        "sourceProfileActive": true
+      }
+    },
+    {
+      "id": "F9",
+      "observation": "Initial browser assertion expected print to hide contents based on the supplied React component contract. It failed; Astro package patterns.css print rules retain contents, confirmed visible in Chromium print emulation.",
+      "impact": "This is a framework-specific contract gap, not a justified Astro API guarantee. Initial failure raw/results retained, final browser test records visible contents and checks article/support retention."
+    }
+  ],
+  "design_attribution": {
+    "source_rules": [
+      "Native typography/palette via package; optional source reading profile",
+      "Host owns branding and destinations"
+    ],
+    "source_translation": [
+      "Grouped footer anatomy"
+    ],
+    "application_extension": [
+      "Two-level reading contents index"
+    ],
+    "host_content": [
+      "Fictional Civic Research Desk identity and illustrative research prose"
+    ]
+  },
+  "unverified": [
+    "Screen-reader/assistive-technology review",
+    "Other engines/browser versions; 320px, locale/RTL, long translated content and full WCAG text-spacing tests",
+    "Computed contrast, forced colors, reduced motion and dark mode",
+    "Printed pagination and physical print rendering; only print-media visibility checked",
+    "Performance/network transfer measurement and sustained use",
+    "Standalone Astro type checking; only production compilation and semantic/browser assertions run",
+    "Current npm dist-tags and live MCP manifest/version/digest"
+  ],
+  "scope": "Only assigned directory written. No hosted Site, publishing, deployment, git push, workbench changes or use of the other language."
+}

@@ -1,0 +1,7 @@
+# Independent builder-skill usage observations
+
+Two independent agents used the corresponding skill to build a synthetic contact directory from a fresh task. Martlet was requested with side navigation; Krigsvold with top navigation. The prompts asked for search, reading/editing, validation and recoverable failed saving, without supplying an intended layout or solution. Neither agent changed the workbench sources.
+
+These directories preserve the emitted component, harness, implementation rationale and raw verification result. They are evaluation evidence, not additional supported application products. The recorded commands used `test-results/skill-use/<family>`; to repeat them, copy a family directory there from the workbench root and use its rationale's commands. Browser executable paths and container-specific launch accommodations are recorded in each harness and may need adapting to another host. No browser installation or host-library setup is supplied here.
+
+Martlet used the skill's offline snapshot because its initial local catalogue lookup preceded catalogue generation. Krigsvold exercised the local MCP server. The differing retrieval conditions are recorded rather than presented as identical tests. Both build/type checks and recorded workflows passed. Automated accessibility scans are limited to the observed fixture states and engines; they do not certify the reference Sites or either complete design language.

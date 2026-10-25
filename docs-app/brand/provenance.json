@@ -1,0 +1,12 @@
+{
+  "martlet": {
+    "repository": "martlettheme/martlettheme",
+    "path": "site/public/martlet-mark.svg",
+    "gitBlobSha": "07986397255ef7994c5e197beae4e67119468e34"
+  },
+  "krigsvold": {
+    "repository": "krigsvoldtheme/krigsvoldtheme",
+    "path": "site/public/krigsvold-mark.svg",
+    "gitBlobSha": "7d4e179dc749056eb79b602b5809464ae718b460"
+  }
+}

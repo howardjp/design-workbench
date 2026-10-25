@@ -1,0 +1,20 @@
+{
+  "name": "krigsvold-astro-adoption-fixture",
+  "version": "1.0.0",
+  "description": "Independent registry adoption validation fixture",
+  "main": "index.js",
+  "scripts": {
+    "build": "astro build",
+    "check:semantic": "python3 scripts/check_output.py"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@krigsvold/astro": "1.2.0",
+    "@krigsvold/theme": "2.2.0",
+    "astro": "5.18.2"
+  },
+  "private": true
+}

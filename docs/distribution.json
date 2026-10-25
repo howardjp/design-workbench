@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-25",
+  "families": {
+    "martlet": {
+      "mcp": {
+        "url": "https://martlettheme.dev/mcp",
+        "published": true
+      },
+      "packages": {
+        "core": {
+          "name": "@martlet/theme",
+          "version": "2.2.1",
+          "published": true,
+          "tag": "next"
+        },
+        "Astro": {
+          "name": "@martlet/astro",
+          "version": "1.2.1",
+          "published": true,
+          "tag": "next"
+        },
+        "React": {
+          "name": "@martlet/react",
+          "version": "0.1.0",
+          "published": false,
+          "tag": "next"
+        }
+      }
+    },
+    "krigsvold": {
+      "mcp": {
+        "url": "https://krigsvoldtheme.dev/mcp",
+        "published": true
+      },
+      "packages": {
+        "core": {
+          "name": "@krigsvold/theme",
+          "version": "2.2.1",
+          "published": true,
+          "tag": "next"
+        },
+        "Astro": {
+          "name": "@krigsvold/astro",
+          "version": "1.2.1",
+          "published": true,
+          "tag": "next"
+        },
+        "React": {
+          "name": "@krigsvold/react",
+          "version": "0.1.0",
+          "published": false,
+          "tag": "next"
+        }
+      }
+    }
+  }
+}

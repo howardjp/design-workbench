@@ -1,0 +1,51 @@
+---
+import { ArticleLayout, SiteHeader, TableOfContents, SiteFooter } from '@martlet/astro';
+import '@martlet/theme/source-profile.css';
+const contents = [
+  { href: '#evidence', label: 'Read the evidence', depth: 2 as const },
+  { href: '#provenance', label: 'Record provenance', depth: 3 as const },
+  { href: '#limits', label: 'Describe the limits', depth: 3 as const },
+  { href: '#reuse', label: 'Make a reusable reference', depth: 2 as const },
+  { href: '#review', label: 'Review before reuse', depth: 3 as const },
+];
+const footerGroups = [
+  { label: 'Reference', links: [{ href: '#evidence', label: 'Evidence' }, { href: '#reuse', label: 'Reuse' }] },
+  { label: 'Working notes', links: [{ href: '#provenance', label: 'Provenance' }, { href: '#supporting-context', label: 'Scope and context' }] },
+];
+---
+<ArticleLayout
+  title="Keeping a useful research record"
+  documentTitle="Keeping a useful research record | Northbank Research Desk"
+  description="A compact research reference about recording evidence, its provenance, and its limits."
+  summary="A working reference for turning a reading session into a record another reader can assess."
+  eyebrow="Research methods · Reference 01"
+  bodyClass="martlet-source-profile"
+  sidebarLabel="Supporting context"
+>
+  <SiteHeader slot="header" name="Northbank Research Desk" home="#main-content" links={[{ href: '#evidence', label: 'Read the reference' }, { href: '#supporting-context', label: 'Context' }]} />
+  <p slot="metadata">Method note · <time datetime="2026-10-25">25 October 2026</time> · Illustrative local fixture</p>
+  <TableOfContents slot="contents" items={contents} label="In this reference" variant="index" />
+
+  <h2 id="evidence" tabindex="-1">Read the evidence</h2>
+  <p>A useful research record connects each conclusion to the material that supports it. Start with the question the source can answer, then retain enough context for a later reader to judge that answer.</p>
+  <h3 id="provenance" tabindex="-1">Record provenance</h3>
+  <p>Keep the source title, author, date, and location beside the note. When a source changes over time, record the edition or revision you actually consulted.</p>
+  <h3 id="limits" tabindex="-1">Describe the limits</h3>
+  <p>Separate direct observations from interpretation. A missing observation is a reason to qualify the claim and state the next check.</p>
+  <h2 id="reuse" tabindex="-1">Make a reusable reference</h2>
+  <p>Write a short account of what the source establishes and why it matters to the question. Group supporting details by purpose so the argument remains readable without the surrounding research session.</p>
+  <h3 id="review" tabindex="-1">Review before reuse</h3>
+  <p>Before citing the note elsewhere, revisit its date, scope, and unresolved questions. Preserve the original record when later evidence changes the conclusion.</p>
+
+  <Fragment slot="sidebar">
+    <h2 id="supporting-context" tabindex="-1">Supporting context</h2>
+    <p>This illustrative reference is a local package adoption fixture. It contains no research dataset or empirical finding.</p>
+    <h3>Use this note for</h3>
+    <p>A compact reminder while reading and preparing a traceable source note.</p>
+  </Fragment>
+
+  <SiteFooter slot="footer" variant="grouped" groups={footerGroups}>
+    <p slot="identity">Northbank Research Desk</p>
+    <p slot="base">Illustrative host identity · Local validation fixture · <a href="#main-content">Back to reference</a></p>
+  </SiteFooter>
+</ArticleLayout>

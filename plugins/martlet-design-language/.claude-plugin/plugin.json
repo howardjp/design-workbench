@@ -1,0 +1,12 @@
+{
+  "name": "martlet-design-language",
+  "version": "0.1.0",
+  "description": "Build Martlet interfaces with its independent UI grammar, source decisions, platform APIs, task patterns and read-only guidance MCP. Experimental application grammar; explicit framework and evidence limits.",
+  "author": {
+    "name": "James P. Howard, II"
+  },
+  "homepage": "https://martlettheme.dev/agents/",
+  "repository": "https://github.com/howardjp/design-workbench",
+  "license": "MIT",
+  "displayName": "Martlet Design Language"
+}

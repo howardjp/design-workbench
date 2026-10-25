@@ -1,0 +1,27 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "martlet-design-language",
+  "version": "0.1.0",
+  "description": "Build Martlet interfaces with its independent UI grammar, source decisions, platform APIs, task patterns and read-only guidance MCP. Experimental application grammar; explicit framework and evidence limits.",
+  "author": {
+    "name": "James P. Howard, II"
+  },
+  "homepage": "https://martlettheme.dev/agents/",
+  "repository": "https://github.com/howardjp/design-workbench",
+  "license": "MIT",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Martlet Design Language",
+        "shortDescription": "Build with Martlet",
+        "longDescription": "Build Martlet interfaces with its independent UI grammar, source decisions, platform APIs, task patterns and read-only guidance MCP. Experimental application grammar; explicit framework and evidence limits.",
+        "developerName": "James P. Howard, II",
+        "category": "Developer Tools",
+        "capabilities": [],
+        "logo": "./assets/mark.svg",
+        "composerIcon": "./assets/mark.svg",
+        "defaultPrompt": "Use Martlet's grammar to build this interface. Retrieve the manifest and platform-specific guidance before choosing APIs."
+      }
+    }
+  }
+}

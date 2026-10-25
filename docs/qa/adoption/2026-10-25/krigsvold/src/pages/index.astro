@@ -1,0 +1,52 @@
+---
+import { ArticleLayout, SiteHeader, SiteFooter, TableOfContents } from '@krigsvold/astro';
+import '@krigsvold/theme/source-profile.css';
+const contents = [
+  { href: '#scope', label: 'Research scope', depth: 2 as const },
+  { href: '#boundaries', label: 'Define the boundaries', depth: 3 as const },
+  { href: '#evidence', label: 'Evidence record', depth: 2 as const },
+  { href: '#limits', label: 'Record the limits', depth: 3 as const },
+];
+const groups = [
+  { label: 'Reference', links: [{ href: '#scope', label: 'Research scope' }, { href: '#evidence', label: 'Evidence record' }] },
+  { label: 'Practice', links: [{ href: '#boundaries', label: 'Boundaries' }, { href: '#limits', label: 'Limits' }] },
+  { label: 'Context', links: [{ href: '#supporting-context', label: 'About this note' }] },
+  { label: 'Desk', links: [{ href: '#contact', label: 'Ownership and contact' }] },
+];
+---
+<ArticleLayout
+  title="Reading an evidence record"
+  documentTitle="Reading an evidence record | Civic Research Desk"
+  description="A short illustrative research reference for documenting scope, evidence, and limits."
+  summary="A working note on making a research claim inspectable."
+  eyebrow="Civic Research Desk · Method note 01"
+  bodyClass="krigsvold-source-profile"
+  sidebarLabel="Reference context"
+>
+  <SiteHeader slot="header" name="Civic Research Desk" home="#main-content" />
+  <p slot="metadata">Illustrative reference · <time datetime="2026-10-25">25 October 2026</time></p>
+  <TableOfContents slot="contents" label="In this reference" items={contents} variant="index" />
+
+  <section aria-labelledby="scope">
+    <h2 id="scope" tabindex="-1">Research scope</h2>
+    <p>A useful record names the question it can answer. Describe the object of study, the period under review, and the evidence available to the reader.</p>
+    <h3 id="boundaries" tabindex="-1">Define the boundaries</h3>
+    <p>State what the record includes before drawing a conclusion. A narrow observation can support a precise claim while leaving related questions open.</p>
+  </section>
+  <section aria-labelledby="evidence">
+    <h2 id="evidence" tabindex="-1">Evidence record</h2>
+    <p>Keep an observation close to its source. Distinguish a directly observed result from an interpretation so another reader can trace the reasoning.</p>
+    <h3 id="limits" tabindex="-1">Record the limits</h3>
+    <p>Describe the checks performed and the conditions they cover. Preserve unresolved questions as part of the record rather than treating missing evidence as a successful check.</p>
+  </section>
+
+  <Fragment slot="sidebar">
+    <h2 id="supporting-context" tabindex="-1">About this note</h2>
+    <p>This is fictional host content for a local package adoption fixture. It demonstrates a reading page and makes no institutional research claim.</p>
+    <dl><dt>Host</dt><dd>Civic Research Desk</dd><dt>Purpose</dt><dd>Illustrative research method reference</dd><dt>Status</dt><dd>Local validation fixture</dd></dl>
+  </Fragment>
+  <SiteFooter slot="footer" variant="grouped" groups={groups}>
+    <Fragment slot="identity"><p><strong>Civic Research Desk</strong></p><p>Clear questions. Traceable evidence.</p></Fragment>
+    <p slot="base" id="contact" tabindex="-1">Civic Research Desk · Fictional host · Contact: no public contact channel; local fixture only.</p>
+  </SiteFooter>
+</ArticleLayout>

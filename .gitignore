@@ -1,0 +1,15 @@
+node_modules/
+dist/
+packages/*/dist/
+var/
+test-results/
+playwright-report/
+*.tgz
+
+docs-dist/
+release-candidates/
+mcp/catalogs/
+agent-dist/
+
+hosted-dist/
+mcp-dist/

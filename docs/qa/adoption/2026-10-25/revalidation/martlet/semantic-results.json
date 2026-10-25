@@ -1,0 +1,115 @@
+{
+  "checks": [
+    {
+      "name": "One main, article, top-level heading, site footer and document language",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Unique ids",
+      "pass": true,
+      "detail": [
+        "main-content",
+        "evidence",
+        "provenance",
+        "limits",
+        "reuse",
+        "review",
+        "supporting-context"
+      ]
+    },
+    {
+      "name": "All fragment links resolve",
+      "pass": true,
+      "detail": [
+        "#main-content",
+        "#main-content",
+        "#evidence",
+        "#supporting-context",
+        "#evidence",
+        "#provenance",
+        "#limits",
+        "#reuse",
+        "#review",
+        "#evidence",
+        "#reuse",
+        "#provenance",
+        "#supporting-context",
+        "#main-content"
+      ]
+    },
+    {
+      "name": "Contents precede article; separate supporting aside follows",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Two parent and three child contents links use native nested lists",
+      "pass": true,
+      "detail": {
+        "parents": 2,
+        "children": 3
+      }
+    },
+    {
+      "name": "Every contents link targets an h2/h3 with tabindex -1",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Skip link resolves to focusable main",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Grouped footer labels and separate host identity",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "No client JavaScript emitted",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Source profile opted in",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Emitted local stylesheets exist",
+      "pass": true,
+      "detail": [
+        "dist/_astro/index.DjCq61BM.css"
+      ]
+    },
+    {
+      "name": "All emitted font URLs are local files",
+      "pass": true,
+      "detail": {
+        "font_url_count": 110
+      }
+    },
+    {
+      "name": "Source-profile CSS follows regular layout defaults",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Container-responsive index and grouped footer rules emitted",
+      "pass": true,
+      "detail": null
+    }
+  ],
+  "passed": 14,
+  "total": 14,
+  "method": "Python stdlib HTMLParser plus emitted asset/CSS inspection; no browser rendering",
+  "unverified": [
+    "Rendered responsive layout at narrow/wide widths",
+    "Keyboard focus movement and visual indicator",
+    "Contrast in actual cascade",
+    "Print rendering",
+    "Dark mode",
+    "Manual assistive technology, localization/RTL, sustained consumer use"
+  ]
+}

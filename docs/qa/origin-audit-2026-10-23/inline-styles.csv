@@ -1,0 +1,5 @@
+"file","line","expression","classification","registerIds"
+"docs-app/src/main.tsx","64","inlineSize: width === ""full"" ? ""100%"" : `${width}px`","host inspection or isolated example layout","N18 C17"
+"docs-app/src/main.tsx","358","padding: ""2rem""","host inspection or isolated example layout","N18 C17"
+"docs-app/src/main.tsx","482","document.documentElement.style.colorScheme = mode","document mode plumbing; full dark grammar unproven","F04 C17"
+"docs-app/src/patterns/martlet.tsx","95","whiteSpace: ""pre-wrap""","application content formatting extension","R06 C14 C15"

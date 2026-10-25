@@ -1,0 +1,30 @@
+{
+  "repository": "martlettheme/npm",
+  "commit": "8190e1ad71788c15bec19eac4875af7e15f4f8cf",
+  "files": {
+    "grammar.md": {
+      "sourcePath": "docs/grammar.md",
+      "sha256": "baff3ebc8728c8a2c55ca5e482d04d71dd97813d2e92c39e04bcfb96dd4bf00e"
+    },
+    "decisions.md": {
+      "sourcePath": "docs/source-decisions.md",
+      "sha256": "8775721c0be2b25da5631860a4a5e3b996f567078d0a24a3f94c1f9ca2b6c820"
+    },
+    "implementation.json": {
+      "sourcePath": "language.json",
+      "sha256": "be54910d2e3cc28be31120a47491762ebddda4729933a721324e115d6f536eab"
+    },
+    "coverage.md": {
+      "sourcePath": "docs/coverage.md",
+      "sha256": "b0c564e3b4f0d1eefea791b8038d4d41d26223d8fb853d3026a578e936e19150"
+    },
+    "forms.md": {
+      "sourcePath": "docs/patterns/forms.md",
+      "sha256": "056071953c31732e8cda2630cd787d37a524d4c8a5dc7f8518324a14b2f60d4a"
+    },
+    "query-results.md": {
+      "sourcePath": "docs/patterns/query-results.md",
+      "sha256": "b7de6b0d238cebb6e9a903f1ed3557483dfc52bd5ec039e614e8d367037a9fb8"
+    }
+  }
+}

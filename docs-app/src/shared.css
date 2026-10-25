@@ -1,0 +1,265 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+img {
+  max-inline-size: 100%;
+  block-size: auto;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+a {
+  text-underline-offset: 0.2em;
+}
+[hidden] {
+  display: none !important;
+}
+.notebook-sr {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.pattern-inspection { display:flex; flex-wrap:wrap; align-items:end; gap:1.5rem; padding-block:1.5rem; border-block-end:1px solid var(--ui-line); }
+.pattern-inspection > div { min-inline-size:min(100%,18rem); }
+.pattern-inspection > a { padding-block:.75rem; }
+.pattern-frame { display:block; max-inline-size:100%; block-size:55rem; margin:2rem auto; border:1px solid var(--ui-line); background:var(--ui-bg); }
+.focused-pattern { padding:clamp(1rem,3vw,2.5rem); }
+.language-guide {
+  max-inline-size: var(--reference-reading-width);
+  margin-inline: auto;
+  padding-block: 2rem 4rem;
+}
+.language-guide > * + * {
+  margin-block-start: 1.25rem;
+}
+.language-guide h2 {
+  margin-block-start: 3rem;
+}
+.language-guide p {
+  line-height: 1.8;
+}
+.language-guide code {
+  font-family: var(--reference-font-code);
+  font-size: 0.85em;
+}
+.language-guide-links {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding-block: 1.5rem;
+  border-block-end: 1px solid var(--ui-line);
+}
+.reference-kicker {
+  font: 700 var(--reference-label-size)/1.5 var(--reference-font-ui);
+  letter-spacing: var(--reference-label-tracking);
+  text-transform: uppercase;
+  color: var(--reference-label-color);
+}
+.component-directory {
+  min-inline-size: 0;
+}
+.component-directory .directory-links {
+  margin-block-start: 1.5rem;
+}
+.directory-links section + section {
+  margin-block-start: 1.5rem;
+}
+.directory-links h2 {
+  font: 700 0.72rem/1.5 var(--reference-font-ui);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ui-muted);
+  margin-block-end: 0.65rem;
+}
+.directory-links a {
+  display: block;
+  font-size: 0.88rem;
+  min-block-size: 2.7rem;
+  padding: 0.55rem 0.6rem;
+  text-decoration: none;
+}
+.directory-links a[aria-current] {
+  font-weight: 700;
+  color: var(--ui-accent);
+}
+.playground {
+  min-inline-size: 0;
+  border: 1px solid var(--ui-line);
+  background: var(--ui-bg);
+  scroll-margin-block-start: 1.5rem;
+}
+.preview-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.25rem;
+  border-block-end: 1px solid var(--ui-line);
+  font: 500 0.72rem/1.5 var(--reference-font-code);
+  color: var(--ui-muted);
+}
+.specimen {
+  padding: 2rem;
+  min-block-size: 11rem;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.demo-feedback {
+  font: 0.88rem/1.6 var(--reference-font-ui);
+  color: var(--ui-muted);
+  margin-block-start: 1rem;
+}
+.controls {
+  background: var(--ui-surface);
+  border-block-start: 1px solid var(--ui-line);
+  padding: 1rem 1.25rem 1.5rem;
+}
+.control-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-block-end: 1rem;
+}
+.control-heading h3 {
+  font: 700 0.85rem/1.5 var(--reference-font-ui);
+}
+.control-grid {
+  display: flex;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  flex-wrap: wrap;
+}
+.control-grid > div {
+  flex: 1;
+  min-inline-size: 14rem;
+}
+.code-block {
+  min-inline-size: 0;
+  margin-block: 1.25rem 2.5rem;
+  border: 1px solid var(--ui-line);
+  background: var(--reference-code-bg);
+  color: var(--reference-code-text);
+}
+.code-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  border-block-end: 1px solid var(--ui-line);
+  font: 0.75rem/1.5 var(--reference-font-ui);
+}
+.code-block textarea {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 20rem;
+  resize: vertical;
+  padding: 1.25rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: 0.8rem/1.8 var(--reference-font-code);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.code-block p {
+  font: 0.8rem/1.6 var(--reference-font-ui);
+  padding: 0.5rem 1rem;
+}
+.code-block p:empty {
+  display: none;
+}
+.shell-frame {
+  inline-size: 100%;
+  block-size: 30rem;
+  border: 1px solid var(--ui-line);
+  background: var(--ui-bg);
+}
+.reference-page > h1 {
+  margin-block: 2rem 1.5rem;
+}
+.reference-page > h2 {
+  margin-block: 2.5rem 1rem;
+}
+.reference-page > p {
+  max-inline-size: 72ch;
+  line-height: 1.85;
+  margin-block: 1rem;
+}
+.reference-page > .lead {
+  font-size: 1.15rem;
+}
+.callout {
+  border-inline-start: 4px solid var(--reference-callout-color);
+  padding: 1.25rem 1.5rem;
+  background: var(--ui-surface);
+  margin-block: 2rem;
+}
+.callout p {
+  margin-block-start: 0.6rem;
+}
+.reference-page code {
+  font-family: var(--reference-font-code);
+  overflow-wrap: anywhere;
+}
+@media (max-width: 40rem) {
+  .specimen {
+    padding: 1rem;
+  }
+  .controls {
+    padding: 1rem;
+  }
+  .control-grid > div {
+    min-inline-size: 100%;
+  }
+  .control-heading {
+    align-items: start;
+  }
+  .control-heading h3 {
+    padding-block-start: 0.75rem;
+  }
+  .code-block textarea {
+    padding: 1rem;
+    font-size: 0.75rem;
+  }
+  .preview-label {
+    padding: 1rem;
+    font-size: 0.66rem;
+  }
+  .shell-frame {
+    block-size: 34rem;
+  }
+}
+@media print {
+  .code-toolbar button,
+  .component-directory,
+  .controls {
+    display: none !important;
+  }
+  .code-block textarea {
+    block-size: 32rem;
+  }
+  .playground,
+  .code-block {
+    break-inside: avoid;
+  }
+}
+
+:where(h1,h2,h3,h4,[id]) { scroll-margin-block-start:6rem; }
+
+.language-guide :is(.language-guide-rules,.language-guide-decisions) > * + * { margin-block-start:1.25rem; }
+.language-guide .language-guide-decisions { margin-block-start:4rem; }
+.language-guide h3 { margin-block-start:2.5rem; }
