@@ -4,8 +4,11 @@
   "families": {
     "martlet": {
       "mcp": {
-        "url": "https://martlettheme.dev/mcp",
-        "published": true
+        "url": "https://martletdesign.dev/mcp",
+        "published": true,
+        "aliases": [
+          "https://martlettheme.dev/mcp"
+        ]
       },
       "packages": {
         "core": {
@@ -26,12 +29,21 @@
           "published": false,
           "tag": "next"
         }
-      }
+      },
+      "preview": {
+        "version": "0.3.0",
+        "stage": "preview"
+      },
+      "home": "https://martletdesign.dev",
+      "reactReference": "https://martletdesign.dev/react/"
     },
     "krigsvold": {
       "mcp": {
-        "url": "https://krigsvoldtheme.dev/mcp",
-        "published": true
+        "url": "https://krigsvolddesign.dev/mcp",
+        "published": true,
+        "aliases": [
+          "https://krigsvoldtheme.dev/mcp"
+        ]
       },
       "packages": {
         "core": {
@@ -52,7 +64,17 @@
           "published": false,
           "tag": "next"
         }
-      }
+      },
+      "preview": {
+        "version": "0.3.0",
+        "stage": "preview"
+      },
+      "home": "https://krigsvolddesign.dev",
+      "reactReference": "https://krigsvolddesign.dev/react/"
     }
+  },
+  "preview": {
+    "version": "0.3.0",
+    "stage": "preview"
   }
 }

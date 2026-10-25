@@ -6,6 +6,7 @@ export default defineConfig(({ mode }) => {
     throw new Error("Choose a documentation family");
   const name = mode === "martlet" ? "Martlet" : "Krigsvold";
   return {
+    base: process.env.DESIGN_DOCS_BASE || "/",
     root: fileURLToPath(new URL(".", import.meta.url)),
     plugins: [
       {

@@ -3,7 +3,7 @@
   "mcpServers": {
     "martlet": {
       "type": "streamable-http",
-      "url": "https://martlettheme.dev/mcp",
+      "url": "https://martletdesign.dev/mcp",
       "extensions": {
         "com.openai": {
           "auth": {

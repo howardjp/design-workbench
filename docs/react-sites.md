@@ -4,12 +4,12 @@ October 24, 2026 · Experimental 0.1.0 · MIT
 
 The two reference applications have separate experimental layouts, existing system marks, theme semantic palettes, and proposed application grammars. They demonstrate a collection/reading/editor pattern in each language alongside all 22 component specimens, API and keyboard contracts, standalone JSX examples, and agent-tooling setup. The [October 23 origin audit](qa/origin-audit-2026-10-23.md) is a fixed baseline. Its [67-item reconciliation ledger](qa/origin-reconciliation.md) now records restored source objects, removed unsupported decoration, explicit application extensions and remaining vocabulary. Neither grammar is locked.
 
-| Family | Private review site | Proposed public home | Output |
+| Family | Private review site | Public preview home | Output |
 | --- | --- | --- | --- |
-| Martlet | https://martlet-react-reference.k3jph.chatgpt.site | https://react.martletdesign.dev | docs-dist/martlet |
-| Krigsvold | https://krigsvold-react-reference.k3jph.chatgpt.site | https://react.krigsvolddesign.org | docs-dist/krigsvold |
+| Martlet | https://martlet-react-reference.k3jph.chatgpt.site | https://martletdesign.dev/react/ | docs-dist/martlet |
+| Krigsvold | https://krigsvold-react-reference.k3jph.chatgpt.site | https://krigsvolddesign.dev/react/ | docs-dist/krigsvold |
 
-Both review Sites retain their existing owner-private audience. DNS and public-domain configuration are separate work. The React packages remain unpublished and experimental; no npm publication, source-site replacement, or public access change is implied.
+Both review Sites retain their existing owner-private audience. The 0.3 public references are distributed separately on the design domains; the owner-private review Sites retain their audience. The React packages remain unpublished and experimental; no npm publication, source-site replacement, or public access change is implied.
 
 ## Language, patterns, and components
 
@@ -21,7 +21,7 @@ Original theme-site SVGs remain byte-for-byte verified, with paths and Git blob 
 
 ## Agent access
 
-Each family has an independent hosted HTTP MCP and local stdio distribution, 58 attributed references, and its own builder skill. The Agent tools page provides a standalone locked-dependency archive that installs and serves outside the workbench. It includes only that family's catalogue and skill. Public MCPs live at https://martlettheme.dev/mcp and https://krigsvoldtheme.dev/mcp through the existing Cloudflare theme sites. Claude Code 2.1.310 connects successfully to both. Static review Sites retain their private audience; account-specific ChatGPT/Claude installation is separate. Read [setup, behavior, evidence and limits](mcp.md).
+Each family has an independent hosted HTTP MCP and local stdio distribution, 58 attributed references, and its own builder skill. The Agent tools page provides a standalone locked-dependency archive that installs and serves outside the workbench. It includes only that family's catalogue and skill. Public MCPs live at https://martletdesign.dev/mcp and https://krigsvolddesign.dev/mcp through the existing Cloudflare theme sites. Claude Code 2.1.310 connects successfully to both. Static review Sites retain their private audience; account-specific ChatGPT/Claude installation is separate. Read [setup, behavior, evidence and limits](mcp.md).
 
 ## Build and isolation
 

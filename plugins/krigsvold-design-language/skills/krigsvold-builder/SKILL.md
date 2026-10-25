@@ -11,7 +11,7 @@ Identify the person's goal, host, platform/package versions, information volume,
 
 ## Obtain authoritative context
 
-Use the hosted read-only MCP at `https://krigsvoldtheme.dev/mcp` when available, or the optional full agent archive’s stdio server. The skill directory alone contains instructions and references, not a server. Confirm availability rather than assuming setup succeeded. Retrieve `builder-skill` for this method through MCP; the offline references below remain a versioned fallback.
+Use the hosted read-only MCP at `https://krigsvolddesign.dev/mcp` when available, or the optional full agent archive’s stdio server. The skill directory alone contains instructions and references, not a server. Confirm availability rather than assuming setup succeeded. Retrieve `builder-skill` for this method through MCP; the offline references below remain a versioned fallback.
 
 
 Discover the Krigsvold MCP tools and call `get_manifest`. Confirm `family` is `krigsvold`; note the snapshot version, commit/digest, platform, and limits. Search by task with `search_guidance`, then retrieve full references with `get_reference`. For a collection/editor, obtain `grammar`, `pattern:collection-editor`, and relevant actual component APIs/examples. Verify exact tokens, imports, props, and original assets; do not infer plausible names.

@@ -4,7 +4,7 @@ import {createHash} from 'node:crypto';
 import {writeFile,mkdir} from 'node:fs/promises';
 const observations=[];
 for(const family of ['martlet','krigsvold']) {
- const origin=`https://${family}theme.dev`;
+ for(const origin of [`https://${family}design.dev`,`https://${family}theme.dev`]) {
  const healthResponse=await fetch(origin+'/health',{signal:AbortSignal.timeout(20000)});assert.equal(healthResponse.status,200);
  const health=await healthResponse.json();assert.equal(health.family,family);assert.equal(health.readOnly,true);
  for(const mode of ['legacy',{pin:'2026-07-28'}]) {
@@ -17,8 +17,9 @@ for(const family of ['martlet','krigsvold']) {
    const tools=await client.listTools();assert.equal(tools.tools.length,3);assert.ok(tools.tools.every(t=>t.annotations.readOnlyHint));
    for(const id of ['grammar','builder-skill','platform:Astro']) {const ref=await call('get_reference',{id});assert.equal(createHash('sha256').update(ref.content).digest('hex'),ref.contentSha256);if(id==='platform:Astro')assert.ok(ref.content.includes('href'));}
    const resources=await client.listResources();assert.equal(resources.resources.length,58);
-   observations.push({family,mode,sourceCommit:manifest.sourceCommit,sourceDigest:manifest.sourceDigest,references:manifest.references.length,distribution:manifest.distribution,passed:true});
+   observations.push({family,origin,mode,sourceCommit:manifest.sourceCommit,sourceDigest:manifest.sourceDigest,references:manifest.references.length,distribution:manifest.distribution,passed:true});
   }finally{await client.close();}
+ }
  }
  console.log(family+': actual public MCP health, both protocol eras, tools/resources and full skill/Astro/hash retrieval pass');
 }

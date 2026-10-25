@@ -7,10 +7,12 @@ for(const family of ['martlet','krigsvold']) {
  const health=await (await worker.fetch(new Request('https://language.test/health'))).json();
  assert.equal(health.family,family);assert.equal(health.readOnly,true);
  assert.equal(await (await worker.fetch(new Request('https://language.test/design-language/'),{ASSETS:{fetch:()=>new Response('existing site')}})).text(),'existing site');
- for(const mode of ['legacy',{pin:'2026-07-28'}]) {
+ const canonical=`https://${family}design.dev`,legacy=`https://${family}theme.dev`;
+ const redirect=await worker.fetch(new Request(legacy+'/design-language/?from=old'));assert.equal(redirect.status,308);assert.equal(redirect.headers.get('location'),canonical+'/design-language/?from=old');
+ for(const origin of [canonical,legacy]) for(const mode of ['legacy',{pin:'2026-07-28'}]) {
   const client=new Client({name:'compiled-worker-consumer',version:'1.0.0'},{mode});
   try {
-   await client.connect(new StreamableHTTPClientTransport(new URL('https://language.test/mcp'),{fetch:(input,init)=>worker.fetch(new Request(input,init))}));
+   await client.connect(new StreamableHTTPClientTransport(new URL(origin+'/mcp'),{fetch:(input,init)=>worker.fetch(new Request(input,init))}));
    const r=await client.callTool({name:'get_manifest',arguments:{}}),manifest=JSON.parse(r.content[0].text);
    assert.equal(manifest.family,family);assert.equal(manifest.references.length,58);
    assert.ok(manifest.references.some(r=>r.id==='builder-skill'));

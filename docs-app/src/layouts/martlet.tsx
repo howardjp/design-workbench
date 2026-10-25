@@ -88,7 +88,7 @@ export function FamilyLayout({
             <Disclosure summary="Browse the 22 components">
               {directory}
             </Disclosure>
-            <span>Experimental · 0.1.0 · MIT</span>
+            <span>Design language 0.3 preview · React 0.1.0 · MIT</span>
           </div>
           {children}
 
@@ -98,7 +98,7 @@ export function FamilyLayout({
         <div className="martlet-reference-footer-grid">
           <div><h2>The language</h2><a href="?page=language">Principles and decisions</a><a href="?page=collection">Working pattern</a><a href="?component=Article">Reading and context</a></div>
           <div><h2>Build</h2><a href="?page=start">Getting started</a><a href="?#components">Component reference</a><a href="?page=agents">MCP and builder skill</a></div>
-          <div><h2>Project</h2><a href={repo}>Source repository ↗</a><a href={`${repo}/blob/work/registry-foundations/docs/release-policy.md`}>Release policy ↗</a><a href={`${repo}/blob/work/registry-foundations/docs/qa/origin-reconciliation.md`}>Origin reconciliation ↗</a></div>
+          <div><h2>Project</h2><a href={repo}>Source repository ↗</a><a href={`${repo}/blob/design-v0.3.0/docs/release-policy.md`}>Release policy ↗</a><a href={`${repo}/blob/design-v0.3.0/docs/qa/origin-reconciliation.md`}>Origin reconciliation ↗</a></div>
         </div>
         <div className="martlet-reference-footer-base"><img src={mark} alt="" width="48" height="48" /><span>Martlet React · MIT<br />Experimental application extensions</span></div>
       </footer>

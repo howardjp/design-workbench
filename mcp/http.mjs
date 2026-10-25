@@ -10,7 +10,8 @@ export function createLanguageHttp(catalog) {
   return {
     async fetch(request) {
       const origin = request.headers.get('origin');
-      const allowed = [new URL(request.url).origin, 'https://chatgpt.com', 'https://claude.ai'];
+      const languageOrigins=[catalog.distribution.mcp.url,...(catalog.distribution.mcp.aliases??[])].map(value=>new URL(value).origin);
+      const allowed = [new URL(request.url).origin,...languageOrigins, 'https://chatgpt.com', 'https://claude.ai'];
       if (origin && !allowed.includes(origin)) return new Response('Origin not allowed', {status:403});
       if (request.method === 'OPTIONS') return new Response(null, {status:204, headers:{
         'Access-Control-Allow-Origin': origin || new URL(request.url).origin,

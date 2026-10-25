@@ -2,6 +2,8 @@
 
 Experimental release workflow · October 25, 2026. Source and all components, styles, specifications, patterns, and reference applications remain MIT and freely available. The separate distribution record reports observed publication; this policy does not claim verified stable accessibility.
 
+The public design-language preview is 0.3.0. Preview releases may remain below 1.0; support follows explicit contracts and documented maturity. Package versions are independent. See [preview scope and canonical homes](preview-0.3.md).
+
 ## Compatibility and versions
 
 Both React packages currently target React 19, ES modules and modern browser CSS, with the matching family theme pinned to 2.1.0. The packed consumer check currently verifies React/ReactDOM 19.3.1; it does not establish every React 19 minor or other rendering framework. The local registry requires Node 24.19 or later within Node 24. Database schema 2 and API/export schema 1 remain unchanged by browser drafts/settings.

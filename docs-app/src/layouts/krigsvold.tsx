@@ -122,10 +122,10 @@ export function FamilyLayout({
               >
                 Agent tools
               </a>
-              <a href="https://krigsvoldtheme.dev/">Theme ↗</a>
+              <a href="https://krigsvolddesign.dev/">Design language ↗</a>
               <a href={repo}>Source ↗</a>
             </div>
-            <span>0.1.0 · EXPERIMENTAL</span>
+            <span>0.3 PREVIEW · REACT 0.1.0</span>
           </div>
           {children}
 
@@ -153,14 +153,14 @@ export function FamilyLayout({
             <li><a href="?page=agents">MCP and builder skill</a></li>
           </ul></nav>
           <nav aria-label="Footer resources"><h2>Resources</h2><ul>
-            <li><a href="https://krigsvoldtheme.dev/">Krigsvold theme ↗</a></li>
+            <li><a href="https://krigsvolddesign.dev/">Krigsvold design language ↗</a></li>
             <li><a href="https://krigsvold.org/">Origin website ↗</a></li>
-            <li><a href={`${repo}/blob/work/registry-foundations/docs/qa/origin-reconciliation.md`}>Origin reconciliation ↗</a></li>
+            <li><a href={`${repo}/blob/design-v0.3.0/docs/qa/origin-reconciliation.md`}>Origin reconciliation ↗</a></li>
           </ul></nav>
           <nav aria-label="Footer project"><h2>Project</h2><ul>
             <li><a href={repo}>Source repository ↗</a></li>
-            <li><a href={`${repo}/blob/work/registry-foundations/docs/release-policy.md`}>Release policy ↗</a></li>
-            <li><a href={`${repo}/blob/work/registry-foundations/LICENSE`}>MIT license ↗</a></li>
+            <li><a href={`${repo}/blob/design-v0.3.0/docs/release-policy.md`}>Release policy ↗</a></li>
+            <li><a href={`${repo}/blob/design-v0.3.0/LICENSE`}>MIT license ↗</a></li>
           </ul></nav>
         </div>
         <div className="krigsvold-reference-footer-base">
