@@ -108,8 +108,8 @@
 @media(max-width:991.98px) { .krigsvold-reference-menu > a:focus-visible { outline-color:var(--krigsvold-color-ice-400); } }
 
 /* Owner-directed full-width documentation band; see documentation-navigation.md. */
-.krigsvold-reference { --documentation-nav-bg:#fff; --documentation-nav-text:var(--krigsvold-color-ink); --documentation-nav-active:var(--krigsvold-color-blue-600); --documentation-nav-muted:var(--krigsvold-color-muted); --documentation-nav-border:var(--krigsvold-color-rule); }
-.krigsvold[data-krigsvold="dark"] .krigsvold-reference { --documentation-nav-bg:#2e3947; --documentation-nav-text:#fff; --documentation-nav-active:var(--krigsvold-color-ice-400); --documentation-nav-muted:rgb(255 255 255/.75); --documentation-nav-border:rgb(255 255 255/.2); }
+.krigsvold-reference { --documentation-nav-bg:white; --documentation-nav-text:var(--krigsvold-color-ink); --documentation-nav-active:var(--krigsvold-color-blue-600); --documentation-nav-muted:var(--krigsvold-color-muted); --documentation-nav-border:var(--krigsvold-color-rule); }
+.krigsvold[data-krigsvold="dark"] .krigsvold-reference { --documentation-nav-bg:var(--documentation-nav-dark-bg); --documentation-nav-text:white; --documentation-nav-active:var(--krigsvold-color-ice-400); --documentation-nav-muted:rgb(255 255 255/.75); --documentation-nav-border:rgb(255 255 255/.2); }
 .krigsvold-reference .krigsvold-app { padding-block-start:0; }
 .krigsvold-reference .krigsvold-app-header { position:relative; z-index:50; max-inline-size:none; margin:0; padding-inline-start:max(1rem,calc((100vw - var(--krigsvold-content-width))/2 + 1rem)); padding-inline-end:max(.8rem,calc((100vw - var(--krigsvold-content-width))/2 + .8rem)); border:0; border-block-end:1px solid var(--documentation-nav-border); border-radius:0; background:var(--documentation-nav-bg); box-shadow:none; backdrop-filter:none; }
 .krigsvold-reference-brand,.krigsvold-reference .krigsvold-app-header summary,.krigsvold-reference-toggle { color:var(--documentation-nav-text); }
