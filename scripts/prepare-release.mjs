@@ -21,13 +21,13 @@ for (const family of selected === "both"
   );
   if (
     !/^0\./.test(pkg.version) ||
-    pkg.private !== true ||
+    pkg.private !== false ||
     pkg.publishConfig?.tag !== "next" ||
     pkg.publishConfig?.access !== "public" ||
     pkg.publishConfig?.provenance !== true
   )
     throw new Error(
-      "Candidates must remain private experimental next-tag packages with public/provenance release configuration",
+      "Candidates must be release-enabled experimental next-tag packages with public/provenance release configuration",
     );
   const result = spawnSync(
     "npm",
@@ -66,11 +66,10 @@ for (const family of selected === "both"
     bytes: (await stat(path)).size,
     integrity: packed.integrity,
     files: packed.files.map((f) => f.path),
-    publication: "unpublished; package remains private",
+    publication: "unpublished candidate; publication is a separate workflow",
     remaining: [
       "Review exact-commit CI and manual consumer evidence",
       "Confirm npm scope ownership and trusted publisher",
-      "Review a release change removing private flag",
       "Publish reviewed tarball with provenance under next; verify registry install",
     ],
   });

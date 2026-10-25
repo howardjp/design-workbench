@@ -29,6 +29,7 @@ jobs:
       - run: npm run check
       - run: npx playwright install --with-deps ${{ matrix.browser }}
       - run: npm run test:browser
+      - run: npm run test:reference
       - run: npm run test:packages
       - run: npm run test:agents
   prepare:

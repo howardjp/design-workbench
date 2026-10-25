@@ -16,7 +16,7 @@ for (const family of ["martlet", "krigsvold"]) {
     ]);
     if (unpack.status) throw Error("Unpack failed");
     const cwd = join(tmp, family);
-    const install = spawnSync("npm", ["ci", "--ignore-scripts", "--offline"], {
+    const install = spawnSync("npm", ["ci", "--ignore-scripts", "--no-audit", "--no-fund", "--fetch-retries=0", "--fetch-timeout=20000"], {
       cwd,
       encoding: "utf8",
     });
@@ -44,7 +44,7 @@ for (const family of ["martlet", "krigsvold"]) {
       });
       const manifest = JSON.parse(raw.content[0].text);
       assert.equal(manifest.family, family);
-      assert.equal(manifest.references.length, 56);
+      assert.equal(manifest.references.length, 57);
     } finally {
       await client.close();
     }

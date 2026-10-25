@@ -11,7 +11,9 @@ export default defineConfig(({ mode }) => {
       {
         name: "selected-family",
         resolveId: (id) =>
-          id === "docs-family"
+          id === "docs-distribution"
+            ? fileURLToPath(new URL(`../mcp/catalogs/${mode}-distribution.json`,import.meta.url))
+            : id === "docs-family"
             ? "\0docs-family"
             : id === "docs-layout"
               ? fileURLToPath(

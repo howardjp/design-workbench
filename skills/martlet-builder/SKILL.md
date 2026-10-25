@@ -11,11 +11,14 @@ Identify the person's task, host conventions, platform, installed versions, data
 
 ## Retrieve the language
 
+Use the hosted read-only MCP at `https://martlettheme.dev/mcp` when available, or the bundled stdio server. Confirm availability rather than assuming setup succeeded. Retrieve `builder-skill` for this method through MCP; the offline references below remain a versioned fallback.
+
+
 Discover the Martlet MCP tools and call `get_manifest`. Confirm `family` is `martlet`; record the snapshot version, source commit/digest, platforms, and limitations. Use `search_guidance` for the task, then `get_reference` for complete grammar/pattern and actual APIs/examples. An excerpt is not the full contract. Retrieve `grammar`, `pattern:collection-editor`, and relevant component references for a collection/editor. Verify imports, props, semantic tokens, and asset provenance before writing them.
 
 When MCP is unavailable, read [the bundled grammar](references/grammar.md), then relevant [component contracts](references/components.md). These are an experimental offline snapshot for React 0.1.0 and theme 2.1.0, not a claim about later releases. Use [source and setup](references/source.md) to identify provenance. Report missing guidance or unsupported platforms; do not invent APIs or borrow another family's rules.
 
-Read [framework availability](references/implementation.json) before choosing imports. Core 2.2.0 and Astro 1.2.0 are unreleased candidates; React examples retain theme 2.1.0. Shared grammar does not imply shared props or state/focus APIs.
+Read [framework availability](references/implementation.json) before choosing imports. The pinned canonical file records its original review status. Check the connected MCP manifest for separately verified publication status; React examples retain theme 2.1.0. Shared grammar does not imply shared props or state/focus APIs.
 
 For a substantial form, retrieve `pattern:validated-form`; for querying, sorting, paging, selection or batch commands, retrieve `pattern:query-results`. Read `coverage` to distinguish checked reference behavior from remaining evidence. Offline, use [forms](references/forms.md), [query/results](references/query-results.md) and [coverage](references/coverage.md). These patterns use existing React exports; do not invent Astro controllers or treat simulated operations as durable services.
 

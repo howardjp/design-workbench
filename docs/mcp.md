@@ -1,6 +1,6 @@
 # MCP and agent skills for Martlet and Krigsvold
 
-October 23, 2026 · Experimental local implementation 0.1.0 · No hosted endpoint
+October 25, 2026 · Experimental MCP 0.1.0 · Independent HTTP and stdio transports
 
 Each design language will provide independently usable Model Context Protocol access to its authoritative knowledge. An agent building an application should be able to retrieve the language's grammar, pattern guidance, foundations, component contracts, working examples, and compatibility information. A searchable catalogue of component names or a token dump alone does not meet this requirement.
 
@@ -33,7 +33,7 @@ Every result must identify its family, source location, source commit or release
 
 The initial server scope should be read-only knowledge retrieval. Searching and retrieving guidance must not depend on the workbench's local SQLite service or expose its records, drafts, settings, or write endpoints. A future code-review capability would need explicit, testable checks and clearly bounded findings; it must not certify usability, accessibility, or language fidelity from static source alone. Code generation and migration automation are separate capabilities requiring their own acceptance evidence.
 
-The initial implementation uses the official MCP TypeScript server/client SDK 2.3.1 and local stdio. Each family has its own launcher, generated catalogue and standalone distribution archive. It exposes `get_manifest`, bounded `search_guidance`, exact `get_reference`, and 53 resources. Results include family, snapshot version, content hashes and source locations; generated release snapshots also identify the workbench commit. Uncommitted local builds explicitly return a null commit and a content digest. Unsupported versions and missing references return errors without fallback. Search is deterministic lexical retrieval, not a semantic recommendation engine.
+The initial implementation uses the official MCP TypeScript server/client SDK 2.3.1, stateless Streamable HTTP and local stdio. Each family has its own launcher, generated catalogue and standalone distribution archive. It exposes `get_manifest`, bounded `search_guidance`, exact `get_reference`, and 57 resources, including the complete builder method. Results include family, snapshot version, content hashes and source locations; generated release snapshots also identify the workbench commit. Uncommitted local builds explicitly return a null commit and a content digest. Unsupported versions and missing references return errors without fallback. Search is deterministic lexical retrieval, not a semantic recommendation engine.
 
 ## Run and consume the implementation
 
@@ -45,7 +45,7 @@ npm run build
 npm run build:knowledge
 ```
 
-Configure a stdio client to launch `node /absolute/path/to/workbench/mcp/martlet.mjs` or `krigsvold.mjs`. Do not start an HTTP server or point a client at the private review-site URL. The two generated archives in `agent-dist` are independently installable outside this repository: extract, run `npm ci --ignore-scripts`, and configure the client to launch that archive's `index.mjs`. Each includes a locked dependency graph, catalogue, companion skill, MIT license and setup instructions. The corresponding family reference site offers its own archive on the Agent tools page.
+Configure a stdio client to launch `node /absolute/path/to/workbench/mcp/martlet.mjs` or `krigsvold.mjs`. For hosted use, follow [client setup](agent-setup.md) and the public `/mcp` endpoints in `distribution.json`. A private review-site URL is not the public endpoint. The two generated archives in `agent-dist` are independently installable outside this repository: extract, run `npm ci --ignore-scripts`, and configure the client to launch that archive's `index.mjs`. Each includes a locked dependency graph, catalogue, companion skill, MIT license and setup instructions. The corresponding family reference site offers its own archive on the Agent tools page.
 
 Call `get_manifest`, confirm the family, search for a task, then retrieve complete references by exact ID. IDs include `grammar`, `charter`, `pattern:collection-editor`, `component:Field`, `example:Field`, `tokens:foundation`, `tokens:layout`, `tokens:tokens`, `asset:mark`, and `compatibility`. Read resources through the URIs returned by `resources/list`; do not guess path names.
 
@@ -77,7 +77,7 @@ Skill evaluation must include fresh builds and existing-application edits, more 
 5. Verify setup in the clients actually claimed as supported; document configuration, compatibility, updating, and troubleshooting. Publish each server/distribution only when its advertised capabilities work.
 6. Deliver and evaluate each companion builder skill with the same versioned sources. Verify that it invokes available retrieval capabilities correctly and produces coherent work across complete task states.
 
-The actual SDK client checks negotiate each server, discover tools/resources, search, retrieve and hash-check exact content, reject invalid and unsupported requests, and verify family-specific React examples. `npm run test:agents` extracts both distribution archives into independent temporary directories, installs locked dependencies, and queries each server outside the workbench. Desktop-client-specific setup, remote HTTP hosting, static code audits, migration automation and broader pattern coverage are not claimed. The React component checks alone would not establish MCP interoperability.
+The actual SDK client checks negotiate each server, discover tools/resources, search, retrieve and hash-check exact content, reject invalid and unsupported requests, and verify family-specific React examples. `npm run test:agents` extracts both distribution archives into independent temporary directories, installs locked dependencies, and queries each server outside the workbench. Pinned modern and legacy HTTP consumers and compiled Worker checks supplement the stdio checks. Account-specific desktop setup, static code audits, migration automation and broader pattern coverage remain separate evidence. The React component checks alone would not establish MCP interoperability.
 
 ## Reference
 

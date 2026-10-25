@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { Client } from "@modelcontextprotocol/client";
 import { StdioClientTransport } from "@modelcontextprotocol/client/stdio";
 import { resolve } from "node:path";
+import distribution from "../docs/distribution.json" with {type:"json"};
 for (const family of ["martlet", "krigsvold"])
   test(
     `${family} MCP negotiates, retrieves sources, isolates family and handles unsupported requests`,
@@ -40,9 +41,9 @@ for (const family of ["martlet", "krigsvold"])
         };
         const manifest = (await call("get_manifest")).value;
         assert.equal(manifest.family, family);
-        assert.equal(manifest.references.length, 56);
-        assert.equal(manifest.platforms.React.published, false);
-        assert.equal(manifest.platforms.Astro.published, false);
+        assert.equal(manifest.references.length, 57);
+        assert.equal(manifest.platforms.React.published, distribution.families[family].packages.React.published);
+        assert.equal(manifest.platforms.Astro.published, distribution.families[family].packages.Astro.published);
         assert.equal(manifest.platforms.Astro.examples, false);
         assert.equal(manifest.canonicalGuidance.repository, `${family}theme/npm`);
         assert.match(manifest.canonicalGuidance.commit, /^[a-f0-9]{40}$/);
@@ -93,7 +94,7 @@ for (const family of ["martlet", "krigsvold"])
         ).value;
         assert.equal(noMatch.results.length, 0);
         const resources = await client.listResources();
-        assert.equal(resources.resources.length, 56);
+        assert.equal(resources.resources.length, 57);
         const resource = resources.resources.find((r) => r.name === "grammar");
         const exact = await client.readResource({ uri: resource.uri });
         assert.equal(

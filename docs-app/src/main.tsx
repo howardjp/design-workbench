@@ -13,6 +13,7 @@ import {
   Badge,
 } from "docs-family";
 import contracts from "./contracts.json";
+import delivery from "docs-distribution";
 import { defaults, Example, exampleCode, type Options } from "./examples";
 import "./shared.css";
 import { CollectionPattern } from "docs-pattern";
@@ -286,17 +287,17 @@ function Start() {
       </h1>
       <p className="lead">
         {familyName} React is an experimental, MIT-licensed component library.
-        Explore the components here, then try a packed build in a real project.
+        Explore the components here, then follow the installation instructions for the verified release.
       </p>
       <div className="callout">
-        <strong>Available in source. Not yet on npm.</strong>
+        <strong>{delivery.packages.React.published ? "Experimental 0.1.0 · npm next" : "Release candidate · registry publication pending"}</strong>
         <p>
-          The proposed first release is 0.1.0 under the <code>next</code> tag.
-          These docs demonstrate the current draft branch; no registry
-          publication is implied.
+          Every export remains experimental. Verify the family and version before adopting it; publication does not establish stability.
         </p>
       </div>
-      <h2>Try the source build</h2>
+      <h2>Install in a React 19 project</h2>
+      {delivery.packages.React.published && <CopyCode code={`npm install @${family}/react@0.1.0 react@19 react-dom@19`} />}
+      <h2>Reproduce from source</h2>
       <p>
         Use Node 24.19 or later within Node 24. The packages target React 19 and
         ship ES modules, declarations, and CSS.
@@ -373,89 +374,25 @@ function ShellExample() {
   );
 }
 function Agents() {
-  return (
-    <article className="reference-page">
-      <p className="reference-kicker">
-        Authoritative context / Practical method
-      </p>
-      <h1>Build with {familyName}.</h1>
-      <p className="lead">
-        A language for people and agents. Use the same grammar, pattern
-        decisions, and component contracts through a local MCP server and a
-        companion builder skill.
-      </p>
-      <div className="callout">
-        <strong>Working experimental tools. Local stdio.</strong>
-        <p>
-          These tools retrieve documented guidance. They do not certify a
-          design, publish an app, or invent missing platform support. React
-          remains experimental and unpublished.
-        </p>
-      </div>
-      <h2>Take the language with you</h2>
-      <p>
-        <a href={`agents/${family}-agent-tools.tar.gz`} download>
-          Download {familyName} MCP and builder skill ↓
-        </a>
-      </p>
-      <p>
-        The MIT archive contains only {familyName}’s knowledge snapshot, server
-        launcher, dependency lock, and builder skill. It runs independently of
-        this site and the administration workbench.
-      </p>
-      <h2>Start from the source</h2>
-      <CopyCode
-        code={`git clone ${repo}.git\ncd design-workbench\ngit checkout work/registry-foundations\nnpm ci --ignore-scripts\nnpm run build\nnpm run build:knowledge\n\n# Configure your MCP client to launch this command over stdio:\nnode /absolute/path/to/design-workbench/mcp/${family}.mjs`}
-      />
-      <p>
-        For the downloaded archive, extract it, run{" "}
-        <code>npm ci --ignore-scripts</code> in its directory, and point your
-        client at its <code>index.mjs</code> instead. The client starts the
-        process; it is not an HTTP address.
-      </p>
-      <h2>Connect an MCP client</h2>
-      <CopyCode
-        code={JSON.stringify(
-          {
-            mcpServers: {
-              [`${family}-design-language`]: {
-                command: "node",
-                args: [`/absolute/path/to/${family}/index.mjs`],
-              },
-            },
-          },
-          null,
-          2,
-        )}
-      />
-      <p>
-        This is the common stdio configuration shape. Your client may use a
-        different configuration location. Interoperability has been checked with
-        the MCP SDK client; individual desktop client setup remains to be
-        verified.
-      </p>
-      <h2>Find the rules, then compose</h2>
-      <p>
-        Begin with <code>get_manifest</code> and confirm the family. Use{" "}
-        <code>search_guidance</code> for the task, then{" "}
-        <code>get_reference</code> for the complete matching rules, pattern, and
-        API examples. Each result identifies the snapshot and source. This
-        snapshot covers React examples, collection/editing, validated forms, query/results and the grammar coverage review.
-      </p>
-      <h2>Add the builder skill</h2>
-      <p>
-        Copy the archive’s <code>{family}-builder</code> directory into your
-        agent client’s supported skills location. The skill explains how to
-        retrieve the rules, choose a composition, preserve the host’s identity,
-        handle failures, and verify the complete task. It includes an offline
-        grammar and API snapshot for use when MCP is unavailable.
-      </p>
-      <p>
-        <a href="?page=language">Read the grammar →</a> ·{" "}
-        <a href="?page=collection">Try the working pattern →</a>
-      </p>
-    </article>
-  );
+  const endpoint=delivery.mcp.url;
+  return <article className="reference-page">
+    <p className="reference-kicker">Authoritative context / Practical method</p>
+    <h1>Build with {familyName}.</h1>
+    <p className="lead">Connect the read-only MCP to retrieve the same grammar, patterns, actual APIs and builder method used by this reference.</p>
+    <div className="callout"><strong>{delivery.mcp.published ? 'Hosted MCP · experimental knowledge' : 'Hosted MCP release in preparation'}</strong><p>Each family is independent. These tools search and retrieve public design guidance; they have no access to the workbench database, user drafts or write operations.</p></div>
+    <h2>One endpoint</h2><CopyCode code={endpoint} />
+    <p>No authentication is required for the public knowledge endpoint. Choose the family you intend to use.</p>
+    <h2>ChatGPT</h2><p>Open Plugins, use the plus button and choose Add custom MCP server. Enter the endpoint, choose No authentication, review the connection and create the plugin. Install it, then select it with @ in a new conversation. Workspace policy may restrict custom connections.</p>
+    <h2>Claude</h2><p>Open Customize → Connectors, add a custom Web connector and enter the endpoint. Choose No sign in, then enable the connector in your conversation. Team and Enterprise owners may need to add it first.</p>
+    <h2>Claude Code</h2><CopyCode code={`claude mcp add --transport http ${family}-design-language ${endpoint}`} />
+    <h2>Retrieve the method with the rules</h2><CopyCode code={`Call get_manifest and confirm family=${family}.\nRetrieve get_reference({id:"builder-skill"}) and get_reference({id:"grammar"}).\nSearch for the task, then retrieve complete patterns, component contracts and examples.\nBuild the requested interface and verify its complete state and keyboard transitions.`} />
+    <p>The MCP includes the builder method as a complete reference, so an agent can retrieve it without a local download. Installing a reusable skill is an additional client capability, not an MCP protocol feature.</p>
+    <h2>Optional installed skill or offline server</h2>
+    <p><a href={`agents/${family}-builder.zip`} download>Download {familyName} builder skill</a> · <a href={`agents/${family}-agent-tools.tar.gz`} download>Download offline MCP and skill</a></p>
+    <p>Use your client’s supported skill upload or skills directory. The offline archive runs with Node 24: extract, run npm ci --ignore-scripts, and configure a stdio client to launch its index.mjs. Do not use a local file path as a remote endpoint.</p>
+    <h2>Verification and limits</h2><p>The SDK client checks modern and legacy HTTP negotiation, exact retrieval, hashes, family isolation, unsupported requests and offline installation. These checks do not establish successful installation in every ChatGPT or Claude account. Grammar 0.3, React 0.1.0 and new application compositions remain experimental; manual assistive technology, RTL and sustained use remain open.</p>
+    <p><a href={`https://${family}theme.dev/agents/`}>Public setup and publication status ↗</a> · <a href="?page=language">Read the grammar →</a></p>
+  </article>;
 }
 function App() {
   const params = new URLSearchParams(location.search);

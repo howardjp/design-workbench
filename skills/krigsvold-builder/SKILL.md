@@ -11,11 +11,14 @@ Identify the person's goal, host, platform/package versions, information volume,
 
 ## Obtain authoritative context
 
+Use the hosted read-only MCP at `https://krigsvoldtheme.dev/mcp` when available, or the bundled stdio server. Confirm availability rather than assuming setup succeeded. Retrieve `builder-skill` for this method through MCP; the offline references below remain a versioned fallback.
+
+
 Discover the Krigsvold MCP tools and call `get_manifest`. Confirm `family` is `krigsvold`; note the snapshot version, commit/digest, platform, and limits. Search by task with `search_guidance`, then retrieve full references with `get_reference`. For a collection/editor, obtain `grammar`, `pattern:collection-editor`, and relevant actual component APIs/examples. Verify exact tokens, imports, props, and original assets; do not infer plausible names.
 
 If MCP is unavailable, read [the bundled grammar](references/grammar.md) and relevant [component contracts](references/components.md). Their offline snapshot applies to experimental React 0.1.0 and theme 2.1.0. Consult [source and setup](references/source.md) for provenance. State missing/unsupported capabilities; do not silently use Martlet or a fictional API.
 
-Read [framework availability](references/implementation.json) before choosing imports. Core 2.2.0 and Astro 1.2.0 are unreleased candidates; React examples retain theme 2.1.0. Shared grammar does not imply shared props or state/focus APIs.
+Read [framework availability](references/implementation.json) before choosing imports. The pinned canonical file records its original review status. Check the connected MCP manifest for separately verified publication status; React examples retain theme 2.1.0. Shared grammar does not imply shared props or state/focus APIs.
 
 For a substantial form, retrieve `pattern:validated-form`; for querying, sorting, paging, selection or batch commands, retrieve `pattern:query-results`. Read `coverage` to distinguish checked reference behavior from remaining evidence. Offline, use [forms](references/forms.md), [query/results](references/query-results.md) and [coverage](references/coverage.md). These patterns use existing React exports; do not invent Astro controllers or treat simulated operations as durable services.
 

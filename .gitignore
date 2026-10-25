@@ -10,3 +10,6 @@ docs-dist/
 release-candidates/
 mcp/catalogs/
 agent-dist/
+
+hosted-dist/
+mcp-dist/

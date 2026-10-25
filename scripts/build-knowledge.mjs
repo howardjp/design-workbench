@@ -12,6 +12,7 @@ if (commit !== null && !/^[a-f0-9]{40}$/.test(commit))
   throw new Error("DESIGN_SOURCE_COMMIT must be a full commit");
 const repo = "https://github.com/howardjp/design-workbench";
 const ref = commit ?? "work/registry-foundations";
+const distribution=JSON.parse(await readFile("docs/distribution.json","utf8"));
 const componentSource = await readFile("docs/components.md", "utf8");
 const contracts = componentSource
   .split("## Administration compositions")[0]
@@ -28,6 +29,8 @@ for (const family of ["martlet", "krigsvold"]) {
   const canonical = JSON.parse(await readFile(`docs/languages/${family}/canonical.json`, 'utf8'));
   const implementations = JSON.parse(await readFile(`docs/languages/${family}/implementation.json`, 'utf8'));
   const canonicalUrl = path => `https://github.com/${canonical.repository}/blob/${canonical.commit}/${path}`;
+  const delivery=distribution.families[family];
+  await writeFile(`mcp/catalogs/${family}-distribution.json`, JSON.stringify(delivery,null,2)+"\n");
   const entries = [];
   function add(
     id,
@@ -50,6 +53,7 @@ for (const family of ["martlet", "krigsvold"]) {
       content,
     });
   }
+  add("builder-skill","skill",`${family} builder method`,await readFile(`skills/${family}-builder/SKILL.md`,"utf8"),`skills/${family}-builder/SKILL.md`,["method","workflow","builder","skill"]);
   const grammar = await readFile(`docs/languages/${family}/grammar.md`, "utf8");
   add(
     "grammar",
@@ -170,7 +174,7 @@ for (const family of ["martlet", "krigsvold"]) {
     "compatibility",
     "compatibility",
     `${family} support and compatibility`,
-    `React 0.1.0 is experimental and unpublished; React 19 and @${family}/theme 2.1.0. Theme 2.1.0 and Astro 1.1.0 are published. Core 2.2.0 and Astro 1.2.0 are unreleased consolidation candidates; new Astro contents/footer contracts require the paired candidate packages. This server supplies React examples only. Do not translate React event or focus props into Astro APIs. Canonical migration guide: ${canonicalUrl('docs/consolidation.md')}. Vue, Svelte, native, and web-component APIs are not implemented here. The collection specimen is fictional and session-only. Manual assistive technology, localization, RTL, and sustained use remain open.\n\n${JSON.stringify(implementations, null, 2)}`,
+    `React 0.1.0 is experimental; React 19 and @${family}/theme 2.1.0. Publication status is recorded separately from the immutable canonical guidance snapshot: ${JSON.stringify(delivery.packages)}. This server supplies React examples only. Do not translate React event or focus props into Astro APIs. Canonical migration guide: ${canonicalUrl('docs/consolidation.md')}. Vue, Svelte and native APIs are not implemented. Manual assistive technology, localization, RTL and sustained use remain open.\n\n${JSON.stringify(implementations,null,2)}`,
     "docs/maturity.md",
     ["platform", "version", "support", "migration"],
   );
@@ -186,12 +190,13 @@ for (const family of ["martlet", "krigsvold"]) {
     sourceCommit: commit,
     sourceDigest,
     platforms: {
-      React: { version: "0.1.0", maturity: "experimental", published: false },
-      Astro: { version: "1.2.0", maturity: "experimental", published: false, examples: false, core: "^2.2.0" },
+      React: { version: "0.1.0", maturity: "experimental", published: delivery.packages.React.published },
+      Astro: { version: "1.2.0", maturity: "experimental", published: delivery.packages.Astro.published, examples: false, core: "^2.2.0" },
     },
+    distribution: {...delivery, reviewedAt:distribution.reviewedAt},
     canonicalGuidance: canonical,
     limitations: [
-      "Local stdio only; no hosted MCP endpoint.",
+      "Read-only stateless HTTP and local stdio; check distribution metadata for live endpoint status.",
       "Search and exact retrieval; no code audit or migration automation.",
       "Reference patterns cover collection/editor, validated forms and query/results; they are session-only specimens.",
       "No registry database, user drafts, or write operations.",
@@ -206,6 +211,7 @@ for (const family of ["martlet", "krigsvold"]) {
   await rm(dir, { recursive: true, force: true });
   await mkdir(dir, { recursive: true });
   await cp("mcp/server.mjs", `${dir}/server.mjs`);
+  await cp("mcp/language.mjs", `${dir}/language.mjs`);
   await cp(`mcp/catalogs/${family}.json`, `${dir}/catalog.json`);
   await writeFile(
     `${dir}/index.mjs`,
@@ -240,8 +246,10 @@ for (const family of ["martlet", "krigsvold"]) {
   );
   await writeFile(
     `${dir}/README.md`,
-    `# ${family} agent tools\n\nExperimental MIT local stdio MCP and companion builder skill. Source ${repo}/tree/${ref}; content digest ${sourceDigest}.\n\nRun npm install --ignore-scripts in this directory, then configure a stdio MCP client with command node and args [\"/absolute/path/to/index.mjs\"]. The client starts the process. The server exposes get_manifest, search_guidance, get_reference, and exact resources. Confirm the family using get_manifest.\n\nCopy ${family}-builder into your client's supported skills directory. No hosted endpoint, npm publication, static audit, or production-accessibility certification is claimed. This archive includes no workbench server or database.\n`,
+    `# ${family} agent tools\n\nExperimental MIT local stdio MCP and companion builder skill. Source ${repo}/tree/${ref}; content digest ${sourceDigest}.\n\nRun npm install --ignore-scripts in this directory, then configure a stdio MCP client with command node and args [\"/absolute/path/to/index.mjs\"]. The client starts the process. The server exposes get_manifest, search_guidance, get_reference, and exact resources. Confirm the family using get_manifest.\n\nCopy ${family}-builder into your client's supported skills directory. Hosted setup and actual package availability are recorded by get_manifest; no static-audit or production-accessibility certification is claimed. This archive includes no workbench server or database.\n`,
   );
+  const zipped=spawnSync("python3",["-m","zipfile","-c",resolve(`agent-dist/${family}-builder.zip`),`${family}-builder`],{cwd:dir});
+  if(zipped.status)throw Error("Skill zip failed");
   const packed = spawnSync("tar", [
     "-czf",
     resolve(`agent-dist/${family}-agent-tools.tar.gz`),

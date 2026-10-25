@@ -36,3 +36,8 @@ declare module "docs-decisions" {
   const decisions: string;
   export default decisions;
 }
+
+declare module 'docs-distribution' {
+ const value: {mcp:{url:string;published:boolean};packages:{React:{published:boolean}}};
+ export default value;
+}

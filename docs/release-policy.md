@@ -1,6 +1,6 @@
 # React experimental release policy
 
-Working release preparation · October 22, 2026. Source and all components, styles, specifications, patterns, and reference applications remain MIT and freely available. This document prepares a release; it does not claim an npm publication or verified stable accessibility.
+Experimental release workflow · October 25, 2026. Source and all components, styles, specifications, patterns, and reference applications remain MIT and freely available. The separate distribution record reports observed publication; this policy does not claim verified stable accessibility.
 
 ## Compatibility and versions
 
@@ -21,7 +21,7 @@ Before 1.0, adopt and publish a stable support policy. Proposed minimum: depreca
 
 A manual `Prepare experimental React candidates` workflow now gates candidate creation on clean builds, Node checks, three browser engines and isolated package consumers at the same commit. It uploads tarballs and a JSON manifest with source commit, integrity, SHA-256, included files and remaining release steps. It has read-only repository permissions and no npm publication step or publishing credential. Local preparation after successful checks uses `node scripts/prepare-release.mjs both FULL_SOURCE_COMMIT` (or select one family). Package changelogs are included in each tarball.
 
-Current manifests intentionally retain `private: true`; `publishConfig` records public access, the `next` tag and provenance for the later reviewed release change. A saved readiness observation or maturity value does not authorize an npm release.
+The release manifests use `private: false`, public access, `next` and provenance. The publication workflow accepts only a GitHub pre-release tagged `react-v0.1.0` that matches both package versions and belongs to main history. It reruns clean checks, three browser engines, package and agent consumers, and compiled Worker checks before separate family publication jobs. npm scope ownership and trusted-publisher configuration remain external requirements. Publication success must be verified from the registry, not inferred from a merged PR. A readiness observation in the registry does not publish anything.
 
 ## Rollback and migrations
 

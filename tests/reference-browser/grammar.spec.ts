@@ -60,3 +60,15 @@ for(const family of ['martlet','krigsvold']){
   });
  }
 }
+
+for(const family of ['martlet','krigsvold'])test(`${family}: hosted onboarding exposes the selected endpoint and optional skill`,async({page})=>{
+ await page.setViewportSize({width:320,height:1000});
+ await page.goto(`http://127.0.0.1:${family==='martlet'?4189:4188}/${family}/?page=agents`);
+ await expect(page.locator('main h1')).toHaveCount(1);
+ await expect(page.getByRole('textbox',{name:'Copyable example source'}).first()).toHaveValue(`https://${family}theme.dev/mcp`);
+ await expect(page.getByRole('link',{name:new RegExp('Download .* builder skill$')})).toHaveAttribute('href',`agents/${family}-builder.zip`);
+ await expect(page.getByRole('heading',{name:'ChatGPT',exact:true})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Claude',exact:true})).toBeVisible();
+ await page.evaluate(()=>document.documentElement.style.fontSize='200%');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});

@@ -30,6 +30,7 @@ for (const family of ["martlet", "krigsvold"]) {
   );
   if (result.status) process.exit(result.status ?? 1);
   await mkdir(`docs-dist/${family}/agents`, { recursive: true });
+  await cp(`agent-dist/${family}-builder.zip`, `docs-dist/${family}/agents/${family}-builder.zip`);
   await cp(
     `agent-dist/${family}-agent-tools.tar.gz`,
     `docs-dist/${family}/agents/${family}-agent-tools.tar.gz`,
