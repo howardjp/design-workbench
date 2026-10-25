@@ -19,6 +19,7 @@ for(const family of ['martlet','krigsvold']) for(const mode of ['legacy',{pin:'2
       assert.equal(manifest.family,family);assert.equal(manifest.references.length,58);
       const found=(await call('search_guidance',{query:'validation form retained work'})).value;
       assert.ok(found.results.some(r=>r.id==='pattern:validated-form'));
+      const astro=await call('search_guidance',{query:'Astro slots',kind:'platform'});assert.ok(!astro.raw.isError);assert.equal(astro.value.results[0].id,'platform:Astro');
       const reference=(await call('get_reference',{id:'pattern:validated-form'})).value;
       assert.equal(reference.family,family);
       assert.equal(createHash('sha256').update(reference.content).digest('hex'),reference.contentSha256);

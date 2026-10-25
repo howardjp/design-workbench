@@ -63,6 +63,7 @@ export function createLanguageServer(catalog, options = {}) {
             "charter",
             "asset",
             "compatibility",
+            "platform",
             "skill",
           ])
           .optional(),
