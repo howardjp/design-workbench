@@ -280,7 +280,7 @@ function Playground({ name, mode }: { name: string; mode: string }) {
 function Start() {
   return (
     <article className="reference-page">
-      <p className="eyebrow">Start here / 0.1.0</p>
+      <p className="eyebrow">Design language 0.3 preview · React 0.1.0</p>
       <h1>
         A small beginning.
         <br />A real foundation.
@@ -297,13 +297,14 @@ function Start() {
       </div>
       <h2>Install in a React 19 project</h2>
       {delivery.packages.React.published && <CopyCode label="Terminal" code={`npm install @${family}/react@0.1.0 react@19 react-dom@19`} />}
+      {!delivery.packages.React.published && <><p>The React package is available as a verified GitHub release tarball while initial npm publication is pending.</p><CopyCode label="Terminal" code={`npm install https://github.com/howardjp/design-workbench/releases/download/react-v0.1.0/${family}-react-0.1.0.tgz react@19 react-dom@19`} /></>}
       <h2>Reproduce from source</h2>
       <p>
         Use Node 24.19 or later within Node 24. The packages target React 19 and
         ship ES modules, declarations, and CSS.
       </p>
       <CopyCode label="Terminal"
-        code={`git clone ${repo}.git\ncd design-workbench\ngit checkout work/registry-foundations\nnpm ci --ignore-scripts\nnpm run build\nnpm run pack:react\n\n# In a separate React 19 project, use the generated tarball:\nnpm install /absolute/path/to/${family}-react-0.1.0.tgz`}
+        code={`git clone ${repo}.git\ncd design-workbench\ngit checkout design-v0.3.0\nnpm ci --ignore-scripts\nnpm run build\nnpm run pack:react\n\n# In a separate React 19 project, use the generated tarball:\nnpm install /absolute/path/to/${family}-react-0.1.0.tgz`}
       />
       <h2>Import components and styles</h2>
       <CopyCode
@@ -391,7 +392,7 @@ function Agents() {
     <p><a href={`agents/${family}-builder.zip`} download>Download {familyName} builder skill</a> · <a href={`agents/${family}-agent-tools.tar.gz`} download>Download offline MCP and skill</a></p>
     <p>Use your client’s supported skill upload or skills directory. The offline archive runs with Node 24: extract, run npm ci --ignore-scripts, and configure a stdio client to launch its index.mjs. Do not use a local file path as a remote endpoint.</p>
     <h2>Verification and limits</h2><p>The SDK client checks modern and legacy HTTP negotiation, exact retrieval, hashes, family isolation, unsupported requests and offline installation. These checks do not establish successful installation in every ChatGPT or Claude account. Grammar 0.3, React 0.1.0 and new application compositions remain experimental; manual assistive technology, RTL and sustained use remain open.</p>
-    <p><a href={`https://${family}theme.dev/agents/`}>Public setup and publication status ↗</a> · <a href="?page=language">Read the grammar →</a></p>
+    <p><a href={`${delivery.home}/agents/`}>Public setup and publication status ↗</a> · <a href="?page=language">Read the grammar →</a></p>
   </article>;
 }
 function App() {

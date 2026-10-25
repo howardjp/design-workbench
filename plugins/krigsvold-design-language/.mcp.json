@@ -2,7 +2,7 @@
   "mcpServers": {
     "krigsvold": {
       "type": "http",
-      "url": "https://krigsvoldtheme.dev/mcp"
+      "url": "https://krigsvolddesign.dev/mcp"
     }
   }
 }

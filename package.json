@@ -26,7 +26,8 @@
     "test:agents": "node scripts/test-agent-packages.mjs",
     "test:reference": "playwright test --config playwright.reference.config.ts",
     "build:hosted": "node scripts/build-hosted.mjs && node scripts/test-hosted.mjs",
-    "build:plugins": "node scripts/build-plugins.mjs"
+    "build:plugins": "node scripts/build-plugins.mjs",
+    "package:preview": "node scripts/package-preview.mjs"
   },
   "dependencies": {
     "@krigsvold/react": "0.1.0",

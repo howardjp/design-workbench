@@ -185,14 +185,14 @@ for (const family of ["martlet", "krigsvold"]) {
   const catalog = {
     schemaVersion: 1,
     family,
-    version: "0.1.0",
+    version: distribution.preview.version,
     themeVersion: "2.1.0",
     grammarVersion: implementations.grammarVersion,
     sourceCommit: commit,
     sourceDigest,
     platforms: {
       React: { version: "0.1.0", maturity: "experimental", published: delivery.packages.React.published },
-      Astro: { version: "1.2.0", maturity: "experimental", published: delivery.packages.Astro.published, examples: false, core: "^2.2.0" },
+      Astro: { version: delivery.packages.Astro.version, maturity: "experimental", published: delivery.packages.Astro.published, examples: false, core: "^"+delivery.packages.core.version },
     },
     distribution: {...delivery, reviewedAt:distribution.reviewedAt},
     canonicalGuidance: canonical,
@@ -227,7 +227,7 @@ for (const family of ["martlet", "krigsvold"]) {
     JSON.stringify(
       {
         name: `${family}-design-language-mcp`,
-        version: "0.1.0",
+        version: distribution.preview.version,
         private: true,
         type: "module",
         license: "MIT",

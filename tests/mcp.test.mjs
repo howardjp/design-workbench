@@ -41,6 +41,8 @@ for (const family of ["martlet", "krigsvold"])
         };
         const manifest = (await call("get_manifest")).value;
         assert.equal(manifest.family, family);
+        assert.equal(manifest.version, distribution.preview.version);
+        assert.equal(manifest.platforms.Astro.version, distribution.families[family].packages.Astro.version);
         assert.equal(manifest.references.length, 58);
         assert.equal(manifest.platforms.React.published, distribution.families[family].packages.React.published);
         assert.equal(manifest.platforms.Astro.published, distribution.families[family].packages.Astro.published);

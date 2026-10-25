@@ -2,7 +2,7 @@
   "mcpServers": {
     "martlet": {
       "type": "http",
-      "url": "https://martlettheme.dev/mcp"
+      "url": "https://martletdesign.dev/mcp"
     }
   }
 }

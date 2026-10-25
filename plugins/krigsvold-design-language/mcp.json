@@ -3,7 +3,7 @@
   "mcpServers": {
     "krigsvold": {
       "type": "streamable-http",
-      "url": "https://krigsvoldtheme.dev/mcp",
+      "url": "https://krigsvolddesign.dev/mcp",
       "extensions": {
         "com.openai": {
           "auth": {

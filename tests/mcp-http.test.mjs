@@ -37,6 +37,6 @@ test('HTTP rejects unrelated browser origins and oversized bodies before tool ex
   try {
     assert.equal((await handler.fetch(new Request('https://language.test/mcp',{method:'POST',headers:{Origin:'https://unrelated.test'},body:'{}'}))).status,403);
     assert.equal((await handler.fetch(new Request('https://language.test/mcp',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json, text/event-stream'},body:'x'.repeat(32769)}))).status,413);
-    assert.equal((await handler.fetch(new Request('https://language.test/mcp',{method:'OPTIONS',headers:{Origin:'https://claude.ai'}}))).status,204);
+    for(const origin of ['https://claude.ai','https://martletdesign.dev','https://martlettheme.dev']) assert.equal((await handler.fetch(new Request('https://language.test/mcp',{method:'OPTIONS',headers:{Origin:origin}}))).status,204);
   } finally {await handler.close();}
 });

@@ -4,8 +4,8 @@ Reviewed October 25, 2026. Consult `distribution.json` for verified publication 
 
 | Language | Public MCP endpoint | Optional builder skill |
 | --- | --- | --- |
-| Martlet | https://martlettheme.dev/mcp | `martlet-builder` |
-| Krigsvold | https://krigsvoldtheme.dev/mcp | `krigsvold-builder` |
+| Martlet | https://martletdesign.dev/mcp | `martlet-builder` |
+| Krigsvold | https://krigsvolddesign.dev/mcp | `krigsvold-builder` |
 
 The remote MCP retrieves public knowledge only. It needs no account, API key or local download. It cannot access the registry administration service, user drafts or write operations. Keep the two independent identities separate.
 
@@ -20,8 +20,8 @@ In Claude, open **Customize → Connectors**, add a custom **Web** connector, pa
 For Claude Code, choose one:
 
 ```sh
-claude mcp add --transport http martlet-design-language https://martlettheme.dev/mcp
-claude mcp add --transport http krigsvold-design-language https://krigsvoldtheme.dev/mcp
+claude mcp add --transport http martlet-design-language https://martletdesign.dev/mcp
+claude mcp add --transport http krigsvold-design-language https://krigsvolddesign.dev/mcp
 ```
 
 Use `/mcp` to inspect connection status. A successful installation command alone does not establish that tool calls work.

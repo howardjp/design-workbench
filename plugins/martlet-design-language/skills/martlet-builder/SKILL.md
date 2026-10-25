@@ -11,7 +11,7 @@ Identify the person's task, host conventions, platform, installed versions, data
 
 ## Retrieve the language
 
-Use the hosted read-only MCP at `https://martlettheme.dev/mcp` when available, or the optional full agent archive’s stdio server. The skill directory alone contains instructions and references, not a server. Confirm availability rather than assuming setup succeeded. Retrieve `builder-skill` for this method through MCP; the offline references below remain a versioned fallback.
+Use the hosted read-only MCP at `https://martletdesign.dev/mcp` when available, or the optional full agent archive’s stdio server. The skill directory alone contains instructions and references, not a server. Confirm availability rather than assuming setup succeeded. Retrieve `builder-skill` for this method through MCP; the offline references below remain a versioned fallback.
 
 
 Discover the Martlet MCP tools and call `get_manifest`. Confirm `family` is `martlet`; record the snapshot version, source commit/digest, platforms, and limitations. Use `search_guidance` for the task, then `get_reference` for complete grammar/pattern and actual APIs/examples. An excerpt is not the full contract. Retrieve `grammar`, `pattern:collection-editor`, and relevant component references for a collection/editor. Verify imports, props, semantic tokens, and asset provenance before writing them.

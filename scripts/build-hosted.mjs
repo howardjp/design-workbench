@@ -14,6 +14,9 @@ export default {async fetch(request,env) {
  const url=new URL(request.url);
  if(url.pathname==='/mcp')return mcp.fetch(request);
  if(url.pathname==='/health')return Response.json({family:catalog.family,version:catalog.version,grammarVersion:catalog.grammarVersion,sourceCommit:catalog.sourceCommit,sourceDigest:catalog.sourceDigest,readOnly:true});
+ const oldOrigins=(catalog.distribution.mcp.aliases??[]).map(value=>new URL(value).origin);
+ if(oldOrigins.includes(url.origin))return Response.redirect(new URL(url.pathname+url.search,catalog.distribution.home),308);
+ if(url.pathname==='/react')return Response.redirect(new URL('/react/'+url.search,url.origin),308);
  return env?.ASSETS?env.ASSETS.fetch(request):new Response('Not found',{status:404});
 }};
 `);
