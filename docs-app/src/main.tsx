@@ -69,7 +69,7 @@ function PatternShowcase({ mode }: { mode: string }) {
     </>
   );
 }
-function CopyCode({ code }: { code: string }) {
+function CopyCode({ code, label = "React / JSX" }: { code: string; label?: string }) {
   const [message, setMessage] = useState("");
   const ref = useRef<HTMLTextAreaElement>(null);
   useEffect(() => setMessage(""), [code]);
@@ -86,7 +86,7 @@ function CopyCode({ code }: { code: string }) {
   return (
     <div className="code-block">
       <div className="code-toolbar">
-        <span>React / JSX</span>
+        <span>{label}</span>
         <Button variant="quiet" onClick={copy}>
           Copy example
         </Button>
@@ -296,13 +296,13 @@ function Start() {
         </p>
       </div>
       <h2>Install in a React 19 project</h2>
-      {delivery.packages.React.published && <CopyCode code={`npm install @${family}/react@0.1.0 react@19 react-dom@19`} />}
+      {delivery.packages.React.published && <CopyCode label="Terminal" code={`npm install @${family}/react@0.1.0 react@19 react-dom@19`} />}
       <h2>Reproduce from source</h2>
       <p>
         Use Node 24.19 or later within Node 24. The packages target React 19 and
         ship ES modules, declarations, and CSS.
       </p>
-      <CopyCode
+      <CopyCode label="Terminal"
         code={`git clone ${repo}.git\ncd design-workbench\ngit checkout work/registry-foundations\nnpm ci --ignore-scripts\nnpm run build\nnpm run pack:react\n\n# In a separate React 19 project, use the generated tarball:\nnpm install /absolute/path/to/${family}-react-0.1.0.tgz`}
       />
       <h2>Import components and styles</h2>
@@ -380,12 +380,12 @@ function Agents() {
     <h1>Build with {familyName}.</h1>
     <p className="lead">Connect the read-only MCP to retrieve the same grammar, patterns, actual APIs and builder method used by this reference.</p>
     <div className="callout"><strong>{delivery.mcp.published ? 'Hosted MCP · experimental knowledge' : 'Hosted MCP release in preparation'}</strong><p>Each family is independent. These tools search and retrieve public design guidance; they have no access to the workbench database, user drafts or write operations.</p></div>
-    <h2>One endpoint</h2><CopyCode code={endpoint} />
+    <h2>One endpoint</h2><CopyCode label="MCP endpoint" code={endpoint} />
     <p>No authentication is required for the public knowledge endpoint. Choose the family you intend to use.</p>
     <h2>ChatGPT</h2><p>Open Plugins, use the plus button and choose Add custom MCP server. Enter the endpoint, choose No authentication, review the connection and create the plugin. Install it, then select it with @ in a new conversation. Workspace policy may restrict custom connections.</p>
     <h2>Claude</h2><p>Open Customize → Connectors, add a custom Web connector and enter the endpoint. Choose No sign in, then enable the connector in your conversation. Team and Enterprise owners may need to add it first.</p>
-    <h2>Claude Code</h2><CopyCode code={`claude mcp add --transport http ${family}-design-language ${endpoint}`} />
-    <h2>Retrieve the method with the rules</h2><CopyCode code={`Call get_manifest and confirm family=${family}.\nRetrieve get_reference({id:"builder-skill"}) and get_reference({id:"grammar"}).\nSearch for the task, then retrieve complete patterns, component contracts and examples.\nBuild the requested interface and verify its complete state and keyboard transitions.`} />
+    <h2>Claude Code</h2><CopyCode label="Terminal" code={`claude mcp add --transport http ${family}-design-language ${endpoint}`} />
+    <h2>Retrieve the method with the rules</h2><CopyCode label="Agent workflow" code={`Call get_manifest and confirm family=${family}.\nRetrieve get_reference({id:"builder-skill"}) and get_reference({id:"grammar"}).\nSearch for the task, then retrieve complete patterns, component contracts and examples.\nBuild the requested interface and verify its complete state and keyboard transitions.`} />
     <p>The MCP includes the builder method as a complete reference, so an agent can retrieve it without a local download. Installing a reusable skill is an additional client capability, not an MCP protocol feature.</p>
     <h2>Optional installed skill or offline server</h2>
     <p><a href={`agents/${family}-builder.zip`} download>Download {familyName} builder skill</a> · <a href={`agents/${family}-agent-tools.tar.gz`} download>Download offline MCP and skill</a></p>
