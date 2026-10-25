@@ -64,6 +64,15 @@
  .martlet-reference-footer-grid { grid-template-columns:minmax(0,1fr); }
 }
 @media(max-width:35rem) { .martlet-reference-index .directory-links { grid-template-columns:minmax(0,1fr); } }
+/* Narrow/enlarged documentation identity must reflow without covering the work. */
+@media(max-width:35rem) {
+ .martlet-reference { padding-block-start:0; }
+ .martlet-reference .martlet-app-header { position:static; }
+ .martlet-reference-identity { min-inline-size:0; flex-wrap:wrap; gap:.5rem; }
+ .martlet-reference-brand { min-inline-size:0; flex:1 1 10rem; white-space:normal; }
+ .martlet-reference-brand span { min-inline-size:0; overflow-wrap:anywhere; }
+ .martlet-reference-toggle { flex:none; }
+}
 @media print { .martlet-reference { padding:0; } .martlet-reference-index,.martlet-reference-footer,.martlet-reference .martlet-app-header { display:none; } }
 
 /* Documentation text roles share the origin's label and reading vocabulary. */

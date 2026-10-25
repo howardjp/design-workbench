@@ -17,6 +17,8 @@ When MCP is unavailable, read [the bundled grammar](references/grammar.md), then
 
 Read [framework availability](references/implementation.json) before choosing imports. Core 2.2.0 and Astro 1.2.0 are unreleased candidates; React examples retain theme 2.1.0. Shared grammar does not imply shared props or state/focus APIs.
 
+For a substantial form, retrieve `pattern:validated-form`; for querying, sorting, paging, selection or batch commands, retrieve `pattern:query-results`. Read `coverage` to distinguish checked reference behavior from remaining evidence. Offline, use [forms](references/forms.md), [query/results](references/query-results.md) and [coverage](references/coverage.md). These patterns use existing React exports; do not invent Astro controllers or treat simulated operations as durable services.
+
 ## Trace existing objects first
 
 Retrieve the `decisions` reference alongside grammar and API guidance. Offline, read [source decisions](references/decisions.md). Treat actual origin use and its rendered cascade as the baseline. Classify each choice as a source rule, a contextual translation, or a new application extension with a task purpose. Remove unsupported decoration. Do not infer provenance from a token existing or from a passing component test. Keep full-page dark mode and unobserved application objects explicitly experimental.

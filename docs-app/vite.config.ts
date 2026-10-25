@@ -21,6 +21,8 @@ export default defineConfig(({ mode }) => {
                 ? fileURLToPath(
                     new URL(`src/patterns/${mode}.tsx`, import.meta.url),
                   )
+                : id === "docs-reference-pattern"
+                  ? fileURLToPath(new URL(`src/lab/${mode}.tsx`, import.meta.url))
                 : id === "docs-grammar" || id === "docs-decisions"
                   ? `\0${id}`
                   : undefined,

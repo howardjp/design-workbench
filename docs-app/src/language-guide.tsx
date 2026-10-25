@@ -26,6 +26,7 @@ export function LanguageGuide() {
   return <article className="language-guide">
     <nav className="language-guide-links" aria-label="Language resources">
       <a href="#source-decisions">Source decisions</a>
+      <a href="?page=patterns">Forms, results and coverage →</a>
       <a href="?page=collection">Try the working pattern →</a>
       <a href="?page=agents">Build with an agent →</a>
       <a href={`https://${family}theme.dev/design-system/`}>Main package reference ↗</a>

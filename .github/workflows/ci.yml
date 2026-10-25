@@ -28,6 +28,13 @@ jobs:
       - run: npm run check
       - run: npx playwright install --with-deps ${{ matrix.browser }}
       - run: npm run test:browser
+      - run: npm run test:reference
       - run: npm run test:packages
       - run: npm run test:agents
 
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reference-pattern-proof-${{ matrix.browser }}
+          path: test-results/reference-proof/
+          if-no-files-found: ignore

@@ -23,7 +23,8 @@
     "build:knowledge": "node scripts/build-knowledge.mjs",
     "mcp:martlet": "node mcp/martlet.mjs",
     "mcp:krigsvold": "node mcp/krigsvold.mjs",
-    "test:agents": "node scripts/test-agent-packages.mjs"
+    "test:agents": "node scripts/test-agent-packages.mjs",
+    "test:reference": "playwright test --config playwright.reference.config.ts"
   },
   "dependencies": {
     "@krigsvold/react": "0.1.0",

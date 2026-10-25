@@ -40,13 +40,15 @@ for (const family of ["martlet", "krigsvold"])
         };
         const manifest = (await call("get_manifest")).value;
         assert.equal(manifest.family, family);
-        assert.equal(manifest.references.length, 53);
+        assert.equal(manifest.references.length, 56);
         assert.equal(manifest.platforms.React.published, false);
         assert.equal(manifest.platforms.Astro.published, false);
         assert.equal(manifest.platforms.Astro.examples, false);
         assert.equal(manifest.canonicalGuidance.repository, `${family}theme/npm`);
         assert.match(manifest.canonicalGuidance.commit, /^[a-f0-9]{40}$/);
         assert.ok(manifest.sourceDigest.length === 64);
+        assert.equal(manifest.grammarVersion, '0.3');
+        for (const id of ['coverage','pattern:validated-form','pattern:query-results']) { const reference=(await call('get_reference',{id})).value; assert.equal(reference.family,family); assert.match(reference.source,new RegExp(family+'theme/npm/blob/'+manifest.canonicalGuidance.commit)); }
         const found = (
           await call("search_guidance", {
             query: "Cardfile collection editor recovery",
@@ -91,7 +93,7 @@ for (const family of ["martlet", "krigsvold"])
         ).value;
         assert.equal(noMatch.results.length, 0);
         const resources = await client.listResources();
-        assert.equal(resources.resources.length, 53);
+        assert.equal(resources.resources.length, 56);
         const resource = resources.resources.find((r) => r.name === "grammar");
         const exact = await client.readResource({ uri: resource.uri });
         assert.equal(

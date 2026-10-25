@@ -28,6 +28,7 @@ export function createLanguageServer(catalog) {
     family: catalog.family,
     version: catalog.version,
     themeVersion: catalog.themeVersion,
+    grammarVersion: catalog.grammarVersion,
     sourceCommit: catalog.sourceCommit,
     sourceDigest: catalog.sourceDigest,
   };

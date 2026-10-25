@@ -103,6 +103,11 @@ for (const family of ["martlet", "krigsvold"]) {
       "draft",
     ],
   );
+  for (const [id,kind,title,path] of [
+    ['pattern:validated-form','pattern','Validated form, error recovery and changed reset','forms.md'],
+    ['pattern:query-results','pattern','Applied query, results, selection and modal recovery','query-results.md'],
+    ['coverage','grammar','Grammar coverage, corrections and open evidence','coverage.md'],
+  ]) add(id,kind,`${family} ${title}`,await readFile(`docs/languages/${family}/${path}`,'utf8'),canonicalUrl(canonical.files[path].sourcePath),['forms','validation','query','selection','scope','pending','recovery','coverage']);
   const tmp = await mkdtemp(resolve("test-results/knowledge-"));
   try {
     const source = (
@@ -177,6 +182,7 @@ for (const family of ["martlet", "krigsvold"]) {
     family,
     version: "0.1.0",
     themeVersion: "2.1.0",
+    grammarVersion: implementations.grammarVersion,
     sourceCommit: commit,
     sourceDigest,
     platforms: {
@@ -187,7 +193,7 @@ for (const family of ["martlet", "krigsvold"]) {
     limitations: [
       "Local stdio only; no hosted MCP endpoint.",
       "Search and exact retrieval; no code audit or migration automation.",
-      "Pattern coverage starts with a collection/editor.",
+      "Reference patterns cover collection/editor, validated forms and query/results; they are session-only specimens.",
       "No registry database, user drafts, or write operations.",
     ],
     entries,

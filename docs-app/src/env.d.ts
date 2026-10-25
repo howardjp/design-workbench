@@ -21,6 +21,9 @@ declare module "*.svg" {
 declare module "docs-pattern" {
   export const CollectionPattern: import("react").ComponentType;
 }
+declare module "docs-reference-pattern" {
+  export const PatternLayout: import('react').ComponentType<{navigation:import('react').ReactNode;context:import('react').ReactNode;children:import('react').ReactNode}>;
+}
 declare module "*?raw" {
   const value: string;
   export default value;

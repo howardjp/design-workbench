@@ -1,6 +1,6 @@
 # Two independent UI grammars
 
-**October 24 review status:** application grammar 0.2 remains experimental. The [origin audit](qa/origin-audit-2026-10-23.md) records 67 baseline findings; the [reconciliation ledger](qa/origin-reconciliation.md) states every implemented disposition and remaining gap. Source objects are authoritative in their contexts. New application capabilities retain explicit task/interaction specifications. Broader pattern and consumer evidence is required before grammar stability.
+**October 24 review status:** application grammar 0.3 remains experimental. The [origin audit](qa/origin-audit-2026-10-23.md) records 67 baseline findings; the [reconciliation ledger](qa/origin-reconciliation.md) states every implemented disposition and remaining gap. Source objects are authoritative in their contexts. New application capabilities retain explicit task/interaction specifications. Broader pattern and consumer evidence is required before grammar stability.
 
 October 23, 2026 · Implementation brief · Pattern decisions remain experimental
 

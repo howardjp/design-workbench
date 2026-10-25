@@ -17,6 +17,7 @@ import { defaults, Example, exampleCode, type Options } from "./examples";
 import "./shared.css";
 import { CollectionPattern } from "docs-pattern";
 import { LanguageGuide } from "./language-guide";
+import { ReferencePatterns } from './lab/patterns';
 
 import { repo, groups, descriptions } from "./data";
 import {
@@ -439,7 +440,7 @@ function Agents() {
         <code>search_guidance</code> for the task, then{" "}
         <code>get_reference</code> for the complete matching rules, pattern, and
         API examples. Each result identifies the snapshot and source. This
-        initial release covers React and the collection/editor pattern.
+        snapshot covers React examples, collection/editing, validated forms, query/results and the grammar coverage review.
       </p>
       <h2>Add the builder skill</h2>
       <p>
@@ -463,6 +464,7 @@ function App() {
   const pattern =
     params.get("page") === "collection" || params.has("workspace");
   const language = params.get("page") === "language";
+  const referencePatterns = params.get('page') === 'patterns';
   const agents = params.get("page") === "agents";
   const contract = contracts.find((item) => item.name === name);
   const [mode, setMode] = useState(initialMode);
@@ -486,12 +488,12 @@ function App() {
       document.head.append(icon);
     }
     icon.href = familyMark;
-    document.title = `${contract?.name ?? (agents ? "Agent tools" : pattern ? "Working patterns" : language ? "Design language" : start ? "Getting started" : "The collection")} · ${familyName} React`;
+    document.title = `${contract?.name ?? (agents ? "Agent tools" : referencePatterns ? "Reference patterns" : pattern ? "Working patterns" : language ? "Design language" : start ? "Getting started" : "The collection")} · ${familyName} React`;
     document.documentElement.style.colorScheme = mode;
     try {
       localStorage.setItem(`docs-${family}-mode`, mode);
     } catch {}
-  }, [mode, contract, start, pattern, language, agents]);
+  }, [mode, contract, start, pattern, language, agents, referencePatterns]);
   if (params.has("shell")) return <ShellExample />;
   if (params.has("workspace"))
     return (
@@ -586,7 +588,7 @@ function App() {
             ? "agents"
             : pattern
               ? "collection"
-              : language
+              : referencePatterns ? 'patterns' : language
                 ? "language"
                 : start
                   ? "start"
@@ -618,6 +620,8 @@ function App() {
           <Agents />
         ) : pattern ? (
           <PatternShowcase mode={mode} />
+        ) : referencePatterns ? (
+          <ReferencePatterns />
         ) : language ? (
           <LanguageGuide />
         ) : start ? (

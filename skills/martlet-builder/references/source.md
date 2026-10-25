@@ -1,6 +1,6 @@
 # Source and framework support
 
-Canonical guidance: https://github.com/martlettheme/npm/tree/7ef42fd241b7cb99014b19bccb1aeec10be0ca89. The bundled grammar and source decisions are exact copies of that revision; implementation.json records framework availability. Grammar 0.2 remains experimental.
+Canonical guidance: https://github.com/martlettheme/npm/tree/bbd30eb29daddfb8f706693d5afa7858bed97d8e. The bundled grammar and source decisions are exact copies of that revision; implementation.json records framework availability. Grammar 0.3 remains experimental.
 
 Core 2.2.0 and Astro 1.2.0 are unreleased consolidation candidates. Do not request their new exports from the published 2.1.0 core or 1.1.0 Astro packages. React 0.1.0 remains unpublished and uses theme 2.1.0; copied examples are React examples. Read the canonical docs/consolidation.md for the paired Astro candidate APIs. Shared grammar does not imply shared props or event/focus APIs.
 

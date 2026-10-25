@@ -61,6 +61,7 @@ export function FamilyLayout({
             >
               Working patterns
             </a>
+            <a href="?page=patterns" aria-current={page === 'patterns' ? 'page' : undefined}>Reference patterns</a>
             <a
               href="?page=start"
               aria-current={page === "start" ? "page" : undefined}
