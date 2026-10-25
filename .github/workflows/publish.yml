@@ -32,7 +32,13 @@ jobs:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
       - run: git merge-base --is-ancestor HEAD origin/main
       - run: npm run check
+      - name: Use the Ubuntu archive for browser dependencies
+        run: |
+          if [ -f /etc/apt/apt-mirrors.txt ]; then
+            sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' /etc/apt/apt-mirrors.txt
+          fi
       - run: npx playwright install --with-deps ${{ matrix.browser }}
+        timeout-minutes: 10
       - run: npm run test:browser
       - run: npm run test:reference
       - run: npm run test:packages

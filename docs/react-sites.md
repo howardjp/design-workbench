@@ -21,7 +21,7 @@ Original theme-site SVGs remain byte-for-byte verified, with paths and Git blob 
 
 ## Agent access
 
-Each family has a real local stdio MCP server, 53 attributed references, and its own builder skill. The Agent tools page provides a standalone locked-dependency archive that installs and serves outside the workbench. It includes only that family's catalogue and skill. No hosted MCP endpoint or desktop-client integration is implied by the static review URL. Read [setup, behavior, evidence and limits](mcp.md).
+Each family has an independent hosted HTTP MCP and local stdio distribution, 58 attributed references, and its own builder skill. The Agent tools page provides a standalone locked-dependency archive that installs and serves outside the workbench. It includes only that family's catalogue and skill. Public MCPs live at https://martlettheme.dev/mcp and https://krigsvoldtheme.dev/mcp through the existing Cloudflare theme sites. Claude Code 2.1.310 connects successfully to both. Static review Sites retain their private audience; account-specific ChatGPT/Claude installation is separate. Read [setup, behavior, evidence and limits](mcp.md).
 
 ## Build and isolation
 
