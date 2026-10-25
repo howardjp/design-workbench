@@ -10,13 +10,13 @@
       "packages": {
         "core": {
           "name": "@martlet/theme",
-          "version": "2.2.0",
+          "version": "2.2.1",
           "published": true,
           "tag": "next"
         },
         "Astro": {
           "name": "@martlet/astro",
-          "version": "1.2.0",
+          "version": "1.2.1",
           "published": true,
           "tag": "next"
         },
@@ -36,13 +36,13 @@
       "packages": {
         "core": {
           "name": "@krigsvold/theme",
-          "version": "2.2.0",
+          "version": "2.2.1",
           "published": true,
           "tag": "next"
         },
         "Astro": {
           "name": "@krigsvold/astro",
-          "version": "1.2.0",
+          "version": "1.2.1",
           "published": true,
           "tag": "next"
         },

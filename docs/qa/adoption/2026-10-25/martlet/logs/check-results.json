@@ -1,0 +1,397 @@
+{
+  "url": "http://127.0.0.1:40139/",
+  "browserVersion": "153.0.8010.0",
+  "checks": [
+    {
+      "name": "landmarks and document metadata",
+      "pass": true,
+      "details": {
+        "title": "Keeping a useful research record | Northbank Research Desk",
+        "lang": "en",
+        "mainCount": 1,
+        "h1Count": 1,
+        "articleCount": 1,
+        "uniqueIds": true,
+        "fragments": [
+          {
+            "href": "#main-content",
+            "target": true
+          },
+          {
+            "href": "#main-content",
+            "target": true
+          },
+          {
+            "href": "#evidence",
+            "target": true
+          },
+          {
+            "href": "#supporting-context",
+            "target": true
+          },
+          {
+            "href": "#evidence",
+            "target": true
+          },
+          {
+            "href": "#provenance",
+            "target": true
+          },
+          {
+            "href": "#limits",
+            "target": true
+          },
+          {
+            "href": "#reuse",
+            "target": true
+          },
+          {
+            "href": "#review",
+            "target": true
+          },
+          {
+            "href": "#evidence",
+            "target": true
+          },
+          {
+            "href": "#reuse",
+            "target": true
+          },
+          {
+            "href": "#provenance",
+            "target": true
+          },
+          {
+            "href": "#supporting-context",
+            "target": true
+          },
+          {
+            "href": "#main-content",
+            "target": true
+          }
+        ],
+        "tocParents": 2,
+        "tocChildren": 3,
+        "tocBeforeArticle": true,
+        "articleBeforeAside": true,
+        "asideSeparate": true,
+        "asideLabel": "Supporting context",
+        "footerGroups": [
+          "Reference",
+          "Working notes"
+        ],
+        "footerIdentity": "Northbank Research Desk",
+        "headingTargetsFocusable": true,
+        "scriptCount": 0,
+        "localAssets": true
+      }
+    },
+    {
+      "name": "all fragment destinations resolve and ids are unique",
+      "pass": true
+    },
+    {
+      "name": "two-level native contents list",
+      "pass": true
+    },
+    {
+      "name": "contents precedes article; supporting aside is separate and follows article",
+      "pass": true
+    },
+    {
+      "name": "host identity and grouped footer",
+      "pass": true
+    },
+    {
+      "name": "TOC heading destinations programmatically focusable",
+      "pass": true
+    },
+    {
+      "name": "static page has no client script",
+      "pass": true
+    },
+    {
+      "name": "wide: no horizontal document overflow",
+      "pass": true,
+      "details": 1440
+    },
+    {
+      "name": "narrow: no horizontal document overflow",
+      "pass": true,
+      "details": 390
+    },
+    {
+      "name": "minimum: no horizontal document overflow",
+      "pass": true,
+      "details": 320
+    },
+    {
+      "name": "enlarged-text: no horizontal document overflow",
+      "pass": true,
+      "details": 1440
+    },
+    {
+      "name": "keyboard skip link focuses main",
+      "pass": true,
+      "details": {
+        "firstFocus": {
+          "text": "Skip to content",
+          "class": "martlet-skip-link",
+          "outline": "solid"
+        },
+        "skipTarget": "main-content"
+      }
+    },
+    {
+      "name": "keyboard contents link focuses target",
+      "pass": true,
+      "details": {
+        "hash": "#provenance"
+      }
+    },
+    {
+      "name": "print article retained",
+      "pass": true
+    },
+    {
+      "name": "no browser errors or failed requests",
+      "pass": true
+    }
+  ],
+  "layouts": [
+    {
+      "name": "wide",
+      "width": 1440,
+      "height": 1000,
+      "scale": 1,
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "overflow": false,
+      "toc": {
+        "x": 183.046875,
+        "y": 607.9375,
+        "width": 256,
+        "height": 252.171875
+      },
+      "article": {
+        "x": 488.953125,
+        "y": 607.9375,
+        "width": 487.515625,
+        "height": 1005.421875
+      },
+      "aside": {
+        "x": 1000.46875,
+        "y": 607.9375,
+        "width": 256.484375,
+        "height": 475.359375
+      },
+      "columns": "256px 768px",
+      "tocPosition": "sticky",
+      "tocBackground": "rgba(0, 0, 0, 0)",
+      "bodyFont": "Cambo, Georgia, serif",
+      "bodySize": "17.2px",
+      "bodyLineHeight": "29.584px",
+      "bodyColor": "rgb(34, 42, 51)",
+      "headerBackground": "rgb(255, 255, 255)",
+      "footerBackground": "rgb(7, 17, 31)",
+      "sourceProfileRule": "none"
+    },
+    {
+      "name": "narrow",
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "viewport": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "toc": {
+        "x": 24,
+        "y": 613.921875,
+        "width": 342,
+        "height": 286.546875
+      },
+      "article": {
+        "x": 24,
+        "y": 940.46875,
+        "width": 342,
+        "height": 977.265625
+      },
+      "aside": {
+        "x": 24,
+        "y": 1941.734375,
+        "width": 342,
+        "height": 308.171875
+      },
+      "columns": "342px",
+      "tocPosition": "static",
+      "tocBackground": "rgb(248, 244, 233)",
+      "bodyFont": "Cambo, Georgia, serif",
+      "bodySize": "17.2px",
+      "bodyLineHeight": "29.584px",
+      "bodyColor": "rgb(34, 42, 51)",
+      "headerBackground": "rgb(255, 255, 255)",
+      "footerBackground": "rgb(7, 17, 31)",
+      "sourceProfileRule": "none"
+    },
+    {
+      "name": "minimum",
+      "width": 320,
+      "height": 800,
+      "scale": 1,
+      "viewport": 320,
+      "scrollWidth": 320,
+      "overflow": false,
+      "toc": {
+        "x": 24,
+        "y": 680.953125,
+        "width": 272,
+        "height": 286.546875
+      },
+      "article": {
+        "x": 24,
+        "y": 1007.5,
+        "width": 272,
+        "height": 1158.1875
+      },
+      "aside": {
+        "x": 24,
+        "y": 2189.6875,
+        "width": 272,
+        "height": 367.328125
+      },
+      "columns": "272px",
+      "tocPosition": "static",
+      "tocBackground": "rgb(248, 244, 233)",
+      "bodyFont": "Cambo, Georgia, serif",
+      "bodySize": "17.2px",
+      "bodyLineHeight": "29.584px",
+      "bodyColor": "rgb(34, 42, 51)",
+      "headerBackground": "rgb(255, 255, 255)",
+      "footerBackground": "rgb(7, 17, 31)",
+      "sourceProfileRule": "none"
+    },
+    {
+      "name": "enlarged-text",
+      "width": 1440,
+      "height": 1000,
+      "scale": 2,
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "overflow": false,
+      "toc": {
+        "x": 51.203125,
+        "y": 891.703125,
+        "width": 1337.59375,
+        "height": 571.125
+      },
+      "article": {
+        "x": 51.203125,
+        "y": 1542.828125,
+        "width": 1337.59375,
+        "height": 1363.1875
+      },
+      "aside": {
+        "x": 51.203125,
+        "y": 2954.015625,
+        "width": 1337.59375,
+        "height": 498.109375
+      },
+      "columns": "1337.59px",
+      "tocPosition": "static",
+      "tocBackground": "rgb(248, 244, 233)",
+      "bodyFont": "Cambo, Georgia, serif",
+      "bodySize": "34.4px",
+      "bodyLineHeight": "59.168px",
+      "bodyColor": "rgb(34, 42, 51)",
+      "headerBackground": "rgb(255, 255, 255)",
+      "footerBackground": "rgb(7, 17, 31)",
+      "sourceProfileRule": "none"
+    }
+  ],
+  "errors": [],
+  "failedRequests": [],
+  "semantic": {
+    "title": "Keeping a useful research record | Northbank Research Desk",
+    "lang": "en",
+    "mainCount": 1,
+    "h1Count": 1,
+    "articleCount": 1,
+    "uniqueIds": true,
+    "fragments": [
+      {
+        "href": "#main-content",
+        "target": true
+      },
+      {
+        "href": "#main-content",
+        "target": true
+      },
+      {
+        "href": "#evidence",
+        "target": true
+      },
+      {
+        "href": "#supporting-context",
+        "target": true
+      },
+      {
+        "href": "#evidence",
+        "target": true
+      },
+      {
+        "href": "#provenance",
+        "target": true
+      },
+      {
+        "href": "#limits",
+        "target": true
+      },
+      {
+        "href": "#reuse",
+        "target": true
+      },
+      {
+        "href": "#review",
+        "target": true
+      },
+      {
+        "href": "#evidence",
+        "target": true
+      },
+      {
+        "href": "#reuse",
+        "target": true
+      },
+      {
+        "href": "#provenance",
+        "target": true
+      },
+      {
+        "href": "#supporting-context",
+        "target": true
+      },
+      {
+        "href": "#main-content",
+        "target": true
+      }
+    ],
+    "tocParents": 2,
+    "tocChildren": 3,
+    "tocBeforeArticle": true,
+    "articleBeforeAside": true,
+    "asideSeparate": true,
+    "asideLabel": "Supporting context",
+    "footerGroups": [
+      "Reference",
+      "Working notes"
+    ],
+    "footerIdentity": "Northbank Research Desk",
+    "headingTargetsFocusable": true,
+    "scriptCount": 0,
+    "localAssets": true
+  },
+  "print": {
+    "tocDisplay": "block",
+    "articleDisplay": "block"
+  }
+}

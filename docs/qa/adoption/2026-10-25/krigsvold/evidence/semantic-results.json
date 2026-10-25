@@ -1,0 +1,106 @@
+{
+  "passed": 24,
+  "checks": [
+    {
+      "check": "exactly one html",
+      "passed": true
+    },
+    {
+      "check": "exactly one body",
+      "passed": true
+    },
+    {
+      "check": "exactly one main",
+      "passed": true
+    },
+    {
+      "check": "exactly one article",
+      "passed": true
+    },
+    {
+      "check": "exactly one aside",
+      "passed": true
+    },
+    {
+      "check": "exactly one footer",
+      "passed": true
+    },
+    {
+      "check": "English light appearance and source profile",
+      "passed": true
+    },
+    {
+      "check": "exactly one title",
+      "passed": true
+    },
+    {
+      "check": "exactly one h1",
+      "passed": true
+    },
+    {
+      "check": "host supplied title and h1",
+      "passed": true
+    },
+    {
+      "check": "all IDs unique",
+      "passed": true
+    },
+    {
+      "check": "all local links have existing targets",
+      "passed": true
+    },
+    {
+      "check": "skip link reaches focusable main",
+      "passed": true
+    },
+    {
+      "check": "contents precedes article precedes support",
+      "passed": true
+    },
+    {
+      "check": "support is named and separate from article",
+      "passed": true
+    },
+    {
+      "check": "two parent sections each contain a nested child",
+      "passed": true
+    },
+    {
+      "check": "contents targets have exact heading levels and are focusable",
+      "passed": true
+    },
+    {
+      "check": "all navigation landmarks uniquely named",
+      "passed": true
+    },
+    {
+      "check": "grouped footer has four named navigation groups",
+      "passed": true
+    },
+    {
+      "check": "footer identity and ownership are host supplied",
+      "passed": true
+    },
+    {
+      "check": "no client script or external network request in HTML",
+      "passed": true
+    },
+    {
+      "check": "emitted stylesheet exists",
+      "passed": true
+    },
+    {
+      "check": "all emitted font and CSS assets resolve locally",
+      "passed": true
+    },
+    {
+      "check": "source profile, reading layout, print and focus rules shipped",
+      "passed": true
+    }
+  ],
+  "font_asset_urls": 208,
+  "output": "dist/index.html",
+  "limits": [
+    "Static source/HTML/CSS checks do not prove visual reflow, focus behavior, contrast, screen-reader usability, or print layout."
+  ]
+}

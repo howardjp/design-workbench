@@ -1,0 +1,159 @@
+{
+  "fixture": "martlet-astro",
+  "path": "/workspace/scratch/ea99548f98cf/adoption/martlet-astro",
+  "status": "production-build-and-bounded-adoption-checks-pass",
+  "scope": "Local programming validation fixture, independent source and registry dependencies; no Site, deployment, push or product integration.",
+  "versions": {
+    "@martlet/theme": {
+      "version": "2.2.0",
+      "resolved": "https://registry.npmjs.org/@martlet/theme/-/theme-2.2.0.tgz",
+      "integrity": "sha512-hq6BqxSbLzMxo9fFG1CZUvpcNcLwFLjKIP3sQusiZi90jpnHJGMkIUiEM2yrwC330XxB/F+bHS2Y8+niovUcrw=="
+    },
+    "@martlet/astro": {
+      "version": "1.2.0",
+      "resolved": "https://registry.npmjs.org/@martlet/astro/-/astro-1.2.0.tgz",
+      "integrity": "sha512-gIQDrToiCJIlfN1aXXwTX45EfTBN6fwbj5u1LmC4zpZilGmSKfAkc0XxJd+PbDYAjsf5q+t4AleDidVXZJFr6g=="
+    },
+    "astro": {
+      "version": "5.18.2",
+      "resolved": "https://registry.npmjs.org/astro/-/astro-5.18.2.tgz",
+      "integrity": "sha512-TnFwLnAXty5MXKPDGuKXqK4AMBXG+FH6RUdK7Oyc3gyfNoFIthT+4eRbzOK43bdRlLaZuxgciDSjgtggZ3OtGQ=="
+    }
+  },
+  "guidance": {
+    "skill": "/workspace/scratch/ea99548f98cf/workbench/skills/martlet-builder/SKILL.md",
+    "family": "martlet",
+    "grammarVersion": "0.3",
+    "maturity": "experimental",
+    "bundledCanonicalRevision": "bbd30eb29daddfb8f706693d5afa7858bed97d8e",
+    "originSourceCommit": "32b7166a629ea696147d0d779d911b713e4baf7e",
+    "hostedMCP": "initialize POST returned HTTP 404; no get_manifest/search_guidance/get_reference possible",
+    "snapshotDigest": "No MCP digest verified; local file SHA256 values saved in logs/guidance-sha256.json"
+  },
+  "apisVerified": [
+    {
+      "export": "ArticleLayout",
+      "source": "node_modules/@martlet/astro/src/components/ArticleLayout.astro",
+      "used": "title/documentTitle/description/summary/eyebrow/bodyClass/sidebarLabel and header/metadata/contents/sidebar/footer slots"
+    },
+    {
+      "export": "SiteHeader",
+      "source": "node_modules/@martlet/astro/src/components/SiteHeader.astro",
+      "used": "name/home/links; native wrapping link header"
+    },
+    {
+      "export": "TableOfContents",
+      "source": "node_modules/@martlet/astro/src/components/TableOfContents.astro",
+      "used": "items with href/label/depth:2|3; label; variant=index"
+    },
+    {
+      "export": "SiteFooter",
+      "source": "node_modules/@martlet/astro/src/components/SiteFooter.astro",
+      "used": "variant=grouped, groups with label/links, identity/base slots"
+    },
+    {
+      "export": "@martlet/theme/source-profile.css",
+      "source": "node_modules/@martlet/theme/package.json and dist/source-profile.css",
+      "used": "Opt-in import and bodyClass=martlet-source-profile after ordinary styles; emitted CSS ordering checked"
+    }
+  ],
+  "composition": {
+    "hostIdentity": "Northbank Research Desk (illustrative)",
+    "contents": "Two parent sections and three child headings, native unnumbered nested lists",
+    "body": "Bounded prose in article; Cambo observed 17.2px/29.584px",
+    "supportingContext": "Distinct labelled aside after article in DOM; side-by-side at 1440px, after body at 390px",
+    "footer": "Two labelled native navigation groups; independent identity/base region",
+    "classification": "Source translation through exported reading/contents/footer components; illustrative host text and fragment destinations are fixture-specific extensions; no invented mark/palette/controller."
+  },
+  "observed": {
+    "productionBuild": {
+      "command": "ASTRO_TELEMETRY_DISABLED=1 npm run build",
+      "exitCode": 0,
+      "pages": 1,
+      "reportedSeconds": 1.64
+    },
+    "semanticChecks": {
+      "passed": 14,
+      "total": 14,
+      "raw": "logs/semantic-check.log"
+    },
+    "browserChecks": {
+      "passed": 15,
+      "total": 15,
+      "browser": "153.0.8010.0",
+      "raw": "logs/browser-check.log",
+      "viewports": [
+        "1440x1000",
+        "390x844",
+        "320x800",
+        "1440x1000 with 200% root font size"
+      ],
+      "keyboard": "Tab/Enter skip link focused main; focused TOC link Enter focused provenance heading",
+      "errors": [],
+      "failedRequests": [],
+      "print": "Article retained, TOC display remains block; no full pagination/PDF review"
+    },
+    "assets": "One emitted local stylesheet; 110 local font URLs resolve; no emitted client scripts.",
+    "visualReview": [
+      "logs/wide.png",
+      "logs/narrow.png inspected; no visible clipping or overlap in those screenshots"
+    ]
+  },
+  "friction": [
+    {
+      "id": "M1",
+      "kind": "missing-guidance",
+      "observation": "Skill asks to use hosted MCP or bundled stdio fallback. Hosted MCP initialize returned HTTP 404; supplied skill directory has no stdio server or setup instructions.",
+      "impact": "Could not retrieve manifest, snapshot digest, builder-skill or live component references; used pinned offline docs and installed package source."
+    },
+    {
+      "id": "M2",
+      "kind": "stale-publication-status",
+      "observation": "Offline source.md/decisions/implementation.json, installed README, docs/consolidation.md and language.json call 2.2.0/1.2.0 unreleased candidates and consolidation discourages npm install; exact versions installed successfully from registry.npmjs.org.",
+      "impact": "Publication guidance contradicts registry availability; installation and lockfile establish versions but not grammar stability."
+    },
+    {
+      "id": "M3",
+      "kind": "platform-api-discovery",
+      "observation": "Bundled components.md documents React contracts, including TOC item id and Article props. Installed Astro TOC requires href and ArticleLayout slots/props differ.",
+      "impact": "Had to read installed src/index.ts, package exports, component source and consolidation.md; React contracts cannot supply Astro API."
+    },
+    {
+      "id": "M4",
+      "kind": "source-guidance-vs-rendering",
+      "observation": "Source decision profile describes a dark/transparent source website header. Exported SiteHeader under opt-in source profile renders white background rgb(255,255,255) with blue links.",
+      "impact": "Fixture preserves actual shipped API/default; source-profile adoption does not reproduce the complete described source header anatomy."
+    },
+    {
+      "id": "M5",
+      "kind": "print-boundary",
+      "observation": "In actual Chromium print media the contents nav has display:block. Offline React component contract says contents navigation omitted from print; Astro consolidation does not promise that behavior.",
+      "impact": "Do not transfer React print claims to Astro; full print output remains unverified."
+    },
+    {
+      "id": "M6",
+      "kind": "environment",
+      "observation": "npm emitted unknown http-proxy env warning and deprecated tsconfck@3.1.6 warning; runtime Playwright initially had no browser and browser download returned truncated/empty archive.",
+      "impact": "Build still passed. Browser execution succeeded using shared /tmp/chromium supplied separately; rerun check.mjs with BROWSER_EXECUTABLE_PATH to another Chromium as needed."
+    }
+  ],
+  "unverified": [
+    "Manual screen-reader and assistive technology review",
+    "Dark mode",
+    "Localization/RTL",
+    "Forced colors, reduced color distinctions and long translated labels",
+    "Full print pagination/PDF rendering",
+    "Cross-browser behavior beyond supplied Chromium 153",
+    "Sustained user or consumer usability evidence",
+    "Live hosted MCP metadata and release promotion status"
+  ],
+  "artifacts": {
+    "source": "src/pages/index.astro",
+    "lockfile": "package-lock.json",
+    "builtOutput": "dist/index.html",
+    "semanticHarness": "semantic_check.py",
+    "browserHarness": "check.mjs",
+    "rawOutputs": "logs/",
+    "findings": "findings.json"
+  }
+}

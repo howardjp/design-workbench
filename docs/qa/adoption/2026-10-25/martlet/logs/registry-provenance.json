@@ -1,0 +1,17 @@
+{
+  "@martlet/theme": {
+    "version": "2.2.0",
+    "resolved": "https://registry.npmjs.org/@martlet/theme/-/theme-2.2.0.tgz",
+    "integrity": "sha512-hq6BqxSbLzMxo9fFG1CZUvpcNcLwFLjKIP3sQusiZi90jpnHJGMkIUiEM2yrwC330XxB/F+bHS2Y8+niovUcrw=="
+  },
+  "@martlet/astro": {
+    "version": "1.2.0",
+    "resolved": "https://registry.npmjs.org/@martlet/astro/-/astro-1.2.0.tgz",
+    "integrity": "sha512-gIQDrToiCJIlfN1aXXwTX45EfTBN6fwbj5u1LmC4zpZilGmSKfAkc0XxJd+PbDYAjsf5q+t4AleDidVXZJFr6g=="
+  },
+  "astro": {
+    "version": "5.18.2",
+    "resolved": "https://registry.npmjs.org/astro/-/astro-5.18.2.tgz",
+    "integrity": "sha512-TnFwLnAXty5MXKPDGuKXqK4AMBXG+FH6RUdK7Oyc3gyfNoFIthT+4eRbzOK43bdRlLaZuxgciDSjgtggZ3OtGQ=="
+  }
+}

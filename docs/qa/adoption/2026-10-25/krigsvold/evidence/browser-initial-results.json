@@ -1,0 +1,99 @@
+{
+  "browser": "153.0.8010.0",
+  "checks": [
+    {
+      "name": "first keyboard stop is skip link",
+      "pass": true
+    },
+    {
+      "name": "skip-link activation focuses main",
+      "pass": true
+    },
+    {
+      "name": "native TOC activation focuses the heading",
+      "pass": true
+    },
+    {
+      "name": "no horizontal overflow at 1440px",
+      "pass": true,
+      "details": 1440
+    },
+    {
+      "name": "no horizontal overflow at 390px",
+      "pass": true,
+      "details": 390
+    },
+    {
+      "name": "narrow contents/body/support retain vertical order",
+      "pass": true
+    },
+    {
+      "name": "no horizontal overflow at 390px and 200% root text",
+      "pass": true
+    },
+    {
+      "name": "print hides contents navigation",
+      "pass": false
+    }
+  ],
+  "observations": {
+    "390": {
+      "viewport": 390,
+      "scrollWidth": 390,
+      "contents": {
+        "x": 20,
+        "y": -210.03125,
+        "width": 350,
+        "height": 251.125
+      },
+      "article": {
+        "x": 20,
+        "y": 108.96875,
+        "width": 350,
+        "height": 777.21875
+      },
+      "aside": {
+        "x": 20,
+        "y": 935.140625,
+        "width": 350,
+        "height": 363.21875
+      },
+      "footer": {
+        "x": 8,
+        "y": 1370.359375,
+        "width": 374,
+        "height": 555.515625
+      }
+    },
+    "1440": {
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "contents": {
+        "x": 153.59375,
+        "y": 96,
+        "width": 320,
+        "height": 232.75
+      },
+      "article": {
+        "x": 526.390625,
+        "y": -144.125,
+        "width": 760,
+        "height": 525.5
+      },
+      "aside": {
+        "x": 526.390625,
+        "y": 430.328125,
+        "width": 760,
+        "height": 336.828125
+      },
+      "footer": {
+        "x": 8,
+        "y": 882.34375,
+        "width": 1424,
+        "height": 317.65625
+      }
+    }
+  },
+  "request_failures": [],
+  "console_errors": []
+}
