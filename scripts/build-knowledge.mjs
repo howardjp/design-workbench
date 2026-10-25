@@ -54,6 +54,7 @@ for (const family of ["martlet", "krigsvold"]) {
     });
   }
   add("builder-skill","skill",`${family} builder method`,await readFile(`skills/${family}-builder/SKILL.md`,"utf8"),`skills/${family}-builder/SKILL.md`,["method","workflow","builder","skill"]);
+  add("platform:Astro","platform",`${family} Astro API and composition`,await readFile(`skills/${family}-builder/references/astro.md`,"utf8"),`skills/${family}-builder/references/astro.md`,["Astro","API","slots","imports","contents","footer","print"]);
   const grammar = await readFile(`docs/languages/${family}/grammar.md`, "utf8");
   add(
     "grammar",

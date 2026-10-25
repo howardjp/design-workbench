@@ -1,0 +1,4 @@
+interface:
+  display_name: "Krigsvold Builder"
+  short_description: "Build precise Krigsvold interfaces and task patterns"
+  default_prompt: "Use $krigsvold-builder to build this app using Krigsvold’s grammar."

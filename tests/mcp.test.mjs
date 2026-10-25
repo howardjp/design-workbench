@@ -41,7 +41,7 @@ for (const family of ["martlet", "krigsvold"])
         };
         const manifest = (await call("get_manifest")).value;
         assert.equal(manifest.family, family);
-        assert.equal(manifest.references.length, 57);
+        assert.equal(manifest.references.length, 58);
         assert.equal(manifest.platforms.React.published, distribution.families[family].packages.React.published);
         assert.equal(manifest.platforms.Astro.published, distribution.families[family].packages.Astro.published);
         assert.equal(manifest.platforms.Astro.examples, false);
@@ -94,7 +94,7 @@ for (const family of ["martlet", "krigsvold"])
         ).value;
         assert.equal(noMatch.results.length, 0);
         const resources = await client.listResources();
-        assert.equal(resources.resources.length, 57);
+        assert.equal(resources.resources.length, 58);
         const resource = resources.resources.find((r) => r.name === "grammar");
         const exact = await client.readResource({ uri: resource.uri });
         assert.equal(

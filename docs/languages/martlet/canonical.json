@@ -1,6 +1,6 @@
 {
   "repository": "martlettheme/npm",
-  "commit": "bbd30eb29daddfb8f706693d5afa7858bed97d8e",
+  "commit": "8190e1ad71788c15bec19eac4875af7e15f4f8cf",
   "files": {
     "grammar.md": {
       "sourcePath": "docs/grammar.md",
@@ -8,11 +8,11 @@
     },
     "decisions.md": {
       "sourcePath": "docs/source-decisions.md",
-      "sha256": "cba2b8da3e812d007e7ec5234d140a041fa850213d62833f8676baf774016693"
+      "sha256": "8775721c0be2b25da5631860a4a5e3b996f567078d0a24a3f94c1f9ca2b6c820"
     },
     "implementation.json": {
       "sourcePath": "language.json",
-      "sha256": "010fc46144a9feb0948b2cf70aa009fe818a6ae737744e6f12690d1a12fad718"
+      "sha256": "be54910d2e3cc28be31120a47491762ebddda4729933a721324e115d6f536eab"
     },
     "coverage.md": {
       "sourcePath": "docs/coverage.md",

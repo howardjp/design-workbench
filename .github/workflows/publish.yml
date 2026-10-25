@@ -37,6 +37,8 @@ jobs:
       - run: npm run test:reference
       - run: npm run test:packages
       - run: npm run test:agents
+      - run: npm run build:plugins
+      - run: git diff --exit-code -- plugins
       - run: npm run build:hosted
   publish:
     needs: verify

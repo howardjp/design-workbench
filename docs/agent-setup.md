@@ -35,3 +35,17 @@ Call `get_manifest`, confirm the family and provenance, then retrieve `builder-s
 SDK checks cover pinned modern 2026-07-28 and legacy Streamable HTTP, tools/resources, hashes, family isolation, validation and unavailable references. Account-specific ChatGPT and Claude UI installation is a separate observation and must be reported separately. A static HTML response from `/mcp` means the Worker route was not deployed. A private Site's sign-in wall is not the public knowledge endpoint. A missing version or platform is unsupported; do not substitute the other family or invent APIs.
 
 Official setup references: [ChatGPT custom MCP](https://developers.openai.com/api/docs/guides/custom-mcp-server), [Claude custom connectors](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp), [Claude Code MCP](https://code.claude.com/docs/en/mcp).
+
+## Paired private plugins and Claude Code source
+
+The repository’s `plugins/martlet-design-language` and `plugins/krigsvold-design-language` each contain the matching builder skill, original mark and remote MCP configuration. They can be saved as separate private ChatGPT plugins. Account creation, installation and tool availability are verified separately; see the release record for actual status.
+
+From a checkout, Claude Code can load one plugin for the session:
+
+```sh
+claude --plugin-dir ./plugins/martlet-design-language
+# or
+claude --plugin-dir ./plugins/krigsvold-design-language
+```
+
+Inspect `/mcp`, then request `get_manifest` and `platform:Astro` or React component references for the selected platform. The `.claude-plugin` compatibility manifest uses the same skill and endpoint as portable `plugin.json` / `mcp.json`. A skill alone contains no MCP executable; the optional full offline agent archive contains the stdio server.

@@ -1,7 +1,7 @@
 # Source and framework support
 
-Canonical guidance: https://github.com/martlettheme/npm/tree/bbd30eb29daddfb8f706693d5afa7858bed97d8e. The bundled grammar and source decisions are exact copies of that revision; implementation.json records framework availability. Grammar 0.3 remains experimental.
+Canonical guidance: https://github.com/martlettheme/npm/tree/8190e1ad71788c15bec19eac4875af7e15f4f8cf. The bundled grammar and source decisions are exact copies of that revision; implementation.json records framework availability. Grammar 0.3 remains experimental.
 
-Core 2.2.0 and Astro 1.2.0 are unreleased consolidation candidates. Do not request their new exports from the published 2.1.0 core or 1.1.0 Astro packages. React 0.1.0 remains unpublished and uses theme 2.1.0; copied examples are React examples. Read the canonical docs/consolidation.md for the paired Astro candidate APIs. Shared grammar does not imply shared props or event/focus APIs.
+Core and Astro 2.2.x/1.2.x guidance is experimental. Check the separately verified distribution record in the connected MCP manifest and npm dist-tags before selecting exact versions. React 0.1.0 uses theme 2.1.0; copied component examples are React examples. Read astro.md for Astro APIs. Shared grammar does not imply shared props or event/focus APIs.
 
-This martlet MCP snapshot is local stdio only. Retrieve grammar, decisions, compatibility and actual component references; check manifest family, sourceCommit and sourceDigest. No hosted endpoint or installed personal skill is implied by the downloadable bundle. Manual accessibility, localization/RTL and sustained use remain open.
+The hosted read-only endpoint is https://martlettheme.dev/mcp when available. The skill directory contains instructions and references only. The optional full agent archive contains a stdio server for offline/local transport; installing the skill does not install that server or create a remote connection. Check manifest family, sourceCommit and sourceDigest. Manual accessibility, localization/RTL and sustained use remain open.
