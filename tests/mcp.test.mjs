@@ -43,15 +43,24 @@ for (const family of ["martlet", "krigsvold"])
         assert.equal(manifest.family, family);
         assert.equal(manifest.version, distribution.preview.version);
         assert.equal(manifest.platforms.Astro.version, distribution.families[family].packages.Astro.version);
-        assert.equal(manifest.references.length, 58);
+        assert.equal(manifest.references.length, 61);
         assert.equal(manifest.platforms.React.published, distribution.families[family].packages.React.published);
         assert.equal(manifest.platforms.Astro.published, distribution.families[family].packages.Astro.published);
-        assert.equal(manifest.platforms.Astro.examples, false);
+        assert.equal(manifest.platforms.Astro.examples, true);
         assert.equal(manifest.canonicalGuidance.repository, `${family}theme/npm`);
         assert.match(manifest.canonicalGuidance.commit, /^[a-f0-9]{40}$/);
         assert.ok(manifest.sourceDigest.length === 64);
         assert.equal(manifest.grammarVersion, '0.3');
         for (const id of ['coverage','pattern:validated-form','pattern:query-results']) { const reference=(await call('get_reference',{id})).value; assert.equal(reference.family,family); assert.match(reference.source,new RegExp(family+'theme/npm/blob/'+manifest.canonicalGuidance.commit)); }
+        const reactSetup=(await call('get_reference',{id:'platform:React'})).value;
+        assert.ok(reactSetup.content.includes(manifest.distribution.packages.React.tarball.url));
+        assert.ok(reactSetup.content.includes(manifest.distribution.packages.React.tarball.sha256));
+        assert.equal(manifest.distribution.packages.React.tarball.available,true);
+        const nativeForms=(await call('get_reference',{id:'styling:forms'})).value;
+        assert.ok(nativeForms.content.includes(`${family}-error-summary`));
+        assert.ok(nativeForms.content.includes('host'));
+        const installSearch=(await call('search_guidance',{query:'React install tarball',kind:'platform'})).value;
+        assert.equal(installSearch.results[0].id,'platform:React');
         const found = (
           await call("search_guidance", {
             query: "Cardfile collection editor recovery",
@@ -96,7 +105,7 @@ for (const family of ["martlet", "krigsvold"])
         ).value;
         assert.equal(noMatch.results.length, 0);
         const resources = await client.listResources();
-        assert.equal(resources.resources.length, 58);
+        assert.equal(resources.resources.length, 61);
         const resource = resources.resources.find((r) => r.name === "grammar");
         const exact = await client.readResource({ uri: resource.uri });
         assert.equal(

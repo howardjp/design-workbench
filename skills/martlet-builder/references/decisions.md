@@ -42,7 +42,7 @@ Full media/figure/footnote/maths, source card/archive variants and complete appl
 
 ## Framework consolidation
 
-Core 2.2.0 and Astro 1.2.0 are unreleased candidates. The source profile is an opt-in import and class; existing core defaults and existing Astro slots remain compatible. New TableOfContents and grouped SiteFooter anatomy are available in the paired candidate packages. React 0.1.0 retains its existing theme 2.1.0 dependency and React-specific events and focus contracts. Framework support is recorded in language.json. These additions do not make the grammar stable.
+Core 2.2.2 and Astro 1.2.2 are preview packages. The source profile is an opt-in import and class; existing core defaults and existing Astro slots remain compatible. New TableOfContents and grouped SiteFooter anatomy are available in the paired candidate packages. React 0.1.0 retains its existing theme 2.1.0 dependency and React-specific events and focus contracts. Framework support is recorded in language.json. These additions do not make the grammar stable.
 
 ## Grammar review 0.3
 
@@ -51,3 +51,7 @@ Validated forms and queried results add explicit application contracts for group
 ## Framework scope
 
 The source website header observations describe the origin object and its reference-host translation. Astro SiteHeader retains a generic wrapping-link header; it does not claim the source masthead, responsive menu controller or React print behavior. Inspect the target platform API and complete composition rather than transferring another renderer’s props or defaults.
+
+## Adoption repair 0.3
+
+The native-HTML form layer makes the existing application-extension vocabulary reusable outside React. It uses the existing semantic palette, leading severity rules, native choice controls, and field/group/region relationships. It does not claim that every form object was observed at the origin. The Lato .86rem label role is retained. Reduced-motion preferences and native modal semantics remain intact. The source profile provides inheritable primary-action defaults; secondary actions retain their own role.

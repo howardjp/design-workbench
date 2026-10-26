@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-25",
+  "reviewedAt": "2026-10-26",
   "families": {
     "martlet": {
       "mcp": {
@@ -13,21 +13,29 @@
       "packages": {
         "core": {
           "name": "@martlet/theme",
-          "version": "2.2.1",
+          "version": "2.2.2",
           "published": true,
           "tag": "next"
         },
         "Astro": {
           "name": "@martlet/astro",
-          "version": "1.2.1",
-          "published": true,
+          "version": "1.2.2",
+          "published": false,
           "tag": "next"
         },
         "React": {
           "name": "@martlet/react",
           "version": "0.1.0",
           "published": false,
-          "tag": "next"
+          "tag": "next",
+          "tarball": {
+            "url": "https://github.com/howardjp/design-workbench/releases/download/react-v0.1.0/martlet-react-0.1.0.tgz",
+            "sha256": "42a501d06ef7114ed5640b52d9889998ae70ca1846e0bdfba9e1ba487c3c1a41",
+            "available": true,
+            "source": "public GitHub pre-release react-v0.1.0"
+          },
+          "install": "npm install https://github.com/howardjp/design-workbench/releases/download/react-v0.1.0/martlet-react-0.1.0.tgz react@19 react-dom@19",
+          "theme": "2.1.0"
         }
       },
       "preview": {
@@ -48,21 +56,29 @@
       "packages": {
         "core": {
           "name": "@krigsvold/theme",
-          "version": "2.2.1",
+          "version": "2.2.2",
           "published": true,
           "tag": "next"
         },
         "Astro": {
           "name": "@krigsvold/astro",
-          "version": "1.2.1",
-          "published": true,
+          "version": "1.2.2",
+          "published": false,
           "tag": "next"
         },
         "React": {
           "name": "@krigsvold/react",
           "version": "0.1.0",
           "published": false,
-          "tag": "next"
+          "tag": "next",
+          "tarball": {
+            "url": "https://github.com/howardjp/design-workbench/releases/download/react-v0.1.0/krigsvold-react-0.1.0.tgz",
+            "sha256": "d7ffd5de0df1f08370d05d5d7a950b932f912b99cd0a2fcf871795e5e0140246",
+            "available": true,
+            "source": "public GitHub pre-release react-v0.1.0"
+          },
+          "install": "npm install https://github.com/howardjp/design-workbench/releases/download/react-v0.1.0/krigsvold-react-0.1.0.tgz react@19 react-dom@19",
+          "theme": "2.1.0"
         }
       },
       "preview": {

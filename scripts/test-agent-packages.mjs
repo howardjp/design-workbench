@@ -44,7 +44,7 @@ for (const family of ["martlet", "krigsvold"]) {
       });
       const manifest = JSON.parse(raw.content[0].text);
       assert.equal(manifest.family, family);
-      assert.equal(manifest.references.length, 58);
+      assert.equal(manifest.references.length, 61);
     } finally {
       await client.close();
     }

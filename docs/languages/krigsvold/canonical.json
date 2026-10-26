@@ -1,30 +1,38 @@
 {
   "repository": "krigsvoldtheme/npm",
-  "commit": "f567b51abbe199f89cbb09b5a8cb9e77bed1e117",
+  "commit": "b07a726bbc8728e7badbd18df6db09bbfceb5752",
   "files": {
     "grammar.md": {
       "sourcePath": "docs/grammar.md",
-      "sha256": "474364df73254ab76c9de385d86b78a1b35bfc2852a2a27bc58cf9f87ef1dd4b"
+      "sha256": "b2a7ac163cdcea938c74664fe7431af53086989d953419e2ace4d5d5bdbe7187"
     },
     "decisions.md": {
       "sourcePath": "docs/source-decisions.md",
-      "sha256": "195ef6ab50efbe8ead64571d101bc63c262130ac335900c5445c3ab13e78fe57"
+      "sha256": "fd83799ecddd9d9adb37d73c30e5b12c529aa072547c3cbfce98ab92793dab46"
     },
     "implementation.json": {
       "sourcePath": "language.json",
-      "sha256": "ee6e8931bff779ee1ebdfee8566b2ba3287b2631f9c00b26835f5846975d7cb3"
+      "sha256": "e689440ccd6e6bf10349f3bc5f284b52b76fef8bf05fe37075b52f2e7090d05a"
     },
     "coverage.md": {
       "sourcePath": "docs/coverage.md",
-      "sha256": "11b9be3b81a5d1ad65ecbca458afa264fc5be3d9fa1733ab1387643da3a3e2e4"
+      "sha256": "3531381e3388194c2a71402379a3d82a62aaf88ad2f2d0ed9894db4b5805bc8d"
     },
     "forms.md": {
       "sourcePath": "docs/patterns/forms.md",
-      "sha256": "03811a1ca4c98230554e0062adc6ec8a69459025342fbc8f1f2385d4dc5fe45c"
+      "sha256": "1d6682f50082a058b13fff6b7393c0bf47b8064d2e0db3ed19df620e39b4b13d"
     },
     "query-results.md": {
       "sourcePath": "docs/patterns/query-results.md",
       "sha256": "9858a37dc9651e529eea0c31389d644f77490c97977d3d437af941c72e88d8fc"
+    },
+    "native-html.md": {
+      "sourcePath": "docs/native-html.md",
+      "sha256": "3e267ec3e3a4b434f247a2e840b4a910273849ab5ac23172ed996323604d7419"
+    },
+    "form-styling.md": {
+      "sourcePath": "docs/form-styling.md",
+      "sha256": "63798f599942b02755508e46915ddab455fd401ab9426af43fd39b0a9680d37a"
     }
   }
 }
