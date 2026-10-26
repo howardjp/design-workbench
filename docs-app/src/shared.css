@@ -263,6 +263,3 @@ a {
 .language-guide :is(.language-guide-rules,.language-guide-decisions) > * + * { margin-block-start:1.25rem; }
 .language-guide .language-guide-decisions { margin-block-start:4rem; }
 .language-guide h3 { margin-block-start:2.5rem; }
-
-/* Owner-selected documentation surface; family palette definitions are unchanged. */
-:root { --documentation-nav-dark-bg:#2e3947; }

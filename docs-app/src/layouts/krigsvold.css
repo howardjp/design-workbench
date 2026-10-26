@@ -107,20 +107,28 @@
 
 @media(max-width:991.98px) { .krigsvold-reference-menu > a:focus-visible { outline-color:var(--krigsvold-color-ice-400); } }
 
-/* Owner-directed full-width documentation band; see documentation-navigation.md. */
-.krigsvold-reference { --documentation-nav-bg:white; --documentation-nav-text:var(--krigsvold-color-ink); --documentation-nav-active:var(--krigsvold-color-blue-600); --documentation-nav-muted:var(--krigsvold-color-muted); --documentation-nav-border:var(--krigsvold-color-rule); }
-.krigsvold[data-krigsvold="dark"] .krigsvold-reference { --documentation-nav-bg:var(--documentation-nav-dark-bg); --documentation-nav-text:white; --documentation-nav-active:var(--krigsvold-color-ice-400); --documentation-nav-muted:rgb(255 255 255/.75); --documentation-nav-border:rgb(255 255 255/.2); }
-.krigsvold-reference .krigsvold-app { padding-block-start:0; }
-.krigsvold-reference .krigsvold-app-header { position:relative; z-index:50; max-inline-size:none; margin:0; padding-inline-start:max(1rem,calc((100vw - var(--krigsvold-content-width))/2 + 1rem)); padding-inline-end:max(.8rem,calc((100vw - var(--krigsvold-content-width))/2 + .8rem)); border:0; border-block-end:1px solid var(--documentation-nav-border); border-radius:0; background:var(--documentation-nav-bg); box-shadow:none; backdrop-filter:none; }
+/* Owner correction: contained menu over the hero; inverse appearance surfaces. */
+.krigsvold-reference { --documentation-nav-bg:rgb(6 19 37/.84); --documentation-nav-text:white; --documentation-nav-active:var(--krigsvold-color-ice-400); --documentation-nav-border:rgb(255 255 255/.2); }
+.krigsvold[data-krigsvold="dark"] .krigsvold-reference { --documentation-nav-bg:white; --documentation-nav-text:var(--krigsvold-color-ink); --documentation-nav-active:var(--krigsvold-color-blue-600); --documentation-nav-border:var(--krigsvold-color-rule); }
+.krigsvold-reference .krigsvold-app-header { position:relative; z-index:50; background:var(--documentation-nav-bg); border-color:var(--documentation-nav-border); }
 .krigsvold-reference-brand,.krigsvold-reference .krigsvold-app-header summary,.krigsvold-reference-toggle { color:var(--documentation-nav-text); }
 .krigsvold-reference .krigsvold-app-header summary:is(:hover,:focus-visible) { color:var(--documentation-nav-active); }
 .krigsvold-reference-toggle { border-color:currentColor; }
-.krigsvold-reference-search { border-color:var(--documentation-nav-border); }
-.krigsvold-reference-search input { color:var(--documentation-nav-text); border-color:var(--documentation-nav-muted); }
-.krigsvold-reference-search input::placeholder { color:var(--documentation-nav-muted); }
-.krigsvold-reference .krigsvold-app-header :is(summary,button,input,a):focus-visible { outline-color:var(--documentation-nav-active); }
+.krigsvold-reference-search { border-inline-start-color:var(--documentation-nav-border); }
+.krigsvold-reference-search input { color:var(--documentation-nav-text); border-block-end-color:currentColor; }
+.krigsvold-reference-search input::placeholder { color:var(--documentation-nav-text); opacity:.75; }
+.krigsvold-reference .krigsvold-app-header :is(.krigsvold-reference-brand,.krigsvold-reference-toggle,summary,input):focus-visible { outline-color:var(--documentation-nav-active); }
+.krigsvold-reference[data-page="home"] .krigsvold-app { position:relative; padding-block-start:0; }
+.krigsvold-reference[data-page="home"] .krigsvold-app-header { position:absolute; z-index:50; inset-block-start:1.25rem; inset-inline:var(--krigsvold-gutter); margin-inline:auto; }
+.krigsvold-reference[data-page="home"] .krigsvold-app > main { padding:0; }
+.krigsvold-reference[data-page="home"] .krigsvold-reference-width { max-inline-size:none; }
+.krigsvold-reference[data-page="home"] .krigsvold-reference-cover { max-inline-size:none; margin:0; padding:9rem max(var(--krigsvold-gutter),calc((100% - var(--krigsvold-content-width))/2)) 4rem; background:var(--krigsvold-color-navy-950); color:white; }
+.krigsvold-reference[data-page="home"] .krigsvold-reference-cover :is(h1,a) { color:white; }
+.krigsvold-reference[data-page="home"] .krigsvold-reference-cover :is(.reference-kicker,.krigsvold-reference-coverline) { color:var(--krigsvold-color-ice-400); }
+.krigsvold-reference[data-page="home"] :is(.krigsvold-reference-register,.krigsvold-reference-status,.krigsvold-reference-catalog) { max-inline-size:var(--krigsvold-content-width); margin-inline:auto; padding-inline:var(--krigsvold-gutter); }
 @media(max-width:991.98px) {
- .krigsvold-reference .krigsvold-app-header { padding-inline:.8rem; }
+ .krigsvold-reference { --documentation-nav-bg:rgb(6 19 37/.96); }
+ .krigsvold-reference[data-page="home"] .krigsvold-app-header { inset-block-start:.75rem; }
  .krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a { color:var(--documentation-nav-text); }
  .krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a:is(:hover,:focus-visible) { background:var(--krigsvold-color-ice-100); color:var(--krigsvold-color-ink); }
 }

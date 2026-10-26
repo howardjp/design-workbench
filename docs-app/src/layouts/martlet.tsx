@@ -20,7 +20,34 @@ export function FamilyLayout({
   children,
 }: LayoutProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [headerReady, setHeaderReady] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    let scheduled = 0, readyFrame = 0;
+    const update = () => setScrolled(window.scrollY >= Math.min(260, Math.max(160, innerHeight * .25)));
+    const onScroll = () => {
+      if (scheduled) return;
+      scheduled = requestAnimationFrame(() => { update(); scheduled = 0; });
+    };
+    const restore = () => {
+      setMenuOpen(false);
+      update();
+      readyFrame = requestAnimationFrame(() => setHeaderReady(true));
+    };
+    restore();
+    window.addEventListener('scroll', onScroll, {passive:true});
+    window.addEventListener('resize', update, {passive:true});
+    window.addEventListener('pageshow', restore);
+    window.addEventListener('hashchange', onScroll);
+    return () => {
+      cancelAnimationFrame(scheduled); cancelAnimationFrame(readyFrame);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', update);
+      window.removeEventListener('pageshow', restore);
+      window.removeEventListener('hashchange', onScroll);
+    };
+  }, []);
   useEffect(() => {
     const close = (event: KeyboardEvent) => {
       if (event.key === "Escape" && menuOpen) { setMenuOpen(false); menuButton.current?.focus(); }
@@ -32,10 +59,10 @@ export function FamilyLayout({
     return () => { window.removeEventListener("keydown", close); media.removeEventListener("change", resize); };
   }, [menuOpen]);
   return (
-    <div className="martlet-reference" data-menu-open={menuOpen}>
+    <div className="martlet-reference" data-page={page} data-menu-open={menuOpen} data-scrolled={scrolled} data-header-ready={headerReady}>
       <AppShell
         navigationLabel="Documentation"
-        headerMode={mode === "dark" ? "dark" : "light"}
+        headerMode={scrolled || menuOpen || page === 'home' ? (mode === 'dark' ? 'light' : 'dark') : (mode === 'dark' ? 'dark' : 'light')}
         brand={
           <div className="martlet-reference-identity">
             <a href="?" className="martlet-reference-brand">
@@ -84,12 +111,12 @@ export function FamilyLayout({
         }
       >
         <div className="martlet-reference-width">
-          <div className="martlet-reference-index">
+          {page !== 'home' && <div className="martlet-reference-index">
             <Disclosure summary="Browse the 22 components">
               {directory}
             </Disclosure>
             <span>Design language 0.3 preview · React 0.1.0 · MIT</span>
-          </div>
+          </div>}
           {children}
 
         </div>
