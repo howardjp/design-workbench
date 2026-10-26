@@ -99,6 +99,7 @@
 .martlet-reference { --documentation-hero-bg:var(--martlet-color-navy-900); --documentation-hero-text:white; --documentation-hero-rule:var(--martlet-color-gold-300); }
 .martlet[data-martlet="dark"] .martlet-reference { --documentation-hero-bg:var(--martlet-color-cream); --documentation-hero-text:var(--martlet-color-navy-900); --documentation-hero-rule:var(--martlet-color-gold-700); }
 .martlet-reference[data-page="home"] { padding-block-start:0; --documentation-nav-text:var(--documentation-hero-text); --documentation-nav-rule:var(--documentation-hero-rule); }
+.martlet-reference[data-page="home"] .martlet-app-header { position:fixed; }
 .martlet[data-martlet="dark"] .martlet-reference[data-page="home"] { --documentation-nav-text:var(--documentation-hero-text); --documentation-nav-rule:var(--documentation-hero-rule); }
 .martlet-reference[data-page="home"] .martlet-app > main { padding:0; }
 .martlet-reference[data-page="home"] .martlet-reference-width { max-inline-size:none; }
