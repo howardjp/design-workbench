@@ -6,7 +6,7 @@ Grammar 0.3 remains experimental. This document makes the settled review require
 
 An observed origin object is the baseline for that object. A host translation must identify its context. An application extension must explain its task, relationships, states and recovery. Later owner direction can supersede a host translation without rewriting the historical origin evidence. Tests enforce those distinctions, rather than treating every visible reference choice as a requirement for adopting applications.
 
-The [documentation navigation decision](documentation-navigation.md) is the current owner-directed host rule: white in light mode, a continuous `#2e3947` band in dark mode, bounded contents, original family identity. It supersedes the earlier solid origin-header translation on the design homes and React references. It does not prescribe an application's header, appearance controller, or navigation orientation. Krigsvold's white desktop popup and transparent in-flow mobile submenu remain distinct objects.
+The [documentation navigation decision](documentation-navigation.md) is the current owner-directed host rule: Martlet uses the origin dark hero and transparent-to-dark-navy scroll transition in light appearance, and reverses to a lighter hero and transparent-to-white transition in dark appearance; Krigsvold floats a dark menu with white text over its hero in light mode, and a white menu with dark text in dark mode. Both retain bounded contents and original family identity. The latest Martlet choice supersedes its earlier white/grey translation. It does not prescribe an application's header, appearance controller, or navigation orientation. Krigsvold's white desktop popup and transparent in-flow mobile submenu remain distinct objects.
 
 ## Independent compositional rules
 
@@ -38,7 +38,7 @@ The IDs refer to the canonical eighteen-domain coverage ledgers. The named check
 | G13 frames | Top/side/none remain available without introducing another family's composition. | Existing shell export/render and browser checks. |
 | G14 reading and footer | Unnumbered parent/child contents retain hierarchy; supporting information and footer identity remain distinct. | `G14: contents retain parent and child hierarchy`; `G14: footer preserves identity and grouped destinations`; existing Article checks. |
 | G15 frameworks | Exact platform APIs and publication status remain separate from shared grammar. | Existing compiled examples, package checks and pinned implementation/distribution records; independent adoption is separate evidence. |
-| Host navigation | White light band, full-width grey dark band and native family identity remain consistent. | Existing `documentation navigation is white in light mode and full-width grey in dark mode` checks and the main sites' cross-renderer checks. |
+| Host navigation | Martlet’s transparent/scrolled/open states and Krigsvold’s inverse floating surfaces retain their independent rules. | Martlet scroll/menu transition checks, Krigsvold hero/overlay/appearance checks, and the main sites' cross-renderer checks. |
 
 ## What a passing check means
 

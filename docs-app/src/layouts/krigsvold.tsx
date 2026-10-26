@@ -12,6 +12,43 @@ import { groups, descriptions, repo } from "../data";
 export const familyMark = mark;
 import type { LayoutProps, PageProps } from "../layout-types";
 import "./krigsvold.css";
+function ReferenceRegister({page}:{page:LayoutProps['page']}) {
+  return (<div className="krigsvold-reference-register">
+            <div>
+              <a href="?" aria-current={page === "home" ? "page" : undefined}>
+                Overview
+              </a>
+              <a
+                href="?page=start"
+                aria-current={page === "start" ? "page" : undefined}
+              >
+                Getting started
+              </a>
+              <a
+                href="?page=language"
+                aria-current={page === "language" ? "page" : undefined}
+              >
+                Design language
+              </a>
+              <a
+                href="?page=collection"
+                aria-current={page === "collection" ? "page" : undefined}
+              >
+                Working patterns
+              </a>
+              <a href="?page=patterns" aria-current={page === 'patterns' ? 'page' : undefined}>Reference patterns</a>
+              <a
+                href="?page=agents"
+                aria-current={page === "agents" ? "page" : undefined}
+              >
+                Agent tools
+              </a>
+              <a href="https://krigsvolddesign.dev/">Design language ↗</a>
+              <a href={repo}>Source ↗</a>
+            </div>
+            <span>0.3 PREVIEW · REACT 0.1.0</span>
+          </div>);
+}
 export function FamilyLayout({
   mode,
   onModeChange,
@@ -32,11 +69,11 @@ export function FamilyLayout({
     return () => { window.removeEventListener("keydown", close); media.removeEventListener("change", resize); };
   }, [menuOpen]);
   return (
-    <div className="krigsvold-reference" data-menu-open={menuOpen}>
+    <div className="krigsvold-reference" data-menu-open={menuOpen} data-page={page}>
       <AppShell
         navigationLabel="Documentation"
         navigationPlacement="top"
-        headerMode={mode === "dark" ? "dark" : "light"}
+        headerMode={mode === "dark" ? "light" : "dark"}
         brand={
           <div className="krigsvold-reference-identity">
             <a href="?" className="krigsvold-reference-brand">
@@ -92,41 +129,7 @@ export function FamilyLayout({
         }
       >
         <div className="krigsvold-reference-width">
-          <div className="krigsvold-reference-register">
-            <div>
-              <a href="?" aria-current={page === "home" ? "page" : undefined}>
-                Overview
-              </a>
-              <a
-                href="?page=start"
-                aria-current={page === "start" ? "page" : undefined}
-              >
-                Getting started
-              </a>
-              <a
-                href="?page=language"
-                aria-current={page === "language" ? "page" : undefined}
-              >
-                Design language
-              </a>
-              <a
-                href="?page=collection"
-                aria-current={page === "collection" ? "page" : undefined}
-              >
-                Working patterns
-              </a>
-              <a href="?page=patterns" aria-current={page === 'patterns' ? 'page' : undefined}>Reference patterns</a>
-              <a
-                href="?page=agents"
-                aria-current={page === "agents" ? "page" : undefined}
-              >
-                Agent tools
-              </a>
-              <a href="https://krigsvolddesign.dev/">Design language ↗</a>
-              <a href={repo}>Source ↗</a>
-            </div>
-            <span>0.3 PREVIEW · REACT 0.1.0</span>
-          </div>
+          {page !== 'home' && <ReferenceRegister page={page} />}
           {children}
 
         </div>
@@ -237,6 +240,7 @@ export function FamilyHome() {
         </p>
         <a href="?page=collection">Enter the Notes workspace →</a>
       </header>
+      <ReferenceRegister page="home" />
       <div className="krigsvold-reference-status">
         <DefinitionList
           items={[

@@ -6,6 +6,7 @@ type Family = 'martlet' | 'krigsvold';
 const reference = (family: Family, query: string) =>
   `http://127.0.0.1:${family === 'martlet' ? 4189 : 4188}/${family}/?${query}`;
 async function ready(page: Page) {
+  await expect(page.locator('main h1')).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
 }
 
