@@ -35,6 +35,7 @@ jobs:
         timeout-minutes: 10
       - run: npm run test:browser
       - run: npm run test:reference
+      - run: npm run test:public-react
       - run: npm run test:packages
       - run: npm run test:agents
       - run: npm run build:plugins
@@ -46,4 +47,11 @@ jobs:
         with:
           name: reference-pattern-proof-${{ matrix.browser }}
           path: test-results/reference-proof/
+          if-no-files-found: ignore
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-react-consumers-${{ matrix.browser }}
+          path: test-results/public-react/
           if-no-files-found: ignore

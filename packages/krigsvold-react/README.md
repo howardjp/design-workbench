@@ -1,6 +1,6 @@
 # @krigsvold/react
 
-Experimental 0.1.0. MIT licensed. Source package in the [design workbench](https://github.com/howardjp/design-workbench). Intended for experimental publication under npm’s `next` tag; it is not a stable public API. Check registry availability before installing.
+Experimental 0.1.0. MIT licensed. Source package in the [design workbench](https://github.com/howardjp/design-workbench). Intended for experimental publication under npm’s `next` tag; it is not a stable public API. npm publication is pending. Use the public GitHub tarball below; the implementation is available independently of npm.
 
 ```tsx
 import { Button, Field, TextInput } from '@krigsvold/react';
@@ -16,7 +16,7 @@ import '@krigsvold/theme/fonts.css'; // optional local fonts
 ```
 
 ```sh
-npm install @krigsvold/react@0.1.0 react@19 react-dom@19
+npm install https://github.com/howardjp/design-workbench/releases/download/react-v0.1.0/krigsvold-react-0.1.0.tgz react@19 react-dom@19
 ```
 
 Exports: AppShell, Button, TextInput, Select, Textarea, Field, Notice, Badge, DataTable, Dialog, Checkbox, Fieldset, Disclosure, ErrorSummary, Article, TableOfContents, FileInput, Radio, Pagination, DefinitionList, Switch, Tabs, and FieldControl/SummaryError/ContentsItem/DefinitionItem (types). Native attributes and refs on native controls follow React 19 conventions. Button defaults to `type="button"`. Field supplies a stable id and associated hint/error descriptions through a render function. Dialog uses the native modal top layer; keep it mounted and control `open`. Escape calls `onDismiss`; provide visible dismissal buttons. DataTable wraps a semantic table in a named, focusable overflow region. Notice announces success/info politely and errors assertively.

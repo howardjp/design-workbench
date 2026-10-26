@@ -55,6 +55,8 @@ for (const family of ["martlet", "krigsvold"]) {
   }
   add("builder-skill","skill",`${family} builder method`,await readFile(`skills/${family}-builder/SKILL.md`,"utf8"),`skills/${family}-builder/SKILL.md`,["method","workflow","builder","skill"]);
   add("platform:Astro","platform",`${family} Astro API and composition`,await readFile(`skills/${family}-builder/references/astro.md`,"utf8"),`skills/${family}-builder/references/astro.md`,["Astro","API","slots","imports","contents","footer","print"]);
+  add("platform:React","platform",`${family} React installation and actual component route`,await readFile(`skills/${family}-builder/references/react-setup.md`,"utf8"),`skills/${family}-builder/references/react-setup.md`,["React","install","npm","tarball","setup","available","package","checksum"]);
+  for (const [id,name,title] of [["platform:HTML","native-html.md","Direct HTML class anatomy"],["styling:forms","form-styling.md","Native HTML form styling and states"]]) add(id,"platform",`${family} ${title}`,await readFile(`docs/languages/${family}/${name}`,"utf8"),canonicalUrl(canonical.files[name].sourcePath),["HTML","Astro","forms","CSS","classes","field","error","dialog","styling"]);
   const grammar = await readFile(`docs/languages/${family}/grammar.md`, "utf8");
   add(
     "grammar",
@@ -175,7 +177,7 @@ for (const family of ["martlet", "krigsvold"]) {
     "compatibility",
     "compatibility",
     `${family} support and compatibility`,
-    `React 0.1.0 is experimental; React 19 and @${family}/theme 2.1.0. Publication status is recorded separately from the immutable canonical guidance snapshot: ${JSON.stringify(delivery.packages)}. This server supplies React examples only. Do not translate React event or focus props into Astro APIs. Canonical migration guide: ${canonicalUrl('docs/consolidation.md')}. Vue, Svelte and native APIs are not implemented. Manual assistive technology, localization, RTL and sustained use remain open.\n\n${JSON.stringify(implementations,null,2)}`,
+    `React 0.1.0 is experimental; React 19 and @${family}/theme 2.1.0. Retrieve platform:React for the supported public release tarball, checksum and exact install command; npm registry publication is independently recorded. Retrieve platform:HTML and styling:forms for core native markup. Publication status is recorded separately from the immutable canonical guidance snapshot: ${JSON.stringify(delivery.packages)}. Component examples are React-specific; platform:Astro supplies a complete reading composition and the neutral starter route. Do not treat shared styling as an Astro controller. Do not translate React event or focus props into Astro APIs. Canonical migration guide: ${canonicalUrl('docs/consolidation.md')}. Vue, Svelte and native APIs are not implemented. Manual assistive technology, localization, RTL and sustained use remain open.\n\n${JSON.stringify(implementations,null,2)}`,
     "docs/maturity.md",
     ["platform", "version", "support", "migration"],
   );
@@ -187,12 +189,13 @@ for (const family of ["martlet", "krigsvold"]) {
     family,
     version: distribution.preview.version,
     themeVersion: "2.1.0",
+    themeVersionRole: "React reference dependency; current core release is distribution.packages.core",
     grammarVersion: implementations.grammarVersion,
     sourceCommit: commit,
     sourceDigest,
     platforms: {
       React: { version: "0.1.0", maturity: "experimental", published: delivery.packages.React.published },
-      Astro: { version: delivery.packages.Astro.version, maturity: "experimental", published: delivery.packages.Astro.published, examples: false, core: "^"+delivery.packages.core.version },
+      Astro: { version: delivery.packages.Astro.version, maturity: "experimental", published: delivery.packages.Astro.published, examples: true, formController: "host-owned starter specimen", core: "^"+delivery.packages.core.version },
     },
     distribution: {...delivery, reviewedAt:distribution.reviewedAt},
     canonicalGuidance: canonical,

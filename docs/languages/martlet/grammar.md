@@ -1,6 +1,6 @@
 # Martlet: a grammar of related things
 
-Experimental grammar 0.3 · Core 2.2.0 candidate · Astro 1.2.0 candidate · React 0.1.0
+Experimental grammar 0.3 · Core 2.2.2 preview · Astro 1.2.2 preview · React 0.1.0
 
 Martlet makes substantial work approachable through proportion, proximity, readable sequence, and continuity. Its warmth must survive a compact collection, an error, or a page without its mark. The adopted charter supplies the criteria; these rules turn them into an application vocabulary to exercise and revise.
 
@@ -71,3 +71,7 @@ The specimen uses fictional, session-only data. Reloading restores its initial n
 Inspect relationships before decoration: can someone tell which help belongs to which control, which action affects which object, and where one task becomes another? Does the same reasoning work in a compact panel and a long form? Can they recover their place after a change? Remove the mark and reduce color distinctions; hierarchy, proportion, grouping, and interaction continuity must still carry the language.
 
 Keyboard conventions, focus visibility, labels, and usable recovery are shared obligations with other sound systems. Do not invent unusual behavior merely to look independent. Manual assistive-technology review, localization, RTL adaptation, and sustained use remain required before stability.
+
+## Native HTML form vocabulary
+
+Core 2.2.2 supplies the optional `forms.css` layer, also included by `full.css`. Read `docs/form-styling.md` for exact classes and semantic obligations. These are experimental application extensions; validation, persistence, draft guards, announcements and focus transitions remain host code. No framework implementation is inferred from a token.
