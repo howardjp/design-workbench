@@ -8,6 +8,8 @@ Build small, working examples of Martlet and Krigsvold using only their public g
 - Krigsvold: https://krigsvolddesign.dev/ and https://krigsvolddesign.dev/react/
 - Read-only MCP endpoints: https://martletdesign.dev/mcp and https://krigsvolddesign.dev/mcp
 
+No authentication is required: these endpoints provide public design documentation, without user accounts or private-data access. A hosted connection does not require downloading a server.
+
 Start a new directory for each language and framework. Follow the public getting-started instructions and discover the documented skill/MCP setup there. Record exact versions, installation sources, commands and the retrieved guidance provenance. Do not use a local checkout, unpublished workspace packages, existing examples' application code, or previous adoption reports. If a documented package cannot be obtained, report that first; a documented public alternative can be tried as a separately labelled route. Do not infer an undocumented API or quietly repair the library.
 
 ## Task

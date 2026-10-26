@@ -46,4 +46,6 @@ These are repeatable reference requirements for the current implementation and e
 
 G16 broader content vocabulary, G17 manual assistive technology/localization/RTL, and G18 sustained use/application breadth remain open. Consumer evidence is tracked separately from automated specimen evidence. Claude's [independent adoption brief](qa/claude-adoption-brief.md) defines the next external exercise without supplying previous findings or implementation-specific remedies.
 
+The first [operator-reported connection observation](qa/mcp-connection-observation-2026-10-25.md) records successful setup and surprise at the lack of login. It does not count as a completed adoption build or a verified retrieval trace.
+
 When a rule changes, record its authority and scope, revise the relevant contract, and exercise both the successful and failed transitions affected. Cross-framework changes require each renderer's own evidence. Do not mark an open gate complete because another framework or a static rendering passes.
