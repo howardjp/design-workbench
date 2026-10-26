@@ -41,4 +41,4 @@ The source audit, adopted charter and actual exported APIs govern these decision
 
 ## Independent adoption repair
 
-Core 2.2.2 adds documented native form styling and direct-HTML anatomy. Astro 1.2.2 adds a runnable form specimen with assertion-based submit, validation, failure/retry, reset-dialog, appearance and reflow checks. These are bounded browser checks; manual assistive technology, localization and sustained adoption remain open. The independent Claude report is preserved at howardjp/prism7 commit 6649c63.
+Core 2.2.3 adds documented native form styling and direct-HTML anatomy. Astro 1.2.2 adds a runnable form specimen with assertion-based submit, validation, failure/retry, reset-dialog, appearance and reflow checks. These are bounded browser checks; manual assistive technology, localization and sustained adoption remain open. The independent Claude report is preserved at howardjp/prism7 commit 6649c63.

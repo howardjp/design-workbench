@@ -1,6 +1,6 @@
 # Native HTML forms
 
-Core 2.2.2 · Experimental application extension. Import `@krigsvold/theme/full.css`, or import colors, foundation, components and `@krigsvold/theme/forms.css` explicitly. Add `.krigsvold` and `data-krigsvold="light"` or `"dark"` to a common ancestor. Fonts are optional and separately imported. The source profile is optional and loads last.
+Core 2.2.3 · Experimental application extension. Import `@krigsvold/theme/full.css`, or import colors, foundation, components and `@krigsvold/theme/forms.css` explicitly. Add `.krigsvold` and `data-krigsvold="light"` or `"dark"` to a common ancestor. Fonts are optional and separately imported. The source profile is optional and loads last.
 
 These classes reuse existing semantic colors and the family's field/group/region hierarchy. They are supported markup contracts, not exported controllers or proof of origin-site use. The host supplies identity and state logic. No special layout or navigation orientation is required.
 

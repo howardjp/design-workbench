@@ -26,6 +26,7 @@ export function createLanguageServer(catalog, options = {}) {
     family: catalog.family,
     version: catalog.version,
     themeVersion: catalog.themeVersion,
+    themeVersionRole: catalog.themeVersionRole,
     grammarVersion: catalog.grammarVersion,
     sourceCommit: catalog.sourceCommit,
     sourceDigest: catalog.sourceDigest,

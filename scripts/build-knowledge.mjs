@@ -189,6 +189,7 @@ for (const family of ["martlet", "krigsvold"]) {
     family,
     version: distribution.preview.version,
     themeVersion: "2.1.0",
+    themeVersionRole: "React reference dependency; current core release is distribution.packages.core",
     grammarVersion: implementations.grammarVersion,
     sourceCommit: commit,
     sourceDigest,

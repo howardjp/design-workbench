@@ -2,7 +2,7 @@
 
 Baseline: [Claude's report at prism7 commit 6649c63](https://github.com/howardjp/prism7/blob/6649c63/adoption/REPORT.md). That exercise used Astro packages and separately labelled theme-only React reconstructions. It did not exercise the actual React component packages. Its browser harness records many observations; those records are not equivalent to assertion-based acceptance.
 
-Grammar remains experimental 0.3. Core 2.2.2 and Astro 1.2.2 are the repair preview; React components remain 0.1.0 on their tested theme 2.1.0 dependency. Publication, artifact availability and grammar maturity are separate fields.
+Grammar remains experimental 0.3. Martlet core 2.2.2, Krigsvold core 2.2.3 and Astro 1.2.2 are the repair preview; React components remain 0.1.0 on their tested theme 2.1.0 dependency. Publication, artifact availability and grammar maturity are separate fields.
 
 | Finding | Repair / disposition | Evidence route |
 | --- | --- | --- |

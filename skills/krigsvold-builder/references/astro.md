@@ -1,6 +1,6 @@
 # Krigsvold Astro APIs
 
-Use the installed `@krigsvold/astro` source as the API authority. This reference covers Astro 1.2.x with core 2.2.x; package publication is recorded separately in the MCP manifest. Install the experimental channel with `npm install @krigsvold/theme@next @krigsvold/astro@next astro` in an Astro project. Verify engine requirements for the chosen Astro version.
+Use the installed `@krigsvold/astro` source as the API authority. This reference covers Astro 1.2.x with core 2.2.x; package publication is recorded separately in the MCP manifest. Install the experimental channel with `npm install @krigsvold/theme@2.2.3 @krigsvold/astro@1.2.2 astro` in an Astro project. Verify engine requirements for the chosen Astro version.
 
 ## Framework boundaries
 
@@ -44,8 +44,8 @@ import '@krigsvold/theme/source-profile.css';
 
 Check production build, local font assets, one main/h1, skip-link and fragment focus, source order, narrow and enlarged text, and actual print output. Automated browser evidence does not establish manual screen-reader support, RTL completeness or sustained consumer use.
 
-## Adoption repair, Astro 1.2.2 and core 2.2.2
+## Adoption repair, Astro 1.2.2 and core 2.2.3
 
-Obtain the neutral starter with `npm pack @krigsvold/astro@next`, extract the downloaded archive, and copy `package/starter/` to your new directory. Or copy `node_modules/@krigsvold/astro/starter/` from an installed package. Install dependencies and run `npm run dev`; `npm run build` verifies the production output. The `/form/` route is a complete, explicitly simulated host controller using supported core classes; no data is sent or stored durably.
+Obtain the neutral starter with `npm pack @krigsvold/astro@1.2.2`, extract the downloaded archive, and copy `package/starter/` to your new directory. Or copy `node_modules/@krigsvold/astro/starter/` from an installed package. Install dependencies and run `npm run dev`; `npm run build` verifies the production output. The `/form/` route is a complete, explicitly simulated host controller using supported core classes; no data is sent or stored durably.
 
 Core `forms.css` is included in `full.css`. Retrieve `styling:forms` for exact field/hint/error/summary/notice/dialog anatomy, and `platform:HTML` for layout classes. `Button type="submit"` and `type="reset"` render the native type once. Use `class="krigsvold-button--secondary"` on `Button` for a secondary action, not a fictional `variant` prop. Validation, announcements, busy/draft state and focus remain host code. Fragment targets should have `tabindex="-1"` when their activation needs to move focus. Runtime appearance changes set the nearest `data-krigsvold` attribute; persistence and preference policy are host choices.

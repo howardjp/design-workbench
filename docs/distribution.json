@@ -20,8 +20,9 @@
         "Astro": {
           "name": "@martlet/astro",
           "version": "1.2.2",
-          "published": false,
-          "tag": "next"
+          "published": true,
+          "tag": "next",
+          "install": "npm install @martlet/theme@2.2.2 @martlet/astro@1.2.2 astro"
         },
         "React": {
           "name": "@martlet/react",
@@ -56,15 +57,16 @@
       "packages": {
         "core": {
           "name": "@krigsvold/theme",
-          "version": "2.2.2",
+          "version": "2.2.3",
           "published": true,
           "tag": "next"
         },
         "Astro": {
           "name": "@krigsvold/astro",
           "version": "1.2.2",
-          "published": false,
-          "tag": "next"
+          "published": true,
+          "tag": "next",
+          "install": "npm install @krigsvold/theme@2.2.3 @krigsvold/astro@1.2.2 astro"
         },
         "React": {
           "name": "@krigsvold/react",
