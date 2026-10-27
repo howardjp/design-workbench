@@ -87,7 +87,7 @@ for(const mode of ['light','dark'])test(`martlet: origin scroll transition and o
  await expect.poll(bg).toBe('rgba(0, 0, 0, 0)');
  await page.evaluate(()=>window.scrollTo({top:300,behavior:'instant'}));
  await expect.poll(bg).toBe(solid);
- expect(await header.getByRole('link',{name:'The language',exact:true}).evaluate(e=>getComputedStyle(e).color)).toBe(mode==='light'?'rgb(255, 255, 255)':'rgb(11, 28, 51)');
+ expect(await header.getByRole('link',{name:'The Language',exact:true}).evaluate(e=>getComputedStyle(e).color)).toBe(mode==='light'?'rgb(255, 255, 255)':'rgb(11, 28, 51)');
  await mkdir('test-results/reference-proof',{recursive:true});await page.screenshot({path:`test-results/reference-proof/martlet-navigation-${mode}.png`});
  await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));await expect.poll(bg).toBe('rgba(0, 0, 0, 0)');
  await page.setViewportSize({width:320,height:1000});
