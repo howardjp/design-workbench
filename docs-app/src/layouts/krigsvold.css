@@ -142,3 +142,10 @@
 @media(min-width:1400px) { .krigsvold-reference { --reference-container:1320px; } }
 .krigsvold-reference .krigsvold-app-header { inline-size:calc(100% - 1.5rem); max-inline-size:calc(var(--reference-container) - 1.5rem); margin-inline:auto; font:1rem/1.65 var(--krigsvold-font-sans); }
 .krigsvold-reference .krigsvold-reference-width { inline-size:100%; max-inline-size:calc(var(--reference-container) - 1.5rem); }
+
+/* Origin material-kit.css html *: rendering is distinct from numeric weight. */
+.krigsvold-reference,.krigsvold-reference * { -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+.krigsvold-reference { --documentation-nav-label:rgb(255 255 255/.88); --documentation-mobile-item:rgb(255 255 255/.76); }
+.krigsvold[data-krigsvold="dark"] .krigsvold-reference { --documentation-nav-label:var(--krigsvold-color-ink); --documentation-mobile-item:var(--krigsvold-color-ink); }
+.krigsvold-reference .krigsvold-app-header summary { color:var(--documentation-nav-label); }
+@media(max-width:991.98px) { .krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a { color:var(--documentation-mobile-item); } }
