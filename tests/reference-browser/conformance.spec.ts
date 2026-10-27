@@ -105,7 +105,11 @@ for (const family of ['martlet', 'krigsvold'] as const) {
 
   test(`${family}: G14: footer preserves identity and grouped destinations`, async ({page}) => {
     await page.goto(reference(family, 'page=patterns'));
-    const footer = page.locator(`.${family}-reference-footer`);
+    const footer = page.locator(`.${family}-master-site-footer`);
+    await expect(footer.getByRole('link', {name:'James Howard website'})).toHaveAttribute('href','https://jameshoward.us/');
+    await expect(footer).toContainText('A website of James Howard');
+    await expect(footer).toContainText(`${family}design.dev`);
+    await expect(footer.getByRole('link',{name:'React reference',exact:true})).toHaveAttribute('href',`https://react.${family}design.dev/`);
     const heading = await footer.locator('h2').first().evaluate(e => {
       const s = getComputedStyle(e);
       return {family:s.fontFamily, weight:s.fontWeight, size:s.fontSize, leading:s.lineHeight, smoothing:s.getPropertyValue('-webkit-font-smoothing')};
@@ -119,14 +123,14 @@ for (const family of ['martlet', 'krigsvold'] as const) {
     for (const width of [1440, 320]) {
       await page.setViewportSize({width, height: 1000});
       await footer.scrollIntoViewIfNeeded();
-      const base = footer.locator(`.${family}-reference-footer-base`);
+      const base = footer.locator(`.${family}-master-footer-${family === 'martlet' ? 'bottom' : 'base'}`);
       if(family === 'martlet' && width===1440) {
         const centers=await base.evaluate(e=>Array.from(e.children).map(child=>{const r=child.getBoundingClientRect();return r.top+r.height/2;}));
         expect(Math.abs(centers[0]-centers[1])).toBeLessThan(1);
       }
 
-      await expect(base).toContainText(family === 'martlet' ? 'Martlet React' : 'James');
-      const groups = footer.locator(`.${family}-reference-footer-grid`);
+      await expect(base).toContainText('James P. Howard, II');
+      const groups = footer.locator(`.${family}-master-footer-grid`);
       const geometry = await groups.evaluate(e => {
         const regions = [...e.children].map(child => {
           const r = child.getBoundingClientRect();

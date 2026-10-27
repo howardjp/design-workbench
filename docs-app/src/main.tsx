@@ -290,14 +290,14 @@ function Start() {
         Explore the components here, then follow the installation instructions for the verified release.
       </p>
       <div className="callout">
-        <strong>{delivery.packages.React.published ? "Experimental 0.1.0 · npm next" : "Release candidate · registry publication pending"}</strong>
+        <strong>{delivery.packages.React.published ? "Experimental 0.1.0 · published on npm" : "Release candidate · registry publication pending"}</strong>
         <p>
           Every export remains experimental. Verify the family and version before adopting it; publication does not establish stability.
         </p>
       </div>
       <h2>Install in a React 19 project</h2>
-      {delivery.packages.React.published && <CopyCode label="Terminal" code={`npm install @${family}/react@0.1.0 react@19 react-dom@19`} />}
-      {!delivery.packages.React.published && <><p>The React package is available as a verified GitHub release tarball while initial npm publication is pending.</p><CopyCode label="Terminal" code={`npm install https://github.com/howardjp/design-workbench/releases/download/react-v0.1.0/${family}-react-0.1.0.tgz react@19 react-dom@19`} /></>}
+      <CopyCode label="Terminal" code={delivery.packages.React.install} />
+      <p>The API remains experimental. This pinned command uses the verified distribution route.</p>
       <h2>Reproduce from source</h2>
       <p>
         Use Node 24.19 or later within Node 24. The packages target React 19 and

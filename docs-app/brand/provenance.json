@@ -8,5 +8,11 @@
     "repository": "krigsvoldtheme/krigsvoldtheme",
     "path": "site/public/krigsvold-mark.svg",
     "gitBlobSha": "7d4e179dc749056eb79b602b5809464ae718b460"
+  },
+  "ownerBadge": {
+    "repository": "martlettheme/martlettheme",
+    "path": "site/public/assets/identity/jh-badge-1x1.svg",
+    "gitBlobSha": "f21a36b81df5620a9ee6058b858081e4fd5b8af7",
+    "role": "Master-site owner identity in both React footers; family marks remain in navigation"
   }
 }

@@ -122,6 +122,10 @@ for (const family of ["martlet", "krigsvold"]) {
         join(dir, "data.mjs"),
         compile(await readFile("docs-app/src/data.ts", "utf8"), "data"),
       );
+      const footer = (await readFile(`docs-app/src/layouts/${family}-footer.tsx`, 'utf8'))
+        .replace(/^import ownerBadge from [^;]+;/m, "const ownerBadge='/jh-badge-1x1.svg';")
+        .replace(/^import ['"][^'"]+\.css['"];?$/gm, '');
+      await writeFile(join(dir, 'footer.mjs'), compile(footer, 'footer'));
       const source = (
         await readFile(`docs-app/src/layouts/${family}.tsx`, "utf8")
       )
@@ -130,6 +134,7 @@ for (const family of ["martlet", "krigsvold"]) {
           /^import mark from [^;]+;/m,
           `const mark = '/${family}-mark.svg';`,
         )
+        .replace(/from ["']\.\/(?:martlet|krigsvold)-footer["']/g, "from './footer.mjs'")
         .replace(/from ["']\.\.\/data["']/g, `from './data.mjs'`)
         .replace(/^import ['"][^'"]+\.css['"];?$/gm, "");
       await writeFile(join(dir, "layout.mjs"), compile(source, "layout"));

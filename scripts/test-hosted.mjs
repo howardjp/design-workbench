@@ -9,6 +9,17 @@ for(const family of ['martlet','krigsvold']) {
  assert.equal(await (await worker.fetch(new Request('https://language.test/design-language/'),{ASSETS:{fetch:()=>new Response('existing site')}})).text(),'existing site');
  const canonical=`https://${family}design.dev`,legacy=`https://${family}theme.dev`;
  const redirect=await worker.fetch(new Request(legacy+'/design-language/?from=old'));assert.equal(redirect.status,308);assert.equal(redirect.headers.get('location'),canonical+'/design-language/?from=old');
+ const reactOrigin=`https://react.${family}design.dev`;
+ for(const path of ['/react','/react/','/react/assets/example.js','/react//example.com/file']) {
+  const response=await worker.fetch(new Request(canonical+path+'?page=start'));
+  const target=new URL(response.headers.get('location'));
+  assert.equal(response.status,308);assert.equal(target.origin,reactOrigin);
+  assert.equal(target.pathname,path.slice(6)||'/');assert.equal(target.search,'?page=start');
+ }
+ for(const path of ['/','/assets/example.js','/agents/skill.zip','/preview.json']) {
+  const response=await worker.fetch(new Request(reactOrigin+path+'?page=start'),{ASSETS:{fetch:request=>new Response(request.url)}});
+  assert.equal(await response.text(),canonical+'/react'+path+'?page=start');
+ }
  for(const origin of [canonical,legacy]) for(const mode of ['legacy',{pin:'2026-07-28'}]) {
   const client=new Client({name:'compiled-worker-consumer',version:'1.0.0'},{mode});
   try {

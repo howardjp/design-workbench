@@ -7,7 +7,7 @@
     "name": "James P. Howard, II"
   },
   "homepage": "https://martletdesign.dev/agents/",
-  "repository": "https://github.com/howardjp/design-workbench",
+  "repository": "https://github.com/k3jph/design-workbench",
   "license": "MIT",
   "extensions": {
     "com.openai": {

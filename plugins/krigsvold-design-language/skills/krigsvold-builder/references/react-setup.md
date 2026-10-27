@@ -2,13 +2,15 @@
 
 React components 0.1.0 · experimental · tested theme dependency 2.1.0 · React 19.
 
-The package is available as a public GitHub release tarball. npm publication is pending (`published: false` means unavailable from the npm registry, not absent implementation). Do not try `@krigsvold/react@next` while that flag is false. Do not replace the real components with theme-only JSX when the documented public archive is obtainable.
+The package is published on npm. At verification, both `latest` and `next` resolve to 0.1.0; the API remains experimental. Pin the version for reproducible adoption and use the real React components.
 
 ```sh
-npm install https://github.com/howardjp/design-workbench/releases/download/react-v0.1.0/krigsvold-react-0.1.0.tgz react@19 react-dom@19
+npm install @krigsvold/react@0.1.0 react@19 react-dom@19
 ```
 
 For a new Vite project, first run `npm create vite@latest example -- --template react-ts`, enter `example`, then use the command above. Check Node engine requirements of the chosen Vite version. Commit package.json and the generated lockfile; verify a clean `npm ci && npm run build`.
+
+The immutable public GitHub archive remains an alternative: https://github.com/howardjp/design-workbench/releases/download/react-v0.1.0/krigsvold-react-0.1.0.tgz. Its checksum applies to that archive, not the npm registry tarball.
 
 Artifact SHA-256: `d7ffd5de0df1f08370d05d5d7a950b932f912b99cd0a2fcf871795e5e0140246`. If an environment cannot install HTTPS tarballs directly, download the exact URL, verify its checksum with `sha256sum`, then run `npm install ./krigsvold-react-0.1.0.tgz react@19 react-dom@19`. A public archive is a supported alternative to registry publication, not an unpublished workspace package.
 

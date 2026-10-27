@@ -2,13 +2,15 @@
 
 React components 0.1.0 · experimental · tested theme dependency 2.1.0 · React 19.
 
-The package is available as a public GitHub release tarball. npm publication is pending (`published: false` means unavailable from the npm registry, not absent implementation). Do not try `@martlet/react@next` while that flag is false. Do not replace the real components with theme-only JSX when the documented public archive is obtainable.
+The package is published on npm. At verification, both `latest` and `next` resolve to 0.1.0; the API remains experimental. Pin the version for reproducible adoption and use the real React components.
 
 ```sh
-npm install https://github.com/howardjp/design-workbench/releases/download/react-v0.1.0/martlet-react-0.1.0.tgz react@19 react-dom@19
+npm install @martlet/react@0.1.0 react@19 react-dom@19
 ```
 
 For a new Vite project, first run `npm create vite@latest example -- --template react-ts`, enter `example`, then use the command above. Check Node engine requirements of the chosen Vite version. Commit package.json and the generated lockfile; verify a clean `npm ci && npm run build`.
+
+The immutable public GitHub archive remains an alternative: https://github.com/howardjp/design-workbench/releases/download/react-v0.1.0/martlet-react-0.1.0.tgz. Its checksum applies to that archive, not the npm registry tarball.
 
 Artifact SHA-256: `42a501d06ef7114ed5640b52d9889998ae70ca1846e0bdfba9e1ba487c3c1a41`. If an environment cannot install HTTPS tarballs directly, download the exact URL, verify its checksum with `sha256sum`, then run `npm install ./martlet-react-0.1.0.tgz react@19 react-dom@19`. A public archive is a supported alternative to registry publication, not an unpublished workspace package.
 
