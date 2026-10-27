@@ -25,7 +25,7 @@ export function MasterFooter() { return (
   <div className="martlet-master-footer-container martlet-master-footer-bottom">
     <a className="martlet-master-footer-identity" href="https://jameshoward.us/" aria-label="James Howard website">
       <img src={ownerBadge} alt="" width="56" height="56" loading="lazy" />
-      <span><strong>martletdesign.dev</strong><br />A website of James Howard</span>
+      <span><strong>react.martletdesign.dev</strong><br />A website of James Howard</span>
     </a>
     <p>Copyright © 2026{new Date().getUTCFullYear() > 2026 ? `–${new Date().getUTCFullYear()}` : ''} James P. Howard, II</p>
   </div>
