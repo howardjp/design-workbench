@@ -47,7 +47,7 @@ export async function api(path, {method = 'GET', body, token = process.env.GH_TO
   assert.ok(['api.github.com', 'uploads.github.com'].includes(new URL(url).hostname));
   const response = await fetch(url, {method, headers: {
     authorization: `Bearer ${token}`, accept: 'application/vnd.github+json',
-    'X-GitHub-Api-Version': '2022-11-28', ...headers,
+    'X-GitHub-Api-Version': '2022-11-28', 'content-type': 'application/json', ...headers,
   }, body: body === undefined ? undefined : raw ? body : JSON.stringify(body), signal: AbortSignal.timeout(60000)});
   if (!response.ok) {
     const error = new Error(`GitHub ${method} ${new URL(url).pathname}: ${response.status} ${await response.text()}`);

@@ -2,7 +2,7 @@ import {pathToFileURL} from 'node:url';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {api, optional, sourceRepository, validateManifest, summary} from './common.mjs';
+import {api, optional, paginate, sourceRepository, validateManifest, summary} from './common.mjs';
 
 export async function publish() {
 const manifest = validateManifest(JSON.parse(await readFile('preview-dist/manifest.json', 'utf8')), process.env.DESIGN_SOURCE_COMMIT);
@@ -14,6 +14,13 @@ let ref = await optional(`${root}/git/ref/tags/${tag}`);
 if (!ref) ref = await api(`${root}/git/refs`, {method: 'POST', body: {ref: `refs/tags/${tag}`, sha: entry.sourceCommit}});
 assert.equal(ref.object.sha, entry.sourceCommit, 'Existing release tag points at a different commit');
 let release = await optional(`${root}/releases/tags/${tag}`);
+// The tag endpoint only returns published releases. Authenticated listing also
+// includes drafts, so an interrupted upload can resume without a duplicate release.
+if (!release) {
+  const drafts = (await paginate(`${root}/releases`)).filter(item => item.tag_name === tag && item.draft);
+  assert.ok(drafts.length <= 1, 'Multiple drafts for the same reference tag');
+  release = drafts[0];
+}
 if (!release) release = await api(`${root}/releases`, {method: 'POST', body: {
   tag_name: tag, target_commitish: entry.sourceCommit, name: `React references ${entry.artifactVersion}`,
   draft: true, prerelease: true,

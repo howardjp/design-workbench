@@ -59,16 +59,18 @@ async function fixture(fn) {
 }
 const json=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:{'content-type':'application/json'}});
 
-test('publication creates a draft, uploads exact assets, then publishes; retries never overwrite', async () => fixture(async () => {
-  let ref=null, release=null;const mutations=[];
+test('publication resumes an interrupted draft, then publishes; retries never overwrite', async () => fixture(async () => {
+  let ref=null, release=null,interrupt=true;const mutations=[];
   globalThis.fetch=async(url,options)=>{
     const u=new URL(url),method=options.method??'GET';
     if(method!=='GET')mutations.push([method,u.pathname]);
     if(u.pathname.includes('/git/ref/tags/'))return ref?json(ref):json({},404);
     if(u.pathname.endsWith('/git/refs')){ref={object:{sha}};return json(ref);}
-    if(u.pathname.includes('/releases/tags/'))return release?json(release):json({},404);
-    if(u.pathname.endsWith('/releases')){release={id:1,draft:true,assets:[],upload_url:'https://uploads.github.com/assets{?name}',html_url:'https://example.test/release'};return json(release);}
+    if(u.pathname.includes('/releases/tags/'))return release && !release.draft?json(release):json({},404);
+    if(u.pathname.endsWith('/releases') && method==='GET')return json(release?[release]:[]);
+    if(u.pathname.endsWith('/releases')){release={id:1,tag_name:`design-v${version}`,draft:true,assets:[],upload_url:'https://uploads.github.com/assets{?name}',html_url:'https://example.test/release'};return json(release);}
     if(u.hostname==='uploads.github.com'){
+      if(interrupt && release.assets.length===1){interrupt=false;throw Error('Interrupted upload');}
       assert.equal(release.draft,true);
       const asset={name:u.searchParams.get('name'),digest:'sha256:'+createHash('sha256').update(options.body).digest('hex'),size:options.body.length};
       release.assets.push(asset);return json(asset);
@@ -76,6 +78,7 @@ test('publication creates a draft, uploads exact assets, then publishes; retries
     if(u.pathname.endsWith('/releases/1')){assert.equal(release.assets.length,3);release.draft=false;return json(release);}
     throw Error('Unexpected request '+url);
   };
+  await assert.rejects(publish(),/Interrupted upload/);assert.equal(release.draft,true);assert.equal(release.assets.length,1);
   await publish();assert.equal(release.draft,false);const count=mutations.length;
   await publish();assert.equal(mutations.length,count);
   release.assets[0].digest='sha256:'+'0'.repeat(64);
