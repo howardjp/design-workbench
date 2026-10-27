@@ -11,6 +11,30 @@ async function ready(page: Page) {
 }
 
 for (const family of ['martlet', 'krigsvold'] as const) {
+  test(`${family}: origin link hover colors and footer treatment`, async ({page}) => {
+    await page.goto(reference(family, 'page=start'));
+    const textLink = page.getByRole('link', {name: 'Read the release policy'});
+    await textLink.hover();
+    await expect(textLink).toHaveCSS('color', family === 'martlet' ? 'rgb(128, 85, 15)' : 'rgb(10, 29, 53)');
+    const footerLink = page.locator(`.${family}-master-site-footer`).getByRole('link', {name:'React reference', exact:true});
+    await footerLink.hover();
+    await expect(footerLink).toHaveCSS('text-decoration-line', family === 'martlet' ? 'underline' : 'none');
+    await expect(footerLink).toHaveCSS('color', family === 'martlet' ? 'rgb(230, 199, 125)' : 'rgba(255, 255, 255, 0.9)');
+    await page.goto(reference(family, ''));
+    if (family === 'martlet') {
+      const heroLink = page.getByRole('link', {name:'Meet the language'});
+      const color = await heroLink.evaluate(e => getComputedStyle(e).color);
+      await heroLink.hover();
+      await expect(heroLink).toHaveCSS('color', color);
+      await expect(heroLink.locator('span')).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 4, 0)');
+    } else {
+      const heroLink = page.getByRole('link', {name:'Enter the Notes workspace'});
+      await heroLink.hover();
+      await expect(heroLink).toHaveCSS('color', 'rgb(6, 19, 37)');
+      await expect(heroLink).toHaveCSS('background-color', 'rgb(217, 238, 244)');
+    }
+  });
+
   test(`${family}: G02: field, group and region relationships survive enlarged text`, async ({page}) => {
     await page.setViewportSize({width: 1440, height: 1000});
     await page.goto(reference(family, 'page=patterns'));
@@ -155,9 +179,9 @@ for (const family of ['martlet', 'krigsvold'] as const) {
   });
 }
 
-test('krigsvold: G05: popup becomes an in-flow mobile submenu', async ({page}) => {
+for (const mode of ['light','dark']) test(`krigsvold: G05: popup becomes an in-flow mobile submenu in ${mode} mode`, async ({page}) => {
   await page.setViewportSize({width: 1440, height: 1000});
-  await page.goto(reference('krigsvold', 'mode=dark'));
+  await page.goto(reference('krigsvold', `mode=${mode}`));
   const header = page.locator('.krigsvold-app-header');
   const disclosure = header.locator('details').first();
   const summary = disclosure.locator('summary');
@@ -175,6 +199,9 @@ test('krigsvold: G05: popup becomes an in-flow mobile submenu', async ({page}) =
   await expect(popup).toBeVisible();
   const mobile = await popup.evaluate(e => ({bg: getComputedStyle(e).backgroundColor, position: getComputedStyle(e).position, shadow: getComputedStyle(e).boxShadow}));
   expect(mobile).toEqual({bg: 'rgba(0, 0, 0, 0)', position: 'static', shadow: 'none'});
+  await popup.locator('a').first().hover();
+  await expect(popup.locator('a').first()).toHaveCSS('background-color',mode === 'light' ? 'rgba(158, 213, 230, 0.1)' : 'rgb(238, 248, 250)');
+  await expect(popup.locator('a').first()).toHaveCSS('color',mode === 'light' ? 'rgb(217, 238, 244)' : 'rgb(23, 32, 42)');
   await page.keyboard.press('Escape');
   await expect(header.getByRole('button', {name: 'Menu', exact: true})).toBeFocused();
   await expect(popup).not.toBeVisible();

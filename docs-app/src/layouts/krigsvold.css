@@ -130,7 +130,7 @@
  .krigsvold-reference { --documentation-nav-bg:rgb(6 19 37/.96); }
  .krigsvold-reference[data-page="home"] .krigsvold-app-header { inset-block-start:.75rem; }
  .krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a { color:var(--documentation-nav-text); }
- .krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a:is(:hover,:focus-visible) { background:var(--krigsvold-color-ice-100); color:var(--krigsvold-color-ink); }
+ .krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a:is(:hover,:focus-visible) { background:rgb(158 213 230/.1); color:var(--krigsvold-color-ice-200); }
 }
 
 /* Origin .container framing, shared with the Astro documentation host. */
@@ -149,3 +149,14 @@
 .krigsvold[data-krigsvold="dark"] .krigsvold-reference { --documentation-nav-label:var(--krigsvold-color-ink); --documentation-mobile-item:var(--krigsvold-color-ink); }
 .krigsvold-reference .krigsvold-app-header summary { color:var(--documentation-nav-label); }
 @media(max-width:991.98px) { .krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a { color:var(--documentation-mobile-item); } }
+
+/* Origin ordinary links: krigsvold.org/src/styles/site.css.
+   Keep the existing experimental dark-mode token; light uses the origin rule. */
+.krigsvold:not([data-krigsvold="dark"]) .krigsvold-reference { --krigsvold-link-hover:var(--krigsvold-color-navy-900); }
+/* Source hero outline action: ice surface with navy text on hover. */
+.krigsvold-reference[data-page="home"] .krigsvold-reference-cover a:hover { background:var(--krigsvold-color-ice-200); color:var(--krigsvold-color-navy-950); }
+
+/* Experimental inverse chrome retains contrast on its white mobile surface. */
+@media(max-width:991.98px) {
+ .krigsvold[data-krigsvold="dark"] .krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a:is(:hover,:focus-visible) { background:var(--krigsvold-color-ice-100); color:var(--krigsvold-color-ink); }
+}

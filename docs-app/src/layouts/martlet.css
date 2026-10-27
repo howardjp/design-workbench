@@ -118,3 +118,12 @@
 @media(max-width:44rem) { .martlet-reference-footer-base { align-items:flex-start; flex-direction:column; } }
 .martlet-reference-footer-base .martlet-reference-footer-identity { max-inline-size:100%; min-inline-size:0; }
 .martlet-reference-footer-identity > span { min-inline-size:0; overflow-wrap:anywhere; }
+
+/* Origin ordinary links: jameshoward.us/src/styles/global.css.
+   Keep the existing experimental dark-mode token; light uses the origin rule. */
+.martlet:not([data-martlet="dark"]) .martlet-reference { --martlet-link-hover:var(--martlet-color-gold-700); }
+.martlet-reference a { transition:color .2s ease; }
+/* Origin home-text-link: retain hero text color and move its arrow. */
+.martlet-reference-intro a > span { display:inline-block; transition:transform .2s ease; }
+.martlet-reference-intro a:hover > span { transform:translateX(.25rem); }
+@media(prefers-reduced-motion:reduce) { .martlet-reference a,.martlet-reference-intro a > span { transition:none; } }
