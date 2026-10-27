@@ -15,14 +15,19 @@ const browser=await({chromium,firefox,webkit})[engine].launch(engine==='chromium
 try{for(const family of ['martlet','krigsvold']){
  const temp=await mkdtemp(join(tmpdir(),'public-'+family+'-'));let server;
  try{
-  const artifact=distribution.families[family].packages.React.tarball;
+  const release=distribution.families[family].packages.React;
+  assert.equal(release.published,true,'Documented npm route is published');
+  const artifact=release.tarball;
   assert.equal(artifact.available,true);
   const response=await fetch(artifact.url);assert.equal(response.status,200,'Public archive download');
   const bytes=Buffer.from(await response.arrayBuffer());assert.equal(createHash('sha256').update(bytes).digest('hex'),artifact.sha256,'Immutable public release digest');
   await mkdir(join(temp,'vendor'));await writeFile(join(temp,'vendor',family+'-react.tgz'),bytes);
-  await writeFile(join(temp,'package.json'),JSON.stringify({name:'public-'+family+'-consumer',private:true,type:'module',scripts:{build:'vite build'},dependencies:{['@'+family+'/react']:'file:vendor/'+family+'-react.tgz',react:'19.3.1','react-dom':'19.3.1'},devDependencies:{vite:'8.3.5'}},null,2)+'\n');
+  await writeFile(join(temp,'package.json'),JSON.stringify({name:'public-'+family+'-consumer',private:true,type:'module',scripts:{build:'vite build'},dependencies:{['@'+family+'/react']:release.version,react:'19.3.1','react-dom':'19.3.1'},devDependencies:{vite:'8.3.5'}},null,2)+'\n');
   execFileSync('npm',['install','--ignore-scripts','--no-audit','--no-fund'],{cwd:temp,stdio:'pipe',timeout:120000});
+  execFileSync('npm',['ci','--ignore-scripts','--no-audit','--no-fund'],{cwd:temp,stdio:'pipe',timeout:120000});
   const lock=JSON.parse(await readFile(join(temp,'package-lock.json'),'utf8'));
+  assert.equal(lock.packages['node_modules/@'+family+'/react'].version,release.version);
+  assert.ok(lock.packages['node_modules/@'+family+'/react'].resolved.startsWith('https://registry.npmjs.org/'),'Consumer uses the public npm package, not a workspace or archive');
   assert.equal(lock.packages['node_modules/@'+family+'/theme'].version,'2.1.0','Real React dependency remains pinned');
   await writeFile(join(temp,'index.html'),'<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Public '+family+' consumer</title></head><body><div id="root"></div><script type="module" src="/main.jsx"></script></body></html>');
   await writeFile(join(temp,'main.jsx'),"import React from 'react';import {createRoot} from 'react-dom/client';import App from './App.jsx';createRoot(document.getElementById('root')).render(<App/>);");
@@ -41,7 +46,7 @@ try{for(const family of ['martlet','krigsvold']){
    await page.locator('#notes').fill('Retain my access requirements.');await page.locator('#submit').click();await active('summary');assert.equal(await page.locator('#summary a').count(),3);await axe();await page.locator('#summary a[href="#email"]').click();await active('email');
    await page.locator('#name').fill('Alex Example');await page.locator('#email').fill('alex@example.org');await page.locator('input[value="studio"]').check();await page.locator('#reminder').check();await page.locator('#submit').click();await page.waitForFunction(()=>document.querySelector('#registration').getAttribute('aria-busy')==='true');await page.locator('#submit').dispatchEvent('click');await active('summary');assert.equal(await page.locator('#notes').inputValue(),'Retain my access requirements.');await page.keyboard.press('Tab');await active('retry');await page.keyboard.press('Enter');await page.getByRole('status').filter({hasText:'recorded'}).waitFor();await active('submit');
    await page.locator('#name').fill('Changed draft');await page.locator('#reset').click();await page.getByRole('dialog').waitFor();assert.equal(await page.evaluate(()=>document.activeElement.textContent.trim()),'Keep editing');await page.keyboard.press('Escape');await active('reset');assert.equal(await page.locator('#name').inputValue(),'Changed draft');await page.locator('#reset').click();await page.getByRole('button',{name:'Discard entries',exact:true}).click();await page.waitForFunction(()=>document.querySelector('#name').value==='');await active('reset');assert.equal(await page.locator('#name').inputValue(),'');assert.deepEqual(errors,[]);
-   console.log(family+': exact public archive installed, locked, built and exercised in '+engine+'; native React fields, errors, retained failure/retry and modal reset pass.');
+   console.log(family+': npm package installed, clean-ci locked, built and exercised in '+engine+'; native React fields, errors, retained failure/retry and modal reset pass.');
   }finally{await context.close();}
  }finally{if(server)await new Promise(done=>server.close(done));await rm(temp,{recursive:true,force:true});}
 }}finally{await browser.close();}

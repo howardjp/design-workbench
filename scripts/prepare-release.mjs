@@ -77,7 +77,7 @@ for (const family of selected === "both"
 await writeFile(
   resolve(directory, "manifest.json"),
   JSON.stringify(
-    { schemaVersion: 1, repository: "howardjp/design-workbench", candidates },
+    { schemaVersion: 1, repository: "k3jph/design-workbench", candidates },
     null,
     2,
   ) + "\n",

@@ -16,7 +16,14 @@ export default {async fetch(request,env) {
  if(url.pathname==='/health')return Response.json({family:catalog.family,version:catalog.version,grammarVersion:catalog.grammarVersion,sourceCommit:catalog.sourceCommit,sourceDigest:catalog.sourceDigest,readOnly:true});
  const oldOrigins=(catalog.distribution.mcp.aliases??[]).map(value=>new URL(value).origin);
  if(oldOrigins.includes(url.origin))return Response.redirect(new URL(url.pathname+url.search,catalog.distribution.home),308);
- if(url.pathname==='/react')return Response.redirect(new URL('/react/'+url.search,url.origin),308);
+ const reactOrigin=new URL(catalog.distribution.reactReference).origin;
+ const reactRedirect=()=>{const target=new URL(reactOrigin);target.pathname=url.pathname.slice(6)||'/';target.search=url.search;return Response.redirect(target,308);};
+ if(url.origin===reactOrigin) {
+  if(url.pathname==='/react'||url.pathname.startsWith('/react/'))return reactRedirect();
+  const assetUrl=new URL('/react'+url.pathname+url.search,catalog.distribution.home);
+  return env?.ASSETS?env.ASSETS.fetch(new Request(assetUrl,request)):new Response('Not found',{status:404});
+ }
+ if(url.pathname==='/react'||url.pathname.startsWith('/react/'))return reactRedirect();
  return env?.ASSETS?env.ASSETS.fetch(request):new Response('Not found',{status:404});
 }};
 `);

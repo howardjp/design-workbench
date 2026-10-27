@@ -54,7 +54,7 @@ await writeFile(
   join(target, "dist/source.json"),
   JSON.stringify(
     {
-      repository: "https://github.com/howardjp/design-workbench",
+      repository: "https://github.com/k3jph/design-workbench",
       commit,
       family,
       version: "0.1.0",
@@ -66,7 +66,7 @@ await writeFile(
 );
 await writeFile(
   join(target, "README.md"),
-  `# ${family} React reference\n\nIndependent static React documentation build from https://github.com/howardjp/design-workbench/tree/${commit}.\n\nReproduce: npm ci --ignore-scripts, npm run build, npm run build:docs. Stage with scripts/stage-docs.mjs.\n\nThe other design family and the local administration API are not bundled. Font and runtime licenses are in dist/licenses.\n`,
+  `# ${family} React reference\n\nIndependent static React documentation build from https://github.com/k3jph/design-workbench/tree/${commit}.\n\nReproduce: npm ci --ignore-scripts, npm run build, npm run build:docs. Stage with scripts/stage-docs.mjs.\n\nThe other design family and the local administration API are not bundled. Font and runtime licenses are in dist/licenses.\n`,
 );
 console.log(
   JSON.stringify({ family, target, project_id: manifest.project_id, commit }),

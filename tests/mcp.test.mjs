@@ -56,6 +56,10 @@ for (const family of ["martlet", "krigsvold"])
         assert.ok(reactSetup.content.includes(manifest.distribution.packages.React.tarball.url));
         assert.ok(reactSetup.content.includes(manifest.distribution.packages.React.tarball.sha256));
         assert.equal(manifest.distribution.packages.React.tarball.available,true);
+        assert.equal(manifest.platforms.React.published,true);
+        assert.ok(reactSetup.content.includes(manifest.distribution.packages.React.install));
+        assert.ok(!reactSetup.content.includes('publication is pending'));
+        assert.ok(reactSetup.content.includes('experimental'));
         const nativeForms=(await call('get_reference',{id:'styling:forms'})).value;
         assert.ok(nativeForms.content.includes(`${family}-error-summary`));
         assert.ok(nativeForms.content.includes('host'));

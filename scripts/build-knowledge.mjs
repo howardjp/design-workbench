@@ -10,7 +10,7 @@ const hash = (s) => createHash("sha256").update(s).digest("hex");
 const commit = process.env.DESIGN_SOURCE_COMMIT ?? null;
 if (commit !== null && !/^[a-f0-9]{40}$/.test(commit))
   throw new Error("DESIGN_SOURCE_COMMIT must be a full commit");
-const repo = "https://github.com/howardjp/design-workbench";
+const repo = "https://github.com/k3jph/design-workbench";
 const ref = commit ?? "work/registry-foundations";
 const distribution=JSON.parse(await readFile("docs/distribution.json","utf8"));
 const componentSource = await readFile("docs/components.md", "utf8");
@@ -177,7 +177,7 @@ for (const family of ["martlet", "krigsvold"]) {
     "compatibility",
     "compatibility",
     `${family} support and compatibility`,
-    `React 0.1.0 is experimental; React 19 and @${family}/theme 2.1.0. Retrieve platform:React for the supported public release tarball, checksum and exact install command; npm registry publication is independently recorded. Retrieve platform:HTML and styling:forms for core native markup. Publication status is recorded separately from the immutable canonical guidance snapshot: ${JSON.stringify(delivery.packages)}. Component examples are React-specific; platform:Astro supplies a complete reading composition and the neutral starter route. Do not treat shared styling as an Astro controller. Do not translate React event or focus props into Astro APIs. Canonical migration guide: ${canonicalUrl('docs/consolidation.md')}. Vue, Svelte and native APIs are not implemented. Manual assistive technology, localization, RTL and sustained use remain open.\n\n${JSON.stringify(implementations,null,2)}`,
+    `React 0.1.0 is experimental; React 19 and @${family}/theme 2.1.0. Retrieve platform:React for the pinned npm install command and alternative immutable archive checksum; publication does not imply API stability. Retrieve platform:HTML and styling:forms for core native markup. Publication status is recorded separately from the immutable canonical guidance snapshot: ${JSON.stringify(delivery.packages)}. Component examples are React-specific; platform:Astro supplies a complete reading composition and the neutral starter route. Do not treat shared styling as an Astro controller. Do not translate React event or focus props into Astro APIs. Canonical migration guide: ${canonicalUrl('docs/consolidation.md')}. Vue, Svelte and native APIs are not implemented. Manual assistive technology, localization, RTL and sustained use remain open.\n\n${JSON.stringify(implementations,null,2)}`,
     "docs/maturity.md",
     ["platform", "version", "support", "migration"],
   );
