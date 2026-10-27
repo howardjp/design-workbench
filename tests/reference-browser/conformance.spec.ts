@@ -179,9 +179,9 @@ for (const family of ['martlet', 'krigsvold'] as const) {
   });
 }
 
-test('krigsvold: G05: popup becomes an in-flow mobile submenu', async ({page}) => {
+for (const mode of ['light','dark']) test(`krigsvold: G05: popup becomes an in-flow mobile submenu in ${mode} mode`, async ({page}) => {
   await page.setViewportSize({width: 1440, height: 1000});
-  await page.goto(reference('krigsvold', 'mode=dark'));
+  await page.goto(reference('krigsvold', `mode=${mode}`));
   const header = page.locator('.krigsvold-app-header');
   const disclosure = header.locator('details').first();
   const summary = disclosure.locator('summary');
@@ -200,8 +200,8 @@ test('krigsvold: G05: popup becomes an in-flow mobile submenu', async ({page}) =
   const mobile = await popup.evaluate(e => ({bg: getComputedStyle(e).backgroundColor, position: getComputedStyle(e).position, shadow: getComputedStyle(e).boxShadow}));
   expect(mobile).toEqual({bg: 'rgba(0, 0, 0, 0)', position: 'static', shadow: 'none'});
   await popup.locator('a').first().hover();
-  await expect(popup.locator('a').first()).toHaveCSS('background-color','rgba(158, 213, 230, 0.1)');
-  await expect(popup.locator('a').first()).toHaveCSS('color','rgb(217, 238, 244)');
+  await expect(popup.locator('a').first()).toHaveCSS('background-color',mode === 'light' ? 'rgba(158, 213, 230, 0.1)' : 'rgb(238, 248, 250)');
+  await expect(popup.locator('a').first()).toHaveCSS('color',mode === 'light' ? 'rgb(217, 238, 244)' : 'rgb(23, 32, 42)');
   await page.keyboard.press('Escape');
   await expect(header.getByRole('button', {name: 'Menu', exact: true})).toBeFocused();
   await expect(popup).not.toBeVisible();
