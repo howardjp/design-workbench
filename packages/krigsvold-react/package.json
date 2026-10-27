@@ -33,7 +33,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/howardjp/design-workbench.git",
+    "url": "git+https://github.com/k3jph/design-workbench.git",
     "directory": "packages/krigsvold-react"
   },
   "publishConfig": {

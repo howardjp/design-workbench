@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-assert.equal(process.env.GITHUB_REPOSITORY,'howardjp/design-workbench');
+assert.equal(process.env.GITHUB_REPOSITORY,'k3jph/design-workbench');
 for(const family of ['martlet','krigsvold']) {
  const pkg=JSON.parse(await readFile(`packages/${family}-react/package.json`,'utf8'));
  assert.equal(pkg.private,false);assert.match(pkg.version,/^0\.\d+\.\d+$/);
