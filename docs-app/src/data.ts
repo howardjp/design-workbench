@@ -1,4 +1,4 @@
-export const repo = "https://github.com/howardjp/design-workbench";
+export const repo = "https://github.com/k3jph/design-workbench";
 export const groups: Record<string, string[]> = {
   "Actions & feedback": ["Button", "Notice", "Badge", "Dialog", "ErrorSummary"],
   "Forms & choices": [

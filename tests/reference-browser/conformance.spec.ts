@@ -106,6 +106,15 @@ for (const family of ['martlet', 'krigsvold'] as const) {
   test(`${family}: G14: footer preserves identity and grouped destinations`, async ({page}) => {
     await page.goto(reference(family, 'page=patterns'));
     const footer = page.locator(`.${family}-reference-footer`);
+    const heading = await footer.locator('h2').first().evaluate(e => {
+      const s = getComputedStyle(e);
+      return {family:s.fontFamily, weight:s.fontWeight, size:s.fontSize, leading:s.lineHeight};
+    });
+    // Rendered origin cascades, rather than agreement between two translations.
+    expect(heading.weight).toBe(family === 'martlet' ? '400' : '600');
+    expect(heading.family).toContain(family === 'martlet' ? 'Cambo' : 'Roboto');
+    expect(parseFloat(heading.leading)).toBeCloseTo(family === 'martlet' ? 17.3696 : 15.808, 1);
+
     for (const width of [1440, 320]) {
       await page.setViewportSize({width, height: 1000});
       await footer.scrollIntoViewIfNeeded();

@@ -127,7 +127,7 @@ export function FamilyLayout({
           <div><h2>Build</h2><a href="?page=start">Getting started</a><a href="?#components">Component reference</a><a href="?page=agents">MCP and builder skill</a></div>
           <div><h2>Project</h2><a href={repo}>Source repository ↗</a><a href={`${repo}/blob/design-v0.3.0/docs/release-policy.md`}>Release policy ↗</a><a href={`${repo}/blob/design-v0.3.0/docs/qa/origin-reconciliation.md`}>Origin reconciliation ↗</a></div>
         </div>
-        <div className="martlet-reference-footer-base"><img src={mark} alt="" width="48" height="48" /><span>Martlet React · MIT<br />Experimental application extensions</span></div>
+        <div className="martlet-reference-footer-base"><a className="martlet-reference-footer-identity" href="?" aria-label="Martlet React home"><img src={mark} alt="" width="56" height="56" /><span><strong>Martlet React</strong><br />Experimental application extensions · MIT</span></a><p>Copyright © 2026 James P. Howard, II</p></div>
       </footer>
     </div>
   );
