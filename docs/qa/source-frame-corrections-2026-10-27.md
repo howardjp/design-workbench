@@ -11,3 +11,11 @@ The approved hero/navigation appearance inversion and scroll behavior are preser
 Validation: source-value assertions added to the existing reference browser checks; both homepage browser suites compare frames, exercise consent/menu behavior, reflow and enlarged text. Exact commands and observed conclusions are recorded in the pull requests; passing automation is not manual assistive-technology or usability evidence.
 
 The workbench transferred to k3jph/design-workbench during this correction. New reference source links and archive URLs use that owner. Immutable existing package/archive evidence retains its original URLs, which GitHub redirects. npm publication and trusted-publisher configuration are separate follow-up work.
+
+## Font rendering and copyright alignment follow-up
+
+The owner identified a remaining visible macOS weight difference. The origin Material Kit stylesheet explicitly applies `-webkit-font-smoothing: antialiased` and `-moz-osx-font-smoothing: grayscale` to `html *`; the documentation host omitted both. The declared navbar/footer weights and corresponding font asset filenames already match, so arbitrary weight reductions would conceal the underlying omission. Restore the actual source rendering rules and the source navbar label opacity (.88, with .76 mobile submenu text), retaining the approved inverse appearance.
+
+Martlet's copyright paragraph used a bottom-only 1.5rem margin. The origin renders `margin: 1em 0`, which keeps the copyright centered with the identity rather than 12px above it. Restore that paragraph rule in both hosts and check their element centers. The respective sites retain their own copyright start years.
+
+Chromium can verify the declared WebKit rendering value; the macOS Firefox rendering effect requires visual review on that platform. Numeric font-weight agreement alone is not a complete fidelity check.

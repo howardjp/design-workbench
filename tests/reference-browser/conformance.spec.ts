@@ -108,10 +108,11 @@ for (const family of ['martlet', 'krigsvold'] as const) {
     const footer = page.locator(`.${family}-reference-footer`);
     const heading = await footer.locator('h2').first().evaluate(e => {
       const s = getComputedStyle(e);
-      return {family:s.fontFamily, weight:s.fontWeight, size:s.fontSize, leading:s.lineHeight};
+      return {family:s.fontFamily, weight:s.fontWeight, size:s.fontSize, leading:s.lineHeight, smoothing:s.getPropertyValue('-webkit-font-smoothing')};
     });
     // Rendered origin cascades, rather than agreement between two translations.
     expect(heading.weight).toBe(family === 'martlet' ? '400' : '600');
+    if(family === 'krigsvold' && heading.smoothing) expect(heading.smoothing).toBe('antialiased');
     expect(heading.family).toContain(family === 'martlet' ? 'Cambo' : 'Roboto');
     expect(parseFloat(heading.leading)).toBeCloseTo(family === 'martlet' ? 17.3696 : 15.808, 1);
 
@@ -119,6 +120,11 @@ for (const family of ['martlet', 'krigsvold'] as const) {
       await page.setViewportSize({width, height: 1000});
       await footer.scrollIntoViewIfNeeded();
       const base = footer.locator(`.${family}-reference-footer-base`);
+      if(family === 'martlet' && width===1440) {
+        const centers=await base.evaluate(e=>Array.from(e.children).map(child=>{const r=child.getBoundingClientRect();return r.top+r.height/2;}));
+        expect(Math.abs(centers[0]-centers[1])).toBeLessThan(1);
+      }
+
       await expect(base).toContainText(family === 'martlet' ? 'Martlet React' : 'James');
       const groups = footer.locator(`.${family}-reference-footer-grid`);
       const geometry = await groups.evaluate(e => {
