@@ -181,7 +181,7 @@ export function FamilyHome() {
             sequence, and continuity from one decision to the next. Explore its
             grammar, working patterns, and twenty-two React components.
           </p>
-          <a href="?page=language">Meet the language →</a>
+          <a href="?page=language">Meet the language <span aria-hidden="true">→</span></a>
         </div>
       </header>
       <Article
