@@ -81,20 +81,20 @@ export function FamilyLayout({
               href="?page=language"
               aria-current={page === "language" ? "page" : undefined}
             >
-              The language
+              The Language
             </a>
             <a
               href="?page=collection"
               aria-current={page === "collection" ? "page" : undefined}
             >
-              Working patterns
+              Working Patterns
             </a>
-            <a href="?page=patterns" aria-current={page === 'patterns' ? 'page' : undefined}>Reference patterns</a>
+            <a href="?page=patterns" aria-current={page === 'patterns' ? 'page' : undefined}>Reference Patterns</a>
             <a
               href="?page=start"
               aria-current={page === "start" ? "page" : undefined}
             >
-              Getting started
+              Getting Started
             </a>
             <a
               href="?#components"
@@ -102,12 +102,12 @@ export function FamilyLayout({
             >
               Components
             </a>
-            <a href="?page=agents">For agents</a>
+            <a href="?page=agents">For Agents</a>
           </div>
         }
         utilities={
           <div id="martlet-reference-utilities"><Button variant="quiet" onClick={onModeChange}>
-            {mode === "light" ? "Dark mode" : "Light mode"}
+            {mode === "light" ? "Dark Mode" : "Light Mode"}
           </Button></div>
         }
       >

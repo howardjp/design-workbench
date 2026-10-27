@@ -11,6 +11,22 @@ async function ready(page: Page) {
 }
 
 for (const family of ['martlet', 'krigsvold'] as const) {
+  test(`${family}: navigation and footer identity refinements`, async ({page}) => {
+    await page.goto(reference(family, 'page=start'));
+    const header=page.locator(`.${family}-app-header`);
+    if(family==='martlet') {
+      await expect(header.getByRole('link',{name:'The Language',exact:true})).toBeVisible();
+      await expect(header.getByRole('link',{name:'Getting Started',exact:true})).toBeVisible();
+      const owner=page.getByRole('link',{name:'James Howard website',exact:true});
+      await owner.hover();
+      await expect(owner).toHaveCSS('text-decoration-line','none');
+    } else {
+      await expect(header.locator('summary').first()).toHaveText('Actions');
+      await expect(header.locator('summary').first()).toHaveCSS('text-transform','none');
+      await expect(page.locator('footer a[href="mailto:count@krigsvold.org"]')).toHaveCount(0);
+    }
+  });
+
   test(`${family}: origin link hover colors and footer treatment`, async ({page}) => {
     await page.goto(reference(family, 'page=start'));
     const textLink = page.getByRole('link', {name: 'Read the release policy'});
@@ -206,4 +222,22 @@ for (const mode of ['light','dark']) test(`krigsvold: G05: popup becomes an in-f
   await expect(header.getByRole('button', {name: 'Menu', exact: true})).toBeFocused();
   await expect(popup).not.toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test('krigsvold: home content follows the header container at every breakpoint', async ({page}) => {
+  for(const width of [390,768,1024,1440,1920]) {
+    await page.setViewportSize({width,height:1000});
+    await page.goto(reference('krigsvold',''));
+    const bounds=await page.evaluate(()=>{
+      const header=document.querySelector('.krigsvold-app-header')!.getBoundingClientRect();
+      const title=document.querySelector('.krigsvold-reference-cover h1')!.getBoundingClientRect();
+      const content=['.krigsvold-reference-register','.krigsvold-reference-status','.krigsvold-reference-catalog'].map(sel=>{
+        const el=document.querySelector(sel)!;const r=el.getBoundingClientRect(),s=getComputedStyle(el);
+        return {left:r.left+parseFloat(s.paddingLeft),right:r.right-parseFloat(s.paddingRight)};
+      });
+      return {left:header.left,right:header.right,titleLeft:title.left,content};
+    });
+    expect(bounds.titleLeft).toBeCloseTo(bounds.left,0);
+    for(const box of bounds.content) {expect(box.left).toBeCloseTo(bounds.left,0);expect(box.right).toBeCloseTo(bounds.right,0);}
+  }
 });

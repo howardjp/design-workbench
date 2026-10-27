@@ -23,28 +23,28 @@ function ReferenceRegister({page}:{page:LayoutProps['page']}) {
                 href="?page=start"
                 aria-current={page === "start" ? "page" : undefined}
               >
-                Getting started
+                Getting Started
               </a>
               <a
                 href="?page=language"
                 aria-current={page === "language" ? "page" : undefined}
               >
-                Design language
+                Design Language
               </a>
               <a
                 href="?page=collection"
                 aria-current={page === "collection" ? "page" : undefined}
               >
-                Working patterns
+                Working Patterns
               </a>
-              <a href="?page=patterns" aria-current={page === 'patterns' ? 'page' : undefined}>Reference patterns</a>
+              <a href="?page=patterns" aria-current={page === 'patterns' ? 'page' : undefined}>Reference Patterns</a>
               <a
                 href="?page=agents"
                 aria-current={page === "agents" ? "page" : undefined}
               >
-                Agent tools
+                Agent Tools
               </a>
-              <a href="https://krigsvolddesign.dev/">Design language ↗</a>
+              <a href="https://krigsvolddesign.dev/">Design Language ↗</a>
               <a href={repo}>Source ↗</a>
             </div>
             <span>0.3 PREVIEW · REACT 0.1.0</span>
@@ -124,7 +124,7 @@ export function FamilyLayout({
           <div id="krigsvold-reference-utilities" className="krigsvold-reference-utilities-content">
             <div className="krigsvold-reference-search">{directory}</div>
             <Button variant="quiet" onClick={onModeChange}>
-              {mode === "light" ? "Dark mode" : "Light mode"}
+              {mode === "light" ? "Dark Mode" : "Light Mode"}
             </Button>
           </div>
         }

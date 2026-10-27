@@ -160,3 +160,13 @@
 @media(max-width:991.98px) {
  .krigsvold[data-krigsvold="dark"] .krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a:is(:hover,:focus-visible) { background:var(--krigsvold-color-ice-100); color:var(--krigsvold-color-ink); }
 }
+
+/* Title-case navigation preserves component/API spelling. */
+.krigsvold-reference .krigsvold-app-header :is(summary,nav a,button) { text-transform:none; }
+/* The home page is full bleed, but its text follows the same container as Astro. */
+.krigsvold-reference[data-page="home"] .krigsvold-reference-cover {
+  padding-inline:max(.75rem,calc((100% - var(--reference-container)) / 2 + .75rem));
+}
+.krigsvold-reference[data-page="home"] :is(.krigsvold-reference-register,.krigsvold-reference-status,.krigsvold-reference-catalog) {
+  inline-size:100%; max-inline-size:var(--reference-container); padding-inline:.75rem;
+}

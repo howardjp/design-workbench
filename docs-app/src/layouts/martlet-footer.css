@@ -21,3 +21,6 @@
 /* Host names and enlarged identity text must wrap beside the source badge. */
 .martlet-master-site-footer .martlet-master-footer-identity { max-inline-size:100%; }
 .martlet-master-footer-identity > span { min-inline-size:0; overflow-wrap:anywhere; }
+
+/* Owner identity keeps its color feedback without link decoration. */
+.martlet-master-site-footer .martlet-master-footer-identity:is(:hover,:focus-visible) { text-decoration:none; }

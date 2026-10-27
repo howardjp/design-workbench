@@ -38,7 +38,6 @@ export function MasterFooter() { return (
     </div>
     <div className="krigsvold-master-footer-base">
       <p>Copyright © 2026{new Date().getUTCFullYear() > 2026 ? `–${new Date().getUTCFullYear()}` : ''} James P. Howard, II</p>
-      <p><a href="mailto:count@krigsvold.org">count@krigsvold.org</a></p>
     </div>
   </div>
 </footer>
