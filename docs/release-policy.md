@@ -28,3 +28,7 @@ The release manifests use `private: false`, public access, `next` and provenance
 ## Rollback and migrations
 
 Never silently replace a published tarball. Correct a bad experimental release with a new patch/minor and an explicit upgrade note; deprecate a defective version with a useful explanation when appropriate. Keep database backups independent of package rollback. Browser specification drafts and workspace preferences use versioned, origin-scoped keys; unknown formats are retained and explained rather than reinterpreted. A fresh origin, port, browser profile, cleared storage, or unavailable storage cannot recover those copies. Source-site changes remain deliberate consumers of generalized fixes, with their own validation.
+
+## Automated reference archives
+
+The tested React reference sites have a separate archive/adoption pipeline, documented in [reference automation and setup](reference-automation.md). Existing verification gates publication of commit-qualified `design-v…` prereleases. The exact archived bytes pass three-browser reference tests before publication; each host adoption PR pins the version, source commit and SHA-256. Strict host CI protection gates merging, followed by Cloudflare and live `/preview.json` verification. This does not change the experimental npm publication job or its trusted-publisher configuration.

@@ -252,10 +252,11 @@ for (const family of ["martlet", "krigsvold"]) {
     `${dir}/README.md`,
     `# ${family} agent tools\n\nExperimental MIT local stdio MCP and companion builder skill. Source ${repo}/tree/${ref}; content digest ${sourceDigest}.\n\nRun npm install --ignore-scripts in this directory, then configure a stdio MCP client with command node and args [\"/absolute/path/to/index.mjs\"]. The client starts the process. The server exposes get_manifest, search_guidance, get_reference, and exact resources. Confirm the family using get_manifest.\n\nCopy ${family}-builder into your client's supported skills directory. Hosted setup and actual package availability are recorded by get_manifest; no static-audit or production-accessibility certification is claimed. This archive includes no workbench server or database.\n`,
   );
-  const zipped=spawnSync("python3",["-m","zipfile","-c",resolve(`agent-dist/${family}-builder.zip`),`${family}-builder`],{cwd:dir});
+  const zipped=spawnSync("python3",[resolve("scripts/zip-reproducible.py"),resolve(dir,`${family}-builder`),resolve(`agent-dist/${family}-builder.zip`)]);
   if(zipped.status)throw Error("Skill zip failed");
   const packed = spawnSync("tar", [
-    "-czf",
+    "--sort=name", "--mtime=@0", "--owner=0", "--group=0", "--numeric-owner",
+    "--mode=u+rwX,go+rX,go-w", "-czf",
     resolve(`agent-dist/${family}-agent-tools.tar.gz`),
     "-C",
     resolve("agent-dist"),
