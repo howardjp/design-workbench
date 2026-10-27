@@ -36,10 +36,10 @@
 .martlet-reference-collection a { display:grid; grid-template-columns:10rem minmax(0,1fr) 1rem; gap:1rem; align-items:baseline; padding-block:.7rem; }
 .martlet-reference-collection a strong { font:400 1.2rem/1.5 var(--martlet-font-serif); }
 .martlet-reference-collection a > span { font:.94rem/1.5 var(--martlet-font-sans); color:var(--ui-muted); }
-.martlet-reference-footer { padding:4rem var(--martlet-gutter) 1.5rem; background:var(--martlet-color-navy-950); color:rgb(220 229 238); font-family:var(--martlet-font-sans); }
+.martlet-reference-footer { padding:4rem var(--martlet-gutter) 1.5rem; background:var(--martlet-color-navy-950); color:rgb(220 229 238); font:1.075rem/1.72 var(--martlet-font-sans); }
 .martlet-reference-footer-grid { max-inline-size:var(--martlet-content-width); margin-inline:auto; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(2rem,6vw,5rem); }
-.martlet-reference-footer h2 { margin:0 0 1rem; padding-block-end:.65rem; border-block-end:1px solid rgb(255 255 255/.13); color:white; font:600 .92rem/1.5 var(--martlet-font-display); letter-spacing:.08em; text-transform:uppercase; }
-.martlet-reference-footer a { display:block; margin-block:.45rem; color:inherit; font-size:.88rem; text-decoration:none; }
+.martlet-reference-footer h2 { margin:0 0 1rem; padding-block-end:.65rem; border-block-end:1px solid rgb(255 255 255/.13); color:white; font:400 .92rem/1.18 var(--martlet-font-serif); letter-spacing:.08em; text-transform:uppercase; }
+.martlet-reference-footer a { display:block; margin-block:.45rem; color:inherit; font-size:inherit; text-decoration:none; }
 .martlet-reference-footer a:hover { color:var(--martlet-color-gold-300); text-decoration:underline; }
 .martlet-reference-footer-base { max-inline-size:var(--martlet-content-width); margin:3rem auto 0; padding-block-start:1.5rem; border-block-start:1px solid rgb(255 255 255/.15); display:flex; align-items:center; gap:1rem; font-size:.82rem; }
 @media(max-width:68rem),(max-aspect-ratio:4/5) {
@@ -108,3 +108,11 @@
 .martlet-reference[data-page="home"] .martlet-reference-intro h1::after { background:var(--documentation-hero-rule); }
 .martlet-reference[data-page="home"] .martlet-reference-width > :not(.martlet-reference-intro) { max-inline-size:var(--martlet-content-width); margin-inline:auto; padding-inline:var(--martlet-gutter); }
 .martlet[data-martlet="dark"] .martlet-reference:is([data-scrolled="true"],[data-menu-open="true"]) { --documentation-nav-bg:white; --documentation-nav-text:var(--martlet-color-navy-900); --documentation-nav-rule:var(--martlet-color-gold-700); --documentation-nav-border:var(--martlet-color-slate-150); }
+
+/* Source footer base: identity and ownership beneath the destination columns. */
+.martlet-reference-footer-base { justify-content:space-between; gap:2rem; }
+.martlet-reference-footer-base .martlet-reference-footer-identity { display:flex; align-items:center; gap:1rem; margin:0; font-size:inherit; }
+.martlet-reference-footer-identity img { inline-size:3.5rem; block-size:auto; flex:none; }
+.martlet-reference-footer-identity strong { color:#fff; font:700 1rem/1.72 var(--martlet-font-display); }
+.martlet-reference-footer-base p { margin:0 0 1.5rem; }
+@media(max-width:44rem) { .martlet-reference-footer-base { align-items:flex-start; flex-direction:column; } }
