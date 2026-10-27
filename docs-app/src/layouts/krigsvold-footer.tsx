@@ -8,7 +8,7 @@ export function MasterFooter() { return (
       <div className="krigsvold-master-footer-identity">
         <a className="krigsvold-master-footer-owner" href="https://jameshoward.us/" aria-label="James Howard website">
           <img src={ownerBadge} alt="" width="58" height="58" loading="lazy" />
-          <span className="krigsvold-master-footer-site">krigsvolddesign.dev</span>
+          <span className="krigsvold-master-footer-site">react.krigsvolddesign.dev</span>
           <span className="krigsvold-master-footer-byline">A website of James Howard</span>
         </a>
         <p>Components, working patterns, and agent guidance grounded in krigsvold.org.</p>

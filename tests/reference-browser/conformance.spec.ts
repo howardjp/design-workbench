@@ -108,7 +108,7 @@ for (const family of ['martlet', 'krigsvold'] as const) {
     const footer = page.locator(`.${family}-master-site-footer`);
     await expect(footer.getByRole('link', {name:'James Howard website'})).toHaveAttribute('href','https://jameshoward.us/');
     await expect(footer).toContainText('A website of James Howard');
-    await expect(footer).toContainText(`${family}design.dev`);
+    await expect(footer).toContainText(`react.${family}design.dev`);
     await expect(footer.getByRole('link',{name:'React reference',exact:true})).toHaveAttribute('href',`https://react.${family}design.dev/`);
     const heading = await footer.locator('h2').first().evaluate(e => {
       const s = getComputedStyle(e);
