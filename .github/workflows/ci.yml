@@ -7,7 +7,7 @@ permissions:
   contents: read
 concurrency:
   group: workbench-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -34,6 +34,11 @@ jobs:
       - run: npx playwright install --with-deps ${{ matrix.browser }}
         timeout-minutes: 10
       - run: npm run test:browser
+      - name: Test the packaged reference bytes
+        run: |
+          export DESIGN_PREVIEW_ARTIFACT_VERSION="$(node -p "JSON.parse(require('fs').readFileSync('docs/distribution.json')).preview.version")-sha.$DESIGN_SOURCE_COMMIT"
+          npm run package:preview
+          node scripts/reference-release/check-archives.mjs
       - run: npm run test:reference
       - run: npm run test:public-react
       - run: npm run test:packages
@@ -55,3 +60,13 @@ jobs:
           name: public-react-consumers-${{ matrix.browser }}
           path: test-results/public-react/
           if-no-files-found: ignore
+
+  references:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: verify
+    permissions:
+      contents: write
+    uses: ./.github/workflows/reference-release.yml
+    with:
+      source_sha: ${{ github.sha }}
+    secrets: inherit

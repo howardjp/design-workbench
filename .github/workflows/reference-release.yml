@@ -1,0 +1,155 @@
+name: Publish and adopt tested React references
+on:
+  workflow_call:
+    inputs:
+      source_sha:
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: react-reference-publication
+  cancel-in-progress: false
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    env:
+      DESIGN_SOURCE_COMMIT: ${{ inputs.source_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Require the exact tested main-history commit
+        run: |
+          test "$(git rev-parse HEAD)" = "$DESIGN_SOURCE_COMMIT"
+          git merge-base --is-ancestor HEAD origin/main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run build
+      - run: npm run build:knowledge
+      - name: Package once with a commit-qualified immutable version
+        run: |
+          export DESIGN_PREVIEW_ARTIFACT_VERSION="$(node -p "JSON.parse(require('fs').readFileSync('docs/distribution.json')).preview.version")-sha.$DESIGN_SOURCE_COMMIT"
+          npm run package:preview
+          node scripts/reference-release/check-archives.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: react-reference-release
+          path: preview-dist/
+          if-no-files-found: error
+          retention-days: 30
+  test-archives:
+    needs: package
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    env:
+      DESIGN_SOURCE_COMMIT: ${{ inputs.source_sha }}
+      WORKBENCH_BROWSER: ${{ matrix.browser }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - uses: actions/download-artifact@v4
+        with:
+          name: react-reference-release
+          path: preview-dist/
+      - run: node scripts/reference-release/check-archives.mjs
+      - name: Use the Ubuntu archive for browser dependencies
+        run: |
+          if [ -f /etc/apt/apt-mirrors.txt ]; then
+            sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' /etc/apt/apt-mirrors.txt
+          fi
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+        timeout-minutes: 10
+      - run: npm run test:reference
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: release-reference-proof-${{ matrix.browser }}
+          path: test-results/reference-proof/
+          if-no-files-found: ignore
+  publish:
+    needs: test-archives
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      DESIGN_SOURCE_COMMIT: ${{ inputs.source_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/download-artifact@v4
+        with:
+          name: react-reference-release
+          path: preview-dist/
+      - run: node scripts/reference-release/check-archives.mjs
+      - run: node scripts/reference-release/publish.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+  adopt:
+    needs: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        family: [martlet, krigsvold]
+    env:
+      DESIGN_SOURCE_COMMIT: ${{ inputs.source_sha }}
+      RELEASE_FAMILY: ${{ matrix.family }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/download-artifact@v4
+        with:
+          name: react-reference-release
+          path: preview-dist/
+      - name: Check adoption credentials
+        env:
+          APP_ID: ${{ vars.ADOPTION_APP_ID }}
+          APP_KEY: ${{ secrets.ADOPTION_APP_PRIVATE_KEY }}
+        run: |
+          if [ -z "$APP_ID" ] || [ -z "$APP_KEY" ]; then
+            echo 'Set ADOPTION_APP_ID and ADOPTION_APP_PRIVATE_KEY; see docs/reference-automation.md.' >&2
+            exit 1
+          fi
+      - uses: actions/create-github-app-token@v2
+        id: app
+        with:
+          app-id: ${{ vars.ADOPTION_APP_ID }}
+          private-key: ${{ secrets.ADOPTION_APP_PRIVATE_KEY }}
+          owner: ${{ matrix.family }}theme
+          repositories: ${{ matrix.family }}theme
+          permission-contents: write
+          permission-pull-requests: write
+          permission-actions: read
+          permission-checks: read
+          permission-administration: read
+      - run: node scripts/reference-release/adopt.mjs
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          SOURCE_GH_TOKEN: ${{ github.token }}
