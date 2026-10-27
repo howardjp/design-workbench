@@ -12,7 +12,7 @@ function FormPattern(){
   function field(key:'title'|'name'|'email',label:string,hint:string){return <Field id={id(key)} label={label} hint={hint} error={f.errors[key]}>{p=><TextInput {...p} type={key==='email'?'email':'text'} autoComplete={key==='name'?'name':key==='email'?'email':undefined} required maxLength={key==='title'?120:200} value={f.draft[key]} onChange={e=>f.change(key,e.target.value)} />}</Field>;}
   return <section className="reference-form-pattern" aria-labelledby={id('heading')}>
     <h2 id={id('heading')}>A publication request</h2>
-    <p>Complete the related details, then send the request. This specimen sends nothing and keeps values only while this page is open.</p>
+    <p>Complete the related details, then send the request. This specimen sends nothing and keeps values only while this page is open. Reloading the page clears your entries; use sample details rather than personal information.</p>
     <form aria-label="Publication request" noValidate onSubmit={e=>{e.preventDefault();void f.save();}}>
       {(f.phase==='invalid'||f.phase==='failed')&&<ErrorSummary ref={f.summary} title={f.phase==='failed'?'Your request has not been sent':'Check the request'} errors={f.phase==='failed'?[{message:'The simulated save failed. Your entries are retained; try sending again.',targetId:id('submit')}]:errors} />}
       <div className="reference-form-groups">
