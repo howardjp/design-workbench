@@ -38,6 +38,7 @@ function ReferenceRegister({page}:{page:LayoutProps['page']}) {
                 Working Patterns
               </a>
               <a href="?page=patterns" aria-current={page === 'patterns' ? 'page' : undefined}>Reference Patterns</a>
+              <a href="?page=research" aria-current={page === "research" ? "page" : undefined}>Research Project</a>
               <a
                 href="?page=agents"
                 aria-current={page === "agents" ? "page" : undefined}

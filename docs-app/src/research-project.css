@@ -1,0 +1,17 @@
+/* Contextual composition using the existing source typography, index, and table.
+   The research form is an experimental application extension, not a new API. */
+.research-project { min-inline-size:0; padding-block:2rem 4rem; }
+.research-project :where(section,article,aside,form,fieldset) { min-inline-size:0; }
+.research-project :where(h1,h2,h3,p,dd,a,legend) { overflow-wrap:anywhere; }
+.research-project section[id] { scroll-margin-block-start:7rem; }
+.research-project .research-number { text-align:end; font-variant-numeric:tabular-nums; }
+.research-context dl { margin:0; }
+.research-context dt { font-weight:700; margin-block-start:1rem; }
+.research-context dd { margin-inline-start:0; }
+.research-table-help,.research-boundary { font-size:.94rem; }
+.research-project .reference-form-groups { display:grid; gap:2.5rem; margin-block:1.5rem; }
+.research-project .reference-form-groups fieldset { display:grid; gap:1.5rem; }
+.research-project .reference-form-groups legend { margin-block-end:1rem; }
+.research-materials { margin-block-start:3rem; }
+.research-project .research-boundary { margin-block-start:1.5rem; }
+@media print { .research-project .reference-pattern-inspection { display:none; } }

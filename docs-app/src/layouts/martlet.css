@@ -127,3 +127,9 @@
 .martlet-reference-intro a > span { display:inline-block; transition:transform .2s ease; }
 .martlet-reference-intro a:hover > span { transform:translateX(.25rem); }
 @media(prefers-reduced-motion:reduce) { .martlet-reference a,.martlet-reference-intro a > span { transition:none; } }
+
+/* Research project specimen */
+.research-martlet .research-context { padding:1.5rem; background:var(--ui-surface); margin-block:2.5rem; font-family:var(--martlet-font-sans); }
+.research-martlet .reference-form-pattern { font-family:var(--martlet-font-sans); }
+.research-martlet .reference-form-groups fieldset { border:0; padding:0; }
+.research-martlet .reference-form-groups legend { font:400 1.5rem/1.3 var(--martlet-font-serif); }
