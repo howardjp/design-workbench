@@ -116,3 +116,5 @@
 .martlet-reference-footer-identity strong { color:white; font:700 1rem/1.72 var(--martlet-font-display); }
 .martlet-reference-footer-base p { margin:0 0 1.5rem; }
 @media(max-width:44rem) { .martlet-reference-footer-base { align-items:flex-start; flex-direction:column; } }
+.martlet-reference-footer-base .martlet-reference-footer-identity { max-inline-size:100%; min-inline-size:0; }
+.martlet-reference-footer-identity > span { min-inline-size:0; overflow-wrap:anywhere; }
