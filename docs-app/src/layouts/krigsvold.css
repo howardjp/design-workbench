@@ -170,3 +170,22 @@
 .krigsvold-reference[data-page="home"] :is(.krigsvold-reference-register,.krigsvold-reference-status,.krigsvold-reference-catalog) {
   inline-size:100%; max-inline-size:var(--reference-container); padding-inline:.75rem;
 }
+
+/* Research project specimen */
+.research-krigsvold { max-inline-size:var(--krigsvold-content-width); margin-inline:auto; }
+.research-krigsvold .research-intro { max-inline-size:58rem; }
+.research-krigsvold h1 { font:700 clamp(2.5rem,5vw,4.6rem)/1.13 var(--krigsvold-font-serif); letter-spacing:var(--krigsvold-tracking-heading); margin-block:1rem; }
+.research-krigsvold h2 { font:700 clamp(1.5rem,3vw,2rem)/1.25 var(--krigsvold-font-serif); }
+.research-krigsvold .research-deck { font-size:1.3rem; line-height:1.6; }
+.research-krigsvold .research-section-nav { display:flex; flex-wrap:wrap; gap:1rem 1.5rem; padding-block:1.25rem; margin-block:2rem; border-block:1px solid var(--ui-line); }
+.research-krigsvold .research-regions { display:grid; grid-template-columns:minmax(0,1fr) 17rem; gap:3rem; align-items:start; }
+.research-krigsvold .research-regions article section + section { margin-block-start:2.5rem; }
+.research-krigsvold .research-regions article p { max-inline-size:68ch; line-height:1.75; }
+.research-krigsvold .research-context { border-inline-start:1px solid var(--ui-line); padding-inline-start:1.5rem; }
+.research-krigsvold .research-context h2 { margin-block-start:0; }
+.research-krigsvold .research-materials { border-block-start:1px solid var(--ui-line); padding-block-start:2rem; }
+.research-krigsvold .reference-form-groups { grid-template-columns:repeat(2,minmax(0,1fr)); }
+@media(max-width:60rem) {
+ .research-krigsvold .research-regions,.research-krigsvold .reference-form-groups { grid-template-columns:minmax(0,1fr); }
+ .research-krigsvold .research-context { border-inline-start:0; padding-inline-start:0; border-block-start:1px solid var(--ui-line); padding-block-start:1.5rem; }
+}

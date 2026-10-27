@@ -6,14 +6,14 @@ import {useResultsPattern} from './use-results';
 import {groups} from '../data';
 import martlet from '../../../docs/languages/martlet/implementation.json';
 import krigsvold from '../../../docs/languages/krigsvold/implementation.json';
-function FormPattern(){
+export function FormPattern({heading="A publication request",formLabel="Publication request"}:{heading?:string;formLabel?:string}={}){
   const f=useFormPattern(),prefix=useId(),id=(key:string)=>`${prefix}-${key}`;
   const errors=Object.entries(f.errors).map(([key,message])=>({message:message!,targetId:id(key)}));
   function field(key:'title'|'name'|'email',label:string,hint:string){return <Field id={id(key)} label={label} hint={hint} error={f.errors[key]}>{p=><TextInput {...p} type={key==='email'?'email':'text'} autoComplete={key==='name'?'name':key==='email'?'email':undefined} required maxLength={key==='title'?120:200} value={f.draft[key]} onChange={e=>f.change(key,e.target.value)} />}</Field>;}
   return <section className="reference-form-pattern" aria-labelledby={id('heading')}>
-    <h2 id={id('heading')}>A publication request</h2>
+    <h2 id={id('heading')}>{heading}</h2>
     <p>Complete the related details, then send the request. This specimen sends nothing and keeps values only while this page is open. Reloading the page clears your entries; use sample details rather than personal information.</p>
-    <form aria-label="Publication request" noValidate onSubmit={e=>{e.preventDefault();void f.save();}}>
+    <form aria-label={formLabel} noValidate onSubmit={e=>{e.preventDefault();void f.save();}}>
       {(f.phase==='invalid'||f.phase==='failed')&&<ErrorSummary ref={f.summary} title={f.phase==='failed'?'Your request has not been sent':'Check the request'} errors={f.phase==='failed'?[{message:'The simulated save failed. Your entries are retained; try sending again.',targetId:id('submit')}]:errors} />}
       <div className="reference-form-groups">
         <Fieldset legend="The request" disabled={f.phase==='saving'}>

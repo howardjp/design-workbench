@@ -18,6 +18,7 @@ import { defaults, Example, exampleCode, type Options } from "./examples";
 import "./shared.css";
 import { CollectionPattern } from "docs-pattern";
 import { LanguageGuide } from "./language-guide";
+import {ResearchProject} from "./research-project";
 import { ReferencePatterns } from './lab/patterns';
 
 import { repo, groups, descriptions } from "./data";
@@ -403,6 +404,7 @@ function App() {
     params.get("page") === "collection" || params.has("workspace");
   const language = params.get("page") === "language";
   const referencePatterns = params.get('page') === 'patterns';
+  const research = params.get("page") === "research";
   const agents = params.get("page") === "agents";
   const contract = contracts.find((item) => item.name === name);
   const [mode, setMode] = useState(initialMode);
@@ -426,12 +428,12 @@ function App() {
       document.head.append(icon);
     }
     icon.href = familyMark;
-    document.title = `${contract?.name ?? (agents ? "Agent tools" : referencePatterns ? "Reference patterns" : pattern ? "Working patterns" : language ? "Design language" : start ? "Getting started" : "The collection")} · ${familyName} React`;
+    document.title = `${contract?.name ?? (research ? "Research project" : agents ? "Agent tools" : referencePatterns ? "Reference patterns" : pattern ? "Working patterns" : language ? "Design language" : start ? "Getting started" : "The collection")} · ${familyName} React`;
     document.documentElement.style.colorScheme = mode;
     try {
       localStorage.setItem(`docs-${family}-mode`, mode);
     } catch {}
-  }, [mode, contract, start, pattern, language, agents, referencePatterns]);
+  }, [mode, contract, start, pattern, language, agents, referencePatterns, research]);
   if (params.has("shell")) return <ShellExample />;
   if (params.has("workspace"))
     return (
@@ -522,7 +524,7 @@ function App() {
         onModeChange={() => setMode(mode === "light" ? "dark" : "light")}
         directory={directory}
         page={
-          agents
+          research ? "research" : agents
             ? "agents"
             : pattern
               ? "collection"
@@ -554,6 +556,8 @@ function App() {
             api={api}
             accessibility={accessibility}
           />
+        ) : research ? (
+          <ResearchProject />
         ) : agents ? (
           <Agents />
         ) : pattern ? (

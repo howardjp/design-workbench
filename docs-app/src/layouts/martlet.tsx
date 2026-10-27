@@ -90,6 +90,7 @@ export function FamilyLayout({
               Working Patterns
             </a>
             <a href="?page=patterns" aria-current={page === 'patterns' ? 'page' : undefined}>Reference Patterns</a>
+              <a href="?page=research" aria-current={page === "research" ? "page" : undefined}>Research Project</a>
             <a
               href="?page=start"
               aria-current={page === "start" ? "page" : undefined}
