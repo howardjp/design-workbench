@@ -9,3 +9,5 @@ Martlet restores the source dark navy footer, three destination columns, Cambo 4
 The approved hero/navigation appearance inversion and scroll behavior are preserved. Original sites, React npm packages and automatic release workflows are unchanged. Corrected references receive a new immutable preview archive; prior archives remain intact.
 
 Validation: source-value assertions added to the existing reference browser checks; both homepage browser suites compare frames, exercise consent/menu behavior, reflow and enlarged text. Exact commands and observed conclusions are recorded in the pull requests; passing automation is not manual assistive-technology or usability evidence.
+
+The workbench transferred to k3jph/design-workbench during this correction. New reference source links and archive URLs use that owner. Immutable existing package/archive evidence retains its original URLs, which GitHub redirects. npm publication and trusted-publisher configuration are separate follow-up work.
