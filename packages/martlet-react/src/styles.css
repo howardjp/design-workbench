@@ -105,6 +105,9 @@
 .martlet-contents a { display:block; padding-block:.35rem; text-decoration:none; }
 .martlet-contents a:hover { text-decoration:underline; }
 .martlet-contents[data-variant="index"] { position:sticky; inset-block-start:6rem; max-block-size:calc(100dvh - 8rem); overflow-y:auto; padding:1.2rem .5rem .5rem 0; border-block-start:2px solid var(--martlet-color-gold-500); scrollbar-width:thin; }
+/* A document index is compact, including after narrow-container reflow. */
+.martlet-contents[data-variant="index"] li[data-depth="2"] { margin-block-start:.35rem; }
+.martlet-contents[data-variant="index"] li:first-child { margin-block-start:0; }
 .martlet-contents[data-variant="inline"] { margin-block-end:2.5rem; padding:1.2rem 1.4rem; background:var(--ui-surface); border-block-start:2px solid var(--martlet-color-gold-500); }
 .martlet-contents[data-variant="inline"] ul { columns:2 16rem; column-gap:2rem; }
 .martlet-contents[data-variant="inline"] li { break-inside:avoid; }
@@ -162,10 +165,10 @@
 .martlet-tabs [role="tab"]:disabled { color:var(--martlet-disabled-text); cursor:default; }
 .martlet-tabs [role="tabpanel"] { padding-block:1.5rem; outline-offset:3px; }
 .martlet-tabs [role="tabpanel"][hidden] { display:none; }
-@container martlet-article (max-width:74rem) {
+@container martlet-article (max-width:56rem) {
  .martlet-article-layout[data-contents="true"] { grid-template-columns:minmax(0,1fr); }
- .martlet-contents[data-variant="index"] { position:static; max-block-size:none; overflow:visible; padding:1.2rem 1.4rem; background:var(--ui-surface); }
- .martlet-contents[data-variant="index"] ul { columns:2 16rem; column-gap:2rem; }
+ .martlet-contents[data-variant="index"] { position:static; max-block-size:none; overflow:visible; max-inline-size:22rem; padding:1rem; background:var(--ui-surface); }
+ .martlet-contents[data-variant="index"] ul { columns:1; }
  .martlet-contents[data-variant="index"] li { break-inside:avoid; }
 }
 @media(max-width:55rem) {
@@ -176,10 +179,6 @@
  .martlet-definitions > div { grid-template-columns:minmax(0,1fr); gap:.5rem; }
 }
 @media(max-width:40rem) { .martlet-contents ul { columns:1 !important; } }
-@media(max-aspect-ratio:4/5) {
- .martlet-article-layout[data-contents="true"] { grid-template-columns:minmax(0,1fr); }
- .martlet-contents[data-variant="index"] { position:static; max-block-size:none; padding:1.2rem 1.4rem; background:var(--ui-surface); }
-}
 @media(prefers-reduced-motion:reduce) { .martlet *, .martlet *::before, .martlet *::after { transition:none !important; animation:none !important; scroll-behavior:auto !important; } }
 @media(forced-colors:active) {
  .martlet-switch-track { forced-color-adjust:none; background:Canvas; border-color:CanvasText; }
@@ -211,8 +210,7 @@
 .martlet-definitions[data-layout="stack"] dd { margin-block-start:.5rem; }
 .martlet-definitions[data-layout="grid"] { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.5rem; }
 .martlet-definitions[data-layout="grid"] > div { display:block; }
-@container martlet-article (max-width:74rem) { .martlet-article-context { position:static; } }
-@media(max-aspect-ratio:4/5) { .martlet-article-context { position:static; } }
+@container martlet-article (max-width:56rem) { .martlet-article-context { position:static; } }
 @media(max-width:48rem) { .martlet-definitions[data-layout="grid"] { grid-template-columns:minmax(0,1fr); } }
 
 /* Technical identifiers may wrap locally; ordinary prose keeps natural word boundaries. */
@@ -232,8 +230,7 @@
 
 /* Existing darker gold improves small-label contrast on the source cream inset. */
 .martlet-contents[data-variant="inline"] > strong { color:var(--martlet-color-gold-700); }
-@container martlet-article (max-width:74rem) { .martlet-contents[data-variant="index"] > strong { color:var(--martlet-color-gold-700); } }
-@media(max-aspect-ratio:4/5) { .martlet-contents[data-variant="index"] > strong { color:var(--martlet-color-gold-700); } }
+@container martlet-article (max-width:56rem) { .martlet-contents[data-variant="index"] > strong { color:var(--martlet-color-gold-700); } }
 .martlet[data-martlet="dark"] .martlet-contents > strong { color:var(--martlet-color-gold-300); }
 
 .martlet-article-header { grid-template-columns:minmax(0,1fr); }

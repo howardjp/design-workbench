@@ -46,3 +46,27 @@ for(const family of ['martlet','krigsvold']) {
   await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
  });
 }
+
+// Preserve the source document relationship, including a tall desktop viewport.
+test('martlet: article index stays left until its container needs to reflow',async({page})=>{
+ await page.goto('http://127.0.0.1:4189/martlet/?page=research');
+ const toc=page.getByRole('navigation',{name:'Project contents'});
+ const body=page.locator('.research-martlet .martlet-prose');
+ for(const [width,height] of [[1440,1000],[1280,1800],[1100,1000]]) {
+  await page.setViewportSize({width,height});
+  const index=await toc.boundingBox(), prose=await body.boundingBox();
+  expect(index!.x+index!.width).toBeLessThanOrEqual(prose!.x);
+  expect(Math.abs(index!.y-prose!.y)).toBeLessThan(2);
+ }
+ for(const width of [768,320]) {
+  await page.setViewportSize({width,height:1000});
+  const index=await toc.boundingBox(), prose=await body.boundingBox();
+  expect(index!.y+index!.height).toBeLessThanOrEqual(prose!.y);
+  const links=await toc.getByRole('link').all();
+  const boxes=await Promise.all(links.map(link=>link.boundingBox()));
+  for(let i=1;i<boxes.length;i++) {
+   expect(boxes[i]!.x).toBeCloseTo(boxes[0]!.x,0);
+   expect(boxes[i]!.y).toBeGreaterThan(boxes[i-1]!.y);
+  }
+ }
+});
