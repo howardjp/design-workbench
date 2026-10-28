@@ -1,0 +1,7 @@
+{
+  "family": "krigsvold",
+  "format": 1,
+  "sha256": "bd06d99367fda7b258533e2903f76c2f769b417dd9c17fea8b598ad097f99012",
+  "stylesheet": "krigsvold-shell.css",
+  "contract": "docs/source-shell/CONTRACT.md"
+}

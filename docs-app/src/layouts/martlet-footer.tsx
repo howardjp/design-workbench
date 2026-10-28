@@ -1,5 +1,5 @@
 import ownerBadge from "../../brand/jh-badge-1x1.svg";
-import "./martlet-footer.css";
+
 
 export function MasterFooter() { return (
 <footer className="martlet-master-site-footer">

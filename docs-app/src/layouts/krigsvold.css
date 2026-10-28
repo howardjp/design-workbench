@@ -2,23 +2,8 @@
 .krigsvold-reference { --reference-font-ui:var(--krigsvold-font-sans); --reference-font-code:var(--krigsvold-font-mono); --reference-code-bg:var(--krigsvold-code-bg); --reference-code-text:var(--krigsvold-code-text); }
 .krigsvold-reference .krigsvold-app { min-block-size:0; padding-block-start:1.25rem; }
 .krigsvold-reference-width { max-inline-size:var(--krigsvold-content-width); margin-inline:auto; }
-.krigsvold-reference .krigsvold-app-header { max-inline-size:var(--krigsvold-content-width); margin-inline:auto; min-block-size:68px; padding:.55rem .8rem .55rem 1rem; gap:1rem; border:1px solid rgb(255 255 255/.2); border-radius:var(--krigsvold-radius-lg); background:rgb(6 19 37/.84); box-shadow:var(--krigsvold-shadow-sm); backdrop-filter:blur(14px); }
-.krigsvold-reference-identity,.krigsvold-reference-brand { display:flex; align-items:center; gap:.7rem; }
-.krigsvold-reference-brand { color:white; font:700 1rem/1.65 var(--krigsvold-font-serif); letter-spacing:.01em; text-decoration:none; }
-.krigsvold-reference .krigsvold-app-header > nav { margin-inline-start:auto; }
-.krigsvold-reference-navigation-links { display:flex; align-items:center; gap:.5rem; }
-.krigsvold-reference .krigsvold-app-header nav > div > details { position:relative; }
-.krigsvold-reference .krigsvold-app-header summary { list-style:none; padding:.5rem; color:rgb(255 255 255/.88); font:700 .83rem/1.65 var(--krigsvold-font-sans); letter-spacing:.045em; text-transform:uppercase; }
-.krigsvold-reference .krigsvold-app-header summary::-webkit-details-marker { display:none; }
-.krigsvold-reference .krigsvold-app-header summary:is(:hover,:focus-visible) { color:var(--krigsvold-color-ice-400); }
-.krigsvold-reference-caret { inline-size:1rem; block-size:1rem; margin-inline-start:.15rem; vertical-align:-.18rem; }
 .krigsvold-reference-menu { position:absolute; inset-block-start:100%; inset-inline-end:0; z-index:20; min-inline-size:15rem; padding:.55rem; border:1px solid var(--krigsvold-color-rule); border-radius:var(--krigsvold-radius-md); background:var(--krigsvold-input-bg); color:var(--krigsvold-color-ink); box-shadow:var(--krigsvold-shadow-md); }
 .krigsvold-reference-menu::before { content:""; position:absolute; inset-block-start:-6px; inset-inline-end:28px; inline-size:12px; block-size:12px; border:1px solid var(--krigsvold-color-rule); border-inline-end:0; border-block-end:0; background:var(--krigsvold-input-bg); transform:rotate(45deg); }
-.krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a { display:block; padding:.62rem .7rem; min-block-size:0; border:0; border-radius:.2rem; color:var(--krigsvold-color-ink); font:.9rem/1.65 var(--krigsvold-font-sans); text-decoration:none; }
-.krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a:hover { background:var(--krigsvold-color-ice-100); }
-.krigsvold-reference .krigsvold-app-utilities { margin:0; }
-.krigsvold-reference-utilities-content { display:flex; align-items:center; gap:.5rem; }
-.krigsvold-reference-toggle { display:none; inline-size:44px; min-block-size:44px; padding:.25rem; color:white; border:1px solid rgb(255 255 255/.5); background:transparent; border-radius:.15rem; font:.75rem/1.5 var(--krigsvold-font-sans); }
 .krigsvold-reference-search { position:relative; inline-size:9rem; margin-inline-start:.65rem; padding-inline-start:.65rem; border-inline-start:1px solid rgb(255 255 255/.25); }
 .krigsvold-reference-search label { position:absolute; inline-size:1px; block-size:1px; overflow:hidden; clip-path:inset(50%); }
 .krigsvold-reference-search input { inline-size:100%; min-block-size:2.5rem; padding:1px 2px; border:0; border-block-end:1px solid rgb(255 255 255/.5); border-radius:0; background:transparent; color:white; font:.86rem/1.5 var(--krigsvold-font-sans); }
@@ -54,52 +39,14 @@
 .krigsvold-reference-catalog header h2 { font-size:var(--krigsvold-text-section); margin-block:1rem; }
 .krigsvold-reference-catalog .krigsvold-table-scroll { margin-block-start:2rem; }
 /* SiteFooter/site.css: identity column + four groups, with a separate base row. */
-.krigsvold-reference-footer { --footer-container:100%; padding:5rem 0 1.5rem; background:var(--krigsvold-color-navy-950); color:rgb(255 255 255/.72); font:400 1rem/1.65 var(--krigsvold-font-sans); }
-.krigsvold-reference-footer-inner { inline-size:100%; max-inline-size:var(--footer-container); padding-inline:.75rem; margin-inline:auto; }
-@media(min-width:576px) { .krigsvold-reference-footer { --footer-container:540px; } }
-@media(min-width:768px) { .krigsvold-reference-footer { --footer-container:720px; } }
-@media(min-width:992px) { .krigsvold-reference-footer { --footer-container:960px; } }
-@media(min-width:1200px) { .krigsvold-reference-footer { --footer-container:1140px; } }
-@media(min-width:1400px) { .krigsvold-reference-footer { --footer-container:1320px; } }
-.krigsvold-reference-footer-grid { max-inline-size:var(--krigsvold-content-width); margin-inline:auto; display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); column-gap:3rem; row-gap:3rem; align-items:start; }
-.krigsvold-reference-footer-grid > * { min-inline-size:0; }
-.krigsvold-reference-footer-identity { grid-column:span 2; }
-.krigsvold-reference-footer a { color:rgb(255 255 255/.9); text-decoration:none; }
-.krigsvold-reference-footer a:hover { text-decoration:underline; }
-.krigsvold-reference-footer .krigsvold-reference-footer-owner { display:inline-flex; flex-direction:column; align-items:flex-start; color:white; line-height:1.35; text-decoration:none; }
-.krigsvold-reference-footer-owner img { inline-size:58px; block-size:58px; margin-block-end:1rem; border-radius:3px; }
-.krigsvold-reference-footer-site { font-size:1rem; font-weight:700; }
-.krigsvold-reference-footer-byline { margin-block-start:.18rem; font-size:1.05rem; font-weight:700; }
-.krigsvold-reference-footer-identity > p { margin-block:1.5rem 1rem; }
-.krigsvold-reference-footer h2 { margin:0 0 .5rem; color:white; font:600 .76rem/1.3 var(--krigsvold-font-sans); letter-spacing:.12em; text-transform:uppercase; }
-.krigsvold-reference-footer ul { margin:1rem 0 0; padding:0; list-style:none; }
-.krigsvold-reference-footer li { margin-block:.55rem; }
-.krigsvold-reference-footer li a { font-size:.88rem; font-weight:500; }
-.krigsvold-reference-footer-base { max-inline-size:var(--krigsvold-content-width); margin:2.5rem auto 0; border-block-start:1px solid rgb(255 255 255/.16); padding-block-start:1.5rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:0 1.5rem; font-size:.8rem; }
-.krigsvold-reference-footer-base p { margin:0 0 1rem; }
-@media(max-width:991.98px) { .krigsvold-reference-footer-grid { grid-template-columns:repeat(4,minmax(0,1fr)); column-gap:1.5rem; } .krigsvold-reference-footer-identity { grid-column:1/-1; max-inline-size:26rem; } }
-@media(max-width:767.98px) { .krigsvold-reference-footer-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .krigsvold-reference-footer-base { display:block; } }
-@media(max-width:1400px) { .krigsvold-reference .krigsvold-app-header { margin-inline:var(--krigsvold-gutter); } }
 @media(max-width:991.98px) {
  .krigsvold-reference .krigsvold-app { padding-block-start:.75rem; }
- .krigsvold-reference .krigsvold-app-header { background:rgb(6 19 37/.96); padding:.55rem .8rem; gap:0; }
  .krigsvold-reference .krigsvold-app-brand { inline-size:100%; }
- .krigsvold-reference-identity { justify-content:space-between; }
- .krigsvold-reference-toggle { display:block; }
- .krigsvold-reference .krigsvold-app-header > nav,.krigsvold-reference .krigsvold-app-utilities { display:none; }
- .krigsvold-reference[data-menu-open="true"] .krigsvold-app-header > nav { display:block; inline-size:100%; margin:0; padding-block:1rem .4rem; }
- .krigsvold-reference[data-menu-open="true"] .krigsvold-app-utilities { display:block; inline-size:100%; }
- .krigsvold-reference-navigation-links { display:block; }
- .krigsvold-reference .krigsvold-app-header summary { padding:.7rem .4rem; }
  .krigsvold-reference-menu { position:static; min-inline-size:0; inline-size:100%; padding:.1rem 0 .45rem .8rem; border:0; background:transparent; box-shadow:none; }
  .krigsvold-reference-menu::before { display:none; }
- .krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a { padding:.38rem .45rem; color:rgb(255 255 255/.76); font-size:.86rem; white-space:normal; }
- .krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a:is(:hover,:focus-visible) { background:rgb(158 213 230/.1); color:var(--krigsvold-color-ice-200); }
- .krigsvold-reference-utilities-content { flex-wrap:wrap; align-items:end; padding-block:1rem; }
  .krigsvold-reference-search { flex:1; inline-size:auto; min-inline-size:10rem; margin:0; padding:0; border:0; }
  .krigsvold-reference-search .directory-links { inset-inline-start:0; inset-inline-end:auto; }
 }
-@media print { .krigsvold-reference .krigsvold-app-header,.krigsvold-reference-register,.krigsvold-reference-footer,.krigsvold-reference-sections { display:none; } }
 
 /* Documentation text roles share the origin's label and reading vocabulary. */
 .krigsvold { --reference-font-ui:var(--krigsvold-font-sans); --reference-font-code:var(--krigsvold-font-mono); --reference-code-bg:var(--krigsvold-code-bg); --reference-code-text:var(--krigsvold-code-text); --reference-reading-width:var(--krigsvold-reading-width); --reference-label-size:.76rem; --reference-label-tracking:.16em; --reference-label-color:var(--krigsvold-color-blue-600); --reference-callout-color:var(--krigsvold-color-blue-600); }
@@ -110,16 +57,10 @@
 /* Owner correction: contained menu over the hero; inverse appearance surfaces. */
 .krigsvold-reference { --documentation-nav-bg:rgb(6 19 37/.84); --documentation-nav-text:white; --documentation-nav-active:var(--krigsvold-color-ice-400); --documentation-nav-border:rgb(255 255 255/.2); }
 .krigsvold[data-krigsvold="dark"] .krigsvold-reference { --documentation-nav-bg:white; --documentation-nav-text:var(--krigsvold-color-ink); --documentation-nav-active:var(--krigsvold-color-blue-600); --documentation-nav-border:var(--krigsvold-color-rule); }
-.krigsvold-reference .krigsvold-app-header { position:relative; z-index:50; background:var(--documentation-nav-bg); border-color:var(--documentation-nav-border); }
-.krigsvold-reference-brand,.krigsvold-reference .krigsvold-app-header summary,.krigsvold-reference-toggle { color:var(--documentation-nav-text); }
-.krigsvold-reference .krigsvold-app-header summary:is(:hover,:focus-visible) { color:var(--documentation-nav-active); }
-.krigsvold-reference-toggle { border-color:currentColor; }
 .krigsvold-reference-search { border-inline-start-color:var(--documentation-nav-border); }
 .krigsvold-reference-search input { color:var(--documentation-nav-text); border-block-end-color:currentColor; }
 .krigsvold-reference-search input::placeholder { color:var(--documentation-nav-text); opacity:.75; }
-.krigsvold-reference .krigsvold-app-header :is(.krigsvold-reference-brand,.krigsvold-reference-toggle,summary,input):focus-visible { outline-color:var(--documentation-nav-active); }
 .krigsvold-reference[data-page="home"] .krigsvold-app { position:relative; padding-block-start:0; }
-.krigsvold-reference[data-page="home"] .krigsvold-app-header { position:absolute; z-index:50; inset-block-start:1.25rem; inset-inline:var(--krigsvold-gutter); margin-inline:auto; }
 .krigsvold-reference[data-page="home"] .krigsvold-app > main { padding:0; }
 .krigsvold-reference[data-page="home"] .krigsvold-reference-width { max-inline-size:none; }
 .krigsvold-reference[data-page="home"] .krigsvold-reference-cover { max-inline-size:none; margin:0; padding:9rem max(var(--krigsvold-gutter),calc((100% - var(--krigsvold-content-width))/2)) 4rem; background:var(--krigsvold-color-navy-950); color:white; }
@@ -128,9 +69,6 @@
 .krigsvold-reference[data-page="home"] :is(.krigsvold-reference-register,.krigsvold-reference-status,.krigsvold-reference-catalog) { max-inline-size:var(--krigsvold-content-width); margin-inline:auto; padding-inline:var(--krigsvold-gutter); }
 @media(max-width:991.98px) {
  .krigsvold-reference { --documentation-nav-bg:rgb(6 19 37/.96); }
- .krigsvold-reference[data-page="home"] .krigsvold-app-header { inset-block-start:.75rem; }
- .krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a { color:var(--documentation-nav-text); }
- .krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a:is(:hover,:focus-visible) { background:rgb(158 213 230/.1); color:var(--krigsvold-color-ice-200); }
 }
 
 /* Origin .container framing, shared with the Astro documentation host. */
@@ -140,15 +78,12 @@
 @media(min-width:992px) { .krigsvold-reference { --reference-container:960px; } }
 @media(min-width:1200px) { .krigsvold-reference { --reference-container:1140px; } }
 @media(min-width:1400px) { .krigsvold-reference { --reference-container:1320px; } }
-.krigsvold-reference .krigsvold-app-header { inline-size:calc(100% - 1.5rem); max-inline-size:calc(var(--reference-container) - 1.5rem); margin-inline:auto; font:1rem/1.65 var(--krigsvold-font-sans); }
 .krigsvold-reference .krigsvold-reference-width { inline-size:100%; max-inline-size:calc(var(--reference-container) - 1.5rem); }
 
 /* Origin material-kit.css html *: rendering is distinct from numeric weight. */
 .krigsvold-reference,.krigsvold-reference * { -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 .krigsvold-reference { --documentation-nav-label:rgb(255 255 255/.88); --documentation-mobile-item:rgb(255 255 255/.76); }
 .krigsvold[data-krigsvold="dark"] .krigsvold-reference { --documentation-nav-label:var(--krigsvold-color-ink); --documentation-mobile-item:var(--krigsvold-color-ink); }
-.krigsvold-reference .krigsvold-app-header summary { color:var(--documentation-nav-label); }
-@media(max-width:991.98px) { .krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a { color:var(--documentation-mobile-item); } }
 
 /* Origin ordinary links: krigsvold.org/src/styles/site.css.
    Keep the existing experimental dark-mode token; light uses the origin rule. */
@@ -157,12 +92,8 @@
 .krigsvold-reference[data-page="home"] .krigsvold-reference-cover a:hover { background:var(--krigsvold-color-ice-200); color:var(--krigsvold-color-navy-950); }
 
 /* Experimental inverse chrome retains contrast on its white mobile surface. */
-@media(max-width:991.98px) {
- .krigsvold[data-krigsvold="dark"] .krigsvold-reference .krigsvold-app-header nav .krigsvold-reference-menu > a:is(:hover,:focus-visible) { background:var(--krigsvold-color-ice-100); color:var(--krigsvold-color-ink); }
-}
 
 /* Title-case navigation preserves component/API spelling. */
-.krigsvold-reference .krigsvold-app-header :is(summary,nav a,button) { text-transform:none; }
 /* The home page is full bleed, but its text follows the same container as Astro. */
 .krigsvold-reference[data-page="home"] .krigsvold-reference-cover {
   padding-inline:max(.75rem,calc((100% - var(--reference-container)) / 2 + .75rem));

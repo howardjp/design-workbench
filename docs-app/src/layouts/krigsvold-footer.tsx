@@ -1,5 +1,5 @@
 import ownerBadge from "../../brand/jh-badge-1x1.svg";
-import "./krigsvold-footer.css";
+
 
 export function MasterFooter() { return (
 <footer className="krigsvold-master-site-footer">

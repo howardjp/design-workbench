@@ -282,10 +282,10 @@ function Start() {
   return (
     <article className="reference-page">
       <p className="eyebrow">Design language 0.3 preview · React 0.1.0</p>
-      <h1>
+      <h2>
         A small beginning.
         <br />A real foundation.
-      </h1>
+      </h2>
       <p className="lead">
         {familyName} React is an experimental, MIT-licensed component library.
         Explore the components here, then follow the installation instructions for the verified release.
@@ -368,7 +368,7 @@ function ShellExample() {
         utilities={<Badge>Workspace</Badge>}
       >
         <div style={{ padding: "2rem" }}>
-          <h1>Your project, in view.</h1>
+          <h2>Your project, in view.</h2>
           <p>One shell. A clear path to the work.</p>
         </div>
       </AppShell>
@@ -379,7 +379,7 @@ function Agents() {
   const endpoint=delivery.mcp.url;
   return <article className="reference-page">
     <p className="reference-kicker">Authoritative context / Practical method</p>
-    <h1>Build with {familyName}.</h1>
+    <h2>Build with {familyName}.</h2>
     <p className="lead">Connect the read-only MCP to retrieve the same grammar, patterns, actual APIs and builder method used by this reference.</p>
     <div className="callout"><strong>{delivery.mcp.published ? 'Hosted MCP · experimental knowledge' : 'Hosted MCP release in preparation'}</strong><p>Each family is independent. These tools search and retrieve public design guidance; they have no access to the workbench database, user drafts or write operations.</p></div>
     <h2>One endpoint</h2><CopyCode label="MCP endpoint" code={endpoint} />
@@ -570,7 +570,7 @@ function App() {
           <Start />
         ) : name ? (
           <article>
-            <h1>Component not found</h1>
+            <h2>Component not found</h2>
             <p>Choose a component from the index.</p>
             <a href="?">Back to the collection</a>
           </article>

@@ -11,44 +11,16 @@ async function ready(page: Page) {
 }
 
 for (const family of ['martlet', 'krigsvold'] as const) {
-  test(`${family}: navigation and footer identity refinements`, async ({page}) => {
-    await page.goto(reference(family, 'page=start'));
-    const header=page.locator(`.${family}-app-header`);
-    if(family==='martlet') {
-      await expect(header.getByRole('link',{name:'The Language',exact:true})).toBeVisible();
-      await expect(header.getByRole('link',{name:'Getting Started',exact:true})).toBeVisible();
-      const owner=page.getByRole('link',{name:'James Howard website',exact:true});
-      await owner.hover();
-      await expect(owner).toHaveCSS('text-decoration-line','none');
-    } else {
-      await expect(header.locator('summary').first()).toHaveText('Actions');
-      await expect(header.locator('summary').first()).toHaveCSS('text-transform','none');
-      await expect(page.locator('footer a[href="mailto:count@krigsvold.org"]')).toHaveCount(0);
-    }
-  });
-
-  test(`${family}: origin link hover colors and footer treatment`, async ({page}) => {
-    await page.goto(reference(family, 'page=start'));
-    const textLink = page.getByRole('link', {name: 'Read the release policy'});
-    await textLink.hover();
-    await expect(textLink).toHaveCSS('color', family === 'martlet' ? 'rgb(128, 85, 15)' : 'rgb(10, 29, 53)');
-    const footerLink = page.locator(`.${family}-master-site-footer`).getByRole('link', {name:'React reference', exact:true});
-    await footerLink.hover();
-    await expect(footerLink).toHaveCSS('text-decoration-line', family === 'martlet' ? 'underline' : 'none');
-    await expect(footerLink).toHaveCSS('color', family === 'martlet' ? 'rgb(230, 199, 125)' : 'rgba(255, 255, 255, 0.9)');
-    await page.goto(reference(family, ''));
-    if (family === 'martlet') {
-      const heroLink = page.getByRole('link', {name:'Meet the language'});
-      const color = await heroLink.evaluate(e => getComputedStyle(e).color);
-      await heroLink.hover();
-      await expect(heroLink).toHaveCSS('color', color);
-      await expect(heroLink.locator('span')).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 4, 0)');
-    } else {
-      const heroLink = page.getByRole('link', {name:'Enter the Notes workspace'});
-      await heroLink.hover();
-      await expect(heroLink).toHaveCSS('color', 'rgb(6, 19, 37)');
-      await expect(heroLink).toHaveCSS('background-color', 'rgb(217, 238, 244)');
-    }
+  test(`${family}: shared shell navigation, identity and appearance`, async ({page}) => {
+    await page.goto(reference(family,'page=start'));
+    const header=page.locator(family==='martlet'?'.site-header':'.site-navbar');
+    await expect(header.getByRole('link',{name:'The Language',exact:true})).toBeVisible();
+    await expect(page.locator('.site-footer').getByRole('link',{name:'James Howard website'})).toBeVisible();
+    await header.getByRole('button',{name:'Dark mode',exact:true}).click();
+    await expect(page.locator('html')).toHaveAttribute('data-appearance','dark');
+    await page.setViewportSize({width:320,height:1000});
+    const menu=header.getByRole('button',{name:'Menu',exact:true});await menu.click();await expect(menu).toHaveAttribute('aria-expanded','true');await page.keyboard.press('Escape');await expect(menu).toBeFocused();await expect(menu).toHaveAttribute('aria-expanded','false');
+    expect(await page.locator('header img').evaluateAll(images=>images.every(e=>(e as HTMLImageElement).naturalWidth>0))).toBe(true);
   });
 
   test(`${family}: G02: field, group and region relationships survive enlarged text`, async ({page}) => {
@@ -100,7 +72,7 @@ for (const family of ['martlet', 'krigsvold'] as const) {
         return {
           heading: style('main h1'),
           input: style('input[required]'),
-          brand: style(`.${family}-reference-brand`),
+          brand: style(family==='martlet'?'.site-header .brand':'.navbar-brand'),
           fonts,
         };
       }, family);
@@ -145,7 +117,7 @@ for (const family of ['martlet', 'krigsvold'] as const) {
 
   test(`${family}: G14: footer preserves identity and grouped destinations`, async ({page}) => {
     await page.goto(reference(family, 'page=patterns'));
-    const footer = page.locator(`.${family}-master-site-footer`);
+    const footer = page.locator(`.site-footer`);
     await expect(footer.getByRole('link', {name:'James Howard website'})).toHaveAttribute('href','https://jameshoward.us/');
     await expect(footer).toContainText('A website of James Howard');
     await expect(footer).toContainText(`react.${family}design.dev`);
@@ -163,14 +135,14 @@ for (const family of ['martlet', 'krigsvold'] as const) {
     for (const width of [1440, 320]) {
       await page.setViewportSize({width, height: 1000});
       await footer.scrollIntoViewIfNeeded();
-      const base = footer.locator(`.${family}-master-footer-${family === 'martlet' ? 'bottom' : 'base'}`);
+      const base = footer.locator(family==='martlet'?'.footer-bottom':'.site-footer__base');
       if(family === 'martlet' && width===1440) {
         const centers=await base.evaluate(e=>Array.from(e.children).map(child=>{const r=child.getBoundingClientRect();return r.top+r.height/2;}));
         expect(Math.abs(centers[0]-centers[1])).toBeLessThan(1);
       }
 
       await expect(base).toContainText('James P. Howard, II');
-      const groups = footer.locator(`.${family}-master-footer-grid`);
+      const groups = footer.locator(family==='martlet'?'.footer-grid':'.row');
       const geometry = await groups.evaluate(e => {
         const regions = [...e.children].map(child => {
           const r = child.getBoundingClientRect();
@@ -195,49 +167,6 @@ for (const family of ['martlet', 'krigsvold'] as const) {
   });
 }
 
-for (const mode of ['light','dark']) test(`krigsvold: G05: popup becomes an in-flow mobile submenu in ${mode} mode`, async ({page}) => {
-  await page.setViewportSize({width: 1440, height: 1000});
-  await page.goto(reference('krigsvold', `mode=${mode}`));
-  const header = page.locator('.krigsvold-app-header');
-  const disclosure = header.locator('details').first();
-  const summary = disclosure.locator('summary');
-  const popup = disclosure.locator('.krigsvold-reference-menu');
-  await summary.click();
-  await expect(popup).toBeVisible();
-  const desktop = await popup.evaluate(e => ({bg: getComputedStyle(e).backgroundColor, position: getComputedStyle(e).position}));
-  expect(desktop).toEqual({bg: 'rgb(255, 255, 255)', position: 'absolute'});
-  await page.keyboard.press('Escape');
-  await expect(summary).toBeFocused();
-  await expect(popup).not.toBeVisible();
-  await page.setViewportSize({width: 320, height: 1000});
-  await header.getByRole('button', {name: 'Menu', exact: true}).click();
-  await summary.click();
-  await expect(popup).toBeVisible();
-  const mobile = await popup.evaluate(e => ({bg: getComputedStyle(e).backgroundColor, position: getComputedStyle(e).position, shadow: getComputedStyle(e).boxShadow}));
-  expect(mobile).toEqual({bg: 'rgba(0, 0, 0, 0)', position: 'static', shadow: 'none'});
-  await popup.locator('a').first().hover();
-  await expect(popup.locator('a').first()).toHaveCSS('background-color',mode === 'light' ? 'rgba(158, 213, 230, 0.1)' : 'rgb(238, 248, 250)');
-  await expect(popup.locator('a').first()).toHaveCSS('color',mode === 'light' ? 'rgb(217, 238, 244)' : 'rgb(23, 32, 42)');
-  await page.keyboard.press('Escape');
-  await expect(header.getByRole('button', {name: 'Menu', exact: true})).toBeFocused();
-  await expect(popup).not.toBeVisible();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-});
-
-test('krigsvold: home content follows the header container at every breakpoint', async ({page}) => {
-  for(const width of [390,768,1024,1440,1920]) {
-    await page.setViewportSize({width,height:1000});
-    await page.goto(reference('krigsvold',''));
-    const bounds=await page.evaluate(()=>{
-      const header=document.querySelector('.krigsvold-app-header')!.getBoundingClientRect();
-      const title=document.querySelector('.krigsvold-reference-cover h1')!.getBoundingClientRect();
-      const content=['.krigsvold-reference-register','.krigsvold-reference-status','.krigsvold-reference-catalog'].map(sel=>{
-        const el=document.querySelector(sel)!;const r=el.getBoundingClientRect(),s=getComputedStyle(el);
-        return {left:r.left+parseFloat(s.paddingLeft),right:r.right-parseFloat(s.paddingRight)};
-      });
-      return {left:header.left,right:header.right,titleLeft:title.left,content};
-    });
-    expect(bounds.titleLeft).toBeCloseTo(bounds.left,0);
-    for(const box of bounds.content) {expect(box.left).toBeCloseTo(bounds.left,0);expect(box.right).toBeCloseTo(bounds.right,0);}
-  }
+for(const mode of ['light','dark']) test(`krigsvold: shared dropdown closes and restores focus in ${mode}`,async({page})=>{
+ await page.goto(reference('krigsvold',`mode=${mode}`));const toggle=page.locator('[data-bs-toggle="dropdown"]').first();await toggle.click();await expect(toggle).toHaveAttribute('aria-expanded','true');await expect(page.locator('.dropdown-menu.show')).toBeVisible();await page.keyboard.press('Escape');await expect(toggle).toBeFocused();await expect(toggle).toHaveAttribute('aria-expanded','false');
 });
