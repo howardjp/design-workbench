@@ -122,13 +122,17 @@ for (const family of ["martlet", "krigsvold"]) {
         join(dir, "data.mjs"),
         compile(await readFile("docs-app/src/data.ts", "utf8"), "data"),
       );
-      const footer = (await readFile(`docs-app/src/layouts/${family}-footer.tsx`, 'utf8'))
-        .replace(/^import ownerBadge from [^;]+;/m, "const ownerBadge='/jh-badge-1x1.svg';")
-        .replace(/^import ['"][^'"]+\.css['"];?$/gm, '');
-      await writeFile(join(dir, 'footer.mjs'), compile(footer, 'footer'));
+      const adapter=(await readFile('docs-app/src/shell/AstroShell.tsx','utf8'))
+        .replace(/^import .* from ['"][^'"]+\.svg['"];?$/gm,line=>`const ${line.split(' ')[1]} = '/'+${JSON.stringify(family)}+'-mark.svg';`)
+        .replace(/from ['"]\.\.\/data['"]/g,"from './data.mjs'")
+        .replace(/^import ['"][^'"]+\.css['"];?$/gm,'');
+      await writeFile(join(dir,'adapter.mjs'),compile(adapter,'adapter'));
       const source = (
         await readFile(`docs-app/src/layouts/${family}.tsx`, "utf8")
       )
+        .replace(/from ['"]\.\.\/shell\/AstroShell['"]/g,"from './adapter.mjs'")
+        .replace(/^import chrome from [^;]+;/m,`const chrome=${await readFile(`docs-app/src/shell/${family}/chrome.json`,'utf8')};`)
+
         .replace(/(["'])docs-family\1/g, JSON.stringify(`@${family}/react`))
         .replace(
           /^import mark from [^;]+;/m,
@@ -159,8 +163,8 @@ for (const family of ["martlet", "krigsvold"]) {
           }),
         ),
       );
-      assert.ok(html.includes(`class="${family}-app"`));
-      assert.ok(html.includes('aria-label="Documentation"'));
+      assert.ok(html.includes(`class="reference-shell"`));
+      assert.ok(html.includes('aria-label="React reference"'));
       assert.ok(html.includes(`src="/${family}-mark.svg"`));
       assert.equal((html.match(/<main /g) ?? []).length, 1);
       assert.ok(

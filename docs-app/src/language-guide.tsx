@@ -16,7 +16,7 @@ function blocks(text: string, demote = false) {
         <tbody>{rows.slice(2).map((row, n) => <tr key={n}>{row.map((cell, k) => <td key={k}>{inline(cell)}</td>)}</tr>)}</tbody>
       </DataTable>;
     }
-    if (block.startsWith("# ")) return demote ? <h2 key={i}>{block.slice(2)}</h2> : <h1 key={i}>{block.slice(2)}</h1>;
+    if (block.startsWith("# ")) return demote ? <h2 key={i}>{block.slice(2)}</h2> : <h2 key={i}>{block.slice(2)}</h2>;
     if (block.startsWith("## ")) return demote ? <h3 key={i}>{block.slice(3)}</h3> : <h2 key={i}>{block.slice(3)}</h2>;
     return <p key={i}>{inline(block.replaceAll("\n", " "))}</p>;
   });

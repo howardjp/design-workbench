@@ -1,0 +1,10 @@
+import{readFile,writeFile,mkdir,cp}from'node:fs/promises';
+import{resolve}from'node:path';import{createHash}from'node:crypto';
+const [family,source]=process.argv.slice(2);
+if(!['martlet','krigsvold'].includes(family)||!source)throw Error('Usage: node scripts/sync-astro-shell.mjs FAMILY /path/to/Astro/site/public/shell');
+const manifest=JSON.parse(await readFile(resolve(source,'manifest.json'),'utf8'));
+const css=await readFile(resolve(source,manifest.stylesheet));
+if(manifest.family!==family||createHash('sha256').update(css).digest('hex')!==manifest.sha256)throw Error('Shell provenance mismatch');
+const target=`docs-app/src/shell/${family}`;await mkdir(target,{recursive:true});
+for(const file of [manifest.stylesheet,'manifest.json','chrome.json'])await cp(resolve(source,file),`${target}/${file}`);
+console.log(`Verified ${family} shell ${manifest.sha256}`);

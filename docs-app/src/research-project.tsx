@@ -55,13 +55,13 @@ export function ResearchProject(){
   const summary='A watershed monitoring project, from a clear question to an inspectable record.';
   return <div className={`research-project research-${family}`}>
     {family==='martlet'?<>
-      <Article title={title} eyebrow="Research project · Demonstration" summary={summary}
+      <Article titleLevel={2} title={title} eyebrow="Research project · Demonstration" summary={summary}
         metadata="Fictional study · Sample data · No submissions are sent"
         contents={<TableOfContents items={sections} label="Project contents" />}>
         <StudyBody /><Context /><Materials />
       </Article>
     </>:<>
-      <header className="research-intro"><p>Research project · Demonstration</p><h1>{title}</h1><p className="research-deck">{summary}</p><p>Fictional study · Sample data · No submissions are sent</p></header>
+      <header className="research-intro"><p>Research project · Demonstration</p><h2>{title}</h2><p className="research-deck">{summary}</p><p>Fictional study · Sample data · No submissions are sent</p></header>
       <nav className="research-section-nav" aria-label="Project contents">{sections.map(s=><a href={`#${s.id}`} key={s.id}>{s.label}</a>)}</nav>
       <div className="research-regions"><article aria-label="Study methods and observations"><StudyBody /></article><Context /></div>
       <Materials />

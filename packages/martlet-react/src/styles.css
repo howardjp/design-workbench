@@ -56,7 +56,7 @@
 .martlet-field label, .martlet-fieldset legend { color:var(--ui-heading); font:700 .86rem/1.5 var(--martlet-font-sans); letter-spacing:.02em; }
 .martlet-hint { color:var(--ui-muted); font-size:.875rem; }
 .martlet-error { color:var(--martlet-danger); font-size:.875rem; }
-.martlet-checkbox, .martlet-radio { display:inline-flex; gap:.5rem; align-items:center; min-block-size:2.8rem; cursor:pointer; font:1rem/1.5 var(--martlet-font-sans); }
+.martlet-checkbox, .martlet-radio { color:var(--ui-text); display:inline-flex; gap:.5rem; align-items:center; min-block-size:2.8rem; cursor:pointer; font:1rem/1.5 var(--martlet-font-sans); }
 .martlet-checkbox input, .martlet-radio input { inline-size:1.2rem; block-size:1.2rem; accent-color:var(--ui-action); flex:none; }
 .martlet-checkbox:has(input:disabled), .martlet-radio:has(input:disabled) { color:var(--martlet-disabled-text); cursor:default; }
 .martlet-fieldset { border:1px solid var(--ui-line); padding:var(--martlet-group-gap); margin:0; min-inline-size:0; }

@@ -1,0 +1,17 @@
+/* React documentation content only. Chrome and mastheads belong to the shared Astro CSS. */
+.reference-shell { padding-block-start:0; color:var(--ui-text); background:var(--ui-bg); }
+.reference-shell .reference-body { padding-block:2rem 4rem; }
+.reference-destinations { display:flex; flex-wrap:wrap; gap:.75rem 1.5rem; padding-block:1rem; border-block-end:1px solid var(--ui-line); }
+.reference-directory { margin-block:1.5rem; }
+.reference-directory .directory-links { display:grid; grid-template-columns:repeat(auto-fit,minmax(12rem,1fr)); gap:1.5rem; }
+.reference-content { min-width:0; }
+.reference-content :is(pre,table) { max-width:100%; }
+.reference-shell .page-masthead { position:relative; }
+.reference-shell .page-masthead>.container { position:relative; }
+.reference-shell .site-footer .footer-identity img { flex-shrink:0; }
+.reference-shell.martlet-reference,.reference-shell.krigsvold-reference { padding-block-start:0; }
+/* Package fields keep their own spacing inside the source document canvas. */
+.reference-content .krigsvold-field > label { margin:0; }
+.reference-content .krigsvold-hint { margin:0; }
+
+.reference-content.martlet-reference,.reference-content.krigsvold-reference {padding-block-start:0;}

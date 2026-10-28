@@ -56,7 +56,7 @@
 .krigsvold-field label, .krigsvold-fieldset legend { color:var(--ui-heading); font:700 .9rem/1.5 var(--krigsvold-font-sans);  }
 .krigsvold-hint { color:var(--ui-muted); font-size:.875rem; }
 .krigsvold-error { color:var(--krigsvold-danger); font-size:.875rem; }
-.krigsvold-checkbox, .krigsvold-radio { display:inline-flex; gap:.5rem; align-items:center; min-block-size:2.8rem; cursor:pointer; font:1rem/1.5 var(--krigsvold-font-sans); }
+.krigsvold-checkbox, .krigsvold-radio { color:var(--ui-text); display:inline-flex; gap:.5rem; align-items:center; min-block-size:2.8rem; cursor:pointer; font:1rem/1.5 var(--krigsvold-font-sans); }
 .krigsvold-checkbox input, .krigsvold-radio input { inline-size:1.2rem; block-size:1.2rem; accent-color:var(--ui-action); flex:none; }
 .krigsvold-checkbox:has(input:disabled), .krigsvold-radio:has(input:disabled) { color:var(--krigsvold-disabled-text); cursor:default; }
 .krigsvold-fieldset { border:1px solid var(--ui-line); padding:var(--krigsvold-group-gap); margin:0; min-inline-size:0; }
