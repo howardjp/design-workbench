@@ -1,0 +1,15 @@
+<div data-listing data-page-size="3">
+  <ul class="example-list">
+    {% for item in include.items %}
+    <li data-list-item>
+      <div class="example-list__meta">{% if item.date %}<time datetime="{{ item.date | escape }}">{{ item.date | date: '%b %-d, %Y' }}</time>{% endif %}{% if item.tag %}<span class="example-tag">{{ item.tag | escape }}</span>{% endif %}</div>
+      <div><h3><a href="{% include examples/url.html url=item.url %}">{{ item.title | escape }}</a></h3><p>{{ item.summary | escape }}</p></div>
+    </li>
+    {% endfor %}
+  </ul>
+  <nav class="example-pagination" aria-label="{{ include.id | escape }} pages" hidden>
+    <button type="button" data-previous>Previous</button>
+    <span data-page-status role="status"></span>
+    <button type="button" data-next>Next</button>
+  </nav>
+</div>

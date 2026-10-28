@@ -1,0 +1,7 @@
+{% if include.actions.size > 0 %}
+<div class="example-actions">
+  {% for action in include.actions %}
+  <a class="example-button{% unless forloop.first %} example-button--secondary{% endunless %}" href="{% include examples/url.html url=action.url %}">{{ action.label | escape }}</a>
+  {% endfor %}
+</div>
+{% endif %}
