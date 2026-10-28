@@ -1,7 +1,6 @@
 import {AstroShell} from '../shell/AstroShell';
 import chrome from '../shell/martlet/chrome.json';
 import '../shell/martlet/martlet-shell.css';
-import { MasterFooter } from "./martlet-footer";
 import { useEffect, useRef, useState } from "react";
 import {
   AppShell,

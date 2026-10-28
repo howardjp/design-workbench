@@ -1,7 +1,6 @@
 import {AstroShell} from '../shell/AstroShell';
 import chrome from '../shell/krigsvold/chrome.json';
 import '../shell/krigsvold/krigsvold-shell.css';
-import { MasterFooter } from "./krigsvold-footer";
 import { useEffect, useRef, useState } from "react";
 import {
   AppShell,

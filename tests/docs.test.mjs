@@ -122,10 +122,6 @@ for (const family of ["martlet", "krigsvold"]) {
         join(dir, "data.mjs"),
         compile(await readFile("docs-app/src/data.ts", "utf8"), "data"),
       );
-      const footer = (await readFile(`docs-app/src/layouts/${family}-footer.tsx`, 'utf8'))
-        .replace(/^import ownerBadge from [^;]+;/m, "const ownerBadge='/jh-badge-1x1.svg';")
-        .replace(/^import ['"][^'"]+\.css['"];?$/gm, '');
-      await writeFile(join(dir, 'footer.mjs'), compile(footer, 'footer'));
       const adapter=(await readFile('docs-app/src/shell/AstroShell.tsx','utf8'))
         .replace(/^import .* from ['"][^'"]+\.svg['"];?$/gm,line=>`const ${line.split(' ')[1]} = '/'+${JSON.stringify(family)}+'-mark.svg';`)
         .replace(/from ['"]\.\.\/data['"]/g,"from './data.mjs'")
