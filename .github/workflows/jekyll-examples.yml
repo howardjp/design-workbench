@@ -120,6 +120,9 @@ jobs:
         run: |
           node examples/page-archetypes/tests/section-index-parity.mjs
           node examples/page-archetypes/tests/breadcrumb-parity.mjs
+      - name: Verify portable download actions
+        timeout-minutes: 10
+        run: node examples/page-archetypes/tests/report-download.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
