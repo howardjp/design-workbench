@@ -422,3 +422,7 @@ A disposable SSR/hydrated Chromium consumer found no defect in the bounded cases
 ### Desktop zoom reflow equivalent
 
 The available headless Chromium environment has no window-automation tools; setting its profile default-zoom preference did not change measured viewport or device pixel ratio. A CDP device-metrics check instead emulates a 1280×900 desktop’s CSS viewport at 200% and 400% using 640×450/DPR 2 and 320×225/DPR 4. Across Jekyll, Astro and React, both families and seven representative content, form and dashboard routes, it passed document reflow, button clipping, keyboard menu/dialog focus, form/search/dashboard actions and selected no-JavaScript fallbacks. This is viewport and density emulation, not genuine desktop browser zoom: zoom controls, browser chrome, visual scaling and rasterization remain unverified.
+
+### Expanded operations CI rehearsal
+
+A clean archived checkout at `d5ac386` ran the exact expanded `operations-directory` workflow group after operations precision coverage was added: all 10 scripts / 120 family-framework-base builds passed in 7m14.968s locally (user CPU 3m52.644s; system CPU 47.963s), under the configured 30-minute cap. Fresh locked root/Astro npm installs, React workspace builds and frozen Bundler installs passed using Node 24.19, Ruby 3.2.3/Bundler 2.4.19, a locked-gem cache and system Chromium 151. GitHub-hosted timing, Playwright download and OS dependency installation were not tested; no remote workflow was run.
