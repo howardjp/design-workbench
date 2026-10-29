@@ -55,6 +55,7 @@ jobs:
         run: |
           npm ci --prefix examples/astro-slice --ignore-scripts
           node examples/page-archetypes/tests/simulation-composition.mjs
+          node examples/page-archetypes/tests/gallery-composition.mjs
       - name: Verify multilingual long-content reflow across frameworks
         env:
           ASTRO_TELEMETRY_DISABLED: '1'

@@ -285,3 +285,7 @@ An adversarial report table with 19 columns collapsed into a 334–350px table i
 ### Static analytics ordering and combined fixtures
 
 Commit `05ecc45` makes Jekyll and Astro's initial no-JavaScript analytics tables respect the same bounded date range and chronological order as the normalized interactive model; Jekyll preserves canonical category order without dropping unknown categories. After merging this with the empty-state change, `npm run test:analytics-empty`, `node examples/page-archetypes/tests/analytics-order-static.mjs`, and `npm run test:examples` all passed on the integrated branch using local Ruby/Bundler and system Chromium. The temporary-fixture tests cover both languages, all three frameworks, root/subpaths and JavaScript/no-JavaScript; the reversed case includes a later out-of-range observation. Sparse or malformed samples remain unassessed.
+
+### Composed gallery dialogs
+
+Two Jekyll gallery sections previously emitted duplicate dialog-heading IDs and routed every image to the first dialog. A reserved section identifier also collided with the generated dialog-title ID in Astro. Jekyll galleries now scope controls and dialogs per instance and restore opener focus; both adapters name their dialogs without generated IDs. Disposable two-gallery Jekyll and Astro fixtures passed both families at root and subpaths for independent image content, unique IDs, Escape focus return, axe and no-JavaScript links. React already has a separate two-gallery composition suite.

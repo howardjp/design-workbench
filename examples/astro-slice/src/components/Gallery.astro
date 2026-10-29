@@ -1,16 +1,14 @@
 ---
 import { exampleImage } from '../assets.mjs';
 const {section, Button} = Astro.props;
-const dialogId = `gallery-${section.id}-dialog`;
-const headingId = `gallery-${section.id}-title`;
 ---
 <div class="gallery" data-gallery>
   <div class="gallery-grid">{section.items.map(item => <figure>
     <a href={exampleImage(item.image)} data-enlarge data-caption={item.caption}><img src={exampleImage(item.image)} alt={item.alt} width="960" height="640" loading="lazy" /><span>Enlarge {item.title}</span></a>
     <figcaption>{item.caption}</figcaption>
   </figure>)}</div>
-  <dialog id={dialogId} aria-labelledby={headingId}>
-    <h3 id={headingId}>Image detail</h3><Button data-close-dialog>Close image</Button>
+  <dialog aria-label="Image detail">
+    <h3>Image detail</h3><Button data-close-dialog>Close image</Button>
     <figure><img alt="" width="960" height="640" /><figcaption></figcaption></figure>
   </dialog>
 </div>

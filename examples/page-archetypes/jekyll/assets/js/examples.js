@@ -74,11 +74,14 @@
     run();
   }
 
-  const dialog = document.querySelector('.example-lightbox');
-  if (dialog && typeof dialog.showModal === 'function') {
-    document.querySelectorAll('[data-enlarge]').forEach(anchor => anchor.addEventListener('click', event => {
+  document.querySelectorAll('[data-gallery]').forEach(gallery => {
+    const dialog = gallery.querySelector('.example-lightbox');
+    if (!dialog || typeof dialog.showModal !== 'function') return;
+    let opener = null;
+    gallery.querySelectorAll('[data-enlarge]').forEach(anchor => anchor.addEventListener('click', event => {
       if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
+      opener = anchor;
       const image = dialog.querySelector('img');
       image.src = anchor.href;
       image.alt = anchor.querySelector('img').alt;
@@ -86,7 +89,8 @@
       dialog.showModal();
     }));
     dialog.querySelector('[data-close-dialog]').addEventListener('click', () => dialog.close());
-  }
+    dialog.addEventListener('close', () => { if (opener?.isConnected) opener.focus(); });
+  });
 
   document.querySelectorAll('[data-workspace]').forEach(workspace => {
     const records = [...workspace.querySelectorAll('[data-record]')];

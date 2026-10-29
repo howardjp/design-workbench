@@ -36,6 +36,8 @@ The same paired builds also support `CHROMIUM_PATH=/usr/bin/chromium node exampl
 
 Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/gallery-link-contract.mjs` against those paired builds to verify modified image links, keyboard dialog focus return and direct image access without JavaScript.
 
+Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/gallery-composition.mjs` to build disposable Jekyll and Astro pages with two galleries and a potentially conflicting section ID. It checks distinct accessible dialogs, Escape focus return, unique IDs, axe and direct links without JavaScript in both families at root and subpaths. Ruby, Bundler and the Astro dependencies are required.
+
 Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/dense-table-reflow.mjs` against the same builds to check 100-row, 19-column tables with long words at 320px. The check verifies useful column widths and a named, keyboard-scrollable region; users must scroll horizontally to inspect wide tables.
 
 Simulation controls derive IDs from the unique section ID using reserved `_simulation-` and `_scene-` prefixes. Existing links to the former fixed `#simulation-mode`, `#ventilation`, or `#scene-view` control IDs must be updated.
