@@ -42,6 +42,26 @@ for(const family of ['martlet','krigsvold']){
   await page.getByLabel('Hide acknowledged alerts',{exact:true}).check();await page.getByRole('button',{name:'Apply monitoring controls'}).click();await expect(page.locator('#alert-table tbody tr')).toHaveCount(0);
   await page.getByLabel('Warning threshold (ms)',{exact:true}).fill('1');await page.getByRole('button',{name:'Apply monitoring controls'}).click();await expect(page.locator('#operations-error')).toBeVisible();await page.getByRole('button',{name:'Reset operations preview'}).click();await expect(page.locator('[data-metric=open_alerts]')).toHaveText('2');
  });
+ test(`${family}: acknowledging an alert preserves unapplied monitoring controls`,async({page})=>{
+  await page.goto(route(family,'operations'));
+  await expect(page.locator('[data-metric=warnings]')).toHaveText('1');
+  const threshold=page.getByLabel('Warning threshold (ms)',{exact:true});
+  await threshold.fill('50');
+  await page.getByRole('button',{name:'Acknowledge AL-001',exact:true}).click();
+  await expect(page.getByRole('button',{name:'Undo acknowledgement AL-001',exact:true})).toBeVisible();
+  await expect(page.locator('[data-metric=warnings]')).toHaveText('1');
+  await expect(threshold).toHaveValue('50');
+  expect(new URL(page.url()).searchParams.get('threshold')).toBe('250');
+  await page.getByRole('button',{name:'Apply monitoring controls'}).click();
+  await expect(page.locator('[data-metric=warnings]')).toHaveText('5');
+  await threshold.fill('1');
+  await page.getByRole('button',{name:'Undo acknowledgement AL-001',exact:true}).click();
+  await expect(page.getByRole('button',{name:'Acknowledge AL-001',exact:true})).toBeVisible();
+  await expect(threshold).toHaveValue('1');
+  await expect(page.locator('[data-metric=warnings]')).toHaveText('5');
+  await page.getByRole('button',{name:'Apply monitoring controls'}).click();
+  await expect(page.locator('#operations-error')).toBeVisible();
+ });
  for(const width of [320,768,1100,1440])for(const view of ['analytics','administration','operations']){
   test(`${family}: ${view} at ${width}px`,async({page})=>{
    await page.setViewportSize({width,height:1000});await page.goto(route(family,view));await expect(page.locator('[data-dashboard]')).toHaveAttribute('data-ready','true');

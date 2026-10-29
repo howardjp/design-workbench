@@ -119,11 +119,15 @@ function operations(){
   form.elements.hideAcknowledged.checked=params.get('hideAcknowledged')==='true';
   let state;
   const buttonClass=root.querySelector('[data-reset-operations]').className;
-  const render=()=>{
-    const threshold=Number(form.elements.threshold.value),error=root.querySelector('#operations-error');
-    if(!Number.isInteger(threshold)||threshold<50||threshold>1000){error.hidden=false;error.textContent='Enter a whole-number warning threshold from 50 to 1000 ms. Previous valid results remain visible.';form.elements.threshold.setAttribute('aria-invalid','true');error.tabIndex=-1;error.focus();return;}
-    error.hidden=true;form.elements.threshold.removeAttribute('aria-invalid');
-    state={hours:Number(form.elements.hours.value),threshold,service:form.elements.service.value,severity:form.elements.severity.value,hideAcknowledged:form.elements.hideAcknowledged.checked};
+  const render=(useApplied=false)=>{
+    const error=root.querySelector('#operations-error');
+    if(!useApplied){
+      const threshold=Number(form.elements.threshold.value);
+      if(!Number.isInteger(threshold)||threshold<50||threshold>1000){error.hidden=false;error.textContent='Enter a whole-number warning threshold from 50 to 1000 ms. Previous valid results remain visible.';form.elements.threshold.setAttribute('aria-invalid','true');error.tabIndex=-1;error.focus();return;}
+      error.hidden=true;form.elements.threshold.removeAttribute('aria-invalid');
+      state={hours:Number(form.elements.hours.value),threshold,service:form.elements.service.value,severity:form.elements.severity.value,hideAcknowledged:form.elements.hideAcknowledged.checked};
+    }
+    const {threshold}=state;
     const view=operationsView(fixture,state,alerts);updateURL(state);
     metric(root,'warnings',String(view.warnings),`Latest service latency ≥ ${threshold} ms.`);
     metric(root,'latency',view.latency+' ms','Mean of latest samples in scope.');
@@ -142,7 +146,7 @@ function operations(){
     status.textContent=`${view.services.length} services · Last ${state.hours} hours · ${threshold} ms warning threshold · ${view.alerts.length} visible alerts.`;
   };
   form.addEventListener('submit',event=>{event.preventDefault();render();});
-  root.querySelector('#alert-table').addEventListener('click',event=>{const id=event.target.closest('[data-acknowledge]')?.dataset.acknowledge;if(!id)return;const target=alerts.find(alert=>alert.id===id);target.acknowledged=!target.acknowledged;localEvents.unshift({service_id:target.service_id,time:null,title:`${target.acknowledged?'Acknowledged':'Reopened'} ${id} locally.`});render();status.textContent=`${id} ${target.acknowledged?'acknowledged':'reopened'} locally. No live alert was changed.`;const replacement=root.querySelector(`[data-acknowledge="${id}"]`);if(replacement)replacement.focus();else form.elements.hideAcknowledged.focus();});
+  root.querySelector('#alert-table').addEventListener('click',event=>{const id=event.target.closest('[data-acknowledge]')?.dataset.acknowledge;if(!id)return;const target=alerts.find(alert=>alert.id===id);target.acknowledged=!target.acknowledged;localEvents.unshift({service_id:target.service_id,time:null,title:`${target.acknowledged?'Acknowledged':'Reopened'} ${id} locally.`});render(true);status.textContent=`${id} ${target.acknowledged?'acknowledged':'reopened'} locally. No live alert was changed.`;const replacement=root.querySelector(`[data-acknowledge="${id}"]`);if(replacement)replacement.focus();else form.elements.hideAcknowledged.focus();});
   root.querySelector('[data-reset-operations]').addEventListener('click',()=>{alerts=structuredClone(fixture.alerts);localEvents=[];form.reset();render();status.textContent='Operations preview reset to the original synthetic snapshot.';});
   render();
 }
