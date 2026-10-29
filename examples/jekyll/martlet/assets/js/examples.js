@@ -39,18 +39,15 @@
     render();
   });
 
-  const search = document.querySelector('.example-search');
-  if (search) {
-    const index = JSON.parse(document.getElementById('example-search-index').textContent);
+  document.querySelectorAll('[data-example-search]').forEach(container => {
+    const search = container.querySelector('.example-search');
+    const index = JSON.parse(container.querySelector('[data-search-index]').textContent);
     const input = search.querySelector('input');
-    const results = document.querySelector('[data-search-results]');
-    const status = document.querySelector('[data-search-status]');
-    const run = () => {
-      const query = input.value.trim().slice(0, 200);
+    const results = container.querySelector('[data-search-results]');
+    const status = container.querySelector('[data-search-status]');
+    const run = value => {
+      const query = value.trim().slice(0, 200);
       input.value = query;
-      const url = new URL(location.href);
-      query ? url.searchParams.set('q', query) : url.searchParams.delete('q');
-      history.replaceState(history.state, '', url);
       results.replaceChildren();
       if (!query) { status.textContent = 'Enter a word or phrase to search the collection.'; return; }
       const words = query.toLocaleLowerCase().split(/\s+/u);
@@ -71,10 +68,21 @@
         results.append(li);
       }
     };
-    input.value = new URL(location.href).searchParams.get('q') || '';
-    search.addEventListener('submit', event => { event.preventDefault(); run(); });
-    run();
-  }
+    const initial = (new URL(location.href).searchParams.get('q') || '').trim().slice(0, 200);
+    const initialUrl = new URL(location.href);
+    initial ? initialUrl.searchParams.set('q', initial) : initialUrl.searchParams.delete('q');
+    history.replaceState(history.state, '', initialUrl);
+    window.addEventListener('nightjar:search-query', event => run(event.detail));
+    window.addEventListener('popstate', () => run(new URL(location.href).searchParams.get('q') || ''));
+    search.addEventListener('submit', event => {
+      event.preventDefault();
+      const query = input.value.trim().slice(0, 200), url = new URL(location.href);
+      query ? url.searchParams.set('q', query) : url.searchParams.delete('q');
+      history.replaceState(history.state, '', url);
+      window.dispatchEvent(new CustomEvent('nightjar:search-query', {detail: query}));
+    });
+    run(initial);
+  });
 
   document.querySelectorAll('[data-gallery]').forEach(gallery => {
     const dialog = gallery.querySelector('.example-lightbox');

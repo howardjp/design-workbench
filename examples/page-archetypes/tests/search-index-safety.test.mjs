@@ -32,7 +32,7 @@ test('Jekyll search serializes authored text safely inside the JSON script', {ti
     const result = await page.evaluate(() => ({
       injected: window.__nightjarInjected === true,
       scripts: [...document.scripts].filter(script => script.textContent.includes('__nightjarInjected')).length,
-      first: JSON.parse(document.getElementById('example-search-index').textContent)[0]
+      first: JSON.parse(document.querySelector('[data-search-index]').textContent)[0]
     }));
     assert.equal(result.injected, false, 'Fixture text must not escape the inert JSON element');
     assert.equal(result.scripts, 1, 'Fixture text must stay inside one JSON element');

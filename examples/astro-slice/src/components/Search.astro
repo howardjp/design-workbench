@@ -1,32 +1,32 @@
 ---
 import catalog from '../../../page-archetypes/content/catalog.json';
 import {supported} from '../supported.mjs';
-const {base, Button} = Astro.props;
+const {base, Button, id, title} = Astro.props;
+const inputId = `search:${id}:query`;
 const prefix = base.replace(/\/$/, '');
 const index = catalog.pages.map(entry => ({title:entry.title, summary:entry.summary, category:entry.category, url:`${prefix}/examples/${entry.id}/`, available:supported.includes(entry.id)}));
 const json = JSON.stringify(index).replace(/</g, '\\u003c');
 ---
-<form data-search action={`${prefix}/examples/search/`} role="search">
-  <label for="example-query">Search the example record</label>
-  <div><input type="search" id="example-query" name="q" maxlength="200" placeholder="Try shoreline, workshop, or protocol" /> <Button type="submit">Search</Button></div>
+<div data-example-search>
+<form data-search action={`${prefix}/examples/search/`} role="search" aria-label={title}>
+  <label for={inputId}>Search the example record</label>
+  <div><input type="search" id={inputId} name="q" maxlength="200" placeholder="Try shoreline, workshop, or protocol" /> <Button type="submit">Search</Button></div>
 </form>
 <p role="status" data-search-status>Enter a word or phrase to search the collection.</p>
 <ul data-search-results></ul>
 <noscript><p>Search requires JavaScript. <a href={`${prefix}/examples/`}>Browse the complete example index</a>.</p></noscript>
-<script type="application/json" id="example-search-index" is:inline set:html={json}></script>
+<script type="application/json" data-search-index is:inline set:html={json}></script>
+</div>
 <script>
-  const form = document.querySelector('[data-search]');
-  if (form) {
-    const index = JSON.parse(document.getElementById('example-search-index').textContent);
+  document.querySelectorAll('[data-example-search]').forEach(container => {
+    const form = container.querySelector('[data-search]');
+    const index = JSON.parse(container.querySelector('[data-search-index]').textContent);
     const input = form.querySelector('input');
-    const results = document.querySelector('[data-search-results]');
-    const status = document.querySelector('[data-search-status]');
-    const run = () => {
-      const query = input.value.trim().slice(0, 200);
+    const results = container.querySelector('[data-search-results]');
+    const status = container.querySelector('[data-search-status]');
+    const run = value => {
+      const query = value.trim().slice(0, 200);
       input.value = query;
-      const url = new URL(location.href);
-      query ? url.searchParams.set('q', query) : url.searchParams.delete('q');
-      history.replaceState(history.state, '', url);
       results.replaceChildren();
       if (!query) { status.textContent = 'Enter a word or phrase to search the collection.'; return; }
       const words = query.toLocaleLowerCase().split(/\s+/u);
@@ -47,8 +47,19 @@ const json = JSON.stringify(index).replace(/</g, '\\u003c');
         results.append(item);
       }
     };
-    input.value = new URL(location.href).searchParams.get('q') || '';
-    form.addEventListener('submit', event => { event.preventDefault(); run(); });
-    run();
-  }
+    const initial = (new URL(location.href).searchParams.get('q') || '').trim().slice(0, 200);
+    const initialUrl = new URL(location.href);
+    initial ? initialUrl.searchParams.set('q', initial) : initialUrl.searchParams.delete('q');
+    history.replaceState(history.state, '', initialUrl);
+    window.addEventListener('nightjar:search-query', event => run(event.detail));
+    window.addEventListener('popstate', () => run(new URL(location.href).searchParams.get('q') || ''));
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const query = input.value.trim().slice(0, 200), url = new URL(location.href);
+      query ? url.searchParams.set('q', query) : url.searchParams.delete('q');
+      history.replaceState(history.state, '', url);
+      window.dispatchEvent(new CustomEvent('nightjar:search-query', {detail: query}));
+    });
+    run(initial);
+  });
 </script>

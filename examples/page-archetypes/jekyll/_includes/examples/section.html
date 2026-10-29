@@ -13,7 +13,7 @@
       {% when 'faq' %}{% include examples/faq.html items=block.items %}
       {% when 'plans' %}{% include examples/plans.html items=block.items %}
       {% when 'form' %}{% include examples/form.html kind=block.form id=block.id %}
-      {% when 'search' %}{% include examples/search.html %}
+      {% when 'search' %}{% include examples/search.html id=block.id title=block.title %}
       {% when 'gallery' %}{% include examples/gallery.html items=block.items %}
       {% when 'workspace' %}{% include examples/workspace.html items=block.items id=block.id title=block.title %}
       {% when 'chat' %}{% include examples/chat.html %}

@@ -34,7 +34,7 @@ function SectionView({section,pageId,special,bodies,entries}:{section:Section;pa
   {section.kind==='stats'&&<DefinitionList items={section.items!.map((item,i)=>({id:`${section.id}-${i}`,term:item.label!,description:item.value!}))}/>}
   {section.kind==='plans'&&<div className="recipe-cards">{section.items!.map(item=><article key={item.title}><h3>{item.title}</h3><p>{item.price}</p><p>{item.summary}</p><ul>{item.features!.map(feature=><li key={feature}>{feature}</li>)}</ul><a href={href(item.action!.url)}>{item.action!.label}</a></article>)}</div>}
   {section.kind==='form'&&<DemoForm kind={section.form!}/>}
-  {section.kind==='search'&&<Search entries={entries}/>}
+  {section.kind==='search'&&<Search entries={entries} title={section.title}/>}
   {section.kind&&specialKinds.includes(section.kind) && (special ? special(section) : (()=>{throw Error(`Missing interactive renderer for ${section.kind}`)})())}
   {section.kind==='table'&&<DataTable caption={section.title}><thead><tr>{section.headers!.map(header=><th key={header} scope="col">{header}</th>)}</tr></thead><tbody>{section.rows!.map((row,i)=><tr key={i}>{row.map((cell,j)=>j===0?<th key={j} scope="row">{cell}</th>:<td key={j}>{cell}</td>)}</tr>)}</tbody></DataTable>}
   {section.actions&&<ul className="recipe-actions">{section.actions.map(action=><li key={action.url}><a href={href(action.url)}>{action.label}</a></li>)}</ul>}

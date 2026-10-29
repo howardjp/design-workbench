@@ -44,6 +44,8 @@ Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/form-co
 
 Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/workspace-composition.mjs` to build disposable catalog pages with two workspaces across all three frameworks and both families at root and subpaths. It checks unique IDs, independent filter/review/reset state, keyboard focus recovery, automated axe and no-JavaScript fallback.
 
+Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/search-composition.mjs` to check two search sections in disposable catalog builds across all three frameworks, both families and root/subpaths. Both controls share the page query, synchronize on submission and history navigation, and retain keyboard and no-JavaScript access.
+
 Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/dense-table-reflow.mjs` against the same builds to check 100-row, 19-column tables with long words at 320px. The check verifies useful column widths and a named, keyboard-scrollable region; users must scroll horizontally to inspect wide tables.
 
 Simulation controls derive IDs from the unique section ID using reserved `_simulation-` and `_scene-` prefixes. Existing links to the former fixed `#simulation-mode`, `#ventilation`, or `#scene-view` control IDs must be updated.

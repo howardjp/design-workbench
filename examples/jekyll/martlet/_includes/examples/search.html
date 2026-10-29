@@ -1,8 +1,10 @@
-<form class="example-search" action="{{ '/examples/search/' | relative_url }}" role="search">
-  <label for="example-query">Search the example record</label><div class="example-search__controls"><input type="search" id="example-query" name="q" maxlength="200" placeholder="Try shoreline, workshop, or protocol"><button class="{% include examples/button-classes.html %}" type="submit">Search</button></div>
+<div data-example-search>
+<form class="example-search" action="{{ '/examples/search/' | relative_url }}" role="search" aria-label="{{ include.title | escape }}">
+  <label for="search:{{ include.id }}:query">Search the example record</label><div class="example-search__controls"><input type="search" id="search:{{ include.id }}:query" name="q" maxlength="200" placeholder="Try shoreline, workshop, or protocol"><button class="{% include examples/button-classes.html %}" type="submit">Search</button></div>
 </form>
 <p role="status" data-search-status>Enter a word or phrase to search the collection.</p>
 <ul class="example-list" data-search-results></ul>
 <noscript><p>Search requires JavaScript. <a href="{{ '/examples/' | relative_url }}">Browse the complete example index</a>.</p></noscript>
 {% capture search_index %}[{% for entry in site.data.examples.pages %}{"title":{{ entry.title | jsonify }},"summary":{{ entry.summary | jsonify }},"category":{{ entry.category | jsonify }},"url":{{ '/examples/' | append: entry.id | append: '/' | relative_url | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}]{% endcapture %}
-<script type="application/json" id="example-search-index">{{ search_index | replace: '<', '\u003c' }}</script>
+<script type="application/json" data-search-index>{{ search_index | replace: '<', '\u003c' }}</script>
+</div>
