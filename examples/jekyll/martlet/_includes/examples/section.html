@@ -2,7 +2,7 @@
 <section class="example-section example-section--{{ block.kind | default: 'prose' }}" aria-labelledby="{{ block.id | escape }}">
   <div class="example-section__label"><h2 id="{{ block.id | escape }}">{{ block.title | escape }}</h2></div>
   <div class="example-section__body">
-    {% if block.body %}<div class="example-prose">{{ block.body | markdownify | escape | nightjar_sanitize }}</div>{% endif %}
+    {% if block.body %}<div class="example-prose">{{ block.body | markdownify | escape | nightjar_sanitize: site.baseurl }}</div>{% endif %}
     {% case block.kind %}
       {% when 'cards' %}{% include examples/cards.html items=block.items %}
       {% when 'listing' %}{% include examples/listing.html items=block.items id=block.id %}

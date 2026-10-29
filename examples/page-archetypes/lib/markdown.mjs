@@ -7,6 +7,12 @@ import sanitizeHtml from 'sanitize-html';
 export function renderMarkdown(source, base = '/', {fixtureMarkup = false, docId = 'document'} = {}) {
   if (typeof docId !== 'string' || !/^[a-z0-9-]+$/.test(docId)) throw new Error('Invalid Markdown document ID');
   const markdown = new MarkdownIt({html: fixtureMarkup}).use(footnote);
+  const prefix = base.replace(/\/$/, '');
+  const rebase = value => {
+    if (!prefix || !value?.startsWith('/') || value.startsWith('//')) return value;
+    if (value === prefix || ['/', '?', '#'].some(separator => value.startsWith(prefix + separator))) return value;
+    return prefix + value;
+  };
   for (const rule of ['fence', 'code_block']) {
     const render = markdown.renderer.rules[rule];
     markdown.renderer.rules[rule] = (...args) => render(...args).replace('<pre', '<pre tabindex="0" aria-label="Code example"');
@@ -14,13 +20,13 @@ export function renderMarkdown(source, base = '/', {fixtureMarkup = false, docId
   const original = markdown.renderer.rules.link_open ?? ((tokens, index, options, _env, renderer) => renderer.renderToken(tokens, index, options));
   markdown.renderer.rules.link_open = (tokens, index, options, env, renderer) => {
     const href = tokens[index].attrGet('href');
-    if (href?.startsWith('/') && !href.startsWith('//')) tokens[index].attrSet('href', base.replace(/\/$/, '') + href);
+    if (href) tokens[index].attrSet('href', rebase(href));
     return original(tokens, index, options, env, renderer);
   };
   const image = markdown.renderer.rules.image;
   markdown.renderer.rules.image = (tokens, index, options, env, renderer) => {
     const src = tokens[index].attrGet('src');
-    if (src?.startsWith('/') && !src.startsWith('//')) tokens[index].attrSet('src', base.replace(/\/$/, '') + src);
+    if (src) tokens[index].attrSet('src', rebase(src));
     return image(tokens, index, options, env, renderer);
   };
   const rendered = markdown.render(source, {docId});

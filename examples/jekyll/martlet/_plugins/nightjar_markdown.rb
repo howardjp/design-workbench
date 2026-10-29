@@ -18,8 +18,18 @@ module NightjarMarkdown
     remove_contents: %w[script style iframe object embed]
   }.freeze
 
-  def nightjar_sanitize(escaped_html)
-    Sanitize.fragment(CGI.unescapeHTML(escaped_html.to_s), CONFIG)
+  def nightjar_sanitize(escaped_html, baseurl = '')
+    prefix = baseurl.to_s.sub(%r{/\z}, '')
+    rebase = lambda do |environment|
+      node = environment[:node]
+      next unless node.element?
+      attribute = node.name == 'a' ? 'href' : node.name == 'img' ? 'src' : nil
+      value = attribute && node[attribute]
+      next unless value && value.start_with?('/') && !value.start_with?('//') && !prefix.empty?
+      next if value == prefix || value.start_with?("#{prefix}/", "#{prefix}?", "#{prefix}#")
+      node[attribute] = prefix + value
+    end
+    Sanitize.fragment(CGI.unescapeHTML(escaped_html.to_s), CONFIG.merge(transformers: rebase))
   end
 end
 Liquid::Template.register_filter(NightjarMarkdown)
