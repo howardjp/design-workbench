@@ -209,3 +209,33 @@ test('krigsvold: dashboard buttons retain contrast through appearance changes an
   }
  }
 });
+
+test('martlet: scrolling header stays opaque over content in light and dark modes',async({page})=>{
+ for(const mode of ['light','dark']){
+  await page.setViewportSize({width:320,height:900});
+  await page.goto('/martlet/examples/sign-in/');
+  if(mode==='dark'){
+   const colorTransitions=await page.evaluate(async()=>{
+    (document.querySelector('[data-appearance-toggle]') as HTMLButtonElement).click();
+    await new Promise(requestAnimationFrame);
+    return [...document.querySelectorAll<HTMLElement>('.site-header, .site-header *')].flatMap(node=>node.getAnimations()).filter(animation=>animation instanceof CSSTransition && ['color','background-color'].includes(animation.transitionProperty)).map(animation=>(animation as CSSTransition).transitionProperty);
+   });
+   expect(colorTransitions,'header color roles switch together').toEqual([]);
+  }
+  await expect(page.locator('html')).toHaveAttribute('data-appearance',mode);
+  const samples=await page.evaluate(async()=>{
+   const header=document.querySelector('.site-header') as HTMLElement;
+   window.scrollTo({top:1000,behavior:'instant'});await new Promise(requestAnimationFrame);
+   const animations=header.getAnimations();animations.forEach(animation=>animation.pause());
+   const values=[];for(const ms of [0,50,100,150,200,300,400,500]){animations.forEach(animation=>{animation.currentTime=ms});values.push({ms,color:getComputedStyle(header).backgroundColor,scrolled:header.classList.contains('is-scrolled')})}
+   animations.forEach(animation=>animation.finish());return values;
+  });
+  for(const sample of samples){
+   expect(sample.scrolled,`${mode} ${sample.ms}ms scrolled`).toBe(true);
+   const alpha=sample.color.startsWith('rgba')?Number(sample.color.match(/[\d.]+/g)?.[3]):1;
+   expect(alpha,`${mode} ${sample.ms}ms background opacity`).toBeGreaterThanOrEqual(.99);
+  }
+  const axe=await new AxeBuilder({page}).include('.site-header').withRules(['color-contrast']).analyze();
+  expect(axe.violations,`${mode} scrolled header`).toEqual([]);
+ }
+});

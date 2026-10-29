@@ -1,4 +1,8 @@
 /* Martlet compositions. Values resolve to the existing shell's semantic roles. */
+/* A fixed white-on-navy header can move over light content as scrolling starts.
+   Switch its background immediately rather than showing low-contrast blends. */
+body.martlet .site-header.is-ready { transition-property: border-color, box-shadow; }
+body.martlet .site-header.is-ready :is(.brand,nav a,.menu-button,.appearance-toggle) { transition-property: box-shadow, transform; }
 .example-root {
   --ex-bg: var(--martlet-bg);
   --ex-text: var(--martlet-text);
