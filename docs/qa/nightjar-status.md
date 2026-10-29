@@ -454,3 +454,5 @@ A further disposable SSR/hydrated Chromium consumer found no defect in two indep
 ### Directory duplicate email normalization
 
 Commit `ab63645` trims and compares both stored and draft email addresses case-insensitively when checking duplicates, while exempting the current record during edits. A schema-valid stored email with leading whitespace previously bypassed the check; model and browser regressions failed before the change. Independent tests passed both languages × three frameworks × root/subpaths for duplicate rejection, error feedback, correction and no-JavaScript data; `test:examples` and workflow YAML parsing passed. The bounded operations/directory CI group adds this 12-build fixture. An integrated-branch rerun is in progress.
+
+The integrated-branch `administration-email.mjs` and `test:examples` rerun passed after `ab63645` across both languages × three frameworks × root/subpaths.
