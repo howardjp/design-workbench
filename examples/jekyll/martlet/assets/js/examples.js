@@ -143,9 +143,13 @@
     });
     filter.disabled = false;
     reset.disabled = false;
+    const matches = (record, query) => {
+      const fields = [record.querySelector('[data-select-record]').textContent, record.querySelector('.example-tag').textContent, record.querySelector('[data-record-summary]').textContent, record.dataset.recordId, record.dataset.recordOwner];
+      return fields.join(' ').toLocaleLowerCase().includes(query) || record.textContent.toLocaleLowerCase().includes(query);
+    };
     const applyFilter = () => {
       const query = filter.value.trim().toLocaleLowerCase();
-      records.forEach(record => { record.hidden = !record.textContent.toLocaleLowerCase().includes(query); });
+      records.forEach(record => { record.hidden = !matches(record, query); });
       count();
       if (active?.hidden) {
         active.querySelector('button').setAttribute('aria-pressed', 'false');

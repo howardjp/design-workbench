@@ -8,12 +8,12 @@ export function Workspace({section}:{section:WorkspaceSection}) {
  const filterRef=useRef<HTMLInputElement>(null);
  const [enhanced,setEnhanced]=useState(false),[query,setQuery]=useState(''),[active,setActive]=useState<string|null>(null),[reviewed,setReviewed]=useState<Set<string>>(new Set()),[message,setMessage]=useState('Local demonstration. No changes are saved.'),[filteredOut,setFilteredOut]=useState(false);
  useEffect(()=>setEnhanced(true),[]);
- const text=(item:WorkspaceItem)=>`${item.title} ${reviewed.has(item.id)?'Reviewed locally':item.status} ${item.summary} ${item.id} ${item.owner}`;
- const visible=section.items.filter(item=>text(item).toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()));
+ const matches=(item:WorkspaceItem,status:string,value:string)=>{const needle=value.trim().toLocaleLowerCase();return [`${item.title} ${status} ${item.summary} ${item.id} ${item.owner}`,`${item.id} · ${item.owner}`].some(text=>text.toLocaleLowerCase().includes(needle));};
+ const visible=section.items.filter(item=>matches(item,reviewed.has(item.id)?'Reviewed locally':item.status,query));
  const selected=section.items.find(item=>item.id===active);
- const changeQuery=(value:string)=>{setQuery(value);const item=section.items.find(entry=>entry.id===active);if(item&&!text(item).toLocaleLowerCase().includes(value.trim().toLocaleLowerCase())){setActive(null);setFilteredOut(true);}};
+ const changeQuery=(value:string)=>{setQuery(value);const item=section.items.find(entry=>entry.id===active);if(item&&!matches(item,reviewed.has(item.id)?'Reviewed locally':item.status,value)){setActive(null);setFilteredOut(true);}};
  const select=(item:WorkspaceItem)=>{setActive(item.id);setFilteredOut(false);setMessage(`Selected ${item.title}. Changes affect this preview only.`);};
- const review=()=>{if(!active)return;const item=section.items.find(entry=>entry.id===active);if(!item)return;setReviewed(old=>new Set(old).add(active));const textAfterReview=`${item.title} Reviewed locally ${item.summary} ${item.id} ${item.owner}`;if(!textAfterReview.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())){setActive(null);setFilteredOut(true);setMessage('Marked reviewed in page memory. The record no longer matches this filter. No server record was changed.');filterRef.current?.focus();}else setMessage('Marked reviewed in page memory. No server record was changed.');};
+ const review=()=>{if(!active)return;const item=section.items.find(entry=>entry.id===active);if(!item)return;setReviewed(old=>new Set(old).add(active));if(!matches(item,'Reviewed locally',query)){setActive(null);setFilteredOut(true);setMessage('Marked reviewed in page memory. The record no longer matches this filter. No server record was changed.');filterRef.current?.focus();}else setMessage('Marked reviewed in page memory. No server record was changed.');};
  const reset=()=>{setReviewed(new Set());setActive(null);setFilteredOut(false);setQuery('');setMessage('Demonstration reset. No changes were saved.');};
  return <><div className="react-workspace" data-workspace={section.id}>
   <div><label htmlFor={filterId}>Filter records</label><input ref={filterRef} id={filterId} type="search" value={query} onChange={event=>changeQuery(event.target.value)} disabled={!enhanced}/><p role="status">{enhanced?`${visible.length} of ${section.items.length} records shown.`:''}</p>

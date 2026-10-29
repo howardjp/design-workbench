@@ -4,9 +4,9 @@ const filterId = `workspace:${section.id}:filter`;
 ---
 <div class="workspace" data-workspace>
   <div><label for={filterId}>Filter records</label><input id={filterId} type="search" data-record-filter disabled /><p data-record-count role="status"></p>
-    <ul class="workspace-records">{section.items.map(item => <li data-record>
+    <ul class="workspace-records">{section.items.map(item => <li data-record data-record-id={item.id} data-record-owner={item.owner}>
       <Button type="button" data-select-record aria-pressed="false" disabled>{item.title}</Button>
-      <span data-record-status>{item.status}</span><p>{item.summary}</p><p>{item.id} · {item.owner}</p>
+      <span data-record-status>{item.status}</span><p data-record-summary>{item.summary}</p><p>{item.id} · {item.owner}</p>
     </li>)}</ul>
   </div>
   <section aria-label={`Selected record — ${section.title}`}><h3>Selected record</h3><div data-active-record><p>Select a record to inspect it.</p></div>
@@ -48,9 +48,13 @@ const filterId = `workspace:${section.id}:filter`;
       button.addEventListener('click', () => select(record));
       button.disabled = false;
     });
+    const matches = (record, query) => {
+      const fields = [record.querySelector('[data-select-record]').textContent, record.querySelector('[data-record-status]').textContent, record.querySelector('[data-record-summary]').textContent, record.dataset.recordId, record.dataset.recordOwner];
+      return fields.join(' ').toLocaleLowerCase().includes(query) || record.textContent.toLocaleLowerCase().includes(query);
+    };
     const applyFilter = () => {
       const query = filter.value.trim().toLocaleLowerCase();
-      records.forEach(record => { record.hidden = !record.textContent.toLocaleLowerCase().includes(query); });
+      records.forEach(record => { record.hidden = !matches(record, query); });
       count();
       if (active?.hidden) {
         active.querySelector('[data-select-record]').setAttribute('aria-pressed', 'false');
