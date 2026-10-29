@@ -9,3 +9,14 @@
   .krigsvold-source-profile .recipe[data-example] > section > :not(h2) { grid-column:2; }
 }
 .krigsvold-source-profile .recipe[data-example] .recipe-list { grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr)); }
+
+/* Preserve readable paper output when dark screen appearance is selected. */
+@media print {
+ html[data-krigsvold="dark"] {
+  color-scheme:light;
+  --krigsvold-bg:#fbfaf7; --krigsvold-panel:#eef8fa; --krigsvold-text:#17202a; --krigsvold-muted:#56616c;
+  --krigsvold-text-strong:#061325; --krigsvold-text-subtle:#56616c; --krigsvold-link:#286a9d;
+  --krigsvold-accent:#286a9d; --krigsvold-line:#d9dee2; --krigsvold-green:#35644e;
+  --krigsvold-danger:#9a3542; --krigsvold-warning:#79571f; --krigsvold-chart-1:#286a9d; --krigsvold-chart-2:#35644e;
+  --krigsvold-source-ink:#17202a; --krigsvold-source-heading:#061325; --krigsvold-source-support:#eef8fa;
+ }}
