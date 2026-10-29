@@ -152,6 +152,7 @@ jobs:
           case "$NIGHTJAR_FIXTURE_SUITE" in
             analytics-coverage)
               node examples/page-archetypes/tests/analytics-empty.mjs
+              node examples/page-archetypes/tests/analytics-duplicates.mjs
               node examples/page-archetypes/tests/analytics-sentinel.mjs
               node examples/page-archetypes/tests/dashboard-text.mjs
               node examples/page-archetypes/tests/analytics-order-static.mjs

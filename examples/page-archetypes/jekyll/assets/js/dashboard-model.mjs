@@ -60,7 +60,8 @@ export function analyticsView(fixture, {start, end, category='All', categoryId=/
   const error=rangeError(start,end,min,max);
   if(error) return {error};
   const selectedCategory=categoryId!==null?categoryId:(category==='All'?null:category);
-  const categoryOrder=new Map(fixture.categories.map((name,index)=>[name,index]));
+  const categoryNames=[...new Set(fixture.categories)];
+  const categoryOrder=new Map(categoryNames.map((name,index)=>[name,index]));
   const rows=fixture.analytics.filter(row=>row.date>=start&&row.date<=end&&(selectedCategory===null||row.category===selectedCategory)).sort((a,b)=>a.date.localeCompare(b.date)||(categoryOrder.get(a.category)??Infinity)-(categoryOrder.get(b.category)??Infinity)||a.category.localeCompare(b.category));
   const length=Math.round((Date.parse(end)-Date.parse(start))/dayMillis)+1;
   const previousEnd=new Date(Date.parse(start)-dayMillis).toISOString().slice(0,10);
@@ -68,12 +69,12 @@ export function analyticsView(fixture, {start, end, category='All', categoryId=/
   const previousRows=fixture.analytics.filter(row=>row.date>=previousStart&&row.date<=previousEnd&&(selectedCategory===null||row.category===selectedCategory));
   try {
     const days=[...new Set(rows.map(row=>row.date))].map(date=>({date,...aggregate(rows.filter(row=>row.date===date))}));
-    const categories=fixture.categories.map(name=>({name,...aggregate(rows.filter(row=>row.category===name))}));
-    const expected=selectedCategory===null?[...new Set(fixture.categories)]:[selectedCategory];
+    const categories=categoryNames.map(name=>({name,...aggregate(rows.filter(row=>row.category===name))}));
+    const expected=selectedCategory===null?categoryNames:[selectedCategory];
     const missingObservations=missingAnalyticsObservations(rows,start,length,expected);
     const precedingComplete=previousStart>=min && missingAnalyticsObservations(previousRows,previousStart,length,expected)===0;
     const previous=!missingObservations&&precedingComplete ? aggregate(previousRows) : null;
-    const previousCategories=previous ? fixture.categories.map(name=>({name,...aggregate(previousRows.filter(row=>row.category===name))})) : null;
+    const previousCategories=previous ? categoryNames.map(name=>({name,...aggregate(previousRows.filter(row=>row.category===name))})) : null;
     return {error:'', rows, days, categories, totals:aggregate(rows), missingObservations, previous, previousCategories};
   } catch(error) {
     if(error instanceof RangeError) return {error:error.message,dataError:true};

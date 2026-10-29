@@ -195,3 +195,8 @@ test('literal All category is distinguishable from the all-categories filter',()
  assert.equal(analyticsView(copy,options).rows.length,21);const single=analyticsView(copy,{...options,categoryId:'All'});assert.equal(single.rows.length,0);assert.equal(single.missingObservations,7);
  assert.equal(comparisonSearch('analytics','?category=All&categoryId=All&token=private'),'category=All&categoryId=All');
 });
+
+test('repeated category declarations are deduplicated without dropping observations',()=>{
+ const copy=structuredClone(fixture);copy.categories.push('Research');const row=copy.analytics.find(item=>item.date==='2026-10-28'&&item.category==='Research');copy.analytics.push({...row,sessions:row.sessions+1});
+ const view=analyticsView(copy,{start:'2026-10-22',end:'2026-10-28',category:'Research'});assert.equal(view.rows.length,8);assert.equal(view.categories.filter(item=>item.name==='Research').length,1);assert.equal(view.totals.sessions,view.rows.reduce((sum,item)=>sum+item.sessions,0));assert.equal(view.categories.find(item=>item.name==='Research').sessions,view.totals.sessions);
+});
