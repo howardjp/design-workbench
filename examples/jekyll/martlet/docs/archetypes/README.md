@@ -100,3 +100,5 @@ Presentation: home, about, announcement. Publishing: article, archive, category,
 The application specimens are intentionally local. Identity, messaging delivery, payments, bookings, device access, and immersive rendering require service adapters. The integration guide explains each boundary in both demos. No real organisation, vacancy, event, measurement, transaction, or scientific finding is represented by the fixture content.
 
 The collection now includes three paired dashboard applications and their reusable capability reference. See [dashboard contracts](DASHBOARDS.md).
+
+Structured catalog links preserve query parameters through HTML escaping. Listing and page dates use calendar-valid `YYYY-MM-DD` values with years 0001–9999; other strings are displayed as inert “Invalid date” text. `node examples/page-archetypes/tests/catalog-structured-safety.mjs url` and `date` exercise schema-valid structured text and link edge cases across both families, all three frameworks and root/subpath builds.

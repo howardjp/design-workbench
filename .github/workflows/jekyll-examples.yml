@@ -26,7 +26,7 @@ jobs:
           git diff --exit-code -- examples/jekyll
           python3 examples/page-archetypes/scripts/update-source-manifest.py --check
           node examples/page-archetypes/scripts/verify.mjs
-          node --test examples/page-archetypes/tests/dashboard-model.test.mjs
+          node --test examples/page-archetypes/tests/dashboard-model.test.mjs examples/page-archetypes/tests/catalog-date.test.mjs
       - name: Install locked Jekyll dependencies
         run: |
           cd examples/jekyll/martlet && bundle install
@@ -160,6 +160,8 @@ jobs:
           case "$NIGHTJAR_FIXTURE_SUITE" in
             analytics-coverage)
               node examples/page-archetypes/tests/analytics-empty.mjs
+              node examples/page-archetypes/tests/catalog-structured-safety.mjs url
+              node examples/page-archetypes/tests/catalog-structured-safety.mjs date
               node examples/page-archetypes/tests/analytics-duplicates.mjs
               node examples/page-archetypes/tests/analytics-calendar.mjs
               node examples/page-archetypes/tests/analytics-calendar.mjs --month

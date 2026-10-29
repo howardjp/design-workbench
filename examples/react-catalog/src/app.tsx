@@ -7,6 +7,7 @@ import {exampleImage} from './assets';
 import {DemoForm,Search} from './interactive';
 import './style.css';
 import {SourceShell} from './shell/SourceShell';
+import {formatCatalogDate} from '../../page-archetypes/lib/catalog-date.mjs';
 
 type Item={title:string;summary:string;url:string;date?:string;tag?:string;question?:string;answer?:string;label?:string;value?:string;price?:string;features?:string[];action?:{label:string;url:string}};
 type Section={id:string;title:string;kind?:string;body?:string;items?:Item[];facts?:{label:string;value:string}[];actions?:{label:string;url:string}[];headers?:string[];rows?:string[][];image?:string;alt?:string;caption?:string;form?:string};
@@ -19,7 +20,7 @@ function Listing({items,title}:{items:Item[];title:string}) {
  const pageCount=Math.ceil(items.length/3);
  useEffect(()=>{if(!pendingFocus.current)return;pendingFocus.current=false;const buttons=nav.current?.querySelectorAll('button');if(page===1)buttons?.[1]?.focus();else if(page===pageCount)buttons?.[0]?.focus();},[page,pageCount]);
  return <><ul className="recipe-listing">{items.map((item,i)=><li key={item.url} hidden={enhanced&&pageCount>1&&(i<3*(page-1)||i>=3*page)}>
-  {(item.date||item.tag)&&<p className="recipe-meta">{item.date&&<time dateTime={item.date}>{new Intl.DateTimeFormat('en-US',{year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(`${item.date}T00:00:00Z`))}</time>}{item.date&&item.tag?' · ':''}{item.tag}</p>}
+  {(item.date||item.tag)&&<p className="recipe-meta">{item.date&&(formatCatalogDate(item.date)?<time dateTime={item.date}>{formatCatalogDate(item.date)}</time>:<span>Invalid date: {item.date}</span>)}{item.date&&item.tag?' · ':''}{item.tag}</p>}
   <h3><a href={href(item.url)}>{item.title}</a></h3><p>{item.summary}</p>
  </li>)}</ul>{enhanced&&pageCount>1&&<Pagination ref={nav} page={page} pageCount={pageCount} onPageChange={next=>{pendingFocus.current=true;setPage(next);}} label={`${title} pages`}/>}</>;
 }
@@ -45,7 +46,7 @@ export function App({data,special}:{data:CatalogPageData;special?:(section:unkno
  if(id==='index') return <SourceShell current="index" title="All page examples"><Article title="All page examples" summary="Browse the shared Northlight collection."><ul>{entries.map(entry=><li key={entry.id}>{entry.available?<a href={href(`/examples/${entry.id}/`)}>{entry.title}</a>:<>{entry.title} (not yet available in this React preview)</>}</li>)}</ul></Article></SourceShell>;
  if(!page) throw Error(`Unported catalog route: ${id}`);
  return <SourceShell current={page.id} title={page.title}>
-  <Article data-composition={page.composition} title={page.title} eyebrow={page.category} summary={page.summary} {...('date' in page && page.date ? {metadata:<><time dateTime={page.date}>{new Intl.DateTimeFormat('en-US',{year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(`${page.date}T00:00:00Z`))}</time>{'author' in page && page.author && <> · {page.author}</>}</>}: {})}>
+  <Article data-composition={page.composition} title={page.title} eyebrow={page.category} summary={page.summary} {...('date' in page && page.date ? {metadata:<>{formatCatalogDate(page.date)?<time dateTime={page.date}>{formatCatalogDate(page.date)}</time>:<span>Invalid date: {page.date}</span>}{'author' in page && page.author && <> · {page.author}</>}</>}: {})}>
    <div data-example={page.id} data-semantic-class={page.semantic_class}>
    {'author' in page && page.author && <nav aria-label="Article context"><a href={href('/examples/person/')}>About {page.author}</a> · <a href={href('/examples/archive/')}>All writing</a></nav>}
    {'tags' in page && page.tags && <ul aria-label="Article subjects">{page.tags.map(tag=><li key={tag}><a href={href('/examples/categories/')}>{tag}</a></li>)}</ul>}

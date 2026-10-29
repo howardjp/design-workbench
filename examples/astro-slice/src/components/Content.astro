@@ -9,8 +9,9 @@ import Chat from './Chat.astro';
 import Simulations from './Simulations.astro';
 import ListingEnhancement from './ListingEnhancement.astro';
 import { exampleImage } from '../assets.mjs';
+import { formatCatalogDate } from '../../../page-archetypes/lib/catalog-date.mjs';
 const {page, href, base, Button} = Astro.props;
-const formatDate = date => new Intl.DateTimeFormat('en-US', {year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(`${date}T00:00:00Z`));
+
 ---
 <div class="recipe" data-example={page.id} data-semantic-class={page.semantic_class}>
   {page.semantic_class === 'article' && <>
@@ -25,7 +26,7 @@ const formatDate = date => new Intl.DateTimeFormat('en-US', {year:'numeric',mont
     {section.kind === 'cards' && <ul class="recipe-list">{section.items.map(item => <li><h3><a href={href(item.url)}>{item.title}</a></h3><p>{item.summary}</p></li>)}</ul>}
     {section.kind === 'listing' && <div data-listing>
       <ul class="recipe-entries">{section.items.map(item => <li data-list-item>
-      {(item.date || item.tag) && <p class="recipe-meta">{item.date && <time datetime={item.date}>{formatDate(item.date)}</time>}{item.date && item.tag && ' · '}{item.tag}</p>}
+      {(item.date || item.tag) && <p class="recipe-meta">{item.date && (formatCatalogDate(item.date) ? <time datetime={item.date}>{formatCatalogDate(item.date)}</time> : <span>Invalid date: {item.date}</span>)}{item.date && item.tag && ' · '}{item.tag}</p>}
       <h3><a href={href(item.url)}>{item.title}</a></h3><p>{item.summary}</p>
       </li>)}</ul>
       {section.items.length > 3 && <><nav data-pagination aria-label={`${section.title} pages`} hidden>
