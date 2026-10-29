@@ -442,3 +442,5 @@ The integrated-branch `operations-text.mjs` and `test:examples` rerun passed aft
 ### Analytics and administration hostile fixture text
 
 Commit `0b704ac` escapes Jekyll analytics option, category and date text. A schema-valid select-breaking category reproduced an injected element before the fix. The independent hostile fixture also exercises administration names, emails and quote/bracket IDs through edit and targeted bulk updates; Jekyll's static directory and hydrated exact-ID matching held without further source changes. All 12 family/framework/root-subpath builds passed with and without JavaScript; canonical reordered analytics, `test:examples` and workflow YAML parsing also passed. The bounded analytics-coverage CI group adds this 12-build test. An integrated-branch rerun is in progress.
+
+The integrated-branch `dashboard-text.mjs` and `test:examples` rerun passed after `0b704ac`, covering both languages × three frameworks × root/subpaths with and without JavaScript.
