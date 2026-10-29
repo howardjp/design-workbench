@@ -400,3 +400,5 @@ The combined-branch pagination consumer check passed both families after rebuild
 ### Manual tabs keyboard exit
 
 In both workspace React packages, moving keyboard focus to an unselected tab left the selected tab as the sole tab stop. Tab or Shift+Tab could therefore land on another tab instead of leaving the tablist. Tabs now rove the tab stop with focus while preserving manual selection, and restore the selected entry point after focus leaves. A Chromium consumer check passed both families for forward/backward exit, re-entry, disabled-tab skipping, Home/End, manual activation, vertical arrows, two independent instances and automated axe. `npm run check` passed 110 tests, and `npm run test:packages` installed and rendered both locally packed packages. The browser test is wired into the existing browser matrix; Firefox and WebKit have not been run locally. This changes workspace source, not published npm packages.
+
+The combined-branch Tabs consumer rerun passed for both families after rebuilding workspaces, using system Chromium; manual focus/selection and independent instances passed. Firefox/WebKit remain unverified locally.
