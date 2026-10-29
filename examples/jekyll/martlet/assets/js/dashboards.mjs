@@ -4,14 +4,14 @@ const root=document.querySelector('[data-dashboard]');
 const fixture=JSON.parse(document.getElementById('dashboard-data').textContent);
 const params=new URL(location.href).searchParams;
 const status=root.querySelector('[data-dashboard-status]');
-root.querySelectorAll('[data-dashboard-controls]').forEach(fieldset=>fieldset.disabled=false);
 const navToggle=root.querySelector('.dash-nav-toggle'),nav=root.querySelector('#dashboard-nav');
-navToggle.hidden=false;root.dataset.ready='true';
 navToggle.addEventListener('click',()=>navToggle.setAttribute('aria-expanded',String(navToggle.getAttribute('aria-expanded')!=='true')));
 root.querySelector('.dash-sidebar').addEventListener('keydown',event=>{if(event.key==='Escape'){navToggle.setAttribute('aria-expanded','false');navToggle.focus();}});
+navToggle.hidden=false;root.dataset.ready='true';
 function updateURL(values){const url=new URL(location.href);for(const[key,value]of Object.entries(values))value===null?url.searchParams.delete(key):url.searchParams.set(key,String(value));history.replaceState(null,'',url);const peer=root.querySelector('[data-compare]');const compare=new URL(peer.href);compare.search=comparisonSearch(root.dataset.dashboard,url.search);peer.href=compare.href;}
 const number=value=>new Intl.NumberFormat('en-US').format(value);
 function analytics(){
+  const fallback=root.querySelector('[data-dashboard-fallback]');if(!fallback)return;
   const form=root.querySelector('#analytics-filters');const start=form.elements.start,end=form.elements.end,category=form.elements.category,range=form.elements.range;const coverage={start:start.min,end:end.max};
   start.value=params.get('start')||start.value;end.value=params.get('end')||end.value;const requestedCategory=params.has('categoryId')?params.get('categoryId'):(params.get('category')==='All'?'':params.get('category')||'');if(fixture.categories.includes(requestedCategory))category.value=requestedCategory;
   if(params.has('start')||params.has('end'))range.value='custom';
@@ -36,9 +36,11 @@ function analytics(){
   form.addEventListener('submit',event=>{event.preventDefault();render();});
   root.querySelector('[data-export-analytics]').addEventListener('click',()=>{if(view)downloadCSV('northlight-analytics.csv',[['Date','Category','Sessions','Downloads','Completed tasks'],...view.rows.map(row=>[row.date,row.category,row.sessions,row.downloads,row.completions])]);});
   render();
+  form.querySelector('fieldset').disabled=false;fallback.hidden=true;
 }
 if(root.dataset.dashboard==='analytics' && root.querySelector('#analytics-filters'))analytics();
 function administration(){
+  const fallback=root.querySelector('[data-dashboard-fallback]');if(!fallback)return;
   let records=structuredClone(fixture.people),selected=new Set(),editing=null,pending=null,returnFocus=null;
   const filters=root.querySelector('#people-filters'),editor=root.querySelector('#person-editor');
   const state={query:params.get('q')||'',status:['Active','Invited','Suspended'].includes(params.get('status'))?params.get('status'):'All',sort:['name','email','role','status'].includes(params.get('sort'))?params.get('sort'):'name',direction:params.get('direction')==='desc'?'desc':'asc',page:Number(params.get('page'))||1,size:[5,10,20].includes(Number(params.get('size')))?Number(params.get('size')):5};
@@ -67,7 +69,7 @@ function administration(){
     if(mode==='loading'){message.setAttribute('role','status');message.textContent='Loading state preview: synthetic directory controls are temporarily unavailable.';}
     else if(mode==='error'){message.setAttribute('role','alert');message.append(element('p','Error state preview: the directory could not be refreshed. Your filters and draft are retained.'));const retry=element('button','Retry directory',{type:'button',class:buttonClass});retry.addEventListener('click',()=>{filters.elements.state.value='ready';render();status.textContent='Directory restored. Filters and draft retained.';});message.append(retry);}
     else if(empty)message.textContent='No people match this view. Clear the filters or return the state preview to Ready.';
-    root.querySelector('[data-new-person]').disabled=!ready;editor.querySelector('fieldset').disabled=!ready;
+    root.querySelector('[data-new-person]').disabled=!ready;
     selectPage.disabled=!ready||empty;
     table.querySelectorAll('[data-sort]').forEach(button=>{button.disabled=!ready;button.closest('th').setAttribute('aria-sort',state.sort===button.dataset.sort?(state.direction==='asc'?'ascending':'descending'):'none');});
     body.replaceChildren();
@@ -86,6 +88,7 @@ function administration(){
     root.querySelector('[data-directory-region]').dataset.density=filters.elements.density.value;
     status.textContent=`${empty?0:current.total} matching people · Page ${current.page} of ${current.pages} · ${records.length} total synthetic records.`;
     updateSelection();
+    editor.querySelector('fieldset').disabled=!ready;
   };
   filters.addEventListener('submit',event=>{event.preventDefault();state.query=filters.elements.query.value.trim();state.status=filters.elements.status.value;state.size=Number(filters.elements.size.value);state.page=1;selected.clear();render();});
   filters.elements.state.addEventListener('change',()=>{selected.clear();render();});
@@ -124,9 +127,11 @@ function administration(){
   });
   window.addEventListener('afterprint',()=>{table.querySelector('[data-print-people]')?.remove();delete table.dataset.printAll;if(prePrintStatus!==null){status.textContent=prePrintStatus;prePrintStatus=null;}});
   render();
+  filters.querySelector('fieldset').disabled=false;fallback.hidden=true;
 }
 if(root.dataset.dashboard==='administration')administration();
 function operations(){
+  const fallback=root.querySelector('[data-dashboard-fallback]');if(!fallback)return;
   const form=root.querySelector('#operations-filters');let alerts=structuredClone(fixture.alerts),localEvents=[];
   const requestedService=params.has('serviceId')?params.get('serviceId'):(params.get('service')==='All'?'':params.get('service')||'');
   const initial={hours:params.get('hours')||'6',threshold:params.get('threshold')||'250',service:requestedService,severity:params.get('severity')||'All'};
@@ -167,5 +172,6 @@ function operations(){
   // Establish a valid default view before validating URL-provided draft controls.
   render(true,false);
   render();
+  form.querySelector('fieldset').disabled=false;fallback.hidden=true;
 }
 if(root.dataset.dashboard==='operations'&&root.querySelector('#operations-filters'))operations();

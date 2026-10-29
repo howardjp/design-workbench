@@ -7,6 +7,7 @@
     <div><label for="people-state">State preview</label><select name="state" id="people-state"><option value="ready">Ready</option><option value="loading">Loading</option><option value="error">Error</option><option value="empty">Empty</option></select></div>
   </div><button class="{% include examples/button-classes.html %}" type="submit">Apply directory filters</button><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-clear-people>Clear filters</button></fieldset>
 </form>
+<p data-dashboard-fallback>Interactive dashboard controls are unavailable. Reload to try again.</p>
 <p class="dash-status" role="status" data-dashboard-status>Published synthetic directory.</p>
 <section class="dash-panel" aria-labelledby="directory-title"><h2 id="directory-title">People directory</h2>
   <div class="dash-actions"><span data-selection-count>0 people selected.</span><button class="{% include examples/button-classes.html %}" type="button" data-bulk="Active" disabled>Activate selected</button><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-bulk="Suspended" disabled>Suspend selected</button><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-new-person disabled>Add person</button></div>

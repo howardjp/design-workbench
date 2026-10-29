@@ -37,6 +37,7 @@ const people=[...fixture.people].sort((a,b)=>a.name.localeCompare(b.name,'en'));
         <div><label for="people-density">Table density</label><select name="density" id="people-density"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></div>
         <div><label for="people-state">State preview</label><select name="state" id="people-state"><option value="ready">Ready</option><option value="loading">Loading</option><option value="error">Error</option><option value="empty">Empty</option></select></div>
       </div><Button type="submit">Apply directory filters</Button><Button type="button" data-clear-people>Clear filters</Button></fieldset></form>
+<p data-dashboard-fallback>Interactive dashboard controls are unavailable. Reload to try again.</p>
       <p class="dash-status" role="status" data-dashboard-status>Published synthetic directory.</p>
       <section class="dash-panel" aria-labelledby="directory-title"><h2 id="directory-title">People directory</h2>
         <div class="dash-actions"><span data-selection-count>0 people selected.</span><Button type="button" data-bulk="Active" disabled>Activate selected</Button><Button type="button" data-bulk="Suspended" disabled>Suspend selected</Button><Button type="button" data-new-person disabled>Add person</Button></div>

@@ -35,6 +35,7 @@
   </div><button class="{% include examples/button-classes.html %}" type="submit">Apply filters</button><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-export-analytics>Download filtered CSV</button></fieldset>
   <p id="analytics-error" class="dash-error" role="alert" hidden></p>
 </form>
+<p data-dashboard-fallback>Interactive dashboard controls are unavailable. Reload to try again.</p>
 <p class="dash-status" role="status" data-dashboard-status{% if data_error_message != empty %} data-analytics-data-error{% endif %}>{% if data_error_message != empty %}{{ data_error_message }}{% elsif initial == empty %}No observations are available for the selected range and category.{% elsif missing_initial > 0 %}Partial data: {{ missing_initial }} expected observation{% if missing_initial == 1 %} is{% else %}s are{% endif %} missing. Totals use available observations.{% else %}Published source data is shown below.{% endif %}</p>
 <dl class="dash-metrics" aria-label="Analytics summary">
   {% include examples/metric.html id='sessions' label='Sessions' unavailable=metrics_unavailable %}

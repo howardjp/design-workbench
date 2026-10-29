@@ -34,6 +34,7 @@ const metrics=[['sessions','Sessions'],['downloads','Downloads'],['conversion','
       <div><label for="analytics-end">End date</label><input id="analytics-end" name="end" type="date" min="2026-09-03" max="2026-10-28" value="2026-10-28" required /></div>
       <div><label for="analytics-category">Category</label><select id="analytics-category" name="category"><option value="">All categories</option>{[...new Set(fixture.categories)].map(category=><option value={category}>{category}</option>)}</select></div>
     </div><Button type="submit">Apply filters</Button><Button type="button" data-export-analytics>Download filtered CSV</Button></fieldset><p id="analytics-error" role="alert" hidden></p></form>
+<p data-dashboard-fallback>Interactive dashboard controls are unavailable. Reload to try again.</p>
     <p role="status" data-analytics-status data-analytics-data-error={initialView?.dataError ? true : undefined}>{initialStatus}</p>
     <dl class="analytics-metrics" aria-label="Analytics summary">{metrics.map(([id,label])=><div><dt>{label}</dt><dd><output data-metric={id}>—</output><p data-comparison={id}>{initialView?.dataError ? 'Unavailable until a safe range is selected.' : 'Calculated from the table below.'}</p></dd></div>)}</dl>
     <div class="analytics-charts">{charts.map(chart=><figure class:list={['analytics-chart',`analytics-chart--${chart.id}`]} aria-labelledby={`${chart.id}-title`}><header><h2 id={`${chart.id}-title`}>{chart.title}</h2><p>{chart.description}</p></header><div class="dash-chart__plot" data-chart={chart.id}></div><figcaption data-chart-summary={chart.id}>The data table provides an alternative to the chart.</figcaption><details><summary>View {chart.title.toLowerCase()} data</summary><div class="analytics-table" role="region" aria-label={`${chart.title} data`} tabindex="0"><table data-chart-table={chart.id}><caption>{chart.title} — synthetic data</caption><thead><tr>{chart.id==='categories' ? <><th scope="col">Category</th><th scope="col">Current sessions</th><th scope="col">Previous sessions</th></> : <><th scope="col">Label</th><th scope="col">{chart.id==='sessions'?'Sessions':'Downloads'}</th></>}</tr></thead><tbody>{chartRows[chart.id].length ? chartRows[chart.id].map(row=><tr><th scope="row">{row[0]}</th>{row.slice(1).map(value=><td>{value}</td>)}</tr>) : <tr><td colspan={chart.id==='categories'?3:2}>{initialView?.dataError ? 'Chart values are unavailable until a safe range is selected.' : 'No observations are available for this chart.'}</td></tr>}</tbody></table></div></details></figure>)}</div>
@@ -48,14 +49,13 @@ const fixture=JSON.parse(document.getElementById('analytics-data').textContent);
 import {analyticsView, dayMillis, comparisonSearch, analyticsCoverageMessage, analyticsComparison} from '../../../page-archetypes/jekyll/assets/js/dashboard-model.mjs';
 import {chart, metric, tableRows, downloadCSV} from '../../../page-archetypes/jekyll/assets/js/dashboard-ui.mjs';
 const root=document.querySelector('[data-analytics-dashboard]');
-const toggle=root.querySelector('.dash-nav-toggle');const navigation=root.querySelector('#dashboard-nav');toggle.hidden=false;root.dataset.ready='true';
-toggle.addEventListener('click',()=>toggle.setAttribute('aria-expanded',String(toggle.getAttribute('aria-expanded')!=='true')));navigation.parentElement.addEventListener('keydown',event=>{if(event.key==='Escape'){toggle.setAttribute('aria-expanded','false');toggle.focus();}});
-if(root.querySelector('#analytics-filters')){
-const form=root.querySelector('#analytics-filters');
+const toggle=root.querySelector('.dash-nav-toggle');const navigation=root.querySelector('#dashboard-nav');
+toggle.addEventListener('click',()=>toggle.setAttribute('aria-expanded',String(toggle.getAttribute('aria-expanded')!=='true')));navigation.parentElement.addEventListener('keydown',event=>{if(event.key==='Escape'){toggle.setAttribute('aria-expanded','false');toggle.focus();}});toggle.hidden=false;root.dataset.ready='true';
+if(root.querySelector('#analytics-filters') && root.querySelector('[data-dashboard-fallback]')){
+const form=root.querySelector('#analytics-filters');const fallback=root.querySelector('[data-dashboard-fallback]');
 const start=form.elements.start,end=form.elements.end,category=form.elements.category,range=form.elements.range;const coverage={start:start.min,end:end.max};
 const params=new URL(location.href).searchParams;
 start.value=params.get('start')||start.value;end.value=params.get('end')||end.value;const requestedCategory=params.has('categoryId')?params.get('categoryId'):(params.get('category')==='All'?'':params.get('category')||'');if(fixture.categories.includes(requestedCategory))category.value=requestedCategory;if(params.has('start')||params.has('end'))range.value='custom';
-form.querySelector('[data-analytics-controls]').disabled=false;
 const status=root.querySelector('[data-analytics-status]');let view;
 const number=value=>new Intl.NumberFormat('en-US').format(value);
 range.addEventListener('change',()=>{if(range.value!=='custom'){end.value='2026-10-28';start.value=new Date(Date.parse(end.value)-(Number(range.value)-1)*dayMillis).toISOString().slice(0,10);}});
@@ -71,6 +71,6 @@ function render(){
   chart(root,'categories',view.categories.filter(row=>view.rows.some(item=>item.category===row.name)).map(row=>({label:row.name,value:row.sessions,previous:view.previousCategories?.find(item=>item.name===row.name)?.sessions??null})),{label:'Sessions by category',bars:true,previous:true});
   tableRows(root.querySelector('#analytics-source'),view.rows.map(row=>[row.date,row.category,row.sessions,row.downloads,row.completions]),['Date','Category','Sessions','Downloads','Completed tasks']);status.textContent=`${view.days.length} days · category: ${category.value||'All categories'} · ${view.rows.length} source records · ${start.value} to ${end.value}. ${analyticsCoverageMessage(view)}`.trim();
 }
-form.addEventListener('submit',event=>{event.preventDefault();render();});root.querySelector('[data-export-analytics]').addEventListener('click',()=>{if(view)downloadCSV('northlight-analytics.csv',[['Date','Category','Sessions','Downloads','Completed tasks'],...view.rows.map(row=>[row.date,row.category,row.sessions,row.downloads,row.completions])]);});render();
+form.addEventListener('submit',event=>{event.preventDefault();render();});root.querySelector('[data-export-analytics]').addEventListener('click',()=>{if(view)downloadCSV('northlight-analytics.csv',[['Date','Category','Sessions','Downloads','Completed tasks'],...view.rows.map(row=>[row.date,row.category,row.sessions,row.downloads,row.completions])]);});render();form.querySelector('[data-analytics-controls]').disabled=false;fallback.hidden=true;
 }
 </script>
