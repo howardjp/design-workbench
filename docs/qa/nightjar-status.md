@@ -656,3 +656,11 @@ The intermittent 16px result was reproduced: the Jekyll shells' universal reduce
 ### Workspace search fields
 
 Commit `05c83af` aligns matching across the workspace records' title, status, summary, ID and owner, including the displayed `ID · owner` form. Before the fix, common cross-field queries matched only React while the displayed separator matched only Jekyll/Astro. Independent and integrated paired composition regressions passed both families, three frameworks and root/subpaths, including cross-field and negative queries, review-state changes, focus recovery, hostile owner text, axe and no-JS. Jekyll and Astro deliberately retain their former raw DOM-text fallback, so unusual queries dependent on literal rendered whitespace can still differ from React.
+
+Hosted portable run `40863708561` at `815e9a6` completed successfully: its main example job, all three fixture groups and both expanded Firefox/WebKit smoke jobs passed. The smoke jobs each reported 16 axe color-contrast results requiring manual review; a green job does not resolve those incompletes. The later `abd3f5c` run was still underway at this observation.
+
+### Local chat feedback
+
+Commit `d372209` replaces stale “Added” feedback with an accessible validation status when a subsequent local chat submission is empty or whitespace-only, and restores the neutral status when the user edits. Existing messages and independent conversations are preserved. Before the change, the paired regression reproduced stale success after an invalid native submission. The independent 12-build composition test passed both families, three frameworks and root/subpaths, covering focus, invalid input, valid recovery, independent state, reset, axe and no-JS; related chat, React workspace, type, model and source-archive checks passed. An integrated rerun is in progress.
+
+The integrated paired form/chat and chat composition reruns passed after `d372209`, along with `test:examples` and the source-manifest check.
