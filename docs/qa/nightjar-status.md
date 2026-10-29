@@ -221,3 +221,7 @@ After workspace correction `e33b8be` and Astro palette correction `56735b5`, the
 ### React search recovery
 
 Commit `826d50b` directs both React search no-results recovery and the no-JavaScript fallback to the complete examples index instead of Home. The independent 47-page React suite passed both languages at root/subpaths with the new link assertions; strict TypeScript passed.
+
+### Astro dashboard fixture scoping
+
+Commit `04755cb` derives each dashboard's embedded data from the canonical fixture, transferring only the fields that view consumes; JSON is escaped for its script context. Unit checks verify exact canonical subset equality and closing-script escaping. Independent analytics, administration, operations and navigation suites passed both families at root/subpaths. In local cold Chromium 151 measurements at 1440px, Martlet administration HTML fell from 46,488 to 15,491 bytes and operations from 44,383 to 21,845; analytics gzip HTML+CSS+JS fell from 23,044 to 21,111 bytes excluding fonts, with data moving from JS into HTML. The methodology and all family/route measurements are in `examples/astro-slice/PERFORMANCE.md`; these are local transfer-size observations, not production performance claims. The full Astro content and dark-print suites also passed on the preceding pagination/isolation commits.
