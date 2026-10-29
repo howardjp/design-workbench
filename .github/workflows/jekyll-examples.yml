@@ -54,6 +54,8 @@ jobs:
         run: npm run test:search-safety
       - name: Verify paired dashboard behaviour, reflow, keyboard and accessibility
         run: npx playwright test --config playwright.dashboard.config.ts
+      - name: Build React packages for portable examples
+        run: npm run build --workspaces
       - name: Verify independent station and scene compositions
         run: |
           npm ci --prefix examples/astro-slice --ignore-scripts
@@ -71,7 +73,6 @@ jobs:
           python3 examples/page-archetypes/scripts/build.py --family krigsvold --destination "$NIGHTJAR_JEKYLL_ROOT/krigsvold"
           NIGHTJAR_FAMILY=martlet NIGHTJAR_BASE=/ npm --prefix examples/astro-slice run build
           NIGHTJAR_FAMILY=krigsvold NIGHTJAR_BASE=/ npm --prefix examples/astro-slice run build
-          npm run build --workspaces
           NIGHTJAR_FAMILY=martlet NIGHTJAR_BASE=/ node examples/react-catalog/build.mjs
           NIGHTJAR_FAMILY=krigsvold NIGHTJAR_BASE=/ node examples/react-catalog/build.mjs
           node examples/page-archetypes/tests/dashboard-framework-parity.mjs
