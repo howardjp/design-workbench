@@ -99,7 +99,10 @@
       dialog.showModal();
     }));
     dialog.querySelector('[data-close-dialog]').addEventListener('click', () => dialog.close());
-    dialog.addEventListener('close', () => { if (opener?.isConnected) opener.focus(); });
+    dialog.addEventListener('close', () => {
+      const active = document.activeElement;
+      if (opener?.isConnected && (!active || active === document.body || active === document.documentElement || dialog.contains(active))) opener.focus();
+    });
   });
 
   document.querySelectorAll('[data-workspace]').forEach(workspace => {
