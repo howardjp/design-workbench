@@ -84,6 +84,13 @@ jobs:
           node examples/page-archetypes/tests/form-composition.mjs
           node examples/page-archetypes/tests/workspace-composition.mjs
           node examples/page-archetypes/tests/search-composition.mjs
+      - name: Verify large directory and duplicate-name controls
+        timeout-minutes: 10
+        env:
+          ASTRO_TELEMETRY_DISABLED: '1'
+        run: |
+          node examples/page-archetypes/tests/administration-duplicate-names.mjs
+          node examples/react-catalog/test-administration-large.mjs
       # These suites rebuild their own root/subpath output, so run them after
       # checks that consume the root-path builds above.
       - name: Verify Astro and React source shells and React compositions

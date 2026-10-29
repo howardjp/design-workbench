@@ -1,4 +1,4 @@
-import {analyticsView,collectionView,validatePerson,nextPersonId,applyBulk,operationsView,dayMillis,comparisonSearch,analyticsCoverageMessage,analyticsComparison} from './dashboard-model.mjs';
+import {analyticsView,collectionView,personControlLabels,validatePerson,nextPersonId,applyBulk,operationsView,dayMillis,comparisonSearch,analyticsCoverageMessage,analyticsComparison} from './dashboard-model.mjs';
 import {element,tableRows,metric,chart,downloadCSV} from './dashboard-ui.mjs';
 const root=document.querySelector('[data-dashboard]');
 const fixture=JSON.parse(document.getElementById('dashboard-data').textContent);
@@ -71,12 +71,14 @@ function administration(){
     selectPage.disabled=!ready||empty;
     table.querySelectorAll('[data-sort]').forEach(button=>{button.disabled=!ready;button.closest('th').setAttribute('aria-sort',state.sort===button.dataset.sort?(state.direction==='asc'?'ascending':'descending'):'none');});
     body.replaceChildren();
+    const controlLabels=personControlLabels(records);
     for(const person of current.rows){
+      const controlLabel=controlLabels.get(person.id);
       const row=body.insertRow();row.dataset.person=person.id;
-      const check=element('input',undefined,{type:'checkbox',class:'dash-row-check','aria-label':`Select ${person.name}`});check.checked=selected.has(person.id);check.dataset.selectPerson=person.id;row.insertCell().append(check);
+      const check=element('input',undefined,{type:'checkbox',class:'dash-row-check','aria-label':`Select ${controlLabel}`});check.checked=selected.has(person.id);check.dataset.selectPerson=person.id;row.insertCell().append(check);
       row.append(element('th',person.name,{scope:'row'}));row.insertCell().textContent=person.email;row.insertCell().textContent=person.role;
       row.insertCell().append(element('span',person.status,{class:`dash-badge dash-badge--${person.status.toLowerCase()}`}));
-      const edit=element('button','Edit',{type:'button',class:buttonClass,'aria-label':`Edit ${person.name}`});edit.dataset.editPerson=person.id;row.insertCell().append(edit);
+      const edit=element('button','Edit',{type:'button',class:buttonClass,'aria-label':`Edit ${controlLabel}`});edit.dataset.editPerson=person.id;row.insertCell().append(edit);
     }
     root.querySelector('[data-people-page]').textContent=`Page ${current.page} of ${current.pages}`;
     root.querySelector('[data-people-previous]').disabled=!ready||empty||current.page===1;

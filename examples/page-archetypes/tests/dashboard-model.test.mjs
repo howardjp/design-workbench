@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {aggregate,analyticsView,rangeError,collectionView,applyBulk,validatePerson,nextPersonId,operationsView,operationsDataIssue,comparisonSearch,analyticsCoverageMessage,analyticsComparison} from '../jekyll/assets/js/dashboard-model.mjs';
+import {aggregate,analyticsView,rangeError,collectionView,personControlLabels,applyBulk,validatePerson,nextPersonId,operationsView,operationsDataIssue,comparisonSearch,analyticsCoverageMessage,analyticsComparison} from '../jekyll/assets/js/dashboard-model.mjs';
 const fixture=JSON.parse(fs.readFileSync(new URL('../content/dashboards.json',import.meta.url)));
 test('analytics computes rates from totals and duration from weighted observations',()=>{
  const totals=aggregate([{sessions:20,downloads:3,completions:4,duration_seconds:1200},{sessions:80,downloads:7,completions:6,duration_seconds:16800}]);
@@ -169,4 +169,9 @@ test('operations reject unsafe observations and aggregates and round exact means
  value=prepare();value.services[0].samples[0].queue=Number.MAX_SAFE_INTEGER+1;assert.match(operationsView(value,{}).error,/safe integer precision/);
  value=prepare();value.services[0].samples[0].latency_ms=Number.MAX_SAFE_INTEGER+1;assert.match(operationsView(value,{}).error,/safe integer precision/);
  value=prepare();value.services.forEach((service,index)=>{service.samples.at(-1).latency_ms=index===0?9007199254740987:0});const view=operationsView(value,{});assert.equal(view.latency,1801439850948197);assert.equal(view.points.at(-1).latency_ms,1801439850948197);
+});
+
+test('directory controls disambiguate repeated names while preserving unique labels',()=>{
+ const labels=personControlLabels([{id:'A',name:'Alex Morgan'},{id:'B',name:' alex morgan '},{id:'C',name:'Avery Lee'}]);
+ assert.equal(labels.get('A'),'Alex Morgan (A)');assert.equal(labels.get('B'),' alex morgan  (B)');assert.equal(labels.get('C'),'Avery Lee');
 });

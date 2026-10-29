@@ -90,6 +90,14 @@ export function collectionView(records,{query='',status='All',sort='name',direct
   const current=Number.isSafeInteger(requestedPage) ? Math.max(1,Math.min(requestedPage,pages)) : 1;
   return {filtered,rows:filtered.slice((current-1)*pageSize,current*pageSize),page:current,pages,size:pageSize,total:filtered.length};
 }
+// Disambiguate controls for people with the same displayed name while keeping
+// existing accessible names for unique records.
+export function personControlLabels(records) {
+  const key=name=>name.trim().toLocaleLowerCase();
+  const counts=new Map();
+  for(const person of records){const name=key(person.name);counts.set(name,(counts.get(name)||0)+1);}
+  return new Map(records.map(person=>[person.id,counts.get(key(person.name))>1?`${person.name} (${person.id})`:person.name]));
+}
 // Allocate a distinct ID even when existing IDs use another vocabulary.
 export function nextPersonId(records) {
   const used=new Set(records.map(record=>record.id));
