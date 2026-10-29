@@ -51,6 +51,30 @@ try{
    await open('article');
    await expect(page.getByRole('heading',{name:catalog.pages.find(item=>item.id==='article').title,exact:true})).toBeVisible();
    await checkAxe('article');
+   if(appearance==='light'){
+    await open('gallery');
+    const gallery=page.locator('[data-gallery]').first(),first=gallery.locator('a').nth(0),second=gallery.locator('a').nth(1),dialog=gallery.locator('dialog');
+    await first.focus();await page.keyboard.press('Enter');await expect(dialog).toBeVisible();
+    await expect(dialog.locator('img')).toHaveAttribute('alt','Stylised field station beside calm water.');
+    await page.keyboard.press('Escape');await expect(dialog).toBeHidden();await expect(first).toBeFocused();
+    // The queued close event must not take focus from another image link.
+    await first.click();await expect(dialog).toBeVisible();
+    const dialogHandle=await dialog.elementHandle(),secondHandle=await second.elementHandle();
+    assert.equal(await page.evaluate(([node,target])=>new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Gallery close event did not arrive')),5000);node.addEventListener('close',()=>requestAnimationFrame(()=>{clearTimeout(timer);resolve(document.activeElement===target)}),{once:true});node.close();target.focus();}),[dialogHandle,secondHandle]),true,`${engine} ${family} ${framework}: gallery close preserves moved focus`);
+    await page.keyboard.press('Enter');await expect(dialog).toBeVisible();await expect(dialog.locator('img')).toHaveAttribute('alt','Layered coastal contours with observation markers.');
+    // Reopening the same gallery before its queued close must retain the image.
+    assert.equal(await page.evaluate(([node,target])=>new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Gallery close event did not arrive')),5000);node.addEventListener('close',()=>requestAnimationFrame(()=>{clearTimeout(timer);resolve(node.open&&node.contains(document.activeElement))}),{once:true});node.close();target.click();}),[dialogHandle,secondHandle]),true,`${engine} ${family} ${framework}: gallery remains open on rapid reopen`);
+    await expect(dialog.locator('img')).toHaveAttribute('alt','Layered coastal contours with observation markers.');
+    await page.keyboard.press('Escape');await expect(dialog).toBeHidden();await expect(second).toBeFocused();
+    const fallback=await browser.newContext({viewport:{width:320,height:900}});
+    try{
+     await fallback.addInitScript(()=>Object.defineProperty(HTMLDialogElement.prototype,'showModal',{configurable:true,value(){throw new Error('simulated modal failure')}}));
+     const fp=await fallback.newPage();await fp.goto(`${origin}/examples/gallery/`,{waitUntil:'networkidle'});
+     const link=fp.locator('[data-gallery] a').first(),href=await link.getAttribute('href');assert.ok(href);
+     const response=fp.waitForResponse(response=>response.request().isNavigationRequest()&&response.url()===new URL(href,origin).href);
+     await link.click();const imageResponse=await response;assert.equal(imageResponse.status(),200);assert.match(imageResponse.headers()['content-type'],/^image\/svg\+xml/);assert.equal(fp.url(),new URL(href,origin).href);
+    }finally{await fallback.close()}
+   }
    await open('sign-in');
    const form=page.locator('form[data-demo-form]'),email=form.getByLabel('Email address'),password=form.getByLabel('Example password'),submit=form.getByRole('button',{name:'Validate example'});
    await email.fill('invented@example.invalid');await password.fill('invented-password');await submit.focus();await page.keyboard.press('Enter');
@@ -64,7 +88,7 @@ try{
    await checkAxe('filtered analytics with chart data open');
    assert.deepEqual(errors,[],`${family} ${framework}: no page script errors`);
    assert.deepEqual(missing,[],`${family} ${framework}: all requested local resources load`);
-   await context.close();console.log(`${engine}: ${family} ${framework} ${appearance}: reading, form, dashboard and mobile keyboard passed; no WCAG-tagged axe violations`);
+   await context.close();console.log(`${engine}: ${family} ${framework} ${appearance}: reading, form, dashboard and mobile keyboard${appearance==='light'?', gallery handover/reopen/fallback':''} passed; no WCAG-tagged axe violations`);
    }
   }finally{server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}
  }
