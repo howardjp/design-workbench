@@ -21,12 +21,36 @@ export function rangeError(start, end, min, max) {
 }
 export function aggregate(rows) {
   const totals = rows.reduce((sum, row) => ({ sessions:sum.sessions+row.sessions, downloads:sum.downloads+row.downloads, completions:sum.completions+row.completions, duration_seconds:sum.duration_seconds+row.duration_seconds }), {sessions:0,downloads:0,completions:0,duration_seconds:0});
-  return {...totals, conversion:totals.sessions ? 100*totals.completions/totals.sessions : 0, mean_duration:totals.sessions ? totals.duration_seconds/totals.sessions : 0};
+  return {...totals, conversion:totals.sessions ? 100*totals.completions/totals.sessions : null, mean_duration:totals.sessions ? totals.duration_seconds/totals.sessions : null};
 }
-export function analyticsView(fixture, {start, end, category='All'}) {
+// A complete period requires one or more observations for every expected date/category.
+function missingAnalyticsObservations(rows,start,length,categories) {
+  const observed=new Set(rows.map(row=>`${row.date}\0${row.category}`));
+  let missing=0;
+  for(let offset=0;offset<length;offset++) {
+    const date=new Date(Date.parse(start)+offset*dayMillis).toISOString().slice(0,10);
+    for(const category of categories) if(!observed.has(`${date}\0${category}`)) missing++;
+  }
+  return missing;
+}
+export function analyticsCoverageMessage(view) {
+  if (!view.rows.length) return 'No observations are available for the selected range and category.';
+  if (view.missingObservations) return `Partial data: ${view.missingObservations} expected observation${view.missingObservations===1?' is':'s are'} missing. Totals use available observations.`;
+  return '';
+}
+export function analyticsComparison(view,key) {
+  if (view.missingObservations) return 'Comparison unavailable: selected period has missing observations.';
+  if (!view.previous) return 'No complete preceding period available.';
+  if (view.previous[key]===0) return 'Comparison unavailable: preceding value is zero.';
+  return `${((view.totals[key]/view.previous[key]-1)*100).toFixed(1)}% versus preceding period.`;
+}
+export function analyticsView(fixture, {start, end, category='All', coverage}) {
   if (!fixture.analytics.length) return {error:'No analytics data is available in this snapshot.',empty:true};
-  const min=fixture.analytics.reduce((date,row)=>row.date<date?row.date:date,fixture.analytics[0].date);
-  const max=fixture.analytics.reduce((date,row)=>row.date>date?row.date:date,fixture.analytics[0].date);
+  const observedMin=fixture.analytics.reduce((date,row)=>row.date<date?row.date:date,fixture.analytics[0].date);
+  const observedMax=fixture.analytics.reduce((date,row)=>row.date>date?row.date:date,fixture.analytics[0].date);
+  const declared=coverage!==undefined;
+  if (declared && (!coverage || typeof coverage.start!=='string' || typeof coverage.end!=='string' || rangeError(coverage.start,coverage.end,coverage.start,coverage.end))) return {error:'Analytics coverage dates are invalid.'};
+  const min=declared?coverage.start:observedMin, max=declared?coverage.end:observedMax;
   const error=rangeError(start,end,min,max);
   if(error) return {error};
   const categoryOrder=new Map(fixture.categories.map((name,index)=>[name,index]));
@@ -37,7 +61,10 @@ export function analyticsView(fixture, {start, end, category='All'}) {
   const previousRows=fixture.analytics.filter(row=>row.date>=previousStart&&row.date<=previousEnd&&(category==='All'||row.category===category));
   const days=[...new Set(rows.map(row=>row.date))].map(date=>({date,...aggregate(rows.filter(row=>row.date===date))}));
   const categories=fixture.categories.map(name=>({name,...aggregate(rows.filter(row=>row.category===name))}));
-  return {error:'', rows, days, categories, totals:aggregate(rows), previous:previousStart>=min ? aggregate(previousRows) : null};
+  const expected=category==='All'?[...new Set(fixture.categories)]:[category];
+  const missingObservations=missingAnalyticsObservations(rows,start,length,expected);
+  const precedingComplete=previousStart>=min && missingAnalyticsObservations(previousRows,previousStart,length,expected)===0;
+  return {error:'', rows, days, categories, totals:aggregate(rows), missingObservations, previous:!missingObservations&&precedingComplete ? aggregate(previousRows) : null};
 }
 export function collectionView(records,{query='',status='All',sort='name',direction='asc',page=1,size=5},fields={search:['name','email','role','id'],sort:['name','email','role','status','id'],defaultSort:'name'}) {
   const needle=query.trim().toLocaleLowerCase();

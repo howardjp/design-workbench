@@ -1,6 +1,11 @@
 {% if site.data.dashboards.analytics == empty %}
 <p role="status" data-analytics-empty>No analytics data is available in this snapshot.</p>
 {% else %}
+{% assign initial = site.data.dashboards.analytics | where_exp: 'item', 'item.date >= "2026-10-22" and item.date <= "2026-10-28"' %}
+{% assign categories = site.data.dashboards.categories | uniq %}
+{% assign expected_dates = '2026-10-22,2026-10-23,2026-10-24,2026-10-25,2026-10-26,2026-10-27,2026-10-28' | split: ',' %}
+{% assign missing_initial = 0 %}
+{% for date in expected_dates %}{% assign daily_observations = initial | where: 'date', date %}{% for category in categories %}{% assign matching_observations = daily_observations | where: 'category', category %}{% if matching_observations == empty %}{% assign missing_initial = missing_initial | plus: 1 %}{% endif %}{% endfor %}{% endfor %}
 <form class="example-form dash-toolbar" id="analytics-filters" novalidate>
   <fieldset disabled data-dashboard-controls><legend>Analytics filters</legend><div class="dash-controls">
     <div><label for="analytics-range">Date range</label><select id="analytics-range" name="range"><option value="7">Last 7 days</option><option value="14">Last 14 days</option><option value="28">Last 28 days</option><option value="custom">Custom range</option></select></div>
@@ -10,7 +15,7 @@
   </div><button class="{% include examples/button-classes.html %}" type="submit">Apply filters</button><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-export-analytics>Download filtered CSV</button></fieldset>
   <p id="analytics-error" class="dash-error" role="alert" hidden></p>
 </form>
-<p class="dash-status" role="status" data-dashboard-status>Published source data is shown below.</p>
+<p class="dash-status" role="status" data-dashboard-status>{% if initial == empty %}No observations are available for the selected range and category.{% elsif missing_initial > 0 %}Partial data: {{ missing_initial }} expected observation{% if missing_initial == 1 %} is{% else %}s are{% endif %} missing. Totals use available observations.{% else %}Published source data is shown below.{% endif %}</p>
 <dl class="dash-metrics" aria-label="Analytics summary">
   {% include examples/metric.html id='sessions' label='Sessions' %}
   {% include examples/metric.html id='downloads' label='Downloads' %}
@@ -23,6 +28,6 @@
   {% include examples/chart.html id='categories' title='Category comparison' description='Current sessions versus the preceding period of equal length, when available.' %}
 </div>
 <section class="dash-panel" aria-labelledby="analytics-source-title"><h2 id="analytics-source-title">Analytics source records</h2><p>Counts are synthetic. Completion rate = completed tasks ÷ sessions; mean duration is weighted by session count.</p>
-<div class="example-table-scroll" role="region" aria-label="Analytics source records" tabindex="0"><table id="analytics-source"><caption>Selected source records — dates and categories</caption><thead><tr><th scope="col">Date</th><th scope="col">Category</th><th scope="col">Sessions</th><th scope="col">Downloads</th><th scope="col">Completed tasks</th></tr></thead><tbody>{% assign initial = site.data.dashboards.analytics | where_exp: 'item', 'item.date >= "2026-10-22" and item.date <= "2026-10-28"' %}{% assign dates = initial | map: 'date' | uniq | sort %}{% assign categories = site.data.dashboards.categories | uniq %}{% for date in dates %}{% assign daily = initial | where: 'date', date %}{% for category in categories %}{% assign category_rows = daily | where: 'category', category %}{% for row in category_rows %}<tr><th scope="row">{{ row.date }}</th><td>{{ row.category }}</td><td>{{ row.sessions }}</td><td>{{ row.downloads }}</td><td>{{ row.completions }}</td></tr>{% endfor %}{% endfor %}{% for row in daily %}{% unless categories contains row.category %}<tr><th scope="row">{{ row.date }}</th><td>{{ row.category }}</td><td>{{ row.sessions }}</td><td>{{ row.downloads }}</td><td>{{ row.completions }}</td></tr>{% endunless %}{% endfor %}{% endfor %}</tbody></table></div></section>
+<div class="example-table-scroll" role="region" aria-label="Analytics source records" tabindex="0"><table id="analytics-source"><caption>Selected source records — dates and categories</caption><thead><tr><th scope="col">Date</th><th scope="col">Category</th><th scope="col">Sessions</th><th scope="col">Downloads</th><th scope="col">Completed tasks</th></tr></thead><tbody>{% assign dates = initial | map: 'date' | uniq | sort %}{% for date in dates %}{% assign daily = initial | where: 'date', date %}{% for category in categories %}{% assign category_rows = daily | where: 'category', category %}{% for row in category_rows %}<tr><th scope="row">{{ row.date }}</th><td>{{ row.category }}</td><td>{{ row.sessions }}</td><td>{{ row.downloads }}</td><td>{{ row.completions }}</td></tr>{% endfor %}{% endfor %}{% for row in daily %}{% unless categories contains row.category %}<tr><th scope="row">{{ row.date }}</th><td>{{ row.category }}</td><td>{{ row.sessions }}</td><td>{{ row.downloads }}</td><td>{{ row.completions }}</td></tr>{% endunless %}{% endfor %}{% endfor %}</tbody></table></div></section>
 
 {% endif %}

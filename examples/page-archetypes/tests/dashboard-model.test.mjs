@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {aggregate,analyticsView,rangeError,collectionView,applyBulk,validatePerson,operationsView,comparisonSearch} from '../jekyll/assets/js/dashboard-model.mjs';
+import {aggregate,analyticsView,rangeError,collectionView,applyBulk,validatePerson,operationsView,comparisonSearch,analyticsCoverageMessage,analyticsComparison} from '../jekyll/assets/js/dashboard-model.mjs';
 const fixture=JSON.parse(fs.readFileSync(new URL('../content/dashboards.json',import.meta.url)));
 test('analytics computes rates from totals and duration from weighted observations',()=>{
  const totals=aggregate([{sessions:20,downloads:3,completions:4,duration_seconds:1200},{sessions:80,downloads:7,completions:6,duration_seconds:16800}]);
@@ -70,4 +70,37 @@ test('analytics ordering is independent of input observation order',()=>{
 test('empty analytics data is explicit and does not invent zero observations',()=>{
  const result=analyticsView({...fixture,analytics:[]},{start:'2026-10-22',end:'2026-10-28',category:'All'});
  assert.deepEqual(result,{error:'No analytics data is available in this snapshot.',empty:true});
+});
+
+test('sparse periods do not imply complete comparisons or missing zeros',()=>{
+ const query={start:'2026-10-22',end:'2026-10-28',category:'All',coverage:{start:'2026-09-03',end:'2026-10-28'}};
+ const without=(date,category)=>({...fixture,analytics:fixture.analytics.filter(row=>row.date!==date||row.category!==category)});
+ const missingCurrent=analyticsView(without('2026-10-24','Research'),query);
+ assert.equal(missingCurrent.missingObservations,1);
+ assert.equal(missingCurrent.previous,null);
+ const missingPrevious=analyticsView(without('2026-10-20','Research'),query);
+ assert.equal(missingPrevious.missingObservations,0);
+ assert.equal(missingPrevious.previous,null);
+ const scoped=analyticsView(without('2026-10-24','Research'),{...query,category:'Publications'});
+ assert.equal(scoped.missingObservations,0);
+ assert.ok(scoped.previous);
+ const zeros=aggregate([{sessions:0,downloads:0,completions:0,duration_seconds:0}]);
+ assert.equal(zeros.sessions,0);
+ assert.equal(zeros.conversion,null);
+ assert.equal(zeros.mean_duration,null);
+ assert.match(analyticsCoverageMessage(missingCurrent),/Partial data: 1 expected observation is missing/);
+ assert.equal(analyticsComparison(missingCurrent,'sessions'),'Comparison unavailable: selected period has missing observations.');
+ assert.equal(analyticsComparison(missingPrevious,'sessions'),'No complete preceding period available.');
+ const none=analyticsView(without('2026-10-24','Research'),{start:'2026-10-24',end:'2026-10-24',category:'Research'});
+ assert.equal(none.rows.length,0);
+ assert.equal(analyticsCoverageMessage(none),'No observations are available for the selected range and category.');
+ const missingBoundary=analyticsView({...fixture,analytics:fixture.analytics.filter(row=>row.date!=='2026-10-28')},query);
+ assert.equal(missingBoundary.error,'');assert.equal(missingBoundary.missingObservations,3);assert.equal(missingBoundary.previous,null);
+ const legacy={...fixture,analytics:fixture.analytics.filter(row=>row.date!=='2026-10-28')};const {coverage:_coverage,...legacyQuery}=query;
+ assert.ok(analyticsView(legacy,legacyQuery).error,'Without declared coverage only observed bounds are known');
+ assert.equal(analyticsView(fixture,{...query,coverage:{start:'2026-10-29',end:'2026-10-28'}}).error,'Analytics coverage dates are invalid.');
+ for(const bounds of [null,{}, {start:null,end:'2026-10-28'}, {start:'2026-09-31',end:'2026-10-28'}]) assert.equal(analyticsView(fixture,{...query,coverage:bounds}).error,'Analytics coverage dates are invalid.');
+ const zeroPrior={...fixture,analytics:fixture.analytics.map(row=>row.date==='2026-10-23'&&row.category==='Research'?{...row,sessions:0,downloads:0,completions:0,duration_seconds:0}:row)};
+ const today=analyticsView(zeroPrior,{start:'2026-10-24',end:'2026-10-24',category:'Research'});
+ assert.equal(analyticsComparison(today,'sessions'),'Comparison unavailable: preceding value is zero.');
 });

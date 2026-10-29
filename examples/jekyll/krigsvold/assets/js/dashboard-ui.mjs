@@ -54,7 +54,7 @@ export function chart(root,id,rows,{label='Count',bars=false,previous=false,thre
   drawChart(mount,id,rows,options);
   const headers=previous?['Category','Current sessions','Previous sessions']:['Label',label];
   tableRows(root.querySelector(`[data-chart-table="${id}"]`),rows.map(row=>previous?[row.label,row.value,row.previous??'Unavailable']:[row.label,row.value]),headers);
-  root.querySelector(`[data-chart-summary="${id}"]`).textContent=previous?'Solid bars: current period. Striped bars: preceding period. Exact values appear in the data table.':`${rows.length} plotted observations.${threshold!==null?` Dashed line: warning threshold ${threshold} ms.`:''} Exact values appear in the data table.`;
+  root.querySelector(`[data-chart-summary="${id}"]`).textContent=!rows.length?'No observations are available for this chart. Exact values appear in the data table.':previous?'Solid bars: current period. Striped bars: preceding period. Exact values appear in the data table.':`${rows.length} plotted observations.${threshold!==null?` Dashed line: warning threshold ${threshold} ms.`:''} Exact values appear in the data table.`;
 }
 export function downloadCSV(name,rows){
   const quote=value=>'"'+String(value).replaceAll('"','""')+'"';
