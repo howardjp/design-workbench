@@ -22,6 +22,29 @@ try { for(const family of ['martlet','krigsvold']) for(const base of ['/','/prev
   assert.equal(await page.locator('.nightjar-masthead h1').isVisible(),true);
   assert.equal(await page.locator('.nightjar-header').isVisible(),false);
   assert.equal(await page.locator('.nightjar-footer').isVisible(),false);
-  await page.close();console.log(`${family} ${base}: screen, dashboard and article print visibility passed`);
+  // A printer often omits backgrounds. Dark-mode foregrounds must still be readable on white paper.
+  await page.emulateMedia({media:'screen'});await page.locator('[data-appearance-toggle]').click();
+  const darkScreenColor=await page.locator('.recipe-prose').first().evaluate(node=>getComputedStyle(node).color);
+  await page.emulateMedia({media:'print'});
+  const darkEnough = async selector => page.locator(selector).first().evaluate(node => {
+    const rgb=getComputedStyle(node).color.match(/\d+/g).slice(0,3).map(Number);
+    const linear=rgb.map(value=>{const n=value/255;return n<=0.04045?n/12.92:((n+0.055)/1.055)**2.4;});
+    return 1.05/(0.05+0.2126*linear[0]+0.7152*linear[1]+0.0722*linear[2]) >= 4.5;
+  });
+  assert.equal(await darkEnough('.recipe-prose'),true,`${family} article dark-appearance print text contrast`);
+  await page.emulateMedia({media:'screen'});
+  assert.equal(await page.locator('.recipe-prose').first().evaluate(node=>getComputedStyle(node).color),darkScreenColor,'Print rules must not change screen appearance');
+  assert.equal(await page.evaluate(()=>document.documentElement.dataset.appearance),'dark');
+  await page.emulateMedia({media:'print'});
+  await page.goto(`${origin}${base}examples/dashboard-analytics/`);
+  await page.waitForFunction(()=>document.querySelector('[data-metric=sessions]')?.textContent==='7,686');
+  assert.equal(await darkEnough('[data-metric=sessions]'),true,`${family} analytics dark-appearance print text contrast`);
+  assert.equal(await darkEnough('#analytics-source tbody th'),true,`${family} analytics table dark-appearance print text contrast`);
+  for (const [view,selector] of [['administration','#people-table tbody th'],['operations','#service-table tbody th']]) {
+    await page.goto(`${origin}${base}examples/dashboard-${view}/`);
+    await page.waitForFunction(()=>document.querySelector('[data-dashboard]')?.dataset.ready==='true');
+    assert.equal(await darkEnough(selector),true,`${family} ${view} dark-appearance print text contrast`);
+  }
+  await page.close();console.log(`${family} ${base}: screen, dark-appearance print and report visibility passed`);
  } finally {await new Promise(r=>server.close(r))}
  }} finally {await browser.close()}
