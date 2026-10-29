@@ -8,6 +8,7 @@ import {DemoForm,Search} from './interactive';
 import './style.css';
 import {SourceShell} from './shell/SourceShell';
 import {formatCatalogDate} from '../../page-archetypes/lib/catalog-date.mjs';
+import {isValidEventDateTime} from '../../page-archetypes/lib/event-time.mjs';
 
 type Item={title:string;summary:string;url:string;date?:string;tag?:string;question?:string;answer?:string;label?:string;value?:string;price?:string;features?:string[];action?:{label:string;url:string;download?:string}};
 type Section={id:string;title:string;kind?:string;body?:string;items?:Item[];facts?:{label:string;value:string}[];actions?:{label:string;url:string;download?:string}[];headers?:string[];rows?:string[][];image?:string;alt?:string;caption?:string;form?:string};
@@ -50,7 +51,7 @@ export function App({data,special}:{data:CatalogPageData;special?:(section:unkno
    <div data-example={page.id} data-semantic-class={page.semantic_class}>
    {'author' in page && page.author && <nav aria-label="Article context"><a href={href('/examples/person/')}>About {page.author}</a> · <a href={href('/examples/archive/')}>All writing</a></nav>}
    {'tags' in page && page.tags && <ul aria-label="Article subjects">{page.tags.map(tag=><li key={tag}><a href={href('/examples/categories/')}>{tag}</a></li>)}</ul>}
-   {'event' in page && page.event && <aside aria-label="Event details"><p><strong>Event details</strong></p><p><time dateTime={page.event.start}>{page.event.display_start}</time> to <time dateTime={page.event.end}>{page.event.display_end}</time> · {page.event.timezone}</p><p>{page.event.location} · {page.event.registration}</p></aside>}
+   {'event' in page && page.event && <aside aria-label="Event details"><p><strong>Event details</strong></p><p>{isValidEventDateTime(page.event.start)?<time dateTime={page.event.start}>{page.event.display_start}</time>:<span>{page.event.display_start} (invalid start time)</span>} to {isValidEventDateTime(page.event.end)?<time dateTime={page.event.end}>{page.event.display_end}</time>:<span>{page.event.display_end} (invalid end time)</span>} · {page.event.timezone}</p><p>{page.event.location} · {page.event.registration}</p></aside>}
    {['reading','document'].includes(page.composition)&&<nav className="recipe-local-index" aria-label="On this page"><p>On this page</p><ol>{page.sections.map(section=><li key={section.id}><a href={`#${section.id}`}>{section.title}</a></li>)}</ol></nav>}
    {page.sections.map(section=><SectionView key={section.id} section={section as Section} pageId={page.id} special={special} bodies={bodies} entries={entries}/>)}</div>
   </Article>
