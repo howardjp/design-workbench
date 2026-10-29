@@ -1,5 +1,7 @@
 ---
 import { renderMarkdown } from '../markdown.mjs';
+import Search from './Search.astro';
+import Catalog from './Catalog.astro';
 const {page, href, base, Button} = Astro.props;
 const formatDate = date => new Intl.DateTimeFormat('en-US', {year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(`${date}T00:00:00Z`));
 ---
@@ -9,6 +11,7 @@ const formatDate = date => new Intl.DateTimeFormat('en-US', {year:'numeric',mont
     <ul class="recipe-tags" aria-label="Article subjects">{page.tags.map(tag => <li><a href={href('/examples/categories/')}>{tag}</a></li>)}</ul>
   </>}
   {page.semantic_class === 'event' && <aside aria-label="Event details"><p><strong>Event details</strong></p><p><time datetime={page.event.start}>{page.event.display_start}</time> to <time datetime={page.event.end}>{page.event.display_end}</time> · {page.event.timezone}</p><p>{page.event.location} · {page.event.registration}</p></aside>}
+  {page.semantic_class === 'catalog-index' && <Catalog href={href} />}
   {page.sections.map(section => <section aria-labelledby={section.id}>
     <h2 id={section.id}>{section.title}</h2>
     {section.body && <div class="recipe-prose" set:html={renderMarkdown(section.body, base)} />}
@@ -23,6 +26,7 @@ const formatDate = date => new Intl.DateTimeFormat('en-US', {year:'numeric',mont
       </nav>}
     </div>}
     {section.kind === 'table' && <div class="recipe-table" role="region" aria-label={`${section.title} table`} tabindex="0"><table><caption>{section.title}</caption><thead><tr>{section.headers.map(header => <th scope="col">{header}</th>)}</tr></thead><tbody>{section.rows.map(row => <tr>{row.map((cell,index) => index === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>)}</tbody></table></div>}
+    {section.kind === 'search' && <Search base={base} Button={Button} />}
     {section.kind === 'facts' && <dl>{section.facts.map(fact => <div><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl>}
     {section.actions && <ul class="recipe-actions">{section.actions.map(action => <li><Button href={href(action.url)}>{action.label}</Button></li>)}</ul>}
   </section>)}

@@ -76,7 +76,7 @@ try {
         }
         assert.deepEqual(missing, [], 'Page resources must load');
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'No horizontal overflow at 320px');
-        if (['home','guide','person','article','event','archive'].includes(record.id)) {
+        if (['home','guide','person','article','event','archive','search'].includes(record.id)) {
           const results=await new AxeBuilder({page}).analyze();
           assert.deepEqual(results.violations.map(({id,nodes})=>({id,html:nodes.map(n=>n.html)})), [], `Axe violations: ${family} ${base} ${record.id}`);
         }
@@ -108,16 +108,53 @@ try {
           await nav.locator('[data-previous]').click();
           assert.equal(await nav.locator('[data-page-status]').innerText(), 'Page 1 of 2');
         }
+        if (record.id === 'search') {
+          await page.goto(`${origin}${base}examples/search/?q=A%20shoreline%20in%20three%20views`);
+          const query=page.getByLabel('Search the example record');
+          assert.equal(await query.inputValue(), 'A shoreline in three views');
+          const unavailable=page.locator('[data-search-results] li').filter({has:page.getByRole('link',{name:'A shoreline in three views',exact:true})});
+          assert.equal(await unavailable.getByText('Not yet available in this Astro preview.').count(),1);
+          await query.fill('shoreline');
+          await page.getByRole('button',{name:'Search',exact:true}).click();
+          const matching=catalog.pages.filter(entry=>`${entry.title} ${entry.summary} ${entry.category}`.toLocaleLowerCase().includes('shoreline'));
+          assert.equal(await page.locator('[data-search-results] li').count(), matching.length);
+          assert.equal(new URL(page.url()).searchParams.get('q'), 'shoreline');
+          for (const entry of matching) assert.equal(await page.locator('[data-search-results]').getByRole('link',{name:entry.title,exact:true}).getAttribute('href'), `${base}examples/${entry.id}/`);
+          await query.fill('<img src=x onerror=alert(1)>');
+          await page.getByRole('button',{name:'Search',exact:true}).click();
+          assert.equal(await page.locator('[data-search-results] img').count(),0);
+          assert.ok((await page.locator('[data-search-status]').textContent()).includes('<img src=x onerror=alert(1)>'));
+          await page.goto(`${origin}${base}examples/search/?q=${'x'.repeat(250)}`);
+          assert.equal((await query.inputValue()).length, 200);
+          assert.equal(new URL(page.url()).searchParams.get('q').length, 200);
+          await query.fill('');
+          await page.getByRole('button',{name:'Search',exact:true}).click();
+          assert.equal(new URL(page.url()).searchParams.has('q'), false);
+          assert.equal(await page.locator('[data-search-results] li').count(),0);
+        }
         if (record.id === 'guide') assert.equal(await page.locator('#arrival + .recipe-prose ol li').count(),4);
         if (record.id === 'opportunity') assert.equal(await page.locator('#requirements + .recipe-prose ul li').count(),3);
         if (record.id === 'changelog') assert.equal(await page.locator('#v1-2 + .recipe-prose h3').count(),2);
         await context.close();
       }
+      const indexContext=await browser.newContext({viewport:{width:320,height:800}});
+      const indexPage=await indexContext.newPage();
+      await indexPage.goto(`${origin}${base}examples/`);
+      assert.equal(await indexPage.locator('h1').count(), 1);
+      assert.equal(await indexPage.locator('.catalog h3').count(), catalog.pages.length);
+      for (const entry of catalog.pages) assert.equal(await indexPage.getByRole('link',{name:entry.title,exact:true}).getAttribute('href'), `${base}examples/${entry.id}/`);
+      const indexAxe=await new AxeBuilder({page:indexPage}).analyze();
+      assert.deepEqual(indexAxe.violations.map(({id,nodes})=>({id,html:nodes.map(n=>n.html)})), [], `Axe violations: ${family} ${base} catalog index`);
+      assert.equal(await indexPage.getByText('Not yet available in this Astro preview.',{exact:true}).count(), catalog.pages.length-supported.length);
+      assert.equal(await indexPage.evaluate(()=>document.documentElement.scrollWidth <= innerWidth), true);
+      await indexContext.close();
       const noJs=await browser.newContext({javaScriptEnabled:false});
       const staticPage=await noJs.newPage();
       await staticPage.goto(`${origin}${base}examples/archive/`);
       assert.equal(await staticPage.locator('[data-list-item]:visible').count(), 6);
       assert.equal(await staticPage.locator('[data-pagination]').isVisible(), false);
+      await staticPage.goto(`${origin}${base}examples/search/`);
+      assert.equal(await staticPage.getByRole('link',{name:'Browse the complete example index'}).getAttribute('href'), `${base}examples/`);
       await noJs.close();
       console.log(`${family} ${base}: ${pages.length} pages; content, routes, pagination, print, no-JS and representative axe passed`);
     } finally { server.closeAllConnections(); await new Promise(r=>server.close(r)); }

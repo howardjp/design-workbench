@@ -1,0 +1,53 @@
+---
+import catalog from '../../../page-archetypes/content/catalog.json';
+import {supported} from '../supported.mjs';
+const {base, Button} = Astro.props;
+const prefix = base.replace(/\/$/, '');
+const index = catalog.pages.map(entry => ({title:entry.title, summary:entry.summary, category:entry.category, url:`${prefix}/examples/${entry.id}/`, available:supported.includes(entry.id)}));
+const json = JSON.stringify(index).replace(/</g, '\\u003c');
+---
+<form data-search action={`${prefix}/examples/search/`} role="search">
+  <label for="example-query">Search the example record</label>
+  <div><input type="search" id="example-query" name="q" maxlength="200" placeholder="Try shoreline, workshop, or protocol" /> <Button type="submit">Search</Button></div>
+</form>
+<p role="status" data-search-status>Enter a word or phrase to search the collection.</p>
+<ul data-search-results></ul>
+<noscript><p>Search requires JavaScript. <a href={`${prefix}/examples/`}>Browse the complete example index</a>.</p></noscript>
+<script type="application/json" id="example-search-index" is:inline set:html={json}></script>
+<script>
+  const form = document.querySelector('[data-search]');
+  if (form) {
+    const index = JSON.parse(document.getElementById('example-search-index').textContent);
+    const input = form.querySelector('input');
+    const results = document.querySelector('[data-search-results]');
+    const status = document.querySelector('[data-search-status]');
+    const run = () => {
+      const query = input.value.trim().slice(0, 200);
+      input.value = query;
+      const url = new URL(location.href);
+      query ? url.searchParams.set('q', query) : url.searchParams.delete('q');
+      history.replaceState(null, '', url);
+      results.replaceChildren();
+      if (!query) { status.textContent = 'Enter a word or phrase to search the collection.'; return; }
+      const words = query.toLocaleLowerCase().split(/\s+/u);
+      const matches = index.filter(entry => words.every(word => `${entry.title} ${entry.summary} ${entry.category}`.toLocaleLowerCase().includes(word)));
+      status.textContent = matches.length ? `${matches.length} result${matches.length === 1 ? '' : 's'} for “${query}”.` : `No results for “${query}”. Try fewer words or browse the example index.`;
+      for (const entry of matches) {
+        const item = document.createElement('li');
+        const heading = document.createElement('h3');
+        const link = document.createElement('a');
+        link.href = entry.url;
+        link.textContent = entry.title;
+        heading.append(link);
+        const summary = document.createElement('p');
+        summary.textContent = entry.summary;
+        item.append(heading, summary);
+        if (!entry.available) { const note = document.createElement('p'); note.textContent = 'Not yet available in this Astro preview.'; item.append(note); }
+        results.append(item);
+      }
+    };
+    input.value = new URL(location.href).searchParams.get('q') || '';
+    form.addEventListener('submit', event => { event.preventDefault(); run(); });
+    run();
+  }
+</script>
