@@ -79,6 +79,7 @@ jobs:
           node examples/page-archetypes/tests/content-semantic-inventory.mjs
           node examples/page-archetypes/tests/axe-route-inventory.mjs
           NIGHTJAR_AXE_APPEARANCE=dark node examples/page-archetypes/tests/axe-route-inventory.mjs
+          node examples/page-archetypes/tests/contrast-bounded.mjs
           node examples/page-archetypes/tests/dashboard-static-chart-data.mjs
           node examples/page-archetypes/tests/zoom-reflow-equivalence.mjs
           node examples/page-archetypes/tests/print-media-inventory.mjs
