@@ -2,7 +2,8 @@
    Host supplies identity and destinations; no source-site personal content is embedded. */
 .nightjar-header { background:#061325; color:#fff; position:relative; z-index:2; }
 .nightjar-header__inner { max-width:80rem; padding:1rem 1.5rem; margin:auto; display:flex; align-items:center; justify-content:space-between; gap:1rem; }
-.nightjar-brand { color:#fff; font-weight:700; text-decoration:none; }
+.nightjar-brand { color:#fff; display:flex; align-items:center; gap:.65rem; font-weight:700; text-decoration:none; }
+.nightjar-brand img { inline-size:40px; block-size:40px; object-fit:contain; flex:none; }
 .nightjar-header nav { display:flex; gap:1.5rem; align-items:center; }
 .nightjar-header nav[hidden] { display:none; }
 .nightjar-header ul,.nightjar-footer ul { list-style:none; padding:0; margin:0; }

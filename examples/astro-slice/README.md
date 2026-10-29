@@ -14,7 +14,7 @@ The contact, account and newsletter forms validate locally with invented values;
 
 Markdown uses markdown-it and footnote parsing; local root-relative links and images respect the build base. Raw HTML remains disabled by default. Only the checked-in stress fixture enables raw markup, which is passed through a narrow HTML/MathML sanitizer before rendering; this fixture-specific option is not an ingestion policy for untrusted HTML. Code blocks are labelled and keyboard focusable, and footnote identifiers are scoped to their page section. Unsupported section kinds fail the build rather than silently disappearing. The three dashboard implementations reuse the shared synthetic fixture and framework-neutral behavior, with browser-local state; functional and visual parity remain subject to further review.
 
-The catalog and search link all 50 fixture records. The dashboard workspace links all three applications. Set `NIGHTJAR_PEER_URL` to the absolute HTTP(S) base URL of the other family build to expose a cross-family comparison link; without it, no public host is assumed. Query state is retained when following that link. The shell uses a fictional host identity and does not introduce an invented mark. Complete navigation, authentic source marks, matching source-shell details and full cross-framework visual review remain open for both families.
+The catalog and search link all 50 fixture records. The dashboard workspace links all three applications. Set `NIGHTJAR_PEER_URL` to the absolute HTTP(S) base URL of the other family build to expose a cross-family comparison link; without it, no public host is assumed. Query state is retained when following that link. The shell uses each design language’s source mark and labels it as an example collection; Northlight remains a fictional host. Its local navigation and grouped footer link to the shared examples and dashboards. The source sites’ personal-owner badges, bylines, legal destinations and external links are intentionally not transplanted into this fictional context. The source sites and this specimen have different content and footer composition, and full cross-framework visual review remains open.
 
 ```sh
 # From the workbench root: install shared renderer dependencies
@@ -25,6 +25,7 @@ NIGHTJAR_FAMILY=martlet npm run build
 NIGHTJAR_FAMILY=krigsvold NIGHTJAR_BASE=/preview/ npm run build
 # Install Playwright Chromium, or select an existing executable:
 CHROMIUM_PATH=/usr/bin/chromium npm test
+CHROMIUM_PATH=/usr/bin/chromium node test-source-shell.mjs
 CHROMIUM_PATH=/usr/bin/chromium npm run test:navigation
 CHROMIUM_PATH=/usr/bin/chromium npm run test:analytics
 CHROMIUM_PATH=/usr/bin/chromium node test-administration.mjs
@@ -32,3 +33,5 @@ CHROMIUM_PATH=/usr/bin/chromium node test-operations.mjs
 ```
 
 Each build selects only its own family shell, styles and fonts. Output is under `dist/<family>`. The test rebuilds both families for `/` and `/preview/`; it checks shared content and destinations, generated CSS isolation, loaded page assets and 320px overflow on the 47 non-dashboard records and the catalog index. Dedicated dashboard and navigation suites cover the other three routes. It runs automated axe on twenty-two representative pages plus the index per build, checks article/event metadata, table and image content, MathML and footnote navigation, keyboard-focusable code, malicious markup sanitization, gallery keyboard open/close and focus return, pagination keyboard operation, print and no-JavaScript fallbacks, search query recovery, result safety, non-navigable unavailable labels, station and scene keyboard/no-JavaScript states, native disclosure, CSV content, record selection/filter/review/reset, message validation and injection resistance, local form validation, reset, no-network behavior and sensitive field clearing, and checks Markdown escaping, unsafe links, and base-aware paths. The dashboard-navigation suite additionally requests each catalog route. Manual visual comparison, screen-reader checks, other browser engines, print on paper and wider viewport review remain open.
+
+`test-source-shell.mjs` checks family marks, base-aware navigation and footer links, mobile keyboard and focus return, 320px overflow, dark/light axe checks, and the no-JavaScript shell at root and `/preview/`. Set `NIGHTJAR_SCREENSHOTS` to a writable directory to capture full-page 320px and 1440px article screenshots for each family; these are review evidence, not approved visual baselines.
