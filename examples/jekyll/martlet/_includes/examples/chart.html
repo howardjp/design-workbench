@@ -1,0 +1,6 @@
+<figure class="dash-panel dash-chart dash-panel--{{ include.id }}" aria-labelledby="{{ include.id }}-title">
+  <header><h2 id="{{ include.id }}-title">{{ include.title | escape }}</h2><p>{{ include.description | escape }}</p></header>
+  <div class="dash-chart__plot" data-chart="{{ include.id }}"></div>
+  <figcaption data-chart-summary="{{ include.id }}">The data table provides an alternative to the chart.</figcaption>
+  <details><summary>View {{ include.title | downcase | escape }} data</summary><div class="example-table-scroll" role="region" aria-label="{{ include.title | escape }} data" tabindex="0"><table data-chart-table="{{ include.id }}"><caption>{{ include.title | escape }} — synthetic data</caption><thead><tr><th scope="col">Label</th><th scope="col">Value</th></tr></thead><tbody><tr><td colspan="2">Chart values appear here when JavaScript is enabled. Published source data follows below.</td></tr></tbody></table></div></details>
+</figure>

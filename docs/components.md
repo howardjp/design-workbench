@@ -66,3 +66,16 @@ Concurrent specification recovery composes DefinitionList, Fieldset/Radio, Discl
 ## Settings composition
 
 Settings composes Tabs, Switch, Field/Select, Button, Notice, ErrorSummary and Dialog. Form values persist across panels; unsaved navigation requires a choice; save failures retain values; clear-recovery confirmation defaults to retaining copies. Martlet uses comfortable reading measure, gathered field groups and understated selected tabs. Krigsvold uses aligned regions, leading rules, uppercase interface labels and explicit selected surfaces. Both share the same settings/data/keyboard contract. See [browser recovery and settings](browser-drafts.md).
+
+## Jekyll application capabilities (experimental)
+
+The paired analytics, administration and operations references extend the existing Liquid include library and source shells. They add no runtime framework or dashboard package. See `examples/page-archetypes/DASHBOARDS.md` for contracts, the shared fixture, interaction rules, and porting boundaries.
+
+- `example-dashboard` composes native site navigation, an application sidebar, a bounded work area, and the normal closing footer.
+- `metric.html` names a value, its unit, and its comparison basis; one central status announces updates.
+- `chart.html` pairs SVG presentation with a disclosure containing exact values and a published source-data fallback.
+- `table.html` now accepts `density: 'comfortable' | 'compact'`; comfortable remains the default. The same density rule is used by application tables.
+- `collectionView` provides configurable search/sort fields, stable ordering, bounded pages and result counts, independent of a renderer or theme.
+- Native form controls, buttons, fieldsets, tables, status/alert regions, disclosures and dialogs remain the starting primitives. Sortable headers and scoped selection compose them; row selection never silently broadens to all matching records.
+
+These are implemented Jekyll and framework-neutral capabilities. Existing React component exports are unchanged; no React dashboard implementation or package release is claimed.

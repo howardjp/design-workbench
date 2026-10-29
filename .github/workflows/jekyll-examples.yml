@@ -1,0 +1,63 @@
+name: Verify portable Jekyll examples
+on:
+  pull_request:
+    paths: ['examples/**', '.github/workflows/jekyll-examples.yml']
+  push:
+    branches: [main]
+    paths: ['examples/**', '.github/workflows/jekyll-examples.yml']
+permissions:
+  contents: read
+jobs:
+  examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+      - run: npm ci --ignore-scripts
+      - name: Check canonical exports and portable contracts
+        run: |
+          python3 examples/page-archetypes/scripts/sync.py
+          git diff --exit-code -- examples/jekyll
+          node examples/page-archetypes/scripts/verify.mjs
+          node --test examples/page-archetypes/tests/dashboard-model.test.mjs
+      - name: Install locked Jekyll dependencies
+        run: |
+          cd examples/jekyll/martlet && bundle install
+          cd ../krigsvold && bundle install
+      - name: Build and verify root-hosted references
+        run: |
+          python3 examples/page-archetypes/scripts/build.py
+          python3 examples/page-archetypes/scripts/verify-html.py examples/jekyll/martlet/dist
+          python3 examples/page-archetypes/scripts/verify-html.py examples/jekyll/krigsvold/dist
+      - name: Build and verify subpath-hosted references
+        run: |
+          python3 examples/page-archetypes/scripts/build.py --family martlet --baseurl /preview --destination "$RUNNER_TEMP/martlet-subpath"
+          python3 examples/page-archetypes/scripts/verify-html.py "$RUNNER_TEMP/martlet-subpath" --baseurl /preview
+          python3 examples/page-archetypes/scripts/build.py --family krigsvold --baseurl /preview --destination "$RUNNER_TEMP/krigsvold-subpath"
+          python3 examples/page-archetypes/scripts/verify-html.py "$RUNNER_TEMP/krigsvold-subpath" --baseurl /preview
+      - name: Build paired application test fixtures
+        run: |
+          python3 examples/page-archetypes/scripts/build.py --family martlet --baseurl /martlet --destination "$GITHUB_WORKSPACE/dashboard-test-dist/martlet"
+          python3 examples/page-archetypes/scripts/build.py --family krigsvold --baseurl /krigsvold --destination "$GITHUB_WORKSPACE/dashboard-test-dist/krigsvold"
+      - name: Install browser for dashboard acceptance checks
+        run: npx playwright install --with-deps chromium
+      - name: Verify paired dashboard behaviour, reflow, keyboard and accessibility
+        run: npx playwright test --config playwright.dashboard.config.ts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dashboard-browser-evidence
+          path: test-results/dashboards
+          if-no-files-found: ignore
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jekyll-example-sites
+          path: |
+            examples/jekyll/martlet/dist
+            examples/jekyll/krigsvold/dist
