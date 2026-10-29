@@ -4,7 +4,7 @@ export const dayMillis = 86400000;
 const comparisonKeys = Object.freeze({
   analytics:['start','end','category'],
   administration:['q','status','sort','direction','page','size','density'],
-  operations:['hours','threshold','service','severity','hideAcknowledged']
+  operations:['hours','threshold','service','serviceId','severity','hideAcknowledged']
 });
 export function comparisonSearch(route, search) {
   if (!Object.hasOwn(comparisonKeys, route)) throw new Error('Unsupported dashboard route');
@@ -143,13 +143,14 @@ export function operationsDataIssue(fixture) {
 }
 // Round nonnegative integer ratios exactly, including near MAX_SAFE_INTEGER.
 function roundedMean(total,count){return Number((2n*BigInt(total)+BigInt(count))/(2n*BigInt(count)));}
-export function operationsView(fixture,{hours=6,threshold=250,service='All',severity='All',hideAcknowledged=false},alerts=fixture.alerts) {
+export function operationsView(fixture,{hours=6,threshold=250,service='All',serviceId=/** @type {string|null} */ (null),severity='All',hideAcknowledged=false},alerts=fixture.alerts) {
   const error=operationsDataIssue(fixture);
   if(error) return {error};
   const limit=[6,12,24].includes(Number(hours))?Number(hours):6;
   const warning=Math.max(50,Math.min(1000,Number(threshold)||250));
   const end=Date.parse(fixture.as_of),start=end-(limit-1)*3600000;
-  const services=fixture.services.filter(item=>service==='All'||item.id===service).map(item=>{
+  const selectedService=serviceId!==null?serviceId:(service==='All'?null:service);
+  const services=fixture.services.filter(item=>selectedService===null||item.id===selectedService).map(item=>{
     const ordered=[...item.samples].sort((a,b)=>a.time.localeCompare(b.time));
     return {...item,latest:ordered.at(-1),samples:ordered.filter(sample=>Date.parse(sample.time)>=start&&Date.parse(sample.time)<=end)};
   });
@@ -159,7 +160,7 @@ export function operationsView(fixture,{hours=6,threshold=250,service='All',seve
   const commonTimes=new Set(points.map(point=>Date.parse(point.time)));
   const partial=services.some(item=>item.samples.length!==limit)||Array.from({length:limit},(_,index)=>end-index*3600000).some(time=>!commonTimes.has(time));
   const staggered=new Set(services.map(item=>item.latest.time)).size>1;
-  const relevant=alerts.filter(alert=>(service==='All'||alert.service_id===service));
+  const relevant=alerts.filter(alert=>(selectedService===null||alert.service_id===selectedService));
   const visible=relevant.filter(alert=>(severity==='All'||alert.severity===severity)&&(!hideAcknowledged||!alert.acknowledged));
   const last=services.map(item=>({...item,warning:item.latest.latency_ms>=warning}));
   const availabilities=services.flatMap(item=>item.samples.map(sample=>sample.availability));

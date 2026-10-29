@@ -182,3 +182,10 @@ test('duplicate directory email checks normalize stored whitespace and case',()=
  assert.equal(validatePerson(draft,records).email,'This email address is already in the directory.');
  assert.equal(validatePerson(draft,records,'existing').email,undefined);
 });
+
+test('literal All service ID is distinguishable from the all-services filter',()=>{
+ const copy=structuredClone(fixture),old=copy.services[0].id;copy.services[0].id='All';copy.alerts.forEach(alert=>{if(alert.service_id===old)alert.service_id='All'});copy.alerts[0].service_id='All';
+ assert.equal(operationsView(copy,{service:'All'}).services.length,copy.services.length);
+ const single=operationsView(copy,{service:'All',serviceId:'All'});assert.equal(single.services.length,1);assert.equal(single.services[0].id,'All');assert.ok(single.alerts.length>0);assert.ok(single.alerts.every(alert=>alert.service_id==='All'));
+ assert.equal(comparisonSearch('operations','?service=All&serviceId=All&token=private'),'service=All&serviceId=All');
+});

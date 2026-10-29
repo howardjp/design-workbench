@@ -9,7 +9,7 @@ const navToggle=root.querySelector('.dash-nav-toggle'),nav=root.querySelector('#
 navToggle.hidden=false;root.dataset.ready='true';
 navToggle.addEventListener('click',()=>navToggle.setAttribute('aria-expanded',String(navToggle.getAttribute('aria-expanded')!=='true')));
 root.querySelector('.dash-sidebar').addEventListener('keydown',event=>{if(event.key==='Escape'){navToggle.setAttribute('aria-expanded','false');navToggle.focus();}});
-function updateURL(values){const url=new URL(location.href);for(const[key,value]of Object.entries(values))url.searchParams.set(key,String(value));history.replaceState(null,'',url);const peer=root.querySelector('[data-compare]');const compare=new URL(peer.href);compare.search=comparisonSearch(root.dataset.dashboard,url.search);peer.href=compare.href;}
+function updateURL(values){const url=new URL(location.href);for(const[key,value]of Object.entries(values))value===null?url.searchParams.delete(key):url.searchParams.set(key,String(value));history.replaceState(null,'',url);const peer=root.querySelector('[data-compare]');const compare=new URL(peer.href);compare.search=comparisonSearch(root.dataset.dashboard,url.search);peer.href=compare.href;}
 const number=value=>new Intl.NumberFormat('en-US').format(value);
 function analytics(){
   const form=root.querySelector('#analytics-filters');const start=form.elements.start,end=form.elements.end,category=form.elements.category,range=form.elements.range;const coverage={start:start.min,end:end.max};
@@ -113,10 +113,11 @@ function administration(){
 if(root.dataset.dashboard==='administration')administration();
 function operations(){
   const form=root.querySelector('#operations-filters');let alerts=structuredClone(fixture.alerts),localEvents=[];
-  const initial={hours:params.get('hours')||'6',threshold:params.get('threshold')||'250',service:params.get('service')||'All',severity:params.get('severity')||'All'};
+  const requestedService=params.has('serviceId')?params.get('serviceId'):(params.get('service')==='All'?'':params.get('service')||'');
+  const initial={hours:params.get('hours')||'6',threshold:params.get('threshold')||'250',service:requestedService,severity:params.get('severity')||'All'};
   for(const[name,value]of Object.entries(initial)){if(name==='threshold'||[...form.elements[name].options].some(option=>option.value===value))form.elements[name].value=value;}
   form.elements.hideAcknowledged.checked=params.get('hideAcknowledged')==='true';
-  let state={hours:6,threshold:250,service:'All',severity:'All',hideAcknowledged:false};
+  let state={hours:6,threshold:250,service:'All',serviceId:null,severity:'All',hideAcknowledged:false};
   const buttonClass=root.querySelector('[data-reset-operations]').className;
   const render=(useApplied=false,updateAddress=true)=>{
     const error=root.querySelector('#operations-error');
@@ -124,7 +125,7 @@ function operations(){
       const threshold=Number(form.elements.threshold.value);
       if(!Number.isInteger(threshold)||threshold<50||threshold>1000){error.hidden=false;error.textContent='Enter a whole-number warning threshold from 50 to 1000 ms. Previous valid results remain visible.';form.elements.threshold.setAttribute('aria-invalid','true');error.tabIndex=-1;error.focus();return;}
       error.hidden=true;form.elements.threshold.removeAttribute('aria-invalid');
-      state={hours:Number(form.elements.hours.value),threshold,service:form.elements.service.value,severity:form.elements.severity.value,hideAcknowledged:form.elements.hideAcknowledged.checked};
+      state={hours:Number(form.elements.hours.value),threshold,service:form.elements.service.value||'All',serviceId:form.elements.service.value==='All'?'All':null,severity:form.elements.severity.value,hideAcknowledged:form.elements.hideAcknowledged.checked};
     }
     const {threshold}=state;
     const view=operationsView(fixture,state,alerts);if(updateAddress)updateURL(state);
@@ -140,7 +141,7 @@ function operations(){
     const alertTable=root.querySelector('#alert-table'),body=alertTable.tBodies[0];body.replaceChildren();
     for(const alert of view.alerts){const row=body.insertRow();row.append(element('th',`${alert.id} · ${alert.title}`,{scope:'row'}));row.insertCell().textContent=fixture.services.find(service=>service.id===alert.service_id).name;row.insertCell().append(element('span',alert.severity,{class:'dash-badge dash-badge--'+alert.severity.toLowerCase()}));row.insertCell().textContent=alert.time.slice(0,16).replace('T',' ')+' UTC';row.insertCell().textContent=alert.acknowledged?'Acknowledged':'Unacknowledged';const button=element('button',alert.acknowledged?'Undo acknowledgement':'Acknowledge',{class:buttonClass,type:'button','aria-label':`${alert.acknowledged?'Undo acknowledgement':'Acknowledge'} ${alert.id}`});button.dataset.acknowledge=alert.id;row.insertCell().append(button);}
     root.querySelector('[data-alert-count]').textContent=view.alerts.length?`${view.alerts.length} alerts match the severity and acknowledgement filters.`:'No alerts match these filters.';
-    const events=[...localEvents,...fixture.activity].filter(event=>state.service==='All'||event.service_id===state.service);
+    const events=[...localEvents,...fixture.activity].filter(event=>(state.serviceId===null&&state.service==='All')||event.service_id===(state.serviceId??state.service));
     const timeline=root.querySelector('[data-activity]');timeline.replaceChildren();for(const event of events){const item=element('li');if(event.time)item.append(element('time',event.time.slice(0,16).replace('T',' ')+' UTC',{datetime:event.time}));else item.append(element('span','Local preview action',{class:'example-help'}));item.append(element('p',event.title));timeline.append(item);}
     if(!events.length)timeline.append(element('li','No activity in the selected scope.'));
     status.textContent=`${view.services.length} services · Last ${state.hours} hours · ${threshold} ms warning threshold · ${view.alerts.length} visible alerts.`;
