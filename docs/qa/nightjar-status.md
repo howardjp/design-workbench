@@ -159,3 +159,7 @@ Commits `6c10dd4` and `8d55ac9` add isolated React administration and shared das
 ### React catalog interactions
 
 Commit `61ff6cd` expands React to 41 paired routes with query-backed search, six local form specimens, native disclosures, pricing, statistics, report CSV and the scoped sanitized stress fixture. Independent Chromium tests passed both families at root/subpaths for all 41 routes, representative axe and responsive checks, safe markup, search, local validation, sensitive-field clearing, disabled no-JavaScript controls, native disclosures, pagination and print; strict TypeScript passed. Nine routes, including dashboard integration and other interactive fixtures, remain unported. Standalone dashboard components are not yet catalog routes.
+
+### React workspace and chat components
+
+Commit `68d0625` adds isolated controlled React workspaces and local chat. Two concurrent workspace instances have distinct accessible detail names; the fixture supports keyboard selection, review, filtering and reset, with complete server-rendered records. Chat rejects whitespace, renders entered text safely, resets locally and does not send a POST. Independent Chromium tests passed both families at root/subpaths for two instances, keyboard/focus, no-JavaScript, 320px, light/dark axe and no network submission; focused TypeScript passed. Catalog wiring and full visual/manual accessibility review remain open.
