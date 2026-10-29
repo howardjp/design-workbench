@@ -43,3 +43,13 @@ The administration URL accepts a `page` parameter. A fractional value such as `?
 ### Parity scope
 
 The shared catalog has eight composition frames and 16 section roles: prose, cards, listing, facts, table, form, FAQ, figure, plans, stats, gallery, search, workspace, chat, sensors and scene. Three dashboards use dedicated renderers and a common synthetic dataset. None of the corresponding 50 Astro or 50 React pages per language has been established as consuming this catalog; analogous starter/reference demonstrations do not constitute parity. Consequently build, functional, accessibility, responsive, visual and performance status for those ports is **unverified**, not passing. Start with paired Astro routes driven by the shared catalog after the Jekyll acceptance gates, preserving base paths, family shells and class semantics; expand section and interaction coverage rather than copying generated Jekyll HTML.
+
+### Jekyll runtime and browser baseline
+
+Ruby 3.2.3 and Bundler 2.4.19 were built without system privileges under `/workspace/nightjar/toolchains/ruby-3.2.3-install`; gems are installed in `/workspace/nightjar/toolchains/gems`. The locked dependencies installed with `BUNDLE_FROZEN=true`. For reuse, put that Ruby's `bin` on `PATH`, and set `BUNDLE_PATH` and `BUNDLE_FROZEN=true`.
+
+Both Jekyll sites built at `/` and `/preview`. `verify-html.py` passed for each build: 57 HTML pages and 1,428 local destinations/fragments per site. The dashboard suite passed 47/47 using installed Chromium 151 with a temporary executable-path override, including the new paired malformed-page regression, interactions, 320/768/1100/1440px overflow/navigation checks, and axe WCAG-tagged checks in light and dark modes. The Playwright browser download was denied by network policy, so these results are specific to system Chromium. Automated checks do not establish complete accessibility conformance.
+
+The 1440px analytics screenshots for both languages and the 320px Martlet analytics screenshot were inspected; both desktop compositions rendered distinctly, and the mobile view reflowed with a bounded table. This is a limited inspection, not a comprehensive visual regression comparison. Screenshots are ignored test artifacts; no visual baseline was approved.
+
+The existing React reference browser suite passed 39/39 on system Chromium. Further registry browser checks are in progress.
