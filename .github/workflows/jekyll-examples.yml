@@ -1,10 +1,10 @@
-name: Verify portable Jekyll examples
+name: Verify portable examples
 on:
   pull_request:
-    paths: ['examples/**', '.github/workflows/jekyll-examples.yml']
+    paths: ['examples/**', 'packages/**', 'package.json', 'package-lock.json', 'playwright.dashboard.config.ts', '.github/workflows/jekyll-examples.yml']
   push:
     branches: [main]
-    paths: ['examples/**', '.github/workflows/jekyll-examples.yml']
+    paths: ['examples/**', 'packages/**', 'package.json', 'package-lock.json', 'playwright.dashboard.config.ts', '.github/workflows/jekyll-examples.yml']
 permissions:
   contents: read
 jobs:
@@ -54,6 +54,7 @@ jobs:
       - name: Verify independent station and scene compositions
         run: |
           npm ci --prefix examples/astro-slice --ignore-scripts
+          npm --prefix examples/astro-slice run test:fixtures
           node examples/page-archetypes/tests/simulation-composition.mjs
           node examples/page-archetypes/tests/gallery-composition.mjs
           node examples/page-archetypes/tests/chat-composition.mjs
@@ -69,6 +70,9 @@ jobs:
           npm run build --workspaces
           NIGHTJAR_FAMILY=martlet NIGHTJAR_BASE=/ node examples/react-catalog/build.mjs
           NIGHTJAR_FAMILY=krigsvold NIGHTJAR_BASE=/ node examples/react-catalog/build.mjs
+          node examples/page-archetypes/tests/dashboard-framework-parity.mjs
+          node examples/page-archetypes/tests/form-keyboard-parity.mjs
+          node examples/page-archetypes/tests/reading-framework-typography.mjs
           node examples/page-archetypes/tests/internationalization-stress.mjs
           node examples/page-archetypes/tests/enlarged-text-motion.mjs
           node examples/page-archetypes/tests/gallery-link-contract.mjs
@@ -89,3 +93,59 @@ jobs:
           path: |
             examples/jekyll/martlet/dist
             examples/jekyll/krigsvold/dist
+
+  # Group the expensive isolated builds to bound parallelism and setup cost.
+  fixture-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [analytics-coverage, analytics-precision, operations-directory]
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+      BUNDLE_FROZEN: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+      - name: Install locked dependencies and build React workspaces
+        run: |
+          npm ci --ignore-scripts
+          npm ci --prefix examples/astro-slice --ignore-scripts
+          npm run build --workspaces
+          (cd examples/jekyll/martlet && bundle install)
+          (cd examples/jekyll/krigsvold && bundle install)
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Exercise isolated schema-valid fixtures
+        env:
+          NIGHTJAR_FIXTURE_SUITE: ${{ matrix.suite }}
+        run: |
+          case "$NIGHTJAR_FIXTURE_SUITE" in
+            analytics-coverage)
+              node examples/page-archetypes/tests/analytics-empty.mjs
+              node examples/page-archetypes/tests/analytics-order-static.mjs
+              node examples/page-archetypes/tests/analytics-sparse.mjs
+              node examples/page-archetypes/tests/analytics-sparse.mjs --gap
+              ;;
+            analytics-precision)
+              node examples/page-archetypes/tests/analytics-precision.mjs
+              node examples/page-archetypes/tests/analytics-precision.mjs --previous
+              node examples/page-archetypes/tests/analytics-precision.mjs --selection
+              ;;
+            operations-directory)
+              node examples/page-archetypes/tests/operations-order.mjs
+              node examples/page-archetypes/tests/operations-partial.mjs
+              node examples/page-archetypes/tests/operations-partial.mjs --disjoint
+              node examples/page-archetypes/tests/operations-invalid.mjs
+              node examples/page-archetypes/tests/operations-invalid.mjs --future
+              node examples/page-archetypes/tests/administration-identifiers.mjs
+              ;;
+            *) exit 1 ;;
+          esac
