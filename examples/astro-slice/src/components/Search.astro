@@ -60,14 +60,18 @@ const json = JSON.stringify(index).replace(/</g, '\\u003c');
     const initialUrl = new URL(location.href);
     initial ? initialUrl.searchParams.set('q', initial) : initialUrl.searchParams.delete('q');
     try { history.replaceState(history.state, '', initialUrl); } catch { return; }
-    window.addEventListener('nightjar:search-query', event => run(event.detail));
+    window.addEventListener('nightjar:search-query', event => {
+      run(event.detail.value);
+      if (!event.detail.urlUpdated) status.append(document.createTextNode(' The address could not be updated; it may not reflect this search.'));
+    });
     window.addEventListener('popstate', () => run(new URL(location.href).searchParams.get('q') || ''));
     form.addEventListener('submit', event => {
       event.preventDefault();
       const query = input.value.trim().slice(0, 200), url = new URL(location.href);
       query ? url.searchParams.set('q', query) : url.searchParams.delete('q');
-      history.replaceState(history.state, '', url);
-      window.dispatchEvent(new CustomEvent('nightjar:search-query', {detail: query}));
+      let urlUpdated = true;
+      try { history.replaceState(history.state, '', url); } catch { urlUpdated = false; }
+      window.dispatchEvent(new CustomEvent('nightjar:search-query', {detail: {value: query, urlUpdated}}));
     });
     run(initial);
     input.disabled = false; submit.disabled = false; container.querySelector('[data-search-fallback]').hidden = true;
