@@ -50,7 +50,7 @@
       input.value = query;
       const url = new URL(location.href);
       query ? url.searchParams.set('q', query) : url.searchParams.delete('q');
-      history.replaceState(null, '', url);
+      history.replaceState(history.state, '', url);
       results.replaceChildren();
       if (!query) { status.textContent = 'Enter a word or phrase to search the collection.'; return; }
       const words = query.toLocaleLowerCase().split(/\s+/u);

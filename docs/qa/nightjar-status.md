@@ -307,3 +307,7 @@ Commit `5aaaee9` marks missing date/category observations as partial, suppresses
 Commit `24b2922` clears an earlier local success message when native validation blocks a repeat submission after a password or code was cleared. Capturing the invalid event handles validation that occurs before the submit handler. A cross-framework Chromium keyboard regression passed both families for missing/malformed input focus, linked help, repeat submission, correction, reset, disabled no-JavaScript controls and no write requests; all six root-path builds passed. This is native Chromium validation evidence, not manual screen-reader certification.
 
 The integrated-branch rerun of `analytics-sparse.mjs` and `test:examples` passed after `5aaaee9`, including both languages, all three frameworks, root/subpaths and JavaScript/no-JavaScript.
+
+### Search host-history preservation
+
+Jekyll and Astro search previously replaced the current browser history entry with null state on initialization and every query update, discarding state owned by the host. They now preserve the existing state. A Chromium regression passed both families in Jekyll, Astro and React, verifying host state, unrelated query parameters, fragment, history length and keyboard search updates. Multiple demo forms still reuse IDs and need a separate composition fix.

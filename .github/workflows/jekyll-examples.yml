@@ -73,6 +73,7 @@ jobs:
           node examples/page-archetypes/tests/enlarged-text-motion.mjs
           node examples/page-archetypes/tests/gallery-link-contract.mjs
           node examples/page-archetypes/tests/dense-table-reflow.mjs
+          node examples/page-archetypes/tests/search-history-state.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
