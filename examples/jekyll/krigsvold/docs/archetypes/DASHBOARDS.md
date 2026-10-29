@@ -35,7 +35,7 @@ Metrics: sessions, downloads, completion rate (`sum(completions) / sum(sessions)
 
 Search covers configured fields; status filtering, stable column sorting and direction, row count, page controls, and density remain independent. Page numbers clamp after filtering. The select-all checkbox affects only visible rows; selections may persist across pages, and filter changes clear selection. The bulk confirmation names the selected records and intended status. Cancel and Escape write nothing. Confirmation updates selected IDs only and returns focus to an available control.
 
-The person editor adds or edits names, invented email addresses, roles and statuses. It validates required fields, email syntax, duplicates excluding the current record, and enum values. Validation retains drafts, marks fields invalid and links a focusable error summary to the fields. Rendering uses text nodes, including user-entered names. Directory changes reset on reload.
+The person editor adds or edits names, invented email addresses, roles and statuses. It validates required fields, email syntax, duplicates excluding the current record, and enum values. Validation retains drafts, marks fields invalid and links a focusable error summary to the fields. Rendering uses text nodes, including user-entered names. Directory changes reset on reload. New records receive the first unused `P-` identifier, so existing stable IDs need not follow a numeric format.
 
 The explicit state-preview control demonstrates ready, loading, error and empty states. Loading disables writes. Error recovery retains filters and drafts. Empty states explain recovery. These are labelled local state specimens, not claims that a network operation took place.
 
@@ -79,6 +79,8 @@ CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/dashboard-fr
 ```
 
 Omit `CHROMIUM_PATH` when Playwright's Chromium is installed. Astro and React default to their `dist` directories; use `NIGHTJAR_ASTRO_ROOT` or `NIGHTJAR_REACT_ROOT` to point at different directories containing `martlet` and `krigsvold` builds. These fixtures must all be built with an empty/root base path. The disposable Jekyll directory can be removed after testing.
+
+The schema-valid arbitrary-ID directory regression builds isolated fixture copies and checks independent add, edit and bulk actions across families, frameworks and base paths: `node examples/page-archetypes/tests/administration-identifiers.mjs`.
 
 ## Empty analytics fixture
 

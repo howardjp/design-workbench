@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {aggregate,analyticsView,rangeError,collectionView,applyBulk,validatePerson,operationsView,comparisonSearch,analyticsCoverageMessage,analyticsComparison} from '../jekyll/assets/js/dashboard-model.mjs';
+import {aggregate,analyticsView,rangeError,collectionView,applyBulk,validatePerson,nextPersonId,operationsView,comparisonSearch,analyticsCoverageMessage,analyticsComparison} from '../jekyll/assets/js/dashboard-model.mjs';
 const fixture=JSON.parse(fs.readFileSync(new URL('../content/dashboards.json',import.meta.url)));
 test('analytics computes rates from totals and duration from weighted observations',()=>{
  const totals=aggregate([{sessions:20,downloads:3,completions:4,duration_seconds:1200},{sessions:80,downloads:7,completions:6,duration_seconds:16800}]);
@@ -122,4 +122,10 @@ test('analytics rejects counts and totals outside exact integer precision',()=>{
  const older={...fixture,analytics:fixture.analytics.map(row=>row.date==='2026-10-10'&&row.category==='Research'?{...row,sessions:Number.MAX_SAFE_INTEGER}:row)};
  const recovered=analyticsView(older,{start:'2026-10-12',end:'2026-10-12',category:'All',coverage:{start:'2026-09-03',end:'2026-10-28'}});
  assert.equal(recovered.error,'');assert.equal(recovered.previousCategories.length,3);
+});
+
+test('new directory identifiers do not collide with arbitrary existing identifiers',()=>{
+ assert.equal(nextPersonId([]),'P-001');
+ assert.equal(nextPersonId([{id:'member-alpha'},{id:'P-001'},{id:'P-003'}]),'P-002');
+ assert.equal(nextPersonId(fixture.people),'P-025');
 });

@@ -1,4 +1,4 @@
-import {analyticsView,collectionView,validatePerson,applyBulk,operationsView,dayMillis,comparisonSearch,analyticsCoverageMessage,analyticsComparison} from './dashboard-model.mjs';
+import {analyticsView,collectionView,validatePerson,nextPersonId,applyBulk,operationsView,dayMillis,comparisonSearch,analyticsCoverageMessage,analyticsComparison} from './dashboard-model.mjs';
 import {element,tableRows,metric,chart,downloadCSV} from './dashboard-ui.mjs';
 const root=document.querySelector('[data-dashboard]');
 const fixture=JSON.parse(document.getElementById('dashboard-data').textContent);
@@ -99,7 +99,7 @@ function administration(){
   editor.addEventListener('submit',event=>{
     event.preventDefault();const draft=Object.fromEntries(['name','email','role','status'].map(name=>[name,editor.elements[name].value.trim()]));const errors=validatePerson(draft,records,editing);clearErrors();
     if(Object.keys(errors).length){const summary=root.querySelector('#person-errors');summary.hidden=false;summary.replaceChildren(element('p','Review the fields below. Your draft has been retained.'));const list=element('ul');for(const[name,message]of Object.entries(errors)){const li=element('li');const link=element('a',message,{href:`#person-${name}`});link.addEventListener('click',event=>{event.preventDefault();editor.elements[name].focus();});li.append(link);list.append(li);const input=editor.elements[name];input.setAttribute('aria-invalid','true');input.setAttribute('aria-describedby',`person-${name}-error`);const hint=root.querySelector(`#person-${name}-error`);hint.hidden=false;hint.textContent=message;}summary.append(list);summary.tabIndex=-1;summary.focus();return;}
-    const id=editing||`P-${String(Math.max(...records.map(person=>Number(person.id.slice(2))))+1).padStart(3,'0')}`;
+    const id=editing||nextPersonId(records);
     records=editing?records.map(person=>person.id===editing?{id,...draft}:person):[...records,{id,...draft}];selected.clear();resetEditor();render();status.textContent=`Saved ${draft.name} (${id}) locally. Reload restores the original fixture.`;
   });
   root.querySelectorAll('[data-bulk]').forEach(button=>button.addEventListener('click',()=>{pending={ids:[...selected],status:button.dataset.bulk};returnFocus=button;root.querySelector('[data-bulk-description]').textContent=`Set ${pending.ids.length} selected people to ${pending.status}: ${records.filter(person=>selected.has(person.id)).map(person=>person.name).join(', ')}.`;dialog.showModal();root.querySelector('[data-bulk-cancel]').focus();}));

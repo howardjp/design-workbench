@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState, type FormEvent} from 'react';
 import {Button, Dialog, family} from 'catalog-family';
 import fixture from '../../../page-archetypes/content/dashboards.json';
-import {collectionView, applyBulk, validatePerson} from '../../../page-archetypes/jekyll/assets/js/dashboard-model.mjs';
+import {collectionView, applyBulk, validatePerson, nextPersonId} from '../../../page-archetypes/jekyll/assets/js/dashboard-model.mjs';
 import './administration.css';
 type Person = {id:string; name:string; email:string; role:string; status:string};
 type Draft = Omit<Person,'id'>;
@@ -30,7 +30,7 @@ export function Administration(){
  const selectCount=view.rows.filter(item=>selected.has(item.id)).length;
  const resetEditor=()=>{setEditing(null);setDraft(emptyDraft);setErrors({});};
  const edit=(person:Person)=>{setEditing(person.id);setDraft({name:person.name,email:person.email,role:person.role,status:person.status});setErrors({});nameRef.current?.focus();};
- const save=(event:FormEvent)=>{event.preventDefault();const value={...draft,name:draft.name.trim(),email:draft.email.trim()};const issues=validateDraft(value,records,editing);if(Object.keys(issues).length){setErrors(issues);return;}const id=editing||`P-${String(Math.max(0,...records.map(person=>Number(person.id.slice(2))))+1).padStart(3,'0')}`;setRecords(old=>editing?old.map(person=>person.id===editing?{...value,id}:person):[...old,{...value,id}]);setSelected(new Set());resetEditor();setAnnouncement(`Saved ${value.name} (${id}) locally. Reload restores the original fixture.`);};
+ const save=(event:FormEvent)=>{event.preventDefault();const value={...draft,name:draft.name.trim(),email:draft.email.trim()};const issues=validateDraft(value,records,editing);if(Object.keys(issues).length){setErrors(issues);return;}const id=editing||nextPersonId(records);setRecords(old=>editing?old.map(person=>person.id===editing?{...value,id}:person):[...old,{...value,id}]);setSelected(new Set());resetEditor();setAnnouncement(`Saved ${value.name} (${id}) locally. Reload restores the original fixture.`);};
  const close=()=>{setPending(null);requestAnimationFrame(()=>{if(triggerRef.current&&!triggerRef.current.disabled)triggerRef.current.focus();else selectAll.current?.focus();});};
  const confirm=()=>{if(!pending)return;setRecords(old=>applyBulk(old,pending.ids,pending.status));const count=pending.ids.length;setSelected(new Set());setPending(null);setAnnouncement(`Updated ${count} selected people locally. No unselected records were changed.`);requestAnimationFrame(()=>selectAll.current?.focus());};
  const sort=(key:string)=>{const direction=scope.sort===key&&scope.direction==='asc'?'desc':'asc';updateScope({...scope,sort:key,direction,page:1});};

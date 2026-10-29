@@ -90,6 +90,13 @@ export function collectionView(records,{query='',status='All',sort='name',direct
   const current=Number.isSafeInteger(requestedPage) ? Math.max(1,Math.min(requestedPage,pages)) : 1;
   return {filtered,rows:filtered.slice((current-1)*pageSize,current*pageSize),page:current,pages,size:pageSize,total:filtered.length};
 }
+// Allocate a distinct ID even when existing IDs use another vocabulary.
+export function nextPersonId(records) {
+  const used=new Set(records.map(record=>record.id));
+  let number=1, id;
+  do { id=`P-${String(number++).padStart(3,'0')}`; } while(used.has(id));
+  return id;
+}
 export function validatePerson(draft,records,id=null) {
   const errors={};
   if(draft.name.trim().length<2)errors.name='Enter a name of at least two characters.';
