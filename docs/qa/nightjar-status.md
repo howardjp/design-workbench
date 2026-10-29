@@ -444,3 +444,7 @@ The integrated-branch `operations-text.mjs` and `test:examples` rerun passed aft
 Commit `0b704ac` escapes Jekyll analytics option, category and date text. A schema-valid select-breaking category reproduced an injected element before the fix. The independent hostile fixture also exercises administration names, emails and quote/bracket IDs through edit and targeted bulk updates; Jekyll's static directory and hydrated exact-ID matching held without further source changes. All 12 family/framework/root-subpath builds passed with and without JavaScript; canonical reordered analytics, `test:examples` and workflow YAML parsing also passed. The bounded analytics-coverage CI group adds this 12-build test. An integrated-branch rerun is in progress.
 
 The integrated-branch `dashboard-text.mjs` and `test:examples` rerun passed after `0b704ac`, covering both languages × three frameworks × root/subpaths with and without JavaScript.
+
+### Additional reading and data composition audit
+
+A disposable SSR/hydrated Chromium consumer found no defect in the bounded cases checked in both families: two independently named Articles and DataTables, keyboard horizontal table scrolling at 320px, encoded space/Unicode contents links, Fieldset external/hint/error descriptions, native radio arrows, controlled Select, multiple FileInput selection/reset, axe and no-JavaScript article/table/radio behavior. No source or test change resulted. This is representative Chromium evidence; Firefox, WebKit and manual assistive-technology behavior remain unverified.
