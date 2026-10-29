@@ -49,7 +49,9 @@ function administration(){
   const table=root.querySelector('#people-table'),body=table.tBodies[0],selectPage=root.querySelector('[data-select-page]');
   const dialog=root.querySelector('[data-bulk-dialog]');
   const buttonClass=root.querySelector('[data-new-person]').className;
-  let current,saving=false;
+  let current,saving=false,initializing=true;
+  const addressWarning=element('p','',{role:'status'});status.after(addressWarning);
+  const syncAddress=()=>{const updated=updateURL({q:state.query,status:state.status,sort:state.sort,direction:state.direction,page:state.page,size:state.size,density:filters.elements.density.value},!initializing);addressWarning.textContent=updated?'':'The address could not be updated. Local changes remain available; try applying the filters again.';};
   const clearErrors=()=>{root.querySelector('#person-errors').hidden=true;for(const name of ['name','email','role','status']){editor.elements[name].removeAttribute('aria-invalid');editor.elements[name].removeAttribute('aria-describedby');root.querySelector(`#person-${name}-error`).hidden=true;}};
   const resetEditor=()=>{editing=null;editor.reset();clearErrors();root.querySelector('[data-editor-legend]').textContent='Add a person';};
   const updateSelection=()=>{
@@ -60,7 +62,7 @@ function administration(){
   };
   const render=()=>{
     current=collectionView(records,state);state.page=current.page;const mode=filters.elements.state.value;
-    updateURL({q:state.query,status:state.status,sort:state.sort,direction:state.direction,page:state.page,size:state.size,density:filters.elements.density.value});
+    syncAddress();
     const message=root.querySelector('[data-directory-state]'),region=root.querySelector('[data-directory-region]');
     const ready=mode==='ready';const empty=ready&&!current.total||mode==='empty';
     region.hidden=!ready||empty;region.setAttribute('aria-busy',String(mode==='loading'));
@@ -92,7 +94,7 @@ function administration(){
   };
   filters.addEventListener('submit',event=>{event.preventDefault();state.query=filters.elements.query.value.trim();state.status=filters.elements.status.value;state.size=Number(filters.elements.size.value);state.page=1;selected.clear();render();});
   filters.elements.state.addEventListener('change',()=>{selected.clear();render();});
-  filters.elements.density.addEventListener('change',()=>{root.querySelector('[data-directory-region]').dataset.density=filters.elements.density.value;updateURL({density:filters.elements.density.value});});
+  filters.elements.density.addEventListener('change',()=>{root.querySelector('[data-directory-region]').dataset.density=filters.elements.density.value;syncAddress();});
   root.querySelector('[data-clear-people]').addEventListener('click',()=>{filters.reset();Object.assign(state,{query:'',status:'All',page:1,size:5});selected.clear();render();});
   root.querySelectorAll('[data-sort]').forEach(button=>button.addEventListener('click',()=>{state.direction=state.sort===button.dataset.sort&&state.direction==='asc'?'desc':'asc';state.sort=button.dataset.sort;state.page=1;render();}));
   for(const[selector,step]of [['[data-people-previous]',-1],['[data-people-next]',1]])root.querySelector(selector).addEventListener('click',()=>{state.page+=step;render();const next=root.querySelector(selector);if(next.disabled)root.querySelector(step===1?'[data-people-previous]':'[data-people-next]').focus();});
@@ -126,7 +128,7 @@ function administration(){
     table.append(printBody);table.dataset.printAll='true';
   });
   window.addEventListener('afterprint',()=>{table.querySelector('[data-print-people]')?.remove();delete table.dataset.printAll;if(prePrintStatus!==null){status.textContent=prePrintStatus;prePrintStatus=null;}});
-  render();
+  render();initializing=false;
   filters.querySelector('fieldset').disabled=false;fallback.hidden=true;
 }
 if(root.dataset.dashboard==='administration')administration();
