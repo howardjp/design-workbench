@@ -518,3 +518,5 @@ The integrated-branch print rerun after `25c9383` passed against fresh root buil
 ### Rapid directory submission integrity
 
 Commit `91fd12d` coalesces same-task successful directory submissions and validates/allocates against the latest React page-memory records, including after bulk changes. The shared Jekyll/Astro controller also avoids a spurious second validation error. Two same-task submissions previously produced React records with identical IDs/emails. The independent 12-build regression passed both families × three frameworks × root/subpaths for same-task submits, separate clicks, edit and bulk-then-save; expanded six-case root parity checked two-page selection, confirmation, untouched records and clearing on filter. Existing email/ID fixtures, `test:examples`, strict React types and YAML parsing passed. The CI fixture group gains this case. Print code was left unchanged; an integrated-branch rerun is in progress.
+
+The integrated-branch `administration-rapid.mjs` and `test:examples` rerun passed after `91fd12d` across both languages × three frameworks × root/subpaths, including the current print-integrated branch.
