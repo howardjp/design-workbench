@@ -141,7 +141,6 @@ jobs:
         browser: [firefox, webkit]
     env:
       NIGHTJAR_BROWSER: ${{ matrix.browser }}
-      NIGHTJAR_JEKYLL_ROOT: ${{ runner.temp }}/portable-browser-jekyll
       ASTRO_TELEMETRY_DISABLED: '1'
       BUNDLE_FROZEN: 'true'
     steps:
@@ -155,6 +154,7 @@ jobs:
           ruby-version: '3.2'
       - name: Install dependencies and build portable sites
         run: |
+          export NIGHTJAR_JEKYLL_ROOT="$RUNNER_TEMP/portable-browser-jekyll"
           npm ci --ignore-scripts
           npm ci --prefix examples/astro-slice --ignore-scripts
           (cd examples/jekyll/martlet && bundle install)
@@ -175,7 +175,7 @@ jobs:
         timeout-minutes: 10
         run: npx playwright install --with-deps "$NIGHTJAR_BROWSER"
       - name: Check reading, forms and analytics across portable frameworks
-        run: node examples/page-archetypes/tests/portable-browser-smoke.mjs
+        run: NIGHTJAR_JEKYLL_ROOT="$RUNNER_TEMP/portable-browser-jekyll" node examples/page-archetypes/tests/portable-browser-smoke.mjs
 
   # Group the expensive isolated builds to bound parallelism and setup cost.
   fixture-regressions:
