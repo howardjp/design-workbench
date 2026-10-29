@@ -1,20 +1,22 @@
 ---
 import catalog from '../../../../page-archetypes/content/catalog.json';
 import Shell from '@nightjar/shell';
+import {exampleAsset} from '../../assets.mjs';
 import { supported } from '../../supported.mjs';
 export function getStaticPaths() {
   const selected = catalog.pages.filter(page => supported.includes(page.id));
   if (selected.length !== supported.length) throw new Error('A selected catalog record is missing');
   for (const page of selected) for (const section of page.sections) {
     if (section.kind === 'form' && !['contact','sign-in','sign-up','password-reset','two-factor','newsletter'].includes(section.form)) throw new Error(`Unsupported form: ${section.form}`);
-    if (section.kind && !['cards', 'facts', 'listing', 'table', 'search', 'form', 'figure', 'gallery', 'workspace', 'chat'].includes(section.kind)) throw new Error(`Unsupported section: ${section.kind}`);
+    if (section.kind && !['cards', 'facts', 'listing', 'table', 'search', 'form', 'figure', 'gallery', 'workspace', 'chat', 'sensors', 'scene', 'faq', 'plans', 'stats'].includes(section.kind)) throw new Error(`Unsupported section: ${section.kind}`);
   }
   if (selected.some(page => page.sections.filter(section => section.kind === 'form').length > 1)) throw new Error('Multiple forms on a page are not implemented');
   if (selected.some(page => page.sections.filter(section => section.kind === 'chat').length > 1)) throw new Error('Multiple chats on a page are not implemented');
+  if (selected.some(page => ['sensors','scene'].some(kind => page.sections.filter(section => section.kind === kind).length > 1))) throw new Error('Multiple instances of the same simulation are not implemented');
   return selected.map(page => ({params: {id: page.id}, props: {page}}));
 }
 const {page} = Astro.props;
 const base = import.meta.env.BASE_URL;
-const href = url => url.startsWith('/') && !url.startsWith('//') ? `${base.replace(/\/$/, '')}${url}` : url;
+const href = url => url.startsWith('/assets/examples/') ? exampleAsset(url) : url.startsWith('/') && !url.startsWith('//') ? `${base.replace(/\/$/, '')}${url}` : url;
 ---
 <Shell page={page} href={href} base={base} />

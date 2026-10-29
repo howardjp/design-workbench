@@ -78,9 +78,32 @@ try {
             const row=page.locator(`section[aria-labelledby="${section.id}"] dl > div`).filter({has:page.getByText(fact.label,{exact:true})});
             assert.equal(await row.locator('dd').innerText(),fact.value);
           }
+          if (section.kind === 'faq') for (const item of section.items) {
+            const detail=page.locator(`section[aria-labelledby="${section.id}"] details`).filter({hasText:item.question});
+            assert.equal(await detail.locator('summary').textContent(),item.question);
+            assert.equal(await detail.locator('p').textContent(),item.answer);
+          }
+          if (section.kind === 'stats') for (const item of section.items) {
+            const row=page.locator(`section[aria-labelledby="${section.id}"] dl > div`).filter({has:page.getByText(item.label,{exact:true})});
+            assert.equal(await row.locator('dd').textContent(),item.value);
+          }
+          if (section.kind === 'plans') for (const item of section.items) {
+            const plan=page.locator(`section[aria-labelledby="${section.id}"] article`).filter({has:page.getByRole('heading',{name:item.title,exact:true})});
+            assert.ok((await plan.textContent()).includes(item.price));
+            assert.deepEqual(await plan.locator('li').allTextContents(),item.features);
+            assert.equal(await plan.getByRole('link',{name:item.action.label}).getAttribute('href'),`${base.replace(/\/$/,'')}${item.action.url}`);
+          }
           for (const link of [...(section.actions ?? []), ...(section.items ?? []).filter(i=>i.url).map(i=>({label:i.title,url:i.url}))]) {
-            assert.equal(await page.locator(`section[aria-labelledby="${section.id}"] a`).filter({hasText:link.label}).getAttribute('href'),base.replace(/\/$/,'')+link.url);
-            assert.ok(catalog.pages.some(p => link.url === `/examples/${p.id}/`), `Unknown catalog destination ${link.url}`);
+            const target=await page.locator(`section[aria-labelledby="${section.id}"] a`).filter({hasText:link.label}).getAttribute('href');
+            if (link.url === '/assets/examples/observations.csv') {
+              assert.ok(target.startsWith(`${base}_astro/`));
+              const response=await page.request.get(`${origin}${target}`);
+              assert.equal(response.status(),200);
+              assert.equal(await response.text(),await readFile('../page-archetypes/jekyll/assets/examples/observations.csv','utf8'));
+            } else {
+              assert.equal(target,base.replace(/\/$/,'')+link.url);
+              assert.ok(link.url === '/examples/' || catalog.pages.some(p => link.url === `/examples/${p.id}/`), `Unknown catalog destination ${link.url}`);
+            }
           }
         }
         assert.deepEqual(missing, [], 'Page resources must load');
@@ -118,7 +141,7 @@ try {
             await page.setViewportSize({width:320,height:800});
           }
         }
-        if (['home','guide','person','article','event','archive','search','contact','sign-up','two-factor','gallery','collection-item','workspace','fleet','chat'].includes(record.id)) {
+        if (['home','guide','person','article','event','archive','search','contact','sign-up','two-factor','gallery','collection-item','workspace','fleet','chat','sensors','scene','faq','pricing','report','patterns'].includes(record.id)) {
           const results=await new AxeBuilder({page}).analyze();
           assert.deepEqual(results.violations.map(({id,nodes})=>({id,html:nodes.map(n=>n.html)})), [], `Axe violations: ${family} ${base} ${record.id}`);
         }
@@ -179,6 +202,39 @@ try {
           assert.equal(await form.locator('[data-chat-status]').textContent(),'Conversation reset. Nothing was delivered.');
           assert.equal(requests,0);
         }
+        if (record.id === 'sensors') {
+          const controls=page.locator('[data-sensors]');
+          const mode=controls.getByLabel('Simulated conditions');
+          const ventilation=controls.getByLabel('Preview ventilation enabled');
+          let requests=0; page.on('request',()=>requests++);
+          await mode.focus(); await page.keyboard.press('ArrowDown');
+          assert.equal(await controls.locator('[data-temperature]').textContent(),'12 °C');
+          await ventilation.check();
+          assert.equal(await controls.locator('[data-sensor-status]').textContent(),'Simulation updated. Preview ventilation enabled. No real device is connected.');
+          await mode.selectOption('24');
+          assert.equal(await controls.locator('[data-temperature]').textContent(),'24 °C');
+          assert.equal(requests,0);
+        }
+        if (record.id === 'scene') {
+          const scene=page.locator('[data-scene]');
+          const select=scene.getByLabel('Viewpoint');
+          await select.focus(); await page.keyboard.press('ArrowDown');
+          const image=scene.locator('[data-scene-image]');
+          assert.equal(await image.getAttribute('alt'),'Stylised field station beside water.');
+          assert.ok((await image.getAttribute('src')).startsWith(`${base}_astro/`));
+          await page.waitForFunction(img=>img.complete && img.naturalWidth>0,await image.elementHandle());
+          assert.equal(await scene.locator('[data-scene-caption]').textContent(),'Field station · Original fictional illustration.');
+          assert.equal(await scene.locator('[data-scene-status]').textContent(),'Showing Field station. No immersive device is connected.');
+          await select.selectOption('notebook');
+          assert.equal(await image.getAttribute('alt'),'An open field notebook with observation lines.');
+        }
+        if (record.id === 'faq') {
+          const details=page.locator('details').filter({has:page.getByText('Is Northlight a real organisation?',{exact:true})});
+          await details.locator('summary').focus(); await page.keyboard.press('Enter');
+          assert.equal(await details.evaluate(el=>el.open),true);
+          await page.keyboard.press('Space');
+          assert.equal(await details.evaluate(el=>el.open),false);
+        }
         if (record.id === 'reference') {
           assert.equal(await page.locator(`time[datetime="${record.date}"]`).count(),1);
           assert.ok((await page.locator('main').innerText()).includes(record.author));
@@ -237,12 +293,12 @@ try {
           assert.equal(await nav.locator('[data-page-status]').innerText(), 'Page 1 of 2');
         }
         if (record.id === 'search') {
-          await page.goto(`${origin}${base}examples/search/?q=Conditions%20at%20the%20station`);
+          await page.goto(`${origin}${base}examples/search/?q=deliberately%20long%20title`);
           const query=page.getByLabel('Search the example record');
-          assert.equal(await query.inputValue(), 'Conditions at the station');
-          const unavailable=page.locator('[data-search-results] li').filter({hasText:'Conditions at the station'});
+          assert.equal(await query.inputValue(), 'deliberately long title');
+          const unavailable=page.locator('[data-search-results] li').filter({hasText:'A deliberately long title about the ordinary details that tend to break a beautifully composed page'});
           assert.equal(await unavailable.locator('a').count(),0);
-          assert.equal(await unavailable.locator('[data-destination]').getAttribute('data-destination'), `${base}examples/sensors/`);
+          assert.equal(await unavailable.locator('[data-destination]').getAttribute('data-destination'), `${base}examples/stress-test/`);
           assert.equal(await unavailable.getByText('Not yet available in this Astro preview.').count(),1);
           await query.fill('shoreline');
           await page.getByRole('button',{name:'Search',exact:true}).click();
@@ -345,6 +401,16 @@ try {
       await staticPage.goto(`${origin}${base}examples/chat/`);
       assert.equal(await staticPage.locator('[data-messages] li').count(),2);
       assert.equal(await staticPage.getByLabel('Message').isDisabled(),true);
+      await staticPage.goto(`${origin}${base}examples/sensors/`);
+      assert.equal(await staticPage.getByLabel('Simulated conditions').isDisabled(),true);
+      assert.equal(await staticPage.locator('[data-temperature]').textContent(),'18 °C');
+      await staticPage.goto(`${origin}${base}examples/scene/`);
+      assert.equal(await staticPage.getByLabel('Viewpoint',{exact:true}).isDisabled(),true);
+      assert.equal(await staticPage.locator('[data-scene-image]').getAttribute('alt'),'Illustrated coastline with observation markers.');
+      await staticPage.goto(`${origin}${base}examples/faq/`);
+      const disclosure=staticPage.locator('details').first();
+      await disclosure.locator('summary').click();
+      assert.equal(await disclosure.evaluate(el=>el.open),true);
       await noJs.close();
       console.log(`${family} ${base}: ${pages.length} pages; content, routes, pagination, print, no-JS and representative axe passed`);
     } finally { server.closeAllConnections(); await new Promise(r=>server.close(r)); }
