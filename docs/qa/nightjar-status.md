@@ -53,3 +53,5 @@ Both Jekyll sites built at `/` and `/preview`. `verify-html.py` passed for each 
 The 1440px analytics screenshots for both languages and the 320px Martlet analytics screenshot were inspected; both desktop compositions rendered distinctly, and the mobile view reflowed with a bounded table. This is a limited inspection, not a comprehensive visual regression comparison. Screenshots are ignored test artifacts; no visual baseline was approved.
 
 The existing React reference browser suite passed 39/39 on system Chromium. Further registry browser checks are in progress.
+
+The existing workbench registry browser suite also passed 178/178 using system Chromium on isolated port 4190; the React reference suite passed 39/39. These include automated axe and responsive checks and do not replace manual screen-reader testing.
