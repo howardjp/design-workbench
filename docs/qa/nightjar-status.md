@@ -448,3 +448,5 @@ The integrated-branch `dashboard-text.mjs` and `test:examples` rerun passed afte
 ### Additional reading and data composition audit
 
 A disposable SSR/hydrated Chromium consumer found no defect in the bounded cases checked in both families: two independently named Articles and DataTables, keyboard horizontal table scrolling at 320px, encoded space/Unicode contents links, Fieldset external/hint/error descriptions, native radio arrows, controlled Select, multiple FileInput selection/reset, axe and no-JavaScript article/table/radio behavior. No source or test change resulted. This is representative Chromium evidence; Firefox, WebKit and manual assistive-technology behavior remain unverified.
+
+A further disposable SSR/hydrated Chromium consumer found no defect in two independently controlled forms in either family: keyboard Select/Radio/Checkbox state and reset, conditional Field hint/error recovery, multiple-file reset, special-character contents links, axe and no-JavaScript field/checkbox behavior passed. No source or test change resulted; Firefox/WebKit and manual assistive technology remain unverified.
