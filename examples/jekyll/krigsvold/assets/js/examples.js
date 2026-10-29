@@ -41,8 +41,10 @@
 
   document.querySelectorAll('[data-example-search]').forEach(container => {
     const search = container.querySelector('.example-search');
-    const index = JSON.parse(container.querySelector('[data-search-index]').textContent);
+    let index;
+    try { index = JSON.parse(container.querySelector('[data-search-index]').textContent); if (!Array.isArray(index) || !index.every(entry => entry && ['title','summary','category','url'].every(key => typeof entry[key] === 'string'))) return; } catch { return; }
     const input = search.querySelector('input');
+    const submit = search.querySelector('button[type="submit"]');
     const results = container.querySelector('[data-search-results]');
     const status = container.querySelector('[data-search-status]');
     const run = value => {
@@ -77,7 +79,7 @@
     const initial = (new URL(location.href).searchParams.get('q') || '').trim().slice(0, 200);
     const initialUrl = new URL(location.href);
     initial ? initialUrl.searchParams.set('q', initial) : initialUrl.searchParams.delete('q');
-    history.replaceState(history.state, '', initialUrl);
+    try { history.replaceState(history.state, '', initialUrl); } catch { return; }
     window.addEventListener('nightjar:search-query', event => run(event.detail));
     window.addEventListener('popstate', () => run(new URL(location.href).searchParams.get('q') || ''));
     search.addEventListener('submit', event => {
@@ -88,6 +90,7 @@
       window.dispatchEvent(new CustomEvent('nightjar:search-query', {detail: query}));
     });
     run(initial);
+    input.disabled = false; submit.disabled = false; container.querySelector('[data-search-fallback]').hidden = true;
   });
 
   document.querySelectorAll('[data-gallery]').forEach(gallery => {

@@ -10,18 +10,21 @@ const json = JSON.stringify(index).replace(/</g, '\\u003c');
 <div data-example-search data-browse-url={`${prefix}/examples/`}>
 <form data-search action={`${prefix}/examples/search/`} role="search" aria-label={title}>
   <label for={inputId}>Search the example record</label>
-  <div><input type="search" id={inputId} name="q" maxlength="200" placeholder="Try shoreline, workshop, or protocol" /> <Button type="submit">Search</Button></div>
+  <div><input type="search" id={inputId} name="q" maxlength="200" placeholder="Try shoreline, workshop, or protocol" disabled /> <Button type="submit" disabled>Search</Button></div>
 </form>
-<p role="status" data-search-status>Enter a word or phrase to search the collection.</p>
+<p role="status" data-search-status>Search is unavailable.</p>
 <ul data-search-results></ul>
-<noscript><p>Search requires JavaScript. <a href={`${prefix}/examples/`}>Browse the complete example index</a>.</p></noscript>
+<p data-search-fallback><a href={`${prefix}/examples/`}>Browse the complete example index</a>.</p>
+<noscript><p>Search requires JavaScript.</p></noscript>
 <script type="application/json" data-search-index is:inline set:html={json}></script>
 </div>
 <script>
   document.querySelectorAll('[data-example-search]').forEach(container => {
     const form = container.querySelector('[data-search]');
-    const index = JSON.parse(container.querySelector('[data-search-index]').textContent);
+    let index;
+    try { index = JSON.parse(container.querySelector('[data-search-index]').textContent); if (!Array.isArray(index) || !index.every(entry => entry && ['title','summary','category','url'].every(key => typeof entry[key] === 'string'))) return; } catch { return; }
     const input = form.querySelector('input');
+    const submit = form.querySelector('button[type="submit"]');
     const results = container.querySelector('[data-search-results]');
     const status = container.querySelector('[data-search-status]');
     const run = value => {
@@ -56,7 +59,7 @@ const json = JSON.stringify(index).replace(/</g, '\\u003c');
     const initial = (new URL(location.href).searchParams.get('q') || '').trim().slice(0, 200);
     const initialUrl = new URL(location.href);
     initial ? initialUrl.searchParams.set('q', initial) : initialUrl.searchParams.delete('q');
-    history.replaceState(history.state, '', initialUrl);
+    try { history.replaceState(history.state, '', initialUrl); } catch { return; }
     window.addEventListener('nightjar:search-query', event => run(event.detail));
     window.addEventListener('popstate', () => run(new URL(location.href).searchParams.get('q') || ''));
     form.addEventListener('submit', event => {
@@ -67,5 +70,6 @@ const json = JSON.stringify(index).replace(/</g, '\\u003c');
       window.dispatchEvent(new CustomEvent('nightjar:search-query', {detail: query}));
     });
     run(initial);
+    input.disabled = false; submit.disabled = false; container.querySelector('[data-search-fallback]').hidden = true;
   });
 </script>

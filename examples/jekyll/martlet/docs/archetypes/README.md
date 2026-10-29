@@ -83,6 +83,8 @@ Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/content
 
 Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/search-composition.mjs` to check two search sections in disposable catalog builds across all three frameworks, both families and root/subpaths. Both controls share the page query, synchronize on submission and history navigation, and retain keyboard and no-JavaScript access.
 
+Search controls remain disabled until initialization succeeds; a browse-index link is available while JavaScript is disabled, blocked or unable to initialize. The query string is left intact on initialization failure. Jekyll and Astro isolate an invalid embedded index to its own search section.
+
 Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/administration-duplicate-names.mjs` to check duplicate and unique accessible control names before and after edits in paired Jekyll, Astro and React dashboards. `node examples/react-catalog/test-administration-large.mjs` exercises 2,500 synthetic people, stable sorting, filters and pagination, bounded enhanced rows, no-JavaScript records and collection recomputation; timings are informational rather than thresholds.
 
 Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/dense-table-reflow.mjs` against the same builds to check 100-row, 19-column tables with long words at 320px. The check verifies useful column widths and a named, keyboard-scrollable region; users must scroll horizontally to inspect wide tables.
