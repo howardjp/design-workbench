@@ -7,8 +7,4 @@
 .dash-app fieldset { min-width:0; border:0; padding:0; }
 .dash-app button { margin:.5rem .5rem .25rem 0; }
 .dash-app [hidden] { display:none !important; }
-.dash-app[data-family=martlet] .dash-sidebar { border-top:3px solid var(--ex-link); }
-.dash-app[data-family=martlet] .dash-panel { border:0; border-top:1px solid var(--ex-line); padding:1.75rem 0; }
-.dash-app[data-family=martlet] .dash-metric { background:transparent; padding-inline:0; }
-.dash-app[data-family=krigsvold] .dash-sidebar { border:1px solid var(--ex-line); background:var(--ex-panel); }
 .ops-notice { padding:1rem; border-inline-start:3px solid var(--ex-link); background:var(--ex-panel); }

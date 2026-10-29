@@ -1,0 +1,5 @@
+/* The Jekyll dashboard heading and panel rules were scoped to .example-root.
+   Astro dashboards use .dash-app directly, so apply the same working hierarchy. */
+.dash-app .dash-heading h1 { font-size:clamp(2rem,3.4vw,3rem); line-height:1.15; margin:.5rem 0 1rem; }
+.dash-app .dash-panel h2 { font-size:1.3rem; line-height:1.25; margin:0 0 .75rem; }
+.dash-app p { margin:0 0 1rem; }

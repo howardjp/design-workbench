@@ -8,7 +8,7 @@ const slug = value => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^
 <div class="catalog">
   <p>One content collection, two independent design languages. Explore {catalog.pages.length} recipes, reusable sections, and local application specimens.</p>
   <p>{catalog.fixture.notice}</p>
-  <p>Some examples are not yet available in this Astro preview.</p>
+  {catalog.pages.some(entry=>!supported.includes(entry.id)) && <p>Some examples are not yet available in this Astro preview.</p>}
   <nav aria-label="Example categories">{categories.map(category => <a href={`#${slug(category)}`}>{category}</a>)}</nav>
   {categories.map(category => <section aria-labelledby={slug(category)}>
     <h2 id={slug(category)}>{category}</h2>

@@ -18,7 +18,7 @@ assert.match(hostileFixture, /<math/);
 assert.doesNotMatch(hostileFixture, /onload|onerror|<script|javascript:/i);
 assert.throws(()=>renderMarkdown('x[^a]\n\n[^a]: note', '/', {docId:'bad" onmouseover="alert(1)'}), /Invalid Markdown document ID/);
 
-const pages = catalog.pages.filter(page => supported.includes(page.id));
+const pages = catalog.pages.filter(page => supported.includes(page.id) && !page.dashboard);
 const browser = await chromium.launch({ headless: true, ...(process.env.CHROMIUM_PATH ? {executablePath: process.env.CHROMIUM_PATH} : {}) });
 try {
   for (const family of ['martlet', 'krigsvold']) for (const base of ['/', '/preview/']) {
@@ -329,10 +329,8 @@ try {
           await page.goto(`${origin}${base}examples/search/?q=Working%20with%20application%20data`);
           const query=page.getByLabel('Search the example record');
           assert.equal(await query.inputValue(), 'Working with application data');
-          const unavailable=page.locator('[data-search-results] li').filter({hasText:'Working with application data'});
-          assert.equal(await unavailable.locator('a').count(),0);
-          assert.equal(await unavailable.locator('[data-destination]').getAttribute('data-destination'), `${base}examples/dashboard-components/`);
-          assert.equal(await unavailable.getByText('Not yet available in this Astro preview.').count(),1);
+          const reference=page.locator('[data-search-results] li').filter({hasText:'Working with application data'});
+          assert.equal(await reference.locator('a').getAttribute('href'), `${base}examples/dashboard-components/`);
           await query.fill('shoreline');
           await page.getByRole('button',{name:'Search',exact:true}).click();
           const matching=catalog.pages.filter(entry=>`${entry.title} ${entry.summary} ${entry.category}`.toLocaleLowerCase().includes('shoreline'));

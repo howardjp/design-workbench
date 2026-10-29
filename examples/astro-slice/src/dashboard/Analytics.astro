@@ -1,17 +1,23 @@
 ---
 import fixture from '../../../page-archetypes/content/dashboards.json';
 import Button from '@nightjar/button';
+import DashboardNav from './DashboardNav.astro';
+import {peerDashboardURL} from './peer.mjs';
 const family=process.env.NIGHTJAR_FAMILY;
-const {base} = Astro.props;
+const {base,page} = Astro.props;
+const href=url=>url.startsWith('/')&&!url.startsWith('//')?`${base.replace(/\/$/,'')}${url}`:url;
+const peer=peerDashboardURL(process.env.NIGHTJAR_PEER_URL,'analytics');
+const peerFamily=family==='martlet'?'Krigsvold':'Martlet';
 const variables = Object.entries({ 'a-text':'text','a-muted':'muted','a-bg':'bg','a-panel':'panel','a-line':'line','a-accent':'accent','a-on':'on-accent','a-focus':'focus','a-disabled-bg':'disabled-bg','a-disabled-text':'disabled-text','dash-chart-primary':'chart-1','dash-chart-secondary':'chart-2','dash-warning':'warning','dash-ui-font':'font-sans','ex-muted':'muted' }).map(([name,token])=>`--${name}:var(--${family}-${token})`).join(';');
 const initial=fixture.analytics.filter(row=>row.date >= '2026-10-22');
 const charts=[{id:'sessions',title:'Session trend',description:'Daily sessions across the selected categories.'},{id:'downloads',title:'Download trend',description:'Daily downloads in the selected period.'},{id:'categories',title:'Category comparison',description:'Current sessions versus the preceding period of equal length, when available.'}];
 const metrics=[['sessions','Sessions'],['downloads','Downloads'],['conversion','Completion rate'],['mean_duration','Mean session duration']];
 ---
 <div class="analytics-app" data-analytics-dashboard data-family={family === "martlet" ? "m" : "k"} style={variables}>
-  <aside aria-label="Dashboard workspace"><p class="eyebrow">Northlight · Workspace</p><nav aria-label="Dashboard navigation"><ul><li><a href="" aria-current="page">Analytics</a></li><li>Administration <small>(not yet ported)</small></li><li>Operations <small>(not yet ported)</small></li></ul></nav><p>One dataset. Two design languages.</p><a href={`${base}examples/`}>All page examples</a></aside>
+  <DashboardNav href={href} current="analytics" />
   <div class="analytics-main">
-    <p>Snapshot: <time datetime={fixture.as_of}>28 Oct 2026, 20:00 UTC</time></p>
+    <header class="dashboard-heading"><p class="eyebrow">{page.category}</p><h1>{page.title}</h1><p>{page.summary}</p></header>
+    <p>Snapshot: <time datetime={fixture.as_of}>28 Oct 2026, 20:00 UTC</time> {peer && <a data-analytics-compare href={peer}>Compare in {peerFamily}</a>}</p>
     <p class="analytics-notice">Synthetic demonstration data. Changes remain in this page’s memory and reset on reload. No live people, systems, or services are connected.</p>
     <form id="analytics-filters" novalidate><fieldset disabled data-analytics-controls><legend>Analytics filters</legend><div class="analytics-controls">
       <div><label for="analytics-range">Date range</label><select id="analytics-range" name="range"><option value="7">Last 7 days</option><option value="14">Last 14 days</option><option value="28">Last 28 days</option><option value="custom">Custom range</option></select></div>
@@ -36,6 +42,8 @@ const start=form.elements.start,end=form.elements.end,category=form.elements.cat
 const params=new URL(location.href).searchParams;
 start.value=params.get('start')||start.value;end.value=params.get('end')||end.value;if(fixture.categories.includes(params.get('category')))category.value=params.get('category');if(params.has('start'))range.value='custom';
 form.querySelector('[data-analytics-controls]').disabled=false;
+const toggle=root.querySelector('.dash-nav-toggle');const navigation=root.querySelector('#dashboard-nav');toggle.hidden=false;root.dataset.ready='true';
+toggle.addEventListener('click',()=>toggle.setAttribute('aria-expanded',String(toggle.getAttribute('aria-expanded')!=='true')));navigation.parentElement.addEventListener('keydown',event=>{if(event.key==='Escape'){toggle.setAttribute('aria-expanded','false');toggle.focus();}});
 const status=root.querySelector('[data-analytics-status]');let view;
 const number=value=>new Intl.NumberFormat('en-US').format(value);
 range.addEventListener('change',()=>{if(range.value!=='custom'){end.value='2026-10-28';start.value=new Date(Date.parse(end.value)-(Number(range.value)-1)*dayMillis).toISOString().slice(0,10);}});
@@ -44,7 +52,7 @@ function render(){
   const candidate=analyticsView(fixture,{start:start.value,end:end.value,category:category.value});const error=root.querySelector('#analytics-error');
   error.hidden=!candidate.error;error.textContent=candidate.error;start.setAttribute('aria-invalid',String(!!candidate.error));end.setAttribute('aria-invalid',String(!!candidate.error));root.querySelector('[data-export-analytics]').disabled=!!candidate.error;
   if(candidate.error){status.textContent='Invalid filters. The previous valid results remain visible.';error.tabIndex=-1;error.focus();return;}
-  view=candidate;const url=new URL(location.href);for(const [key,value] of Object.entries({start:start.value,end:end.value,category:category.value}))url.searchParams.set(key,value);history.replaceState(null,'',url);
+  view=candidate;const url=new URL(location.href);for(const [key,value] of Object.entries({start:start.value,end:end.value,category:category.value}))url.searchParams.set(key,value);history.replaceState(null,'',url);const compare=root.querySelector('[data-analytics-compare]');if(compare){const peer=new URL(compare.href);peer.search=url.search;compare.href=peer.href;}
   const comparisons=id=>view.previous&&view.previous[id]?`${((view.totals[id]/view.previous[id]-1)*100).toFixed(1)}% versus preceding period.`:'No complete preceding period available.';
   metric(root,'sessions',number(view.totals.sessions),comparisons('sessions'));metric(root,'downloads',number(view.totals.downloads),comparisons('downloads'));metric(root,'conversion',view.totals.conversion.toFixed(1)+'%','Completed tasks ÷ sessions.');metric(root,'mean_duration',Math.round(view.totals.mean_duration)+' s','Weighted by session count.');
   chart(root,'sessions',view.days.map(day=>({label:day.date,value:day.sessions})),{label:'Sessions'});chart(root,'downloads',view.days.map(day=>({label:day.date,value:day.downloads})),{label:'Downloads'});

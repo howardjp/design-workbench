@@ -4,8 +4,9 @@ import Shell from '@nightjar/shell';
 import {exampleAsset} from '../../assets.mjs';
 import { supported } from '../../supported.mjs';
 export function getStaticPaths() {
-  const selected = catalog.pages.filter(page => supported.includes(page.id));
-  if (selected.length !== supported.length) throw new Error('A selected catalog record is missing');
+  const available = catalog.pages.filter(page => supported.includes(page.id));
+  if (available.length !== supported.length) throw new Error('A selected catalog record is missing');
+  const selected = available.filter(page => !page.dashboard);
   for (const page of selected) for (const section of page.sections) {
     if (section.kind === 'form' && !['contact','sign-in','sign-up','password-reset','two-factor','newsletter'].includes(section.form)) throw new Error(`Unsupported form: ${section.form}`);
     if (section.kind && !['cards', 'facts', 'listing', 'table', 'search', 'form', 'figure', 'gallery', 'workspace', 'chat', 'sensors', 'scene', 'faq', 'plans', 'stats'].includes(section.kind)) throw new Error(`Unsupported section: ${section.kind}`);

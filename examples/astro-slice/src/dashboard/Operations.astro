@@ -1,22 +1,31 @@
 ---
 import fixture from '../../../page-archetypes/content/dashboards.json';
+import DashboardNav from './DashboardNav.astro';
+import {peerDashboardURL} from './peer.mjs';
 import MartletButton from '@martlet/astro/Button.astro';
 import KrigsvoldButton from '@krigsvold/astro/Button.astro';
 import '../../../page-archetypes/jekyll/assets/css/dashboard.css';
 import './operations.css';
+import './dashboard-integration.css';
+import martletCSS from './operations-martlet.css?raw';
+import krigsvoldCSS from './operations-krigsvold.css?raw';
 const family=process.env.NIGHTJAR_FAMILY;
 const Button=family==='martlet'?MartletButton:KrigsvoldButton;
-const {href}=Astro.props;
+const {href,page}=Astro.props;
+const peer=peerDashboardURL(process.env.NIGHTJAR_PEER_URL,'operations');
+const peerFamily=family==='martlet'?'Krigsvold':'Martlet';
 const values={'ex-text':'text','ex-muted':'muted','ex-bg':'bg','ex-panel':'panel','ex-line':'line','ex-link':'link','dash-ui-font':'font-sans','dash-number-font':family==='krigsvold'?'font-mono':'font-sans','dash-chart-primary':'chart-1','dash-chart-secondary':'chart-2','dash-warning':'warning','dash-danger':'danger','dash-success':'green','dash-overlay':'overlay-scrim'};
 const variables=Object.entries(values).map(([name,token])=>`--${name}:var(--${family}-${token})`).join(';');
 const metrics=[['warnings','Services under warning'],['latency','Latest mean latency'],['open_alerts','Unacknowledged alerts'],['queue','Queued observations']];
 const json=JSON.stringify(fixture).replace(/</g,'\\u003c');
 ---
+<style is:inline set:html={family==='martlet'?martletCSS:krigsvoldCSS}></style>
 <div class="dash-app" data-dashboard="operations" data-family={family} style={variables}>
   <div class="dash-layout">
-    <aside class="dash-sidebar" aria-label="Dashboard workspace"><p>Northlight · Workspace</p><Button class="dash-nav-toggle" type="button" aria-controls="dashboard-nav" aria-expanded="false" hidden>Dashboard navigation</Button><nav id="dashboard-nav" aria-label="Dashboard navigation"><ul><li>Analytics (not yet available here)</li><li>Administration (not yet available here)</li><li><a href={href('/examples/dashboard-operations/')} aria-current="page">Operations</a></li></ul><p>One dataset. Two design languages.</p><a href={href('/examples/')}>All page examples</a></nav></aside>
+    <DashboardNav href={href} current="operations" />
     <div class="dash-main">
-      <p>Snapshot: <time datetime={fixture.as_of}>28 Oct 2026, 20:00 UTC</time> <a data-compare href={href('/examples/dashboard-operations/')} hidden>Comparison unavailable</a></p>
+      <header class="dash-heading"><p class="eyebrow">{page.category}</p><h1>{page.title}</h1><p>{page.summary}</p></header>
+      <p>Snapshot: <time datetime={fixture.as_of}>28 Oct 2026, 20:00 UTC</time> <a data-compare href={peer || href('/examples/dashboard-operations/')} hidden={!peer}>Compare in {peerFamily}</a></p>
       <p class="ops-notice">Synthetic demonstration data. Changes remain in this page’s memory and reset on reload. No live people, systems, or services are connected.</p>
       <form class="dash-toolbar" id="operations-filters" novalidate><fieldset disabled data-dashboard-controls><legend>Operational scope and thresholds</legend><div class="dash-controls">
         <div><label for="operations-hours">Monitoring window</label><select name="hours" id="operations-hours"><option value="6">Last 6 hours</option><option value="12">Last 12 hours</option><option value="24">Last 24 hours</option></select></div>

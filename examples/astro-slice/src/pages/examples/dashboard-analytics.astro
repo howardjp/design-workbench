@@ -8,4 +8,4 @@ const page={...record,sections:[]};
 const base=import.meta.env.BASE_URL;
 const href=url=>url.startsWith('/')&&!url.startsWith('//')?`${base.replace(/\/$/,'')}${url}`:url;
 ---
-<Shell page={page} href={href} base={base}><Analytics base={base} /></Shell>
+<Shell page={page} href={href} base={base}><Analytics base={base} page={record} /></Shell>
