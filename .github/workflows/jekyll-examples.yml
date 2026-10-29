@@ -118,6 +118,8 @@ jobs:
           node examples/react-catalog/test-gallery.mjs
           node examples/react-catalog/test-simulation.mjs
           node examples/react-catalog/test-workspace-chat.mjs
+          node --test examples/page-archetypes/tests/thermal-model.test.mjs
+          node examples/react-catalog/test-scientific.mjs
       - name: Verify portable section navigation
         timeout-minutes: 10
         run: |
