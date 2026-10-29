@@ -108,6 +108,19 @@ test('paired initial and filtered views have identical functional results',async
  for(const view of ['administration','operations']){await page.goto(route('martlet',view));const first=await page.locator(view==='administration'?'#people-table tbody':'#service-table tbody').textContent();await page.goto(route('krigsvold',view));expect(await page.locator(view==='administration'?'#people-table tbody':'#service-table tbody').textContent()).toEqual(first);}
 });
 
+for(const family of ['martlet','krigsvold'])test(`${family}: workspace review re-evaluates active filters`,async({page})=>{
+ await page.goto(`/${family}/examples/workspace/`);
+ const workspace=page.locator('[data-workspace]');
+ const filter=workspace.getByLabel('Filter records');
+ await filter.fill('Needs review');
+ await workspace.getByRole('button',{name:'Station inlet',exact:true}).click();
+ await workspace.getByRole('button',{name:'Mark reviewed locally'}).click();
+ await expect(workspace.locator('[data-record-count]')).toHaveText('0 of 3 records shown.');
+ await expect(workspace.getByRole('button',{name:'Mark reviewed locally'})).toBeDisabled();
+ await expect(workspace.locator('[data-active-record]')).toContainText('outside this filter');
+ await expect(filter).toBeFocused();
+});
+
 for(const family of ['martlet','krigsvold'])test(`${family}: publishing primitives remain native`,async({page})=>{
  await page.goto(`/${family}/examples/article/`);
  const action=page.getByRole('link',{name:'Read the survey method',exact:true});

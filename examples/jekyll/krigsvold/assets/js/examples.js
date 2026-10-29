@@ -115,7 +115,7 @@
     });
     filter.disabled = false;
     reset.disabled = false;
-    filter.addEventListener('input', () => {
+    const applyFilter = () => {
       const query = filter.value.trim().toLocaleLowerCase();
       records.forEach(record => { record.hidden = !record.textContent.toLocaleLowerCase().includes(query); });
       count();
@@ -125,12 +125,14 @@
         detail.textContent = 'The selected record is outside this filter. Select a visible record.';
         review.disabled = true;
       }
-    });
+    };
+    filter.addEventListener('input', applyFilter);
     review.addEventListener('click', () => {
       if (!active) return;
       active.querySelector('.example-tag').textContent = 'Reviewed locally';
-      select(active);
-      status.textContent = 'Marked reviewed in page memory. No server record was changed.';
+      select(active); applyFilter();
+      if (!active) { status.textContent = 'Marked reviewed in page memory. The record no longer matches this filter. No server record was changed.'; filter.focus(); }
+      else status.textContent = 'Marked reviewed in page memory. No server record was changed.';
     });
     reset.addEventListener('click', () => {
       records.forEach((record, i) => { record.querySelector('.example-tag').textContent = original[i]; record.hidden = false; record.querySelector('button').setAttribute('aria-pressed', 'false'); });

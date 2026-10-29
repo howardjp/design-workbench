@@ -182,6 +182,14 @@ try {
           assert.equal(await rows.nth(1).locator('[data-record-status]').textContent(),fixture[1].status);
           assert.equal(await filter.inputValue(),'');
           assert.equal(await rows.locator(':scope:visible').count(),fixture.length);
+          await filter.fill(fixture[1].status);
+          await rows.nth(1).getByRole('button',{name:fixture[1].title}).click();
+          await review.click();
+          assert.equal(await rows.nth(1).isVisible(),false);
+          assert.equal(await review.isDisabled(),true);
+          assert.ok((await workspace.locator('[data-active-record]').textContent()).includes('outside this filter'));
+          assert.equal(await filter.evaluate(node=>node===document.activeElement),true);
+          await reset.click();
           assert.equal(requests,0);
         }
         if (record.id === 'chat') {
