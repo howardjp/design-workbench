@@ -211,3 +211,9 @@ Commit `11935fb` validates an initial React operations threshold URL. Invalid in
 ### Dashboard cross-framework checks and mobile width
 
 Commits `1f7896e` and `529ebc4` correct redundant React mobile dashboard padding and add a reproducible representative cross-framework dashboard test. At 320px the administration form grew from 192/200px to 272/280px (Martlet/Krigsvold) while retaining the family AppShell gutter; a corrected Martlet screen was visually inspected. The independent integrated React dashboard suite passed both families at root/subpaths, including hydrated and no-JavaScript geometry. The new comparison passed all six family/framework combinations for analytics filters and error focus, operations acknowledgement with pending drafts, keyboard confirmation/cancel and focus, mobile navigation/overflow and no-JavaScript content. It is representative rather than complete visual or manual accessibility conformance; React still differs in source mark and full site chrome.
+
+### Jekyll account guidance and combined workspace checks
+
+Commit `b738dc6` associates the visible password and verification-code hints with their Jekyll inputs, matching the Astro and React behavior. Both family builds passed; targeted Chromium checks confirmed accessible descriptions for sign-in, sign-up and two-factor pages, root/subpath link checks passed (57 pages, 1,428 destinations per build), and `test:examples` passed. The initial link-check invocation omitted `--baseurl` and produced false missing-file reports; rerunning with correct base paths passed.
+
+After workspace correction `e33b8be` and Astro palette correction `56735b5`, the independent full Astro and React catalog suites passed both families at root and subpaths (47 direct content routes per build), including representative axe, routing, responsive and no-JavaScript checks. These are not a substitute for full manual accessibility or visual review.
