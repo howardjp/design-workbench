@@ -11,6 +11,8 @@ import {renderMarkdown} from '../page-archetypes/lib/markdown.mjs';
 assert.ok(!renderMarkdown('<script>alert(1)</script> [bad](javascript:alert(1))').includes('<script>'));
 assert.ok(!renderMarkdown('[bad](javascript:alert(1))').includes('href="javascript:'));
 assert.match(renderMarkdown('[home](/examples/home/)', '/preview/'), /href="\/preview\/examples\/home\/"/);
+const hostile=renderMarkdown('<math><mi onload="alert(1)">E</mi></math><script>alert(1)</script><img src="javascript:alert(1)" onerror="alert(1)">','/',{fixtureMarkup:true,docId:'security-test'});
+assert.doesNotMatch(hostile,/<script|onload|onerror|javascript:/i);assert.match(hostile,/<math>/);
 const browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{})});
 try {
  for(const family of ['martlet','krigsvold'])for(const base of ['/','/preview/']){
@@ -42,19 +44,23 @@ try {
      if(section.body && !/[*_`\[\]<>\n]/.test(section.body)) assert.equal(await region.locator('.recipe-prose').innerText(),section.body);
      if(section.kind==='table'){assert.equal(await region.locator('thead th').count(),section.headers.length);assert.equal(await region.locator('tbody tr').count(),section.rows.length);assert.equal(await region.locator('tbody tr').first().innerText(),section.rows[0].join('\t'));}
      if(section.kind==='figure'){const img=region.locator('img');assert.equal(await img.getAttribute('alt'),section.alt);assert.equal(await region.locator('figcaption').innerText(),section.caption);const src=await img.getAttribute('src');assert.ok(src.startsWith(base));assert.equal((await page.request.get(origin+src)).status(),200);}
-     for(const link of [...(section.actions||[]),...(section.items||[]).map(i=>({label:i.title,url:i.url}))]){
+     for(const link of [...(section.actions||[]),...(['cards','listing'].includes(section.kind)?(section.items||[]).map(i=>({label:i.title,url:i.url})):[]),...(section.kind==='plans'?(section.items||[]).map(i=>i.action):[])]){
       assert.equal(await region.getByRole('link',{name:link.label,exact:true,includeHidden:true}).getAttribute('href'),base.replace(/\/$/,'')+link.url);
      }
     }
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     assert.deepEqual(errors,[]);
+    if(record.id==='stress-test'){assert.equal(await page.locator('math').count(),1);assert.equal(await page.locator('script:not([type=module])').count(),0);assert.ok(await page.locator('a[href*="fn"]').count()>0);}
+    if(record.id==='faq') assert.equal(await page.locator('details').count(),4);
+    if(record.id==='pricing') assert.equal(await page.locator('section[data-section=plans] article').count(),3);
+    if(record.id==='report'){const url=await page.getByRole('link',{name:'Download example data (CSV)'}).getAttribute('href');const response=await page.request.get(origin+url);assert.equal(response.status(),200);assert.ok((await response.text()).includes('North transect'));}
     if(record.id==='guide') assert.equal(await page.locator('#arrival + .recipe-prose ol > li').count(),4);
     if(record.id==='opportunity') assert.equal(await page.locator('#requirements + .recipe-prose ul > li').count(),3);
     if(record.id==='reference'){assert.equal(await page.locator('#example + .recipe-prose pre').getAttribute('tabindex'),'0');assert.ok((await page.locator('#example + .recipe-prose code').innerText()).includes('north-001'));}
     if(record.id==='changelog') assert.equal(await page.locator('#v1-2 + .recipe-prose h3').count(),2);
     if(record.semantic_class==='article'){assert.equal(await page.locator('#return + .recipe-prose p').count(),2);assert.equal(await page.locator('article time').getAttribute('datetime'),record.date);assert.ok((await page.locator('article header').innerText()).includes(record.author));assert.equal(await page.locator('[aria-label="Article subjects"] li').count(),record.tags.length);}
     if(record.semantic_class==='event'){const context=page.locator('[aria-label="Event details"]');assert.equal(await context.locator('time').first().getAttribute('datetime'),record.event.start);assert.ok((await context.innerText()).includes(record.event.timezone));assert.ok((await context.innerText()).includes(record.event.location));}
-    if(['home','archive','case-study','article','event','reference','place'].includes(record.id)) {
+    if(['home','archive','case-study','article','event','reference','place','faq','pricing','contact','search','stress-test'].includes(record.id)) {
      assert.deepEqual((await new AxeBuilder({page}).analyze()).violations.map(x=>x.id),[],`${family} ${base} ${record.id}`);
      await page.setViewportSize({width:1440,height:900});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     }
@@ -66,9 +72,15 @@ try {
    const initial=await listing.filter({visible:true}).first().innerText();
    await page.getByRole('button',{name:'Next page'}).focus();await page.keyboard.press('Enter');assert.equal(await page.getByRole('button',{name:'Previous page'}).evaluate(el=>document.activeElement===el),true);assert.equal(await listing.filter({visible:true}).count(),3);assert.notEqual(await listing.filter({visible:true}).first().innerText(),initial);
    await page.keyboard.press('Enter');assert.equal(await page.getByRole('button',{name:'Next page'}).evaluate(el=>document.activeElement===el),true);assert.equal(await listing.filter({visible:true}).first().innerText(),initial);
-   await page.reload();assert.equal(await page.locator('h1').innerText(),records.find(x=>x.id==='archive').title);await page.emulateMedia({media:'print'});assert.equal(await listing.filter({visible:true}).count(),6);assert.equal(await page.getByRole('navigation',{name:'Latest writing pages'}).isVisible(),false);await context.close();
+   await page.reload();assert.equal(await page.locator('h1').innerText(),records.find(x=>x.id==='archive').title);await page.emulateMedia({media:'print'});assert.equal(await listing.filter({visible:true}).count(),6);assert.equal(await page.getByRole('navigation',{name:'Latest writing pages'}).isVisible(),false);const formPage=await context.newPage();const requests=[];formPage.on('request',request=>{if(request.method()!=='GET')requests.push(request.url());});
+   await formPage.goto(`${origin}${base}examples/sign-in/`);await formPage.getByLabel('Email address').fill('demo@example.invalid');await formPage.getByLabel('Example password').fill('fictional123');await formPage.getByRole('button',{name:'Validate example'}).click();assert.match(await formPage.locator('form [role=status]').innerText(),/Nothing was sent/);assert.equal(await formPage.getByLabel('Example password').inputValue(),'');assert.deepEqual(requests,[]);
+   await formPage.goto(`${origin}${base}examples/two-factor/`);await formPage.getByLabel('Six-digit example code').fill('123456');await formPage.getByRole('button',{name:'Validate example'}).click();assert.equal(await formPage.getByLabel('Six-digit example code').inputValue(),'');
+   await formPage.goto(`${origin}${base}examples/search/?q=shoreline`);await formPage.waitForFunction(()=>document.querySelector('input[type=search]')?.value==='shoreline');assert.match(await formPage.locator('form[role=search] + p').innerText(),/result/);await formPage.getByLabel('Search the example record').fill('<img src=x onerror=alert(1)>');await formPage.getByRole('button',{name:'Search',exact:true}).click();assert.match(await formPage.locator('form[role=search] + p').innerText(),/No results/);assert.equal(await formPage.locator('[data-example] img').count(),0);assert.ok(new URL(formPage.url()).searchParams.has('q'));await formPage.close();
    const nojs=await browser.newContext({javaScriptEnabled:false}),nojsPage=await nojs.newPage();
-   await nojsPage.goto(`${origin}${base}examples/archive/`);assert.equal(await nojsPage.locator('.recipe-listing li:visible').count(),6);await nojs.close();
+   await nojsPage.goto(`${origin}${base}examples/archive/`);assert.equal(await nojsPage.locator('.recipe-listing li:visible').count(),6);
+   await nojsPage.goto(`${origin}${base}examples/sign-in/`);assert.equal(await nojsPage.getByLabel('Email address').isDisabled(),true);
+   await nojsPage.goto(`${origin}${base}examples/faq/`);await nojsPage.locator('summary').first().click();assert.equal(await nojsPage.locator('details').first().getAttribute('open'),'');await nojs.close();
+   await context.close();
    console.log(`${family} ${base}: ${records.length} direct routes, content, isolation, responsive, axe, pagination, and no-JS passed`);
   } finally{server.closeAllConnections();await new Promise(r=>server.close(r))}
  }

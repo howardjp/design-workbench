@@ -9,10 +9,10 @@ import {renderMarkdown} from '../page-archetypes/lib/markdown.mjs';
 const family=process.env.NIGHTJAR_FAMILY, base=process.env.NIGHTJAR_BASE || '/';
 if(!['martlet','krigsvold'].includes(family)||!/^\/(?:[a-zA-Z0-9_-]+\/)*$/.test(base))throw Error('Provide a family and an absolute directory base');
 const root=resolve('examples/react-catalog'),configFile=resolve(root,'vite.config.mjs');
-// Only checked-in, schema-validated author content is compiled here. Raw HTML is
-// disabled, including for any future untrusted input; no general HTML ingestion.
+// Only the checked-in stress fixture opts into the shared HTML/MathML allowlist.
+// Other records use raw HTML disabled. This is not an untrusted ingestion API.
 const rendered={};
-for(const page of catalog.pages.filter(item=>selected.includes(item.id))) for(const section of page.sections) if(section.body) rendered[`${page.id}-${section.id}`]=renderMarkdown(section.body,base,{docId:`${page.id}-${section.id}`});
+for(const page of catalog.pages.filter(item=>selected.includes(item.id))) for(const section of page.sections) if(section.body) rendered[`${page.id}-${section.id}`]=renderMarkdown(section.body,base,{fixtureMarkup:page.id==='stress-test',docId:`${page.id}-${section.id}`});
 await writeFile(resolve(root,'src/rendered.json'),JSON.stringify(rendered));
 await build({configFile,mode:family});
 const server=await createServer({configFile,mode:family,server:{middlewareMode:true},appType:'custom'});
@@ -22,7 +22,7 @@ try {
  validatePages();
  const out=resolve(root,'dist',family),template=await readFile(resolve(out,'index.html'),'utf8');
  const images=resolve(out,'assets/examples');await mkdir(images,{recursive:true});
- for(const file of ['station.svg','coast.svg','notebook.svg']) await copyFile(resolve('examples/page-archetypes/jekyll/assets/examples',file),resolve(images,file));
+ for(const file of ['station.svg','coast.svg','notebook.svg','observations.csv']) await copyFile(resolve('examples/page-archetypes/jekyll/assets/examples',file),resolve(images,file));
  for(const page of pages){
   const dir=resolve(out,'examples',page.id);await mkdir(dir,{recursive:true});
   const markup=renderToString(React.createElement(App,{id:page.id}));

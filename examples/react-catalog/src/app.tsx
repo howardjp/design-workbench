@@ -1,12 +1,13 @@
 import {useEffect,useRef,useState} from 'react';
-import {AppShell,Article,DefinitionList,Pagination,DataTable,family} from 'catalog-family';
+import {AppShell,Article,DefinitionList,Pagination,DataTable,Disclosure,family} from 'catalog-family';
 import {pages} from './pages';
 import rendered from './rendered.json';
 import {exampleImage} from './assets';
+import {DemoForm,Search} from './interactive';
 import './style.css';
 
-type Item={title:string;summary:string;url:string;date?:string;tag?:string};
-type Section={id:string;title:string;kind?:string;body?:string;items?:Item[];facts?:{label:string;value:string}[];actions?:{label:string;url:string}[];headers?:string[];rows?:string[][];image?:string;alt?:string;caption?:string};
+type Item={title:string;summary:string;url:string;date?:string;tag?:string;question?:string;answer?:string;label?:string;value?:string;price?:string;features?:string[];action?:{label:string;url:string}};
+type Section={id:string;title:string;kind?:string;body?:string;items?:Item[];facts?:{label:string;value:string}[];actions?:{label:string;url:string}[];headers?:string[];rows?:string[][];image?:string;alt?:string;caption?:string;form?:string};
 const bodies:Record<string,string>=rendered;
 const base=import.meta.env.BASE_URL.replace(/\/$/,'');
 const href=(url:string)=>url.startsWith('/')&&!url.startsWith('//') ? `${base}${url}` : url;
@@ -28,6 +29,11 @@ function SectionView({section,pageId}:{section:Section;pageId:string}){
   {section.kind==='facts'&&<DefinitionList items={section.facts!.map((fact,i)=>({id:`${section.id}-${i}`,term:fact.label,description:fact.value}))}/>}
   {section.kind==='listing'&&<Listing title={section.title} items={section.items!}/>}
   {section.kind==='figure'&&<figure><img src={exampleImage(section.image!)} alt={section.alt!} width="960" height="640" loading="lazy"/><figcaption>{section.caption}</figcaption></figure>}
+  {section.kind==='faq'&&<div>{section.items!.map((item,i)=><Disclosure key={i} summary={item.question}>{item.answer}</Disclosure>)}</div>}
+  {section.kind==='stats'&&<DefinitionList items={section.items!.map((item,i)=>({id:`${section.id}-${i}`,term:item.label!,description:item.value!}))}/>}
+  {section.kind==='plans'&&<div className="recipe-cards">{section.items!.map(item=><article key={item.title}><h3>{item.title}</h3><p>{item.price}</p><p>{item.summary}</p><ul>{item.features!.map(feature=><li key={feature}>{feature}</li>)}</ul><a href={href(item.action!.url)}>{item.action!.label}</a></article>)}</div>}
+  {section.kind==='form'&&<DemoForm kind={section.form!}/>}
+  {section.kind==='search'&&<Search/>}
   {section.kind==='table'&&<DataTable caption={section.title}><thead><tr>{section.headers!.map(header=><th key={header} scope="col">{header}</th>)}</tr></thead><tbody>{section.rows!.map((row,i)=><tr key={i}>{row.map((cell,j)=>j===0?<th key={j} scope="row">{cell}</th>:<td key={j}>{cell}</td>)}</tr>)}</tbody></DataTable>}
   {section.actions&&<ul className="recipe-actions">{section.actions.map(action=><li key={action.url}><a href={href(action.url)}>{action.label}</a></li>)}</ul>}
  </section>;
