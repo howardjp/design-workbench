@@ -1,5 +1,13 @@
 # Operation Nightjar progress ledger
 
+## Current state — 2026-10-29
+
+The original 50 paired Jekyll recipes are preserved, and Astro and React adapters now build all 50 routes for each design language. The campaign has added dashboard and content behavior, accessibility, security, responsive, print, performance and package-type improvements, with the dated evidence and limitations recorded below. Route availability and automated Chromium checks do not establish complete visual, interaction or accessibility parity. The entries below are chronological snapshots; early baseline statements describe the state at that time, not the current implementation.
+
+Outstanding work includes comprehensive visual and interaction review, manual assistive-technology testing, real browser zoom and physical print assessment, Firefox and WebKit testing, Ruby advisory coverage, hosted CI and fresh browser/gem installation checks. Cross-browser provisioning in this environment is blocked by proxy denials as described at the end of this ledger. Publishing and deployment have not been performed. Local branches and patch exports preserve the work for review.
+
+At `2883aac`, the 234-commit workbench export applied to the original `4935a11` feature tip and reproduced tree `7fd1b628a56bc053d08e4caee8a5a93050a64efe` with a clean worktree. Git reported one historical trailing-whitespace warning. Subsequent ledger updates require a refreshed export; the two native package patch exports are separate.
+
 ## 2026-10-29 — baseline and continuation
 
 This campaign builds on `feat/portable-page-archetypes` at `4935a11`. Work is isolated on local branch `nightjar/audit`; the existing branch has not been modified. Its catalog contains 50 matched recipes, including analytics, administration and operations dashboards for each family. The shared catalog, fixture, contracts, generator and Jekyll source live in `examples/page-archetypes`; the standalone Jekyll exports live in `examples/jekyll`.
