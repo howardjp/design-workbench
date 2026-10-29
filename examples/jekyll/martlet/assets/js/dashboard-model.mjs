@@ -50,8 +50,14 @@ export function analyticsComparison(view,key) {
   if (view.previous[key]===0) return 'Comparison unavailable: preceding value is zero.';
   return `${((view.totals[key]/view.previous[key]-1)*100).toFixed(1)}% versus preceding period.`;
 }
+export const analyticsCalendarError='Analytics data unavailable: observation dates must be valid calendar dates.';
+export function analyticsCalendarIssue(fixture) {
+  return fixture.analytics.some(row=>rangeError(row.date,row.date,row.date,row.date))?analyticsCalendarError:'';
+}
 export function analyticsView(fixture, {start, end, category='All', categoryId=/** @type {string|null} */ (null), coverage}) {
   if (!fixture.analytics.length) return {error:'No analytics data is available in this snapshot.',empty:true};
+  const calendarError=analyticsCalendarIssue(fixture);
+  if(calendarError)return {error:calendarError,dataError:true,calendarError:true};
   const observedMin=fixture.analytics.reduce((date,row)=>row.date<date?row.date:date,fixture.analytics[0].date);
   const observedMax=fixture.analytics.reduce((date,row)=>row.date>date?row.date:date,fixture.analytics[0].date);
   const declared=coverage!==undefined;

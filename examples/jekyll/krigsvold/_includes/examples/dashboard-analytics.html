@@ -1,5 +1,8 @@
+{% assign invalid_analytics_dates = false %}{% for row in site.data.dashboards.analytics %}{% assign calendar_date = row.date | date: '%Y-%m-%d' %}{% assign calendar_epoch = row.date | date: '%s' %}{% if calendar_date != row.date or calendar_epoch == row.date %}{% assign invalid_analytics_dates = true %}{% endif %}{% endfor %}
 {% if site.data.dashboards.analytics == empty %}
 <p role="status" data-analytics-empty>No analytics data is available in this snapshot.</p>
+{% elsif invalid_analytics_dates %}
+<p role="status" data-analytics-calendar-error>Analytics data unavailable: observation dates must be valid calendar dates.</p>
 {% else %}
 {% assign initial = site.data.dashboards.analytics | where_exp: 'item', 'item.date >= "2026-10-22" and item.date <= "2026-10-28"' %}
 {% assign categories = site.data.dashboards.categories | uniq %}

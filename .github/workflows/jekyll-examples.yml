@@ -153,6 +153,8 @@ jobs:
             analytics-coverage)
               node examples/page-archetypes/tests/analytics-empty.mjs
               node examples/page-archetypes/tests/analytics-duplicates.mjs
+              node examples/page-archetypes/tests/analytics-calendar.mjs
+              node examples/page-archetypes/tests/analytics-calendar.mjs --month
               node examples/page-archetypes/tests/dashboard-snapshot.mjs
               node examples/page-archetypes/tests/dashboard-snapshot.mjs --invalid
               node examples/page-archetypes/tests/analytics-sentinel.mjs

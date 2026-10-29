@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {aggregate,analyticsView,rangeError,collectionView,personControlLabels,applyBulk,validatePerson,nextPersonId,operationsView,operationsDataIssue,validOperationsTimestamp,operationsSnapshotLabel,comparisonSearch,analyticsCoverageMessage,analyticsComparison} from '../jekyll/assets/js/dashboard-model.mjs';
+import {aggregate,analyticsView,analyticsCalendarIssue,rangeError,collectionView,personControlLabels,applyBulk,validatePerson,nextPersonId,operationsView,operationsDataIssue,validOperationsTimestamp,operationsSnapshotLabel,comparisonSearch,analyticsCoverageMessage,analyticsComparison} from '../jekyll/assets/js/dashboard-model.mjs';
 const fixture=JSON.parse(fs.readFileSync(new URL('../content/dashboards.json',import.meta.url)));
 test('analytics computes rates from totals and duration from weighted observations',()=>{
  const totals=aggregate([{sessions:20,downloads:3,completions:4,duration_seconds:1200},{sessions:80,downloads:7,completions:6,duration_seconds:16800}]);
@@ -205,4 +205,9 @@ test('operations reject impossible UTC calendar timestamps across snapshot data'
  assert.equal(validOperationsTimestamp('2026-02-31T19:00:00+00:00'),false);assert.equal(validOperationsTimestamp('2026-10-28T20:99:00+00:00'),false);
  assert.equal(operationsSnapshotLabel('2026-10-28T20:00:00+00:00'),'28 Oct 2026, 20:00 UTC');assert.equal(operationsSnapshotLabel('2026-10-28T20:00:30+00:00'),'28 Oct 2026, 20:00:30 UTC');
  for(const type of ['sample','snapshot','alert','activity']){const copy=structuredClone(fixture),bad='2026-02-31T19:00:00+00:00';if(type==='sample')copy.services[0].samples[0].time=bad;if(type==='snapshot')copy.as_of=bad;if(type==='alert')copy.alerts[0].time=bad;if(type==='activity')copy.activity[0].time=bad;assert.match(operationsDataIssue(copy),/valid UTC calendar times/);assert.deepEqual(operationsView(copy,{}),{error:operationsDataIssue(copy)});}
+});
+
+test('analytics rejects impossible observation dates before calculating any range',()=>{
+ const options={start:'2026-10-22',end:'2026-10-28',category:'Research'};assert.equal(analyticsCalendarIssue(fixture),'');
+ for(const date of ['2026-09-31','2026-13-01']){const copy=structuredClone(fixture);copy.analytics[0].date=date;assert.match(analyticsCalendarIssue(copy),/valid calendar dates/);assert.deepEqual(analyticsView(copy,options),{error:analyticsCalendarIssue(copy),dataError:true,calendarError:true});}
 });
