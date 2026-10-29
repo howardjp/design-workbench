@@ -281,3 +281,7 @@ Commit `fc09481` permits an empty analytics array in the shared schema and rende
 ### Dense table reflow
 
 An adversarial report table with 19 columns collapsed into a 334–350px table in Astro and 668–785px in React at a 320px viewport, making some columns only one or two characters wide. Astro and both React table components now keep an 8rem minimum cell width, matching the existing Jekyll adapter; wide tables scroll within their named, keyboard-focusable region. A Chromium check passed both families in Jekyll, Astro and React with 100 added rows, 19 columns, long unbroken words, document bounds and keyboard scrolling. This synthetic stress check does not measure the rendering performance of unbounded data sets.
+
+### Static analytics ordering and combined fixtures
+
+Commit `05ecc45` makes Jekyll and Astro's initial no-JavaScript analytics tables respect the same bounded date range and chronological order as the normalized interactive model; Jekyll preserves canonical category order without dropping unknown categories. After merging this with the empty-state change, `npm run test:analytics-empty`, `node examples/page-archetypes/tests/analytics-order-static.mjs`, and `npm run test:examples` all passed on the integrated branch using local Ruby/Bundler and system Chromium. The temporary-fixture tests cover both languages, all three frameworks, root/subpaths and JavaScript/no-JavaScript; the reversed case includes a later out-of-range observation. Sparse or malformed samples remain unassessed.
