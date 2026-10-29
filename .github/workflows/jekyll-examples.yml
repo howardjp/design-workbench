@@ -59,6 +59,7 @@ jobs:
           npm ci --prefix examples/astro-slice --ignore-scripts
           npm --prefix examples/astro-slice run test:fixtures
           node examples/page-archetypes/tests/simulation-composition.mjs
+          node examples/page-archetypes/tests/content-security.mjs
           node examples/page-archetypes/tests/gallery-composition.mjs
           node examples/page-archetypes/tests/chat-composition.mjs
       - name: Verify multilingual long-content reflow across frameworks
