@@ -24,12 +24,15 @@ jobs:
         run: |
           python3 examples/page-archetypes/scripts/sync.py
           git diff --exit-code -- examples/jekyll
+          python3 examples/page-archetypes/scripts/update-source-manifest.py --check
           node examples/page-archetypes/scripts/verify.mjs
           node --test examples/page-archetypes/tests/dashboard-model.test.mjs
       - name: Install locked Jekyll dependencies
         run: |
           cd examples/jekyll/martlet && bundle install
           cd ../krigsvold && bundle install
+      - name: Verify isolated source archive and site inputs
+        run: python3 examples/page-archetypes/tests/source-archive.test.py
       - name: Build and verify root-hosted references
         run: |
           python3 examples/page-archetypes/scripts/build.py
