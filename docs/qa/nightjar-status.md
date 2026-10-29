@@ -233,3 +233,7 @@ Commit `0a777ed` clears an example form's local validation-success message when 
 ### Conformance evidence snapshot
 
 Commit `4e8a5de` adds a dated 50-row readable matrix and 300-cell JSON snapshot across both languages and all three frameworks. It distinguishes route/build and sampled browser evidence from unassessed full visual, manual accessibility and performance conformance. `node scripts/qa/nightjar-conformance.mjs --check` passed on the integrated branch; the independent validation deliberately corrupted a cell and confirmed the checker failed before restoring it. This checker verifies inventory and snapshot consistency; it does not rerun browser tests or certify parity.
+
+### React search URL normalization
+
+Commit `e2ba2b1` normalizes the initial React search URL to match the input: queries longer than 200 characters are truncated and whitespace-only queries removed, while other parameters and `history.state` are retained. A 250-character URL/200-character input mismatch was reproduced before the fix. The independent 47-route React suite passed both families at root/subpaths, strict TypeScript passed, and a browser check confirmed history state survives initialization and search submission.
