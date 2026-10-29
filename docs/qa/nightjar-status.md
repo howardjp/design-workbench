@@ -107,3 +107,7 @@ Commit `7aae638` adds observation and fleet workspaces and local conversation, r
 ### Astro simulations and static sections
 
 Commit `ae67d4f` ports station and scene simulations, FAQ, plan and statistic sections, and the original report CSV, bringing the adapter to 45 of 50 recipes per family. Four full Chromium configurations passed in the independent worktree for catalog content, original CSV bytes, keyboard simulation, native disclosures, no-JavaScript fallback, 320px reflow and 21 representative axe pages. The static recovery examples do not configure HTTP error status codes. The stress fixture and four dashboard-related records remain unported; the simulation adapter currently guards against duplicate instances rather than supporting them. Visual and comprehensive functional parity remain open.
+
+### Astro content stress fixture
+
+Commit `44ee4d6` adds the stress record, bringing the experimental adapter to 46 of 50 recipes per language. Ordinary Markdown continues to disable raw HTML; only the checked-in stress fixture opts into a restricted sanitized HTML/MathML subset. Footnotes have scoped IDs and return links; code blocks are keyboard focusable and long text wraps. The independent suite passed both families at root and subpaths, including stress-page axe, MathML namespace, footnote targets, 320px reflow, hostile markup and unsafe URL rejection; targeted checks also covered nested lists, heading hierarchy and code focus. The four dashboard-related records remain unported in this branch. A combined rerun after integration is in progress.
