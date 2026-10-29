@@ -378,3 +378,5 @@ A no-JavaScript generated-DOM inventory examined all 50 records for each family 
 ### Static chart alternatives
 
 Jekyll and Astro chart-detail tables previously contained placeholders without JavaScript, unlike the React tables. Both now render the selected default-period daily sessions and downloads, category comparisons, and common-timestamp mean latency values as semantic tables. All three frameworks and both families matched the shared model for the four canonical charts with JavaScript disabled. Sparse observations retain unavailable preceding comparisons; disjoint monitoring series show no fabricated common points, and unsafe analytics totals do not produce chart values. Interactive filtering still requires JavaScript.
+
+The integrated-branch static-chart-data check and `test:examples` passed after `0c74b13` using freshly built paired root sites. The first invocation lacked `NIGHTJAR_JEKYLL_ROOT` and stopped at its documented precondition; rerunning with the root builds and variable set passed all six language/framework comparisons.
