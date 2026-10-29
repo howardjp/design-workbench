@@ -127,3 +127,7 @@ Commit `7476a4c` connects the three Astro dashboard routes and dashboard overvie
 ### Astro print refinement
 
 Commit `e59fdcf` hides site navigation/footer chrome and analytics controls in print while retaining report and table content. An emulated-print regression failed before the change and passed afterward for both families at root and subpath, covering all three dashboards and an article. Dark-mode print colors, physical printers and other browser engines remain unverified.
+
+### Astro dependency security
+
+Commit `20a5a29` updates the Astro experiment's Astro, markdown-it and sanitize-html dependencies. The prior npm audit reported four advisories (one high, one moderate, two low) in this build-time dependency tree; remote exploitability was not established. `npm audit` now reports zero advisories including development dependencies. In the independent updated worktree the full 47-page catalog suite and analytics, administration, operations and navigation suites passed for both families at root and subpaths. A targeted review of Markdown sanitization, links, JSON script escaping, text-only chat/results and dashboard fixture rendering found no further concrete injection defect; it is not a complete security certification.
