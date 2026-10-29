@@ -4,4 +4,5 @@
 <p role="status" data-search-status>Enter a word or phrase to search the collection.</p>
 <ul class="example-list" data-search-results></ul>
 <noscript><p>Search requires JavaScript. <a href="{{ '/examples/' | relative_url }}">Browse the complete example index</a>.</p></noscript>
-<script type="application/json" id="example-search-index">[{% for entry in site.data.examples.pages %}{"title":{{ entry.title | jsonify }},"summary":{{ entry.summary | jsonify }},"category":{{ entry.category | jsonify }},"url":{{ '/examples/' | append: entry.id | append: '/' | relative_url | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}]</script>
+{% capture search_index %}[{% for entry in site.data.examples.pages %}{"title":{{ entry.title | jsonify }},"summary":{{ entry.summary | jsonify }},"category":{{ entry.category | jsonify }},"url":{{ '/examples/' | append: entry.id | append: '/' | relative_url | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}]{% endcapture %}
+<script type="application/json" id="example-search-index">{{ search_index | replace: '<', '\u003c' }}</script>

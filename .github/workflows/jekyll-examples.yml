@@ -47,6 +47,8 @@ jobs:
           python3 examples/page-archetypes/scripts/build.py --family krigsvold --baseurl /krigsvold --destination "$GITHUB_WORKSPACE/dashboard-test-dist/krigsvold"
       - name: Install browser for dashboard acceptance checks
         run: npx playwright install --with-deps chromium
+      - name: Verify Jekyll search index serialization
+        run: npm run test:search-safety
       - name: Verify paired dashboard behaviour, reflow, keyboard and accessibility
         run: npx playwright test --config playwright.dashboard.config.ts
       - uses: actions/upload-artifact@v4

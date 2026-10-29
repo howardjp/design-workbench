@@ -31,6 +31,7 @@
     "test:public-react": "node scripts/test-public-react.mjs",
     "test:examples": "node examples/page-archetypes/scripts/verify.mjs && node --test examples/page-archetypes/tests/dashboard-model.test.mjs",
     "test:dashboards": "playwright test --config playwright.dashboard.config.ts",
+    "test:search-safety": "node --test examples/page-archetypes/tests/search-index-safety.test.mjs",
     "build:examples": "python3 examples/page-archetypes/scripts/build.py"
   },
   "dependencies": {
