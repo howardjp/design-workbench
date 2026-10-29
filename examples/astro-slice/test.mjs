@@ -76,6 +76,39 @@ try {
         }
         assert.deepEqual(missing, [], 'Page resources must load');
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'No horizontal overflow at 320px');
+        if (record.id === 'home') {
+          const menu=page.getByRole('button',{name:'Menu',exact:true});
+          const nav=page.getByRole('navigation',{name:'Primary navigation'});
+          assert.equal(await nav.isVisible(),false);
+          await menu.focus(); await page.keyboard.press('Enter');
+          assert.equal(await menu.getAttribute('aria-expanded'),'true');
+          assert.equal(await nav.isVisible(),true);
+          await page.keyboard.press('Escape');
+          assert.equal(await nav.isVisible(),false);
+          assert.equal(await menu.evaluate(el=>el===document.activeElement),true);
+          await menu.click(); await page.getByRole('button',{name:'Dark mode'}).click();
+          assert.equal(await page.locator('html').getAttribute(`data-${family}`),'dark');
+          await page.reload();
+          assert.equal(await page.locator('html').getAttribute(`data-${family}`),'dark');
+          await menu.click();
+          assert.equal(await page.getByRole('button',{name:'Light mode'}).getAttribute('aria-pressed'),'true');
+          await page.evaluate(() => Promise.all(document.getAnimations().map(animation => animation.finished.catch(() => {}))));
+          const darkAxe=await new AxeBuilder({page}).analyze();
+          assert.deepEqual(darkAxe.violations.map(({id,nodes})=>({id,html:nodes.map(n=>n.html)})), [], `Dark axe: ${family} ${base}`);
+          await page.getByRole('button',{name:'Light mode'}).click();
+          assert.equal(await page.locator('html').getAttribute(`data-${family}`),'light');
+          await page.evaluate(() => Promise.all(document.getAnimations().map(animation => animation.finished.catch(() => {}))));
+          if (family === 'krigsvold') {
+            const backgrounds=await page.locator('#welcome ~ .recipe-actions a').evaluateAll(nodes=>nodes.map(node=>getComputedStyle(node).backgroundColor));
+            assert.equal(backgrounds.length,2);
+            assert.notEqual(backgrounds[0],backgrounds[1], 'Secondary action must retain its outline treatment');
+            await page.setViewportSize({width:1440,height:900});
+            const label=await page.locator('#welcome').boundingBox();
+            const content=await page.locator('#welcome ~ .recipe-prose').boundingBox();
+            assert.ok(label && content && content.x > label.x + label.width, 'Desktop region label precedes its content');
+            await page.setViewportSize({width:320,height:800});
+          }
+        }
         if (['home','guide','person','article','event','archive','search'].includes(record.id)) {
           const results=await new AxeBuilder({page}).analyze();
           assert.deepEqual(results.violations.map(({id,nodes})=>({id,html:nodes.map(n=>n.html)})), [], `Axe violations: ${family} ${base} ${record.id}`);
@@ -151,6 +184,7 @@ try {
       const noJs=await browser.newContext({javaScriptEnabled:false});
       const staticPage=await noJs.newPage();
       await staticPage.goto(`${origin}${base}examples/archive/`);
+      assert.equal(await staticPage.getByRole('navigation',{name:'Primary navigation'}).isVisible(), true);
       assert.equal(await staticPage.locator('[data-list-item]:visible').count(), 6);
       assert.equal(await staticPage.locator('[data-pagination]').isVisible(), false);
       await staticPage.goto(`${origin}${base}examples/search/`);

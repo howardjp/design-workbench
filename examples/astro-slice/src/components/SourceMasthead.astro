@@ -1,0 +1,9 @@
+---
+const {page} = Astro.props;
+const date = page.date && new Intl.DateTimeFormat('en-US', {year:'numeric',month:'long',day:'numeric',timeZone:'UTC'}).format(new Date(`${page.date}T00:00:00Z`));
+---
+<header class="nightjar-masthead"><div class="nightjar-masthead__inner">
+  <p class="nightjar-eyebrow">{page.category} · Fictional demonstration</p>
+  <h1>{page.title}</h1><p>{page.summary}</p>
+  {page.semantic_class === 'article' && <p><time datetime={page.date}>{date}</time> · {page.author}</p>}
+</div></header>

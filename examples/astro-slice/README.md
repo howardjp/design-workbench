@@ -1,12 +1,12 @@
 # Astro catalog experiment
 
-This is a partial port of the shared Northlight fixture, not an Astro implementation of the whole catalog. It builds 22 selected records and a catalog index using the published native `@martlet/astro` or `@krigsvold/astro` 1.2.2 layouts, headers, footers and action buttons. Content and destinations come directly from `../page-archetypes/content/catalog.json`; Markdown, cards, facts, tables, listings and search are supported. It uses reading layouts for document, reading and dossier compositions and landing layouts for the other currently selected compositions. These are contextual translations, not evidence of visual parity with the Jekyll reference.
+This partial port builds 22 selected records and a catalog index using family-specific Astro Layouts and buttons with a contextual source-inspired shell. It draws content from the shared catalog and supports Markdown, cards, facts, tables, listings and search. The shell adds a masthead, breadcrumb, grouped footer, responsive menu and persisted appearance; Krigsvold uses aligned label/content regions. These translations do not establish visual parity with Jekyll.
 
 Article author, date, subjects and context links, and event start/end, timezone, location and registration state are retained. Long listings progressively enhance to three items per page with keyboard controls and live status; without JavaScript and when printed, all records remain available. The event's table has a labelled scroll region, caption, and row and column headers.
 
 Markdown uses markdown-it with raw HTML disabled; local root-relative links and images respect the build base. This deliberately does not support the trusted HTML and MathML in the stress fixture. Unsupported section kinds fail the build rather than silently disappearing. Other interactive section and dashboard contracts remain to be implemented.
 
-The sample deliberately retains catalog links to records not yet ported. **Some destinations therefore return 404 in this standalone slice.** The search and catalog include all 50 fixture records, marking the 28 unported entries as unavailable in this preview. Links to those records do not establish parity. The package headers are generic native Astro components and do not reproduce the origin masthead. Independent review found that Krigsvold's about page is also missing the source mark, navy footer, breadcrumb, appearance toggle and aligned label/content composition. Shell integration and visual review are needed for both families before claiming visual parity.
+Some catalog destinations are not yet ported and return 404 in this standalone slice; the index and search label the 28 unavailable entries. The shell uses a fictional host identity and does not introduce an invented mark. Complete navigation, authentic source marks, matching source-shell details and full cross-framework visual review remain open for both families.
 
 ```sh
 npm ci --ignore-scripts
