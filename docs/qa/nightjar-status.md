@@ -685,6 +685,10 @@ Hosted portable run `40870681820` at `e2f2341` passed the new gallery smoke in b
 
 Commit `619f460` removes Jekyll's global early enabling of demo and chat fieldsets. Each remains disabled until its own handlers are installed; all three ports show a visible unavailable explanation when scripts are absent or blocked. A synthetic failure immediately after the former global enable left a Jekyll sign-in form active without its submit handler and produced a native GET containing fictional email and password fields. Independent and integrated 12-build paired regressions passed both families × three frameworks × root/subpaths for no-JS, blocked scripts, partial initialization, disabled activation with no navigation, malformed first-form isolation, normal independent forms/chats, keyboard and axe. Full Astro/React catalog suites, dedicated chat, model, strict type, source-archive and manifest checks passed independently; integrated chat and model checks also passed. This is bounded failure-path evidence, not a guarantee against every host modification.
 
+### Required free-text validation
+
+Commit `db57e34` rejects whitespace-only required names in contact and sign-up examples and whitespace-only contact messages without trimming or rewriting entered text. Before the fix, a contact name containing only spaces produced a success status. Independent and integrated paired form-composition tests passed both families × three frameworks × root/subpaths, including correction, reset, scripted value changes, preservation of surrounding spaces, independent forms, password clearing, keyboard, axe and the blocked/partial initialization fallbacks. Model and manifest checks passed; strict React and source-archive checks passed independently. Existing CI runs the expanded composition test.
+
 Hosted portable run `40870681820` at `e2f2341` subsequently passed all six jobs, including Firefox and WebKit gallery smoke; the separate workbench workflow passed all three engines. The later form-initialization fix has its own hosted run pending.
 
 ### Event time metadata
