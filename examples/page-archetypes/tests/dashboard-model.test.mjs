@@ -16,6 +16,16 @@ test('date and category scope constrain every analytic record and comparison',()
  assert.ok(rangeError('2026-10-28','2026-10-22','2026-09-03','2026-10-28'));
  assert.ok(rangeError('2026-09-31','2026-10-02','2026-09-03','2026-10-28'));
 });
+test('preceding analytics totals include both endpoints in the selected category',()=>{
+ // 15–21 October research fixture, with 15 October contributing 266 sessions.
+ const view=analyticsView(fixture,{start:'2026-10-22',end:'2026-10-28',category:'Research'});
+ assert.ok(view.previous);
+ assert.equal(view.previous.sessions,2156);
+ assert.equal(view.previous.downloads,301);
+ assert.equal(view.previous.completions,77);
+ assert.equal(view.previous.duration_seconds,356132);
+ assert.equal(analyticsComparison(view,'sessions'),'6.8% versus preceding period.');
+});
 test('collection pages clamp after filtering and bulk writes affect only selected IDs',()=>{
  const view=collectionView(fixture.people,{query:'Mara Ellis',page:8,size:5});assert.equal(view.total,1);assert.equal(view.page,1);
  const result=applyBulk(fixture.people,['P-001'],'Suspended');assert.equal(result[0].status,'Suspended');assert.deepEqual(result.slice(1),fixture.people.slice(1));assert.notEqual(result,fixture.people);
