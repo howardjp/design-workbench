@@ -472,3 +472,5 @@ The integrated-branch `analytics-sentinel.mjs` and `test:examples` rerun passed 
 ### Duplicate analytics declarations and observations
 
 Commit `82db6e5` deduplicates repeated category declarations in selectors and comparison series across all renderers while retaining and summing every repeated date/category observation. React source-row keys distinguish repeated observations. An independent schema-valid adversarial fixture, sentinel and ordering regressions each passed both languages × three frameworks × root/subpaths with and without JavaScript, including filtering and recovery; 22 model tests, strict React types and workflow YAML parsing passed. The bounded analytics CI group adds this 12-build test. An integrated-branch rerun is in progress.
+
+The integrated-branch `analytics-duplicates.mjs` and `test:examples` rerun passed after `82db6e5` across both languages × three frameworks × root/subpaths.
