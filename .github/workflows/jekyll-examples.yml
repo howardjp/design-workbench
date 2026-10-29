@@ -32,7 +32,9 @@ jobs:
           cd examples/jekyll/martlet && bundle install
           cd ../krigsvold && bundle install
       - name: Verify isolated source archive and site inputs
-        run: python3 examples/page-archetypes/tests/source-archive.test.py
+        run: |
+          python3 examples/page-archetypes/tests/source-archive.test.py
+          node examples/page-archetypes/tests/event-time-parity.mjs
       - name: Build and verify root-hosted references
         run: |
           python3 examples/page-archetypes/scripts/build.py
