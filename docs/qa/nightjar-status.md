@@ -269,3 +269,7 @@ Commits `594cbaa` and `046d4a7` scope inert, script-safe hydration data to the c
 ### Analytics observation ordering
 
 Commit `545510c` derives analytics bounds independently of input order and returns chronologically ordered rows and days using canonical category order, without mutating the fixture. A reversed valid fixture failed before the change and now matches the original totals and category-filtered views. `test:examples` passed with nine model tests, Jekyll analytics browser checks passed 18/18, and Astro/React analytics suites passed both families at root/subpaths. Empty analytics data remains a separate work item; the model and consumers previously assumed records exist.
+
+### Gallery link interaction
+
+Enhanced gallery links previously cancelled modified clicks across all three frameworks, preventing users from invoking native link behavior. The gallery now intercepts only unmodified primary activation. A cross-framework Chromium regression passed both families for Ctrl/Meta/Shift/Alt events, a Control-click event, keyboard opening and Escape focus return, and direct image navigation with JavaScript disabled. The check confirms modified events are not cancelled; it does not claim native tab/window behavior across every operating system or browser.

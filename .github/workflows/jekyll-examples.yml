@@ -69,6 +69,7 @@ jobs:
           NIGHTJAR_FAMILY=krigsvold NIGHTJAR_BASE=/ node examples/react-catalog/build.mjs
           node examples/page-archetypes/tests/internationalization-stress.mjs
           node examples/page-archetypes/tests/enlarged-text-motion.mjs
+          node examples/page-archetypes/tests/gallery-link-contract.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

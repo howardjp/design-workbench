@@ -34,6 +34,8 @@ The cross-framework long-content reflow check runs against already-built root-pa
 
 The same paired builds also support `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/enlarged-text-motion.mjs`. It tests 200% root font size and reduced-motion emulation at 320 and 768 pixels across the three dashboards, including keyboard navigation, focus return and filter submission. Root font-size scaling is not browser zoom; these checks do not establish full reduced-motion or assistive-technology support.
 
+Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/gallery-link-contract.mjs` against those paired builds to verify modified image links, keyboard dialog focus return and direct image access without JavaScript.
+
 Simulation controls derive IDs from the unique section ID using reserved `_simulation-` and `_scene-` prefixes. Existing links to the former fixed `#simulation-mode`, `#ventilation`, or `#scene-view` control IDs must be updated.
 
 For the multiple-simulation composition check, also install the locked Astro example dependencies with `npm ci --prefix examples/astro-slice --ignore-scripts`, then run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/simulation-composition.mjs` from the workbench root. Omit `CHROMIUM_PATH` if Playwright’s Chromium is installed. The check builds disposable fixtures; Ruby, Bundler and both Jekyll lockfiles must be available.

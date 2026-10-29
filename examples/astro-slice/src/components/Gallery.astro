@@ -26,6 +26,7 @@ const headingId = `gallery-${section.id}-title`;
     if (!dialog || typeof dialog.showModal !== 'function') return;
     let opener = null;
     gallery.querySelectorAll('[data-enlarge]').forEach(link => link.addEventListener('click', event => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
       opener = link;
       const image = dialog.querySelector('img');

@@ -77,6 +77,7 @@
   const dialog = document.querySelector('.example-lightbox');
   if (dialog && typeof dialog.showModal === 'function') {
     document.querySelectorAll('[data-enlarge]').forEach(anchor => anchor.addEventListener('click', event => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
       const image = dialog.querySelector('img');
       image.src = anchor.href;

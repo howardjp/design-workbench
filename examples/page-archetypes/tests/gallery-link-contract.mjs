@@ -1,0 +1,22 @@
+// Exercise enhanced links and native fallbacks across the paired framework builds.
+import assert from 'node:assert/strict';
+import {createServer} from 'node:http';
+import {readFile} from 'node:fs/promises';
+import {resolve,extname} from 'node:path';
+import {chromium,expect} from '@playwright/test';
+const root=process.cwd(),only=process.env.NIGHTJAR_GALLERY_FRAMEWORK||'all';
+if(!['all','Jekyll','Astro','React'].includes(only))throw Error('Choose all, Jekyll, Astro or React');
+const sources=[['Jekyll',process.env.NIGHTJAR_JEKYLL_ROOT],['Astro',process.env.NIGHTJAR_ASTRO_ROOT||resolve(root,'examples/astro-slice/dist')],['React',process.env.NIGHTJAR_REACT_ROOT||resolve(root,'examples/react-catalog/dist')]];
+if((only==='all'||only==='Jekyll')&&!sources[0][1])throw Error('Set NIGHTJAR_JEKYLL_ROOT to the paired root-path builds');
+const browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{})});
+try {for(const [framework,source] of sources.filter(([name])=>only==='all'||name===only))for(const family of ['martlet','krigsvold']){
+ const directory=resolve(source,family),server=createServer(async(req,res)=>{const path=new URL(req.url,'http://localhost').pathname,file=resolve(directory,path.slice(1)+(path.endsWith('/')?'index.html':''));if(!file.startsWith(directory+'/')){res.writeHead(403).end();return}try{const data=await readFile(file),type={'.html':'text/html','.css':'text/css','.js':'text/javascript','.mjs':'text/javascript','.svg':'image/svg+xml','.woff':'font/woff','.woff2':'font/woff2'};res.writeHead(200,{'Content-Type':type[extname(file)]||'application/octet-stream'}).end(data)}catch{res.writeHead(404).end()}});await new Promise(r=>server.listen(0,'127.0.0.1',r));
+ try{const origin=`http://127.0.0.1:${server.address().port}`,page=await browser.newPage();await page.goto(`${origin}/examples/gallery/`,{waitUntil:'networkidle'});const link=page.locator('[data-enlarge], [data-gallery] a').first(),dialog=page.getByRole('dialog');
+  for(const modifier of ['ctrlKey','metaKey','shiftKey','altKey']){const cancelled=await link.evaluate((anchor,modifier)=>{let cancelled;const observer=event=>{cancelled=event.defaultPrevented;event.preventDefault()};document.addEventListener('click',observer,{once:true});anchor.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,button:0,[modifier]:true}));return cancelled;},modifier);assert.equal(cancelled,false,`${framework}/${family}: ${modifier} click must retain native link behavior`);assert.equal(await dialog.count(),0,`${framework}/${family}: modified click must not open dialog`);}
+  await link.evaluate(anchor=>{document.addEventListener('click',event=>event.preventDefault(),{capture:true,once:true});anchor.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,button:0}));});assert.equal(await dialog.count(),0,`${framework}/${family}: previously cancelled activation does not open dialog`);
+  await page.evaluate(()=>document.addEventListener('click',event=>{window.galleryCancelled=event.defaultPrevented;event.preventDefault()},{once:true}));await link.click({modifiers:['Control']});assert.equal(await page.evaluate(()=>window.galleryCancelled),false,`${framework}/${family}: real Control-click is not cancelled`);assert.equal(await dialog.count(),0,`${framework}/${family}: Control-click does not open dialog`);
+  await link.focus();await page.keyboard.press('Enter');await expect(dialog).toBeVisible();await page.keyboard.press('Escape');await expect(dialog).toBeHidden();assert.equal(await link.evaluate(el=>el===document.activeElement),true,`${framework}/${family}: Escape restores focus`);await page.close();
+  const nojs=await browser.newContext({javaScriptEnabled:false}),staticPage=await nojs.newPage();await staticPage.goto(`${origin}/examples/gallery/`);const direct=staticPage.locator('[data-enlarge], [data-gallery] a').first(),href=await direct.getAttribute('href');assert.match(href||'',/\.svg$/,`${framework}/${family}: direct image link`);const [response]=await Promise.all([staticPage.waitForResponse(r=>r.request().isNavigationRequest()&&r.url().endsWith(href)),direct.click()]);assert.equal(response.status(),200);await nojs.close();
+  console.log(`${framework} ${family}: modified links, keyboard focus and no-JS image passed`);
+ }finally{server.closeAllConnections();await new Promise(r=>server.close(r));}
+}}finally{await browser.close();}

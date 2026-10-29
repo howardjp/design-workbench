@@ -7,7 +7,7 @@ export type GallerySection={id:string;title:string;items:GalleryItem[]};
 export function Gallery({section}:{section:GallerySection}) {
  const id=useId(),dialog=useRef<HTMLDialogElement>(null),opener=useRef<HTMLAnchorElement|null>(null),[selected,setSelected]=useState<GalleryItem|null>(null);
  useEffect(()=>{const node=dialog.current;if(!node)return;if(selected&&!node.open)node.showModal();else if(!selected&&node.open)node.close();},[selected]);
- const open=(event:MouseEvent<HTMLAnchorElement>,item:GalleryItem)=>{if(typeof dialog.current?.showModal!=='function')return;event.preventDefault();opener.current=event.currentTarget;setSelected(item);};
+ const open=(event:MouseEvent<HTMLAnchorElement>,item:GalleryItem)=>{if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||typeof dialog.current?.showModal!=='function')return;event.preventDefault();opener.current=event.currentTarget;setSelected(item);};
  const closed=()=>{setSelected(null);if(opener.current?.isConnected)opener.current.focus();};
  return <div className="react-gallery" data-gallery={section.id}>
   <div className="rg-grid">{section.items.map((item,index)=><figure key={`${item.image}-${index}`}><a href={exampleImage(item.image)} onClick={event=>open(event,item)}><img src={exampleImage(item.image)} alt={item.alt} width="960" height="640" loading="lazy"/><span>Enlarge {item.title}</span></a><figcaption>{item.caption}</figcaption></figure>)}</div>
