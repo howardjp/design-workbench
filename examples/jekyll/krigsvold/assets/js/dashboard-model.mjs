@@ -112,17 +112,29 @@ export function applyBulk(records,ids,status) {
   return records.map(record=>selected.has(record.id)?{...record,status}:record);
 }
 export const operationsDataError='Operations data unavailable: service observations contain duplicate timestamps or readings after the snapshot.';
+export const operationsPrecisionError='Operations data unavailable: observations or totals exceed supported safe integer precision.';
 export function operationsDataIssue(fixture) {
-  const end=Date.parse(fixture.as_of);
-  return fixture.services.some(service=>{
-    const seen=new Set();
-    return service.samples.some(sample=>{
-      const time=Date.parse(sample.time),invalid=time>end||seen.has(time);
+  const end=Date.parse(fixture.as_of), totals=new Map();
+  let latestLatency=0,latestQueue=0,precision=false;
+  for(const service of fixture.services){
+    const seen=new Set();let latest=null;
+    for(const sample of service.samples){
+      const time=Date.parse(sample.time);
+      if(time>end||seen.has(time))return operationsDataError;
       seen.add(time);
-      return invalid;
-    });
-  }) ? operationsDataError : '';
+      if(!latest||sample.time>latest.time)latest=sample;
+      if(!Number.isSafeInteger(sample.latency_ms)||sample.latency_ms<0||!Number.isSafeInteger(sample.queue)||sample.queue<0){precision=true;continue;}
+      const total=(totals.get(time)||0)+sample.latency_ms;
+      if(!Number.isSafeInteger(total))precision=true;
+      totals.set(time,total);
+    }
+    if(latest){latestLatency+=latest.latency_ms;latestQueue+=latest.queue;}
+    if(!Number.isSafeInteger(latestLatency)||!Number.isSafeInteger(latestQueue))precision=true;
+  }
+  return precision?operationsPrecisionError:'';
 }
+// Round nonnegative integer ratios exactly, including near MAX_SAFE_INTEGER.
+function roundedMean(total,count){return Number((2n*BigInt(total)+BigInt(count))/(2n*BigInt(count)));}
 export function operationsView(fixture,{hours=6,threshold=250,service='All',severity='All',hideAcknowledged=false},alerts=fixture.alerts) {
   const error=operationsDataIssue(fixture);
   if(error) return {error};
@@ -135,7 +147,7 @@ export function operationsView(fixture,{hours=6,threshold=250,service='All',seve
   });
   // Plot only timestamps represented by every service; never pair by array position.
   const samplesByService=services.map(item=>new Map(item.samples.map(sample=>[sample.time,sample])));
-  const points=(services[0]?.samples||[]).filter(sample=>samplesByService.every(samples=>samples.has(sample.time))).map(sample=>({time:sample.time,latency_ms:Math.round(samplesByService.reduce((sum,samples)=>sum+samples.get(sample.time).latency_ms,0)/services.length)}));
+  const points=(services[0]?.samples||[]).filter(sample=>samplesByService.every(samples=>samples.has(sample.time))).map(sample=>({time:sample.time,latency_ms:roundedMean(samplesByService.reduce((sum,samples)=>sum+samples.get(sample.time).latency_ms,0),services.length)}));
   const commonTimes=new Set(points.map(point=>Date.parse(point.time)));
   const partial=services.some(item=>item.samples.length!==limit)||Array.from({length:limit},(_,index)=>end-index*3600000).some(time=>!commonTimes.has(time));
   const staggered=new Set(services.map(item=>item.latest.time)).size>1;
@@ -143,5 +155,5 @@ export function operationsView(fixture,{hours=6,threshold=250,service='All',seve
   const visible=relevant.filter(alert=>(severity==='All'||alert.severity===severity)&&(!hideAcknowledged||!alert.acknowledged));
   const last=services.map(item=>({...item,warning:item.latest.latency_ms>=warning}));
   const availabilities=services.flatMap(item=>item.samples.map(sample=>sample.availability));
-  return {services:last,points,alerts:visible,open:relevant.filter(alert=>!alert.acknowledged).length,warnings:last.filter(item=>item.warning).length,queue:last.reduce((sum,item)=>sum+item.latest.queue,0),latency:last.length?Math.round(last.reduce((sum,item)=>sum+item.latest.latency_ms,0)/last.length):0,partial,staggered,availability:availabilities.length?Math.min(...availabilities):null,threshold:warning};
+  return {services:last,points,alerts:visible,open:relevant.filter(alert=>!alert.acknowledged).length,warnings:last.filter(item=>item.warning).length,queue:last.reduce((sum,item)=>sum+item.latest.queue,0),latency:last.length?roundedMean(last.reduce((sum,item)=>sum+item.latest.latency_ms,0),last.length):0,partial,staggered,availability:availabilities.length?Math.min(...availabilities):null,threshold:warning};
 }

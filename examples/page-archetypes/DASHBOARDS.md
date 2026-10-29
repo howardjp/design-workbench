@@ -45,6 +45,8 @@ Monitoring windows end at the snapshot time and start 5, 11 or 23 hours earlier,
 
 Acknowledgement and undo update page memory and add an explicitly local timeline entry. Reset restores the original fixture. Availability is identified as a minimum sampled synthetic value, not a live SLA calculation. Status and severity use text and borders as well as semantic colours.
 
+All latency and queue observations must be nonnegative safe integers; the sum of latest queues, the sum of latest latencies, and each timestamp's sum of latencies across services must also fit within `Number.MAX_SAFE_INTEGER`. Validation covers the entire snapshot, including observations outside the selected window, so every service selection has the same trustworthy precision boundary. Snapshots exceeding it produce an explicit unavailable state before or after JavaScript enhancement. Means are rounded from exact integer sums, including at the safe-integer boundary. Run `node examples/page-archetypes/tests/operations-precision.mjs` with `observation`, `queue`, `latency`, or `rounding` to verify these cases in isolated builds.
+
 ## Family composition and deliberate extensions
 
 Both families use the same DOM information sequence and functional controller. Martlet uses documentary side navigation, an open reading hierarchy, generous groups, Cambo headings, Lato controls/numbers, restrained gold rules and a full-width primary trend. Krigsvold uses aligned bounded panels, a compact sidebar, Roboto/Roboto Slab/Roboto Mono roles, paired trend panels and an aligned category comparison.
@@ -53,7 +55,7 @@ Both switch the application sidebar to a disclosure below 64rem, reduce metric c
 
 ## Portable component contracts
 
-`collectionView(records, options, fields)` returns filtered rows, clamped page, page count, page size, and total; `fields` declares searchable keys, sortable keys and default sort. Records require stable IDs. `analyticsView` and `operationsView` are domain calculations, not visual components. `operationsView` returns an `error` instead of calculated values when its snapshot has duplicate service timestamps or future observations. `applyBulk` and `validatePerson` remain domain workflow helpers.
+`collectionView(records, options, fields)` returns filtered rows, clamped page, page count, page size, and total; `fields` declares searchable keys, sortable keys and default sort. Records require stable IDs. `analyticsView` and `operationsView` are domain calculations, not visual components. `operationsView` returns an `error` instead of calculated values when its snapshot has duplicate service timestamps, future observations, unsafe latency/queue integers, or unsafe aggregate totals. `applyBulk` and `validatePerson` remain domain workflow helpers.
 
 Charts accept labelled numeric rows, an optional previous value and an optional threshold. The Jekyll SVG adapter is replaceable; the data table and equivalent information are required. Metrics require a name, formatted unit, and explanation of comparison/aggregation. Reuse existing React controls and tables when porting; implement rendering and state in the framework's normal mechanisms, keeping these fixture and behaviour contracts. Do not copy imperative DOM controllers into React.
 

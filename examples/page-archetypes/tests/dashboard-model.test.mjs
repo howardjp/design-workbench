@@ -159,3 +159,14 @@ test('operations reject duplicate or post-snapshot observations',()=>{
   assert.deepEqual(operationsView(broken,{}),{error:operationsDataIssue(broken)});
  }
 });
+
+test('operations reject unsafe observations and aggregates and round exact means',()=>{
+ const prepare=()=>structuredClone(fixture);
+ let value=prepare();value.services[0].samples.at(-1).queue=Number.MAX_SAFE_INTEGER;assert.match(operationsView(value,{}).error,/safe integer precision/);
+ value=prepare();value.services[0].samples.at(-1).latency_ms=Number.MAX_SAFE_INTEGER;assert.match(operationsView(value,{}).error,/safe integer precision/);
+ value=prepare();value.services[0].samples.at(-1).latency_ms=Number.MAX_SAFE_INTEGER;value.services.slice(1).forEach(service=>service.samples.pop());assert.match(operationsView(value,{}).error,/safe integer precision/,'staggered latest total is checked even without matching times');
+ value=prepare();value.services[0].samples[0].latency_ms=Number.MAX_SAFE_INTEGER;assert.match(operationsView(value,{}).error,/safe integer precision/,'historical timestamp total is checked');
+ value=prepare();value.services[0].samples[0].queue=Number.MAX_SAFE_INTEGER+1;assert.match(operationsView(value,{}).error,/safe integer precision/);
+ value=prepare();value.services[0].samples[0].latency_ms=Number.MAX_SAFE_INTEGER+1;assert.match(operationsView(value,{}).error,/safe integer precision/);
+ value=prepare();value.services.forEach((service,index)=>{service.samples.at(-1).latency_ms=index===0?9007199254740987:0});const view=operationsView(value,{});assert.equal(view.latency,1801439850948197);assert.equal(view.points.at(-1).latency_ms,1801439850948197);
+});
