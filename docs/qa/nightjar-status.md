@@ -199,3 +199,7 @@ Commit `e33b8be` reapplies a workspace's active filter after a review changes a 
 ### Cross-framework analytics URL state
 
 Commit `a318f60` makes end-date-only URLs display Custom range in all three frameworks and validates initial React URL ranges. Invalid React ranges retain default results, show/focus an error and disable CSV until corrected. The React invalid-range regression failed before the change; the independently run Jekyll dashboard suite passed 57/57, Astro analytics and standalone/integrated React dashboard suites passed both families at root/subpaths, `test:examples` and strict React TypeScript passed. Both Jekyll exports were synchronized.
+
+### Astro listing asset isolation
+
+Commit `af3939a` loads the Astro listing enhancement only on pages with listings. In a local Chromium 151, 1440px root-path measurement, Martlet About JavaScript fell from 1,891 raw / 856 gzip bytes to 1,312 / 537 and one script request was removed. Targeted tests passed for both families at root/subpaths: About omits the controller, Archive loads and advances, and no-JavaScript Archive retains all records. The full content suite with the print-palette isolation correction is still running. Initial measurements also found dashboards embedding unused fixture domains; further scoping is being investigated.
