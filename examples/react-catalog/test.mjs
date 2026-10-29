@@ -1,13 +1,17 @@
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import {createServer} from 'node:http';
-import {readFile,readdir} from 'node:fs/promises';
+import {access,readFile,readdir} from 'node:fs/promises';
 import {resolve,extname} from 'node:path';
 import {chromium} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import catalog from '../page-archetypes/content/catalog.json' with {type:'json'};
 import selected from './src/selected.json' with {type:'json'};
 import {renderMarkdown} from '../page-archetypes/lib/markdown.mjs';
+import {renderDocument} from './src/template.mjs';
+const tokens="$& $' $"+String.fromCharCode(96);
+const templated=renderDocument('<html><head><title>Old</title></head><body><!--app--></body></html>',{originalTitle:'<title>Old</title>',title:`Title ${tokens} <`,markup:`<p>${tokens}</p>`,styles:`<style>/* ${tokens} */</style>`});
+assert.ok(templated.includes(`<title>Title ${tokens.replaceAll('&','&amp;')} &lt;</title>`));assert.ok(templated.includes(`<p>${tokens}</p>`));assert.ok(templated.includes(`<style>/* ${tokens} */</style>`));
 assert.ok(!renderMarkdown('<script>alert(1)</script> [bad](javascript:alert(1))').includes('<script>'));
 assert.ok(!renderMarkdown('[bad](javascript:alert(1))').includes('href="javascript:'));
 assert.match(renderMarkdown('[home](/examples/home/)', '/preview/'), /href="\/preview\/examples\/home\/"/);
@@ -54,6 +58,11 @@ try {
       assert.equal(await region.getByRole('link',{name:link.label,exact:true,includeHidden:true}).getAttribute('href'),base.replace(/\/$/,'')+link.url);
      }
     }
+    for(const raw of await page.locator('[data-example] a[href]').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('href')))){
+     if(!raw||raw.startsWith('#')||!raw.startsWith(base)||raw.startsWith('//'))continue;
+     const path=new URL(raw,origin).pathname.slice(base.length);const target=resolve(dir,path.endsWith('/')?path+'index.html':path);
+     assert.ok(target.startsWith(dir+'/'));await access(target);
+    }
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     assert.deepEqual(errors,[]);
     if(record.id==='stress-test'){assert.equal(await page.locator('math').count(),1);assert.equal(await page.locator('script:not([type=module])').count(),0);assert.ok(await page.locator('a[href*="fn"]').count()>0);}
@@ -66,7 +75,7 @@ try {
     if(record.id==='changelog') assert.equal(await page.locator('#v1-2 + .recipe-prose h3').count(),2);
     if(record.semantic_class==='article'){assert.equal(await page.locator('#return + .recipe-prose p').count(),2);assert.equal(await page.locator('article time').getAttribute('datetime'),record.date);assert.ok((await page.locator('article header').innerText()).includes(record.author));assert.equal(await page.locator('[aria-label="Article subjects"] li').count(),record.tags.length);}
     if(record.semantic_class==='event'){const context=page.locator('[aria-label="Event details"]');assert.equal(await context.locator('time').first().getAttribute('datetime'),record.event.start);assert.ok((await context.innerText()).includes(record.event.timezone));assert.ok((await context.innerText()).includes(record.event.location));}
-    if(['home','archive','case-study','article','event','reference','place','faq','pricing','contact','search','stress-test'].includes(record.id)) {
+    if(['home','archive','case-study','article','event','reference','place','faq','pricing','contact','search','stress-test','gallery','workspace','fleet','chat','sensors','scene'].includes(record.id)) {
      assert.deepEqual((await new AxeBuilder({page}).analyze()).violations.map(x=>x.id),[],`${family} ${base} ${record.id}`);
      await page.setViewportSize({width:1440,height:900});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     }
@@ -81,11 +90,21 @@ try {
    await page.reload();assert.equal(await page.locator('h1').innerText(),records.find(x=>x.id==='archive').title);await page.emulateMedia({media:'print'});assert.equal(await listing.filter({visible:true}).count(),6);assert.equal(await page.getByRole('navigation',{name:'Latest writing pages'}).isVisible(),false);const formPage=await context.newPage();const requests=[];formPage.on('request',request=>{if(request.method()!=='GET')requests.push(request.url());});
    await formPage.goto(`${origin}${base}examples/sign-in/`);await formPage.getByLabel('Email address').fill('demo@example.invalid');await formPage.getByLabel('Example password').fill('fictional123');await formPage.getByRole('button',{name:'Validate example'}).click();assert.match(await formPage.locator('form [role=status]').innerText(),/Nothing was sent/);assert.equal(await formPage.getByLabel('Example password').inputValue(),'');assert.deepEqual(requests,[]);
    await formPage.goto(`${origin}${base}examples/two-factor/`);await formPage.getByLabel('Six-digit example code').fill('123456');await formPage.getByRole('button',{name:'Validate example'}).click();assert.equal(await formPage.getByLabel('Six-digit example code').inputValue(),'');
-   await formPage.goto(`${origin}${base}examples/search/?q=shoreline`);await formPage.waitForFunction(()=>document.querySelector('input[type=search]')?.value==='shoreline');assert.match(await formPage.locator('form[role=search] + p').innerText(),/result/);await formPage.getByLabel('Search the example record').fill('<img src=x onerror=alert(1)>');await formPage.getByRole('button',{name:'Search',exact:true}).click();assert.match(await formPage.locator('form[role=search] + p').innerText(),/No results/);assert.equal(await formPage.locator('[data-example] img').count(),0);assert.ok(new URL(formPage.url()).searchParams.has('q'));await formPage.close();
+   await formPage.goto(`${origin}${base}examples/search/?q=shoreline`);await formPage.waitForFunction(()=>document.querySelector('input[type=search]')?.value==='shoreline');assert.match(await formPage.locator('form[role=search] + p').innerText(),/result/);await formPage.getByLabel('Search the example record').fill('<img src=x onerror=alert(1)>');await formPage.getByRole('button',{name:'Search',exact:true}).click();assert.match(await formPage.locator('form[role=search] + p').innerText(),/No results/);assert.equal(await formPage.locator('[data-example] img').count(),0);assert.ok(new URL(formPage.url()).searchParams.has('q'));await formPage.goto(`${origin}${base}examples/gallery/`,{waitUntil:'networkidle'});const image=formPage.locator('[data-gallery] a').first();await image.focus();await formPage.keyboard.press('Enter');const dialog=formPage.getByRole('dialog');await dialog.waitFor({state:'visible'});await formPage.keyboard.press('Escape');await dialog.waitFor({state:'hidden'});assert.equal(await image.evaluate(el=>document.activeElement===el),true);
+   await formPage.goto(`${origin}${base}examples/workspace/`);const record=formPage.getByRole('button',{name:'North transect'});await record.click();await formPage.getByRole('button',{name:'Mark reviewed locally'}).click();assert.ok(await formPage.getByText('Reviewed locally',{exact:true}).count()>0);await formPage.getByLabel('Filter records').fill('Station inlet');assert.equal(await record.isVisible(),false);await formPage.getByRole('button',{name:'Reset demonstration'}).click();assert.equal(await record.isVisible(),true);
+   await formPage.goto(`${origin}${base}examples/fleet/`);assert.equal(await formPage.getByRole('button',{name:'Field van'}).isVisible(),true);
+   await formPage.goto(`${origin}${base}examples/chat/`);await formPage.getByLabel('Message').fill('<img src=x onerror=alert(1)>');await formPage.getByRole('button',{name:'Add to this preview'}).click();assert.equal(await formPage.locator('[data-example] img').count(),0);assert.equal(await formPage.getByText('<img src=x onerror=alert(1)>',{exact:true}).count(),1);await formPage.getByRole('button',{name:'Reset conversation'}).click();assert.equal(await formPage.locator('ol[aria-label=Conversation] li').count(),2);
+   await formPage.goto(`${origin}${base}examples/sensors/`);await formPage.getByLabel('Simulated conditions').selectOption('24');assert.equal(await formPage.locator('[data-sensors] output').innerText(),'24 °C');
+   await formPage.goto(`${origin}${base}examples/scene/`);await formPage.getByLabel('Viewpoint',{exact:true}).selectOption('station');assert.equal(await formPage.locator('[data-scene] img').getAttribute('alt'),'Stylised field station beside water.');await formPage.close();
    const nojs=await browser.newContext({javaScriptEnabled:false}),nojsPage=await nojs.newPage();
    await nojsPage.goto(`${origin}${base}examples/archive/`);assert.equal(await nojsPage.locator('.recipe-listing li:visible').count(),6);
    await nojsPage.goto(`${origin}${base}examples/sign-in/`);assert.equal(await nojsPage.getByLabel('Email address').isDisabled(),true);
-   await nojsPage.goto(`${origin}${base}examples/faq/`);await nojsPage.locator('summary').first().click();assert.equal(await nojsPage.locator('details').first().getAttribute('open'),'');await nojs.close();
+   await nojsPage.goto(`${origin}${base}examples/faq/`);await nojsPage.locator('summary').first().click();assert.equal(await nojsPage.locator('details').first().getAttribute('open'),'');
+   await nojsPage.goto(`${origin}${base}examples/gallery/`);assert.ok((await nojsPage.locator('[data-gallery] a').first().getAttribute('href')).startsWith(base+'assets/examples/'));assert.equal(await nojsPage.locator('link[rel=stylesheet][href*=special-]').count(),1);assert.equal(await nojsPage.locator('.rg-grid').evaluate(el=>getComputedStyle(el).display),'grid');
+   await nojsPage.goto(`${origin}${base}examples/workspace/`);assert.equal(await nojsPage.getByLabel('Filter records').isDisabled(),true);assert.ok(await nojsPage.locator('[data-workspace] li').count()>0);
+   await nojsPage.goto(`${origin}${base}examples/chat/`);assert.equal(await nojsPage.getByRole('button',{name:'Add to this preview'}).isDisabled(),true);
+   await nojsPage.goto(`${origin}${base}examples/sensors/`);assert.equal(await nojsPage.getByLabel('Simulated conditions').isDisabled(),true);
+   await nojsPage.goto(`${origin}${base}examples/scene/`);assert.equal(await nojsPage.getByLabel('Viewpoint',{exact:true}).isDisabled(),true);await nojs.close();
    await context.close();
    console.log(`${family} ${base}: ${records.length} direct routes, content, isolation, responsive, axe, pagination, and no-JS passed`);
   } finally{server.closeAllConnections();await new Promise(r=>server.close(r))}

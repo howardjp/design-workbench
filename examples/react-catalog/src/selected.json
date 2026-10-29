@@ -42,5 +42,11 @@
   "coming-soon",
   "dashboard-analytics",
   "dashboard-administration",
-  "dashboard-operations"
+  "dashboard-operations",
+  "gallery",
+  "workspace",
+  "fleet",
+  "chat",
+  "sensors",
+  "scene"
 ]

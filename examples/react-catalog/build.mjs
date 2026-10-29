@@ -7,6 +7,7 @@ import catalog from '../page-archetypes/content/catalog.json' with {type:'json'}
 import selected from './src/selected.json' with {type:'json'};
 import {renderMarkdown} from '../page-archetypes/lib/markdown.mjs';
 import {peerDashboardURL} from './src/dashboard/peer.mjs';
+import {renderDocument} from './src/template.mjs';
 const family=process.env.NIGHTJAR_FAMILY, base=process.env.NIGHTJAR_BASE || '/';
 if(!['martlet','krigsvold'].includes(family)||!/^\/(?:[a-zA-Z0-9_-]+\/)*$/.test(base))throw Error('Provide a family and an absolute directory base');
 const root=resolve('examples/react-catalog'),configFile=resolve(root,'vite.config.mjs');
@@ -20,7 +21,8 @@ await build({configFile,mode:family});
 const server=await createServer({configFile,mode:family,server:{middlewareMode:true},appType:'custom'});
 try {
  const {App}=await server.ssrLoadModule('/src/app.tsx');
- const {pages,validatePages}=await server.ssrLoadModule('/src/pages.ts');
+ const {pages,validatePages,requiresSpecial}=await server.ssrLoadModule('/src/pages.ts');
+ const {renderSpecial}=await server.ssrLoadModule('/src/special.tsx');
  validatePages();
  const out=resolve(root,'dist',family),template=await readFile(resolve(out,'index.html'),'utf8'),dashboardTemplate=await readFile(resolve(out,'dashboard.html'),'utf8');
  const manifest=JSON.parse(await readFile(resolve(out,'.vite/manifest.json'),'utf8'));
@@ -30,17 +32,20 @@ try {
  for(const file of ['station.svg','coast.svg','notebook.svg','observations.csv']) await copyFile(resolve('examples/page-archetypes/jekyll/assets/examples',file),resolve(images,file));
  for(const page of pages){
   const dir=resolve(out,'examples',page.id);await mkdir(dir,{recursive:true});
-  const markup=renderToString(React.createElement(App,{id:page.id}));
-  await writeFile(resolve(dir,'index.html'),template.replace('<!--app-->',markup).replace('<title>Northlight examples</title>',`<title>${page.title.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))} · Northlight</title>`));
+  const needsSpecial=requiresSpecial(page.id);
+  const markup=renderToString(React.createElement(App,{id:page.id,...(needsSpecial?{special:renderSpecial}:{})}));
+  const css=needsSpecial?manifest['src/special.tsx']?.css:[];if(needsSpecial&&!css?.length)throw Error('Missing interactive stylesheet in build manifest');
+  const styles=css.map(file=>`<link rel="stylesheet" crossorigin href="${base}${file}">`).join('');
+  await writeFile(resolve(dir,'index.html'),renderDocument(template,{styles,markup,title:`${page.title} · Northlight`,originalTitle:'<title>Northlight examples</title>'}));
  }
  const indexDir=resolve(out,'examples');await mkdir(indexDir,{recursive:true});
- await writeFile(resolve(indexDir,'index.html'),template.replace('<!--app-->',renderToString(React.createElement(App,{id:'index'}))).replace('<title>Northlight examples</title>','<title>All page examples · Northlight</title>'));
+ await writeFile(resolve(indexDir,'index.html'),renderDocument(template,{markup:renderToString(React.createElement(App,{id:'index'})),title:'All page examples · Northlight',originalTitle:'<title>Northlight examples</title>'}));
  for(const [id,name] of dashboards){
   const module=await server.ssrLoadModule(`/src/dashboard/${name}.tsx`);const dir=resolve(indexDir,`dashboard-${id}`);await mkdir(dir,{recursive:true});
   const markup=renderToString(React.createElement(DashboardFrame,{current:id},React.createElement(module[name])));
   const css=manifest[`src/dashboard/${name}.tsx`]?.css;if(!css?.length)throw Error(`Missing ${name} stylesheet in build manifest`);
   const styles=css.map(file=>`<link rel="stylesheet" crossorigin href="${base}${file}">`).join('');
-  await writeFile(resolve(dir,'index.html'),dashboardTemplate.replace('</head>',`${styles}</head>`).replace('<!--app-->',markup).replace('<title>Northlight dashboard</title>',`<title>${name} · Northlight</title>`));
+  await writeFile(resolve(dir,'index.html'),renderDocument(dashboardTemplate,{styles,markup,title:`${name} · Northlight`,originalTitle:'<title>Northlight dashboard</title>'}));
  }
  // Generic entries cannot render unknown routes; publish only actual records.
  const {rm}=await import('node:fs/promises');await rm(resolve(out,'index.html'));await rm(resolve(out,'dashboard.html'));

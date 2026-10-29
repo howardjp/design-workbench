@@ -1,6 +1,7 @@
 import {useEffect,useRef,useState} from 'react';
 import {AppShell,Article,DefinitionList,Pagination,DataTable,Disclosure,family} from 'catalog-family';
-import {pages} from './pages';
+import {pages,specialKinds} from './pages';
+import type {ReactNode} from 'react';
 import catalog from '../../page-archetypes/content/catalog.json';
 import selected from './selected.json';
 import rendered from './rendered.json';
@@ -24,7 +25,7 @@ function Listing({items,title}:{items:Item[];title:string}) {
   <h3><a href={href(item.url)}>{item.title}</a></h3><p>{item.summary}</p>
  </li>)}</ul>{enhanced&&pageCount>1&&<Pagination ref={nav} page={page} pageCount={pageCount} onPageChange={next=>{pendingFocus.current=true;setPage(next);}} label={`${title} pages`}/>}</>;
 }
-function SectionView({section,pageId}:{section:Section;pageId:string}){
+function SectionView({section,pageId,special}:{section:Section;pageId:string;special?:(section:unknown)=>ReactNode}){
  return <section data-section={section.id} {...(section.kind==='table'?{'aria-label':`${section.title} section`}:{'aria-labelledby':section.id})}><h2 id={section.id} tabIndex={-1}>{section.title}</h2>
   {section.body&&<div className="recipe-prose" dangerouslySetInnerHTML={{__html:bodies[`${pageId}-${section.id}`]}}/>}
   {section.kind==='cards'&&<ul className="recipe-cards">{section.items!.map(item=><li key={item.url}><h3><a href={href(item.url)}>{item.title}</a></h3><p>{item.summary}</p></li>)}</ul>}
@@ -36,11 +37,12 @@ function SectionView({section,pageId}:{section:Section;pageId:string}){
   {section.kind==='plans'&&<div className="recipe-cards">{section.items!.map(item=><article key={item.title}><h3>{item.title}</h3><p>{item.price}</p><p>{item.summary}</p><ul>{item.features!.map(feature=><li key={feature}>{feature}</li>)}</ul><a href={href(item.action!.url)}>{item.action!.label}</a></article>)}</div>}
   {section.kind==='form'&&<DemoForm kind={section.form!}/>}
   {section.kind==='search'&&<Search/>}
+  {section.kind&&specialKinds.includes(section.kind) && (special ? special(section) : (()=>{throw Error(`Missing interactive renderer for ${section.kind}`)})())}
   {section.kind==='table'&&<DataTable caption={section.title}><thead><tr>{section.headers!.map(header=><th key={header} scope="col">{header}</th>)}</tr></thead><tbody>{section.rows!.map((row,i)=><tr key={i}>{row.map((cell,j)=>j===0?<th key={j} scope="row">{cell}</th>:<td key={j}>{cell}</td>)}</tr>)}</tbody></DataTable>}
   {section.actions&&<ul className="recipe-actions">{section.actions.map(action=><li key={action.url}><a href={href(action.url)}>{action.label}</a></li>)}</ul>}
  </section>;
 }
-export function App({id}:{id:string}) {
+export function App({id,special}:{id:string;special?:(section:unknown)=>ReactNode}) {
  if(id==='index') return <div className={family} {...{[`data-${family}`]:'light'}}><AppShell brand={<a href={href('/examples/home/')}>Northlight Field Institute</a>} navigationPlacement="top" navigation={<a href={href('/examples/home/')}>Home</a>} utilities={null}><Article title="All page examples" summary="Browse the shared Northlight collection."><ul>{catalog.pages.map(entry=><li key={entry.id}>{selected.includes(entry.id)?<a href={href(`/examples/${entry.id}/`)}>{entry.title}</a>:<>{entry.title} (not yet available in this React preview)</>}</li>)}</ul></Article></AppShell></div>;
  const page=pages.find(item=>item.id===id);
  if(!page) throw Error(`Unported catalog route: ${id}`);
@@ -50,7 +52,7 @@ export function App({id}:{id:string}) {
    {'author' in page && page.author && <nav aria-label="Article context"><a href={href('/examples/person/')}>About {page.author}</a> · <a href={href('/examples/archive/')}>All writing</a></nav>}
    {'tags' in page && page.tags && <ul aria-label="Article subjects">{page.tags.map(tag=><li key={tag}><a href={href('/examples/categories/')}>{tag}</a></li>)}</ul>}
    {'event' in page && page.event && <aside aria-label="Event details"><p><strong>Event details</strong></p><p><time dateTime={page.event.start}>{page.event.display_start}</time> to <time dateTime={page.event.end}>{page.event.display_end}</time> · {page.event.timezone}</p><p>{page.event.location} · {page.event.registration}</p></aside>}
-   {page.sections.map(section=><SectionView key={section.id} section={section as Section} pageId={page.id}/>)}</div>
+   {page.sections.map(section=><SectionView key={section.id} section={section as Section} pageId={page.id} special={special}/>)}</div>
   </Article>
  </AppShell></div>;
 }
