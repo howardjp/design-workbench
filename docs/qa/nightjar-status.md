@@ -490,3 +490,7 @@ Commit `acebe4a` rejects impossible analytics observation dates anywhere in the 
 ### Fresh-checkout example setup
 
 The page-archetypes README now gives a complete paired Jekyll/Astro/React root-path build and browser-check sequence, including the separate locked dependency installs and the directory shape required by cross-framework tests. A clean Git archive passed fresh root and Astro `npm ci`, both frozen Bundler installs using the existing local Ruby gem cache, all six root-path builds, the 300-route content inventory and all six dashboard behavior-parity cases. System Chromium was used; a fresh browser download and fresh Ruby gem download were not tested in that run.
+
+### Clean paired example setup
+
+Commit `1a713db` documents the complete paired root-path Jekyll/Astro/React build sequence, browser setup and `NIGHTJAR_JEKYLL_ROOT` directory layout in the canonical and synced READMEs. An independent clean Git archive passed fresh root/Astro npm installs, frozen Bundler installs using the existing local gem cache, all six builds, the 300-route content inventory, six dashboard parity cases and `test:examples`. Fresh Ruby-gem and Playwright-browser downloads were not exercised.
