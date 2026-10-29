@@ -116,7 +116,9 @@ jobs:
           node examples/react-catalog/test-workspace-chat.mjs
       - name: Verify portable section navigation
         timeout-minutes: 10
-        run: node examples/page-archetypes/tests/section-index-parity.mjs
+        run: |
+          node examples/page-archetypes/tests/section-index-parity.mjs
+          node examples/page-archetypes/tests/breadcrumb-parity.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

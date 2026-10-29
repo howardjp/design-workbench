@@ -606,3 +606,11 @@ Review of matched screenshots identified a navigation gap: Jekyll's 18 reading a
 The integrated-branch index regression also passed all eight port/family/base combinations after rebuilding the React workspaces.
 
 GitHub rejected portable workflow run `40857912588` before job creation because the new smoke job referenced `runner.temp` in job-level `env`, where that context is unavailable. The workflow-run connector omitted this validation failure; the Actions run page exposed it. The workflow now derives the same path from `RUNNER_TEMP` inside the two relevant steps. YAML and shell syntax checks passed; a new hosted run is required to establish scheduling and browser results.
+
+The corrected hosted run `40858245268` on `06e5a5b` created its jobs and passed both new Firefox and WebKit portable smoke jobs across the two families and three frameworks. At this observation its main example and fixture jobs were still running; the bounded cross-engine cases do not establish full cross-browser parity.
+
+### Portable breadcrumbs
+
+Commit `0531774` corrects Astro's missing Examples ancestor and Home self-link, and removes the React catalog's self-link as an ancestor. Separators are hidden from assistive technology. The independent regression passed both ports and both families at root/subpaths, JS/no-JS, keyboard navigation, mobile reflow and home, catalog, article and dashboard structure. Full Astro and React source-shell suites passed in both families and bases, including axe, dark appearance, print and no-JS; strict React types passed. The focused regression is included in the read-only CI sequence.
+
+The integrated-branch breadcrumb regression passed all eight port/family/base combinations. On hosted run `40858245268`, the original package-build problem was resolved and the hostile-content security matrix passed, but the main example job later failed waiting for the second Jekyll gallery dialog in the composition test. That failure is under investigation; subsequent main-job checks did not run.
