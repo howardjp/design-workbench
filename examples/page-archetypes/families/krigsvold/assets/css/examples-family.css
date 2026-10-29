@@ -30,6 +30,9 @@
 
 /* Native .btn supplies typography, geometry, transitions, and pressed states. */
 .example-root .btn { margin-bottom: 0; }
+/* Light and dark foreground/background roles change together; interpolating
+   their colors crosses low-contrast intermediate pairs. Retain non-color motion. */
+.example-root :is(.btn-dark-blue,.btn-outline-dark-blue) { transition-property: box-shadow, transform; }
 .example-root .btn-dark-blue { --bs-btn-active-bg: var(--navy-900); --bs-btn-active-border-color: var(--navy-900); --bs-btn-disabled-bg: var(--navy-900); }
 .example-root .btn-dark-blue:focus-visible { color: white; background: var(--blue-600); }
 .example-root .btn-outline-dark-blue { --bs-btn-color: var(--navy-900); --bs-btn-border-color: var(--navy-900); --bs-btn-hover-border-color: var(--navy-900); --bs-btn-active-bg: var(--navy-900); --bs-btn-active-border-color: var(--navy-900); }

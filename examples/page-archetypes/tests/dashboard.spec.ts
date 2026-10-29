@@ -175,3 +175,37 @@ for(const family of ['martlet','krigsvold'])for(const mode of ['light','dark'])t
  const results=await new AxeBuilder({page}).include('.example-root caption').withRules(['color-contrast']).analyze();
  expect(results.violations).toEqual([]);
 });
+
+test('krigsvold: dashboard buttons retain contrast through appearance changes and hover',async({page})=>{
+ await page.goto(route('krigsvold','analytics'));
+ await expect(page.locator('[data-dashboard]')).toHaveAttribute('data-ready','true');
+ const primary=page.getByRole('button',{name:'Apply filters',exact:true});
+ const secondary=page.getByRole('button',{name:'Download filtered CSV',exact:true});
+ for(const target of ['dark','light']){
+  const samples=await page.evaluate(async()=>{
+   const buttons=[...document.querySelectorAll<HTMLElement>('#analytics-filters button.btn-dark-blue, #analytics-filters button.btn-outline-dark-blue')];
+   const parse=(value:string)=>{const values=value.match(/[\d.]+/g)?.map(Number)??[];return [values[0]??0,values[1]??0,values[2]??0,values[3]??1]};
+   const luminance=(rgb:number[])=>{const channel=(v:number)=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4};return .2126*channel(rgb[0])+.7152*channel(rgb[1])+.0722*channel(rgb[2])};
+   const ratio=(button:HTMLElement)=>{
+    const color=parse(getComputedStyle(button).color),bg=[0,0,0];let rest=1;
+    for(let node:HTMLElement|null=button;node&&rest>.0001;node=node.parentElement){const c=parse(getComputedStyle(node).backgroundColor);for(let i=0;i<3;i++)bg[i]+=rest*c[3]*c[i];rest*=1-c[3]}
+    for(let i=0;i<3;i++)bg[i]+=rest*255;
+    const a=luminance(color),b=luminance(bg);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);
+   };
+   (document.querySelector('[data-appearance-toggle]') as HTMLButtonElement).click();
+   await new Promise(requestAnimationFrame);
+   const animations=buttons.flatMap(button=>button.getAnimations());animations.forEach(animation=>animation.pause());
+   const result=[];for(const ms of [0,25,50,75,100,125,150]){animations.forEach(animation=>{animation.currentTime=ms});result.push({ms,ratios:buttons.map(ratio)})}
+   animations.forEach(animation=>animation.finish());return result;
+  });
+  await expect(page.locator('html')).toHaveAttribute('data-appearance',target);
+  expect(samples).toHaveLength(7);
+  expect(samples[0].ratios).toHaveLength(2);
+  for(const sample of samples)for(const ratio of sample.ratios)expect(ratio,`${target} at ${sample.ms}ms`).toBeGreaterThanOrEqual(4.5);
+  for(const button of [primary,secondary]){
+   await button.hover();
+   const results=await new AxeBuilder({page}).include('#analytics-filters button:hover').withRules(['color-contrast']).analyze();
+   expect(results.violations,`${target} hover`).toEqual([]);
+  }
+ }
+});
