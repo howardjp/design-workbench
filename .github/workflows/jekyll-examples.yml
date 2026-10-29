@@ -74,6 +74,9 @@ jobs:
           node examples/page-archetypes/tests/content-semantic-inventory.mjs
           node examples/page-archetypes/tests/dashboard-static-chart-data.mjs
           node examples/page-archetypes/tests/zoom-reflow-equivalence.mjs
+          node examples/page-archetypes/tests/print-media-inventory.mjs
+          node examples/page-archetypes/tests/print-directory.mjs
+          node examples/page-archetypes/tests/print-disclosures.mjs
           node examples/page-archetypes/tests/form-keyboard-parity.mjs
           node examples/page-archetypes/tests/reading-framework-typography.mjs
           node examples/page-archetypes/tests/card-action-parity.mjs

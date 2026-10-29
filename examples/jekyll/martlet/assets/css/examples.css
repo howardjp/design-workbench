@@ -108,9 +108,21 @@
 }
 @media print {
   .example-root { --ex-bg: white; --ex-text: black; --ex-strong: black; --ex-muted: #333; --ex-link: #222; --ex-panel: #f3f3f3; --ex-line: #999; padding: 0; }
+  main details::details-content { content-visibility: visible !important; }
+  /* Background graphics are commonly omitted: preserve legible text and data. */
+  body, main { background: #fff !important; }
+  main, main *, .example-root .example-price { color: #000 !important; text-shadow: none !important; }
+  main * { background-color: transparent !important; background-image: none !important; }
+  main svg text { fill: #000 !important; }
+  .example-root pre { white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; overflow: visible; }
+  .example-root table { table-layout: fixed; width: 100%; }
+  .example-root :is(th,td) { overflow-wrap: anywhere; word-break: break-word; }
   .example-local-index, .example-breadcrumb, .example-port-note, .example-pagination, .example-root button, .example-category-nav, .site-header, .nav-shell, .site-footer { display: none !important; }
   .example-wrap { width: 100%; max-width: none; }
   .example-root [data-list-item][hidden] { display: block !important; }
+  .example-root [data-select-record], .example-root #people-table .dash-sort { display: inline !important; border: 0; padding: 0; background: transparent; color: #000; font: inherit; text-align: start; }
+  #people-table[data-print-all] tbody:not([data-print-people]) { display: none; }
+  #people-table :is(th,td):first-child, #people-table :is(th,td):last-child { display: none; }
   .example-section, .example-document { display: block !important; }
   .example-table-scroll { overflow: visible; }
   .example-root table { font-size: 9pt; }

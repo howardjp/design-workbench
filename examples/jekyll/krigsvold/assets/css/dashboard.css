@@ -100,3 +100,7 @@ html[data-appearance=dark] body.dashboard-page .site-header { background: var(--
 html[data-appearance=dark] .dash-app .eyebrow { color: var(--ex-link); }
 /* UI control roles outrank the generic example form's inherited prose font. */
 .example-root.dash-app :is(input:not([type=checkbox]),select,textarea,legend) { font-family: var(--dash-ui-font); }
+
+/* A print-only directory body is created synchronously at print time. */
+[data-print-people] { display: none; }
+@media print { #people-table[data-print-all] [data-print-people] { display: table-row-group; } }

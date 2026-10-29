@@ -39,6 +39,18 @@ html[data-appearance=dark] .nightjar-header :focus-visible { outline-color:#0613
 body { margin:0; }
 /* Printing is for the document or report, not the site navigation chrome. */
 @media print {
+ main details::details-content { content-visibility: visible !important; }
+ /* Print legibly even when the browser omits background graphics. */
+ body, main { background:#fff !important; }
+ main, main * { color:#000 !important; text-shadow:none !important; }
+ main * { background-color:transparent !important; background-image:none !important; }
+ main svg text { fill:#000 !important; }
+ main :is(.recipe-table,.analytics-table,.example-table-scroll) { overflow:visible !important; }
+ #people-table[data-print-all] tbody:not([data-print-people]) { display:none; }
+ #people-table :is(th,td):first-child, #people-table :is(th,td):last-child { display:none; }
+ main table { table-layout:fixed; width:100%; max-width:100%; }
+ main :is(th,td) { min-width:0 !important; overflow-wrap:anywhere; word-break:break-word; font-size:9pt; }
+ main pre { white-space:pre-wrap !important; overflow-wrap:anywhere; word-break:break-word; overflow:visible !important; }
  .nightjar-header, .nightjar-footer, .nightjar-breadcrumb { display:none !important; }
  .nightjar-masthead, html[data-appearance=dark] .nightjar-masthead { background:transparent !important; color:#000 !important; }
  .nightjar-masthead__inner { padding:0; }

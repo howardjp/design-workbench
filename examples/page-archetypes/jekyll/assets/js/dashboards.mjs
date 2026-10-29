@@ -108,6 +108,20 @@ function administration(){
   root.querySelector('[data-bulk-cancel]').addEventListener('click',()=>dialog.close());
   root.querySelector('[data-bulk-confirm]').addEventListener('click',()=>{if(!pending)return;records=applyBulk(records,pending.ids,pending.status);const count=pending.ids.length;selected.clear();dialog.close();render();status.textContent=`Updated ${count} selected people locally. No unselected records were changed.`;});
   dialog.addEventListener('close',()=>{pending=null;if(returnFocus&&!returnFocus.disabled)returnFocus.focus();else selectPage.focus();});
+  // Preserve the interactive rows and focus while printing the applied result set.
+  let prePrintStatus=null;
+  window.addEventListener('beforeprint',()=>{
+    if(filters.elements.state.value!=='ready'||!current.total)return;
+    if(prePrintStatus===null)prePrintStatus=status.textContent;status.textContent=`${current.total} matching people · All matching records shown for print · ${records.length} total synthetic records.`;
+    table.querySelector('[data-print-people]')?.remove();
+    const printBody=element('tbody',undefined,{'data-print-people':''});
+    for(const person of current.filtered){
+      const row=printBody.insertRow();row.insertCell().textContent='—';row.append(element('th',person.name,{scope:'row'}));
+      for(const value of [person.email,person.role,person.status,person.id])row.insertCell().textContent=value;
+    }
+    table.append(printBody);table.dataset.printAll='true';
+  });
+  window.addEventListener('afterprint',()=>{table.querySelector('[data-print-people]')?.remove();delete table.dataset.printAll;if(prePrintStatus!==null){status.textContent=prePrintStatus;prePrintStatus=null;}});
   render();
 }
 if(root.dataset.dashboard==='administration')administration();
