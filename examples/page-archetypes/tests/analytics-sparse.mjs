@@ -7,6 +7,7 @@ import {spawnSync} from 'node:child_process';
 import {createServer} from 'node:http';
 import {chromium} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import {analyticsView} from '../jekyll/assets/js/dashboard-model.mjs';
 import {Validator} from '@cfworker/json-schema';
 const root=process.cwd(),temp=mkdtempSync(join(tmpdir(),'nightjar-sparse-'));
 const original=JSON.parse(readFileSync('examples/page-archetypes/content/dashboards.json','utf8'));
@@ -82,6 +83,7 @@ try {
     const axe=await new AxeBuilder({page}).include('main').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();assert.deepEqual(axe.violations.map(({id})=>id),[],`${family} ${framework}: automated accessibility`);
    }else assert.equal(await navigation.isVisible(),true);
    }
+   if(!javascriptEnabled){const view=analyticsView(fixture,{start:'2026-10-22',end:'2026-10-28',category:'All',coverage:{start:'2026-09-03',end:'2026-10-28'}});for(const [title,expected] of [['Session trend',view.days.map(day=>[day.date,String(day.sessions)])],['Download trend',view.days.map(day=>[day.date,String(day.downloads)])],['Category comparison',view.categories.filter(category=>view.rows.some(row=>row.category===category.name)).map(category=>[category.name,String(category.sessions),String(view.previousCategories?.find(previous=>previous.name===category.name)?.sessions??'Unavailable')])]]){const figure=page.locator('figure').filter({has:page.getByRole('heading',{name:title,exact:true})}),rows=await figure.locator('tbody tr:has(th[scope=row])').evaluateAll(items=>items.map(row=>[...row.children].map(cell=>cell.textContent.trim())));assert.deepEqual(rows,expected,`${family} ${framework} ${base}: ${title} static sparse rows`);}}
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'No page overflow at 320px');
    assert.deepEqual(errors,[]);await context.close();
   }console.log(`${family} ${framework} ${base}: sparse/gap data handled with and without JavaScript`);

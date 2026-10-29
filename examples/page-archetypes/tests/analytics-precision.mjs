@@ -62,6 +62,7 @@ try {
     const outputs=await page.locator('[aria-label="Analytics summary"] output').allTextContents();
     assert.ok(outputs.every(value=>value.trim()==='—'),'No rounded metrics');
     if(!javascriptEnabled && framework!=='react') assert.equal(await page.getByText('Unavailable until a safe range is selected.',{exact:true}).count(),4);
+    if(!javascriptEnabled && framework!=='react'){assert.equal(await page.locator('[data-chart-table] tbody th[scope=row]').count(),0,'Unsafe totals must not be rendered as chart observations');assert.equal(await page.getByText('Chart values are unavailable until a safe range is selected.',{exact:true}).count(),3);}
     assert.equal(await page.getByRole('button',{name:'Download filtered CSV'}).isDisabled(),true,'No invalid export');
     if(!javascriptEnabled) assert.match(await page.locator('body').innerText(),/JavaScript is required to choose a different range/);
     if(javascriptEnabled){

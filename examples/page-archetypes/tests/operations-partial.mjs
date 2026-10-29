@@ -7,6 +7,7 @@ import {spawnSync} from 'node:child_process';
 import {createServer} from 'node:http';
 import {chromium} from '@playwright/test';
 import {Validator} from '@cfworker/json-schema';
+import {operationsView} from '../jekyll/assets/js/dashboard-model.mjs';
 const root=process.cwd(),temp=mkdtempSync(join(tmpdir(),'nightjar-empty-'));
 const original=JSON.parse(readFileSync('examples/page-archetypes/content/dashboards.json','utf8'));
 const disjoint=process.argv.includes('--disjoint');
@@ -41,6 +42,7 @@ try {
    await page.goto(`http://127.0.0.1:${server.address().port}${base}examples/dashboard-operations/`,{waitUntil:'networkidle'});
    for(const service of fixture.services){const latest=service.samples.at(-1),row=page.locator('#service-table tbody tr').filter({hasText:service.name});assert.match(await row.innerText(),new RegExp(latest.time.replaceAll('+','\\+')),'latest sample time is visible with and without JS');}
    if(javascriptEnabled){assert.match(await page.locator('body').innerText(),/Partial sample coverage/);assert.match(await page.locator('body').innerText(),/sample times differ/);const outputs=await page.locator('[aria-label="Operations summary"] output').allTextContents();assert.equal(outputs[1],`${Math.round(fixture.services.reduce((sum,service)=>sum+service.samples.at(-1).latency_ms,0)/fixture.services.length)} ms`);const table=page.locator('table').filter({has:page.locator('caption', {hasText:'Latency trend'})});const rows=await table.locator('tbody tr').allTextContents();assert.equal(rows.length,disjoint?0:4,`${family} ${framework} ${base}: ${JSON.stringify(rows)}`);if(!disjoint){assert.match(rows[0],/16:00 UTC/);assert.match(rows[3],/19:00 UTC/);}await page.getByRole('button',{name:'Acknowledge AL-001'}).click();assert.equal(await page.locator('[aria-label="Operations summary"] output').nth(2).innerText(),'1');if(disjoint){await page.getByRole('combobox',{name:'Service',exact:true}).selectOption(fixture.services[1].id);await page.getByRole('button',{name:'Apply monitoring controls'}).click();assert.match(await page.locator('body').innerText(),/No availability samples in this monitoring window/);assert.equal(await table.locator('tbody tr').count(),0);}}
+   if(!javascriptEnabled){const expected=operationsView(fixture,{}).points.map(point=>[`${point.time.slice(11,16)} UTC`,String(point.latency_ms)]),figure=page.locator('figure').filter({has:page.getByRole('heading',{name:'Latency trend',exact:true})}),rows=await figure.locator('tbody tr:has(th[scope=row])').evaluateAll(items=>items.map(row=>[...row.children].map(cell=>cell.textContent.trim())));assert.deepEqual(rows,expected,`${family} ${framework} ${base}: static common-time latency rows`);if(!expected.length&&framework!=='react')assert.match(await figure.locator('tbody').textContent(),/No common observations/);}
    assert.deepEqual(errors,[]);await context.close();
   }console.log(`${family} ${framework} ${base}: partial samples remain truthful with and without JavaScript`);
 

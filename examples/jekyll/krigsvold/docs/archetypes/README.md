@@ -46,6 +46,8 @@ Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/workspa
 
 Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/content-semantic-inventory.mjs` against paired root-path builds to audit all 50 routes without JavaScript. It checks canonical titles, summaries, section headings and structured content, actions, table headers, image descriptions, prose against Jekyll, application dashboard navigation and full directory fixture visibility. Footnote marker formatting and Astro's fingerprinted CSV URL are normalized; the CSV bytes are compared. This is a bounded semantic inventory, not a complete visual or assistive-technology audit.
 
+Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/dashboard-static-chart-data.mjs` against the same paired builds to compare four no-JavaScript chart data tables to the shared dashboard model. Sparse, disjoint and unsafe fixtures are exercised by the separate analytics and operations regression suites.
+
 Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/search-composition.mjs` to check two search sections in disposable catalog builds across all three frameworks, both families and root/subpaths. Both controls share the page query, synchronize on submission and history navigation, and retain keyboard and no-JavaScript access.
 
 Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/dense-table-reflow.mjs` against the same builds to check 100-row, 19-column tables with long words at 320px. The check verifies useful column widths and a named, keyboard-scrollable region; users must scroll horizontally to inspect wide tables.
