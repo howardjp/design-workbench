@@ -47,6 +47,10 @@ try {
         page.on('response', response=>{ if(response.status() >= 400) missing.push(response.url()); });
         await page.goto(`${origin}${base}examples/${record.id}/`, {waitUntil:'load'});
         await page.evaluate(() => document.fonts.ready);
+        if (record.id === 'about' || record.id === 'archive') {
+          const scripts = await page.locator('script[src]').evaluateAll(nodes => Promise.all(nodes.map(node => fetch(node.src).then(response => response.text()))));
+          assert.equal(scripts.some(source => source.includes('[data-listing]')), record.id === 'archive', 'Pagination code should load only on a page that uses pagination');
+        }
         assert.equal(await page.locator('h1').count(),1);
         assert.equal(await page.locator('h1').innerText(),record.title);
         assert.equal(await page.locator('main').count(),1);
@@ -269,9 +273,11 @@ try {
           const noteTarget=await footnote.getAttribute('href');
           assert.equal(noteTarget,'#fn-stress-test-prose-1');
           await footnote.focus(); await page.keyboard.press('Enter');
+          await page.waitForURL(url=>url.hash===noteTarget);
           assert.equal(new URL(page.url()).hash,noteTarget);
           const back=page.locator('#prose + .recipe-prose .footnote-backref');
           await back.click();
+          await page.waitForURL(url=>url.hash==='#fnref-stress-test-prose-1');
           assert.equal(new URL(page.url()).hash,'#fnref-stress-test-prose-1');
           const ids=await page.locator('[id]').evaluateAll(nodes=>nodes.map(node=>node.id));
           assert.equal(new Set(ids).size,ids.length,'Fixture IDs must remain unique');
