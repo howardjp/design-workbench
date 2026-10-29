@@ -2,7 +2,7 @@
 export const dayMillis = 86400000;
 // Only intentional view state crosses to the separately configured peer host.
 const comparisonKeys = Object.freeze({
-  analytics:['start','end','category'],
+  analytics:['start','end','category','categoryId'],
   administration:['q','status','sort','direction','page','size','density'],
   operations:['hours','threshold','service','serviceId','severity','hideAcknowledged']
 });
@@ -50,7 +50,7 @@ export function analyticsComparison(view,key) {
   if (view.previous[key]===0) return 'Comparison unavailable: preceding value is zero.';
   return `${((view.totals[key]/view.previous[key]-1)*100).toFixed(1)}% versus preceding period.`;
 }
-export function analyticsView(fixture, {start, end, category='All', coverage}) {
+export function analyticsView(fixture, {start, end, category='All', categoryId=/** @type {string|null} */ (null), coverage}) {
   if (!fixture.analytics.length) return {error:'No analytics data is available in this snapshot.',empty:true};
   const observedMin=fixture.analytics.reduce((date,row)=>row.date<date?row.date:date,fixture.analytics[0].date);
   const observedMax=fixture.analytics.reduce((date,row)=>row.date>date?row.date:date,fixture.analytics[0].date);
@@ -59,16 +59,17 @@ export function analyticsView(fixture, {start, end, category='All', coverage}) {
   const min=declared?coverage.start:observedMin, max=declared?coverage.end:observedMax;
   const error=rangeError(start,end,min,max);
   if(error) return {error};
+  const selectedCategory=categoryId!==null?categoryId:(category==='All'?null:category);
   const categoryOrder=new Map(fixture.categories.map((name,index)=>[name,index]));
-  const rows=fixture.analytics.filter(row=>row.date>=start&&row.date<=end&&(category==='All'||row.category===category)).sort((a,b)=>a.date.localeCompare(b.date)||(categoryOrder.get(a.category)??Infinity)-(categoryOrder.get(b.category)??Infinity)||a.category.localeCompare(b.category));
+  const rows=fixture.analytics.filter(row=>row.date>=start&&row.date<=end&&(selectedCategory===null||row.category===selectedCategory)).sort((a,b)=>a.date.localeCompare(b.date)||(categoryOrder.get(a.category)??Infinity)-(categoryOrder.get(b.category)??Infinity)||a.category.localeCompare(b.category));
   const length=Math.round((Date.parse(end)-Date.parse(start))/dayMillis)+1;
   const previousEnd=new Date(Date.parse(start)-dayMillis).toISOString().slice(0,10);
   const previousStart=new Date(Date.parse(start)-length*dayMillis).toISOString().slice(0,10);
-  const previousRows=fixture.analytics.filter(row=>row.date>=previousStart&&row.date<=previousEnd&&(category==='All'||row.category===category));
+  const previousRows=fixture.analytics.filter(row=>row.date>=previousStart&&row.date<=previousEnd&&(selectedCategory===null||row.category===selectedCategory));
   try {
     const days=[...new Set(rows.map(row=>row.date))].map(date=>({date,...aggregate(rows.filter(row=>row.date===date))}));
     const categories=fixture.categories.map(name=>({name,...aggregate(rows.filter(row=>row.category===name))}));
-    const expected=category==='All'?[...new Set(fixture.categories)]:[category];
+    const expected=selectedCategory===null?[...new Set(fixture.categories)]:[selectedCategory];
     const missingObservations=missingAnalyticsObservations(rows,start,length,expected);
     const precedingComplete=previousStart>=min && missingAnalyticsObservations(previousRows,previousStart,length,expected)===0;
     const previous=!missingObservations&&precedingComplete ? aggregate(previousRows) : null;

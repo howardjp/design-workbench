@@ -13,17 +13,17 @@ function updateURL(values){const url=new URL(location.href);for(const[key,value]
 const number=value=>new Intl.NumberFormat('en-US').format(value);
 function analytics(){
   const form=root.querySelector('#analytics-filters');const start=form.elements.start,end=form.elements.end,category=form.elements.category,range=form.elements.range;const coverage={start:start.min,end:end.max};
-  start.value=params.get('start')||start.value;end.value=params.get('end')||end.value;if(fixture.categories.includes(params.get('category')))category.value=params.get('category');
+  start.value=params.get('start')||start.value;end.value=params.get('end')||end.value;const requestedCategory=params.has('categoryId')?params.get('categoryId'):(params.get('category')==='All'?'':params.get('category')||'');if(fixture.categories.includes(requestedCategory))category.value=requestedCategory;
   if(params.has('start')||params.has('end'))range.value='custom';
   let view;
   range.addEventListener('change',()=>{if(range.value!=='custom'){end.value='2026-10-28';start.value=new Date(Date.parse(end.value)-(Number(range.value)-1)*dayMillis).toISOString().slice(0,10);}});
   [start,end].forEach(input=>input.addEventListener('input',()=>{range.value='custom';}));
   const render=()=>{
-    const candidate=analyticsView(fixture,{start:start.value,end:end.value,category:category.value,coverage});const error=root.querySelector('#analytics-error');
+    const candidate=analyticsView(fixture,{start:start.value,end:end.value,category:category.value||'All',categoryId:category.value==='All'?'All':null,coverage});const error=root.querySelector('#analytics-error');
     error.hidden=!candidate.error;error.textContent=candidate.error;start.setAttribute('aria-invalid',String(!!candidate.error&&!candidate.dataError));end.setAttribute('aria-invalid',String(!!candidate.error&&!candidate.dataError));
     root.querySelector('[data-export-analytics]').disabled=!!candidate.error;
     if(candidate.error){status.textContent=candidate.dataError?(view?'Analytics data is unavailable for this range. The previous valid results remain visible.':candidate.error):(view?'Invalid filters. The previous valid results remain visible.':'Invalid filters. No valid results are available.');if(candidate.dataError)status.setAttribute('data-analytics-data-error','');else status.removeAttribute('data-analytics-data-error');error.tabIndex=-1;error.focus();return;}
-    status.removeAttribute('data-analytics-data-error');view=candidate;updateURL({start:start.value,end:end.value,category:category.value});
+    status.removeAttribute('data-analytics-data-error');view=candidate;updateURL({start:start.value,end:end.value,category:category.value||'All',categoryId:category.value==='All'?'All':null});
     const hasRows=view.rows.length>0;root.querySelector('[data-export-analytics]').disabled=!hasRows;
     metric(root,'sessions',hasRows?number(view.totals.sessions):'Unavailable',analyticsComparison(view,'sessions'));metric(root,'downloads',hasRows?number(view.totals.downloads):'Unavailable',analyticsComparison(view,'downloads'));
     metric(root,'conversion',view.totals.conversion===null?'Unavailable':view.totals.conversion.toFixed(1)+'%',view.totals.conversion===null?'Unavailable without sessions.':'Completed tasks ÷ sessions.');metric(root,'mean_duration',view.totals.mean_duration===null?'Unavailable':Math.round(view.totals.mean_duration)+' s',view.totals.mean_duration===null?'Unavailable without sessions.':'Weighted by session count.');
@@ -31,7 +31,7 @@ function analytics(){
     chart(root,'downloads',view.days.map(day=>({label:day.date,value:day.downloads})),{label:'Downloads'});
     chart(root,'categories',view.categories.filter(row=>view.rows.some(item=>item.category===row.name)).map(row=>({label:row.name,value:row.sessions,previous:view.previousCategories?.find(item=>item.name===row.name)?.sessions??null})),{label:'Sessions by category',bars:true,previous:true});
     tableRows(root.querySelector('#analytics-source'),view.rows.map(row=>[row.date,row.category,row.sessions,row.downloads,row.completions]),['Date','Category','Sessions','Downloads','Completed tasks']);
-    status.textContent=`${view.days.length} days · category: ${category.value} · ${view.rows.length} source records · ${start.value} to ${end.value}. ${analyticsCoverageMessage(view)}`.trim();
+    status.textContent=`${view.days.length} days · category: ${category.value||'All categories'} · ${view.rows.length} source records · ${start.value} to ${end.value}. ${analyticsCoverageMessage(view)}`.trim();
   };
   form.addEventListener('submit',event=>{event.preventDefault();render();});
   root.querySelector('[data-export-analytics]').addEventListener('click',()=>{if(view)downloadCSV('northlight-analytics.csv',[['Date','Category','Sessions','Downloads','Completed tasks'],...view.rows.map(row=>[row.date,row.category,row.sessions,row.downloads,row.completions])]);});

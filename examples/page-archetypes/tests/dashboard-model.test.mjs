@@ -189,3 +189,9 @@ test('literal All service ID is distinguishable from the all-services filter',()
  const single=operationsView(copy,{service:'All',serviceId:'All'});assert.equal(single.services.length,1);assert.equal(single.services[0].id,'All');assert.ok(single.alerts.length>0);assert.ok(single.alerts.every(alert=>alert.service_id==='All'));
  assert.equal(comparisonSearch('operations','?service=All&serviceId=All&token=private'),'service=All&serviceId=All');
 });
+
+test('literal All category is distinguishable from the all-categories filter',()=>{
+ const copy=structuredClone(fixture);copy.categories.push('All');const options={start:'2026-10-22',end:'2026-10-28',category:'All'};
+ assert.equal(analyticsView(copy,options).rows.length,21);const single=analyticsView(copy,{...options,categoryId:'All'});assert.equal(single.rows.length,0);assert.equal(single.missingObservations,7);
+ assert.equal(comparisonSearch('analytics','?category=All&categoryId=All&token=private'),'category=All&categoryId=All');
+});
