@@ -305,3 +305,5 @@ Commit `5aaaee9` marks missing date/category observations as partial, suppresses
 ### Native invalid form resubmission
 
 Commit `24b2922` clears an earlier local success message when native validation blocks a repeat submission after a password or code was cleared. Capturing the invalid event handles validation that occurs before the submit handler. A cross-framework Chromium keyboard regression passed both families for missing/malformed input focus, linked help, repeat submission, correction, reset, disabled no-JavaScript controls and no write requests; all six root-path builds passed. This is native Chromium validation evidence, not manual screen-reader certification.
+
+The integrated-branch rerun of `analytics-sparse.mjs` and `test:examples` passed after `5aaaee9`, including both languages, all three frameworks, root/subpaths and JavaScript/no-JavaScript.
