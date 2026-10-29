@@ -71,6 +71,7 @@ jobs:
           NIGHTJAR_FAMILY=martlet NIGHTJAR_BASE=/ node examples/react-catalog/build.mjs
           NIGHTJAR_FAMILY=krigsvold NIGHTJAR_BASE=/ node examples/react-catalog/build.mjs
           node examples/page-archetypes/tests/dashboard-framework-parity.mjs
+          node examples/page-archetypes/tests/content-semantic-inventory.mjs
           node examples/page-archetypes/tests/form-keyboard-parity.mjs
           node examples/page-archetypes/tests/reading-framework-typography.mjs
           node examples/page-archetypes/tests/internationalization-stress.mjs
