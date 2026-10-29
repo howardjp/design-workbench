@@ -596,3 +596,11 @@ An initial saved-dark Chromium scan of 300 route states found the local-index la
 Commit `49d8655` moves the React workspace build before the portable security and composition tests. A clean checkout reproduced the hosted missing-`@martlet/react` failure before that build; after it, the full hostile-content test passed all 12 family/framework/base combinations with and without JavaScript and both Jekyll safe-mode fallbacks. Security assertions were retained.
 
 Commit `082771c` adds a bounded Firefox/WebKit hosted matrix for portable examples: both families and Jekyll/Astro/React, with article, local sign-in and analytics routes, 320px reflow, keyboard submission and dashboard navigation, data-table disclosure, local resource responses and script errors. The same six framework/family cases passed in local Chromium. Firefox/WebKit portable-route results remain pending hosted execution; the previously successful three-engine workbench workflow tests components and reference applications, not this new portable smoke. The new matrix is not a substitute for the full Chromium fixtures or manual assistive-technology review.
+
+All three hosted portable fixture groups on `189b6ab` subsequently passed (analytics precision, analytics coverage and operations/directory). The separate main job remained failed at the workspace build ordering described above; later steps did not run on that job.
+
+### Reading and document section navigation
+
+Review of matched screenshots identified a navigation gap: Jekyll's 18 reading and document recipes provided an “On this page” index, while their Astro and React ports did not. Commit `6a24895` restores native fragment indexes in both ports, with the existing family styles and print hiding. The independent regression passed all 18 recipes × two ports × two families × root/subpaths, with and without JavaScript, including keyboard activation, destination IDs and 320px reflow. Focused light/dark axe, strict React types and both complete 47-route Astro/React catalog suites also passed. The new regression is wired into the read-only CI workflow. No visual baseline was approved.
+
+The integrated-branch index regression also passed all eight port/family/base combinations after rebuilding the React workspaces.
