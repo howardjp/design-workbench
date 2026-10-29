@@ -191,3 +191,7 @@ Commit `60db50c` wires gallery, workspace, fleet, chat, sensors and scene, so al
 ### Astro print palette isolation correction
 
 The earlier dark-print change `0914c64` placed both families' palette declarations in a shared stylesheet, which caused the existing Astro CSS-isolation assertion to fail in the combined suite. Commit `56735b5` moves each palette into its family-specific shell stylesheet. The paired root/subpath dark-print tests passed in the independent worktree; the complete Astro suite is running with this correction and the pagination asset optimization. The prior print change should not be treated as fully validated until that suite passes.
+
+### Cross-framework workspace filtering
+
+Commit `e33b8be` reapplies a workspace's active filter after a review changes a record. Previously React could keep a now-hidden record selected and actionable; Jekyll and Astro could leave the nonmatching row visible. The change clears selection when the record leaves scope, updates the visible results and restores focus appropriately. The React regression failed before the fix; React workspace/chat checks passed both families at root/subpaths, targeted Jekyll checks passed both families, and focused Astro workspace/fleet checks passed all four configurations. A full Astro suite is running with the separately integrated CSS-isolation correction.
