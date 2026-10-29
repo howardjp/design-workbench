@@ -52,6 +52,10 @@ for (const family of ['martlet', 'krigsvold']) {
 for (const mutate of [
   c => { delete c.pages.find(p => p.id === 'event').event; },
   c => { c.pages[0].sections[0].actions[0].url = 'javascript:alert(1)'; },
+  c => { c.pages[0].sections[0].actions[0].download = '../unsafe.csv'; },
+  c => { c.pages[0].sections[0].actions[0].download = 'bad" onmouseover="x'; },
+  c => { c.pages[0].sections[0].actions[0].download = 'a'.repeat(129); },
+  c => { c.pages[0].sections[0].actions[0].download = ''; },
   c => { c.pages[0].sections[0].kind = 'unknown-widget'; },
   c => { delete c.pages.find(p => p.id === 'article').author; }
 ]) {

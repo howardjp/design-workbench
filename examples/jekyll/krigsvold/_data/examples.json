@@ -1320,7 +1320,8 @@
           "actions": [
             {
               "label": "Download example data (CSV)",
-              "url": "/assets/examples/observations.csv"
+              "url": "/assets/examples/observations.csv",
+              "download": "observations.csv"
             },
             {
               "label": "Observation protocol",
