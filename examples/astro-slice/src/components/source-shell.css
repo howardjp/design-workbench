@@ -36,3 +36,9 @@ html[data-appearance=dark] .nightjar-header :focus-visible { outline-color:#0613
 }
 @media(max-width:30rem) { .nightjar-footer__inner { grid-template-columns:1fr; } }
 body { margin:0; }
+/* Printing is for the document or report, not the site navigation chrome. */
+@media print {
+ .nightjar-header, .nightjar-footer, .nightjar-breadcrumb { display:none !important; }
+ .nightjar-masthead, html[data-appearance=dark] .nightjar-masthead { background:transparent !important; color:#000 !important; }
+ .nightjar-masthead__inner { padding:0; }
+}

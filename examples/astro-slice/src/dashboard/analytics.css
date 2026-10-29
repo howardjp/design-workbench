@@ -17,3 +17,9 @@
 @media(max-width:64rem) { .analytics-app[data-ready] .dash-nav-toggle { display:inline-flex; } .analytics-app[data-ready] .dash-nav-toggle[aria-expanded=false] + nav { display:none; } }
 
 .dashboard-heading { margin-bottom:2rem; } .dashboard-heading h1 { font-size:clamp(2rem,3.4vw,3rem); line-height:1.15; margin:.5rem 0 1rem; } .dashboard-heading > p { max-width:65ch; }
+/* Preserve the report and its data while omitting interactive navigation. */
+@media print {
+ .analytics-app { display:block; width:100%; max-width:none; margin:0; }
+ .analytics-app aside, .analytics-app form { display:none; }
+ .analytics-chart { break-inside:avoid; }
+}
