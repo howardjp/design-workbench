@@ -1,7 +1,6 @@
 ---
 const {section, Button} = Astro.props;
-const filterId = `filter-${section.id}`;
-const activeId = `active-${section.id}`;
+const filterId = `workspace:${section.id}:filter`;
 ---
 <div class="workspace" data-workspace>
   <div><label for={filterId}>Filter records</label><input id={filterId} type="search" data-record-filter disabled /><p data-record-count role="status"></p>
@@ -10,7 +9,7 @@ const activeId = `active-${section.id}`;
       <span data-record-status>{item.status}</span><p>{item.summary}</p><p>{item.id} · {item.owner}</p>
     </li>)}</ul>
   </div>
-  <section aria-labelledby={activeId}><h3 id={activeId}>Selected record</h3><div data-active-record><p>Select a record to inspect it.</p></div>
+  <section aria-label={`Selected record — ${section.title}`}><h3>Selected record</h3><div data-active-record><p>Select a record to inspect it.</p></div>
     <div class="workspace-actions"><Button type="button" data-review-record disabled>Mark reviewed locally</Button> <Button type="button" data-reset-workspace disabled>Reset demonstration</Button></div>
     <p role="status" data-workspace-status>Local demonstration. No changes are saved.</p>
   </section>

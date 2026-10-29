@@ -15,7 +15,7 @@
       {% when 'form' %}{% include examples/form.html kind=block.form id=block.id %}
       {% when 'search' %}{% include examples/search.html %}
       {% when 'gallery' %}{% include examples/gallery.html items=block.items %}
-      {% when 'workspace' %}{% include examples/workspace.html items=block.items %}
+      {% when 'workspace' %}{% include examples/workspace.html items=block.items id=block.id title=block.title %}
       {% when 'chat' %}{% include examples/chat.html %}
       {% when 'sensors' %}{% include examples/sensors.html id=block.id %}
       {% when 'scene' %}{% include examples/scene.html id=block.id %}
