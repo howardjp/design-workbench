@@ -55,3 +55,7 @@ The 1440px analytics screenshots for both languages and the 320px Martlet analyt
 The existing React reference browser suite passed 39/39 on system Chromium. Further registry browser checks are in progress.
 
 The existing workbench registry browser suite also passed 178/178 using system Chromium on isolated port 4190; the React reference suite passed 39/39. These include automated axe and responsive checks and do not replace manual screen-reader testing.
+
+### Operations filter drafts
+
+Acknowledging an alert previously read unapplied monitoring controls and could silently change the active scope; an invalid pending threshold could leave a stale display after the underlying local state changed. Commit `dc759fe` re-renders acknowledgement against the last applied scope while preserving form drafts and the URL's applied state. The paired browser regression failed before the fix and passed after it. Both Jekyll dashboard fixtures rebuilt, `npm run test:examples` passed, and the full system-Chromium dashboard suite passed 49/49 in the independent fix worktree.
