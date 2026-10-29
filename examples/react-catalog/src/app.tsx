@@ -1,10 +1,13 @@
 import {useEffect,useRef,useState} from 'react';
-import {AppShell,Article,DefinitionList,Pagination,family} from 'catalog-family';
+import {AppShell,Article,DefinitionList,Pagination,DataTable,family} from 'catalog-family';
 import {pages} from './pages';
+import rendered from './rendered.json';
+import {exampleImage} from './assets';
 import './style.css';
 
 type Item={title:string;summary:string;url:string;date?:string;tag?:string};
-type Section={id:string;title:string;kind?:string;body?:string;items?:Item[];facts?:{label:string;value:string}[];actions?:{label:string;url:string}[]};
+type Section={id:string;title:string;kind?:string;body?:string;items?:Item[];facts?:{label:string;value:string}[];actions?:{label:string;url:string}[];headers?:string[];rows?:string[][];image?:string;alt?:string;caption?:string};
+const bodies:Record<string,string>=rendered;
 const base=import.meta.env.BASE_URL.replace(/\/$/,'');
 const href=(url:string)=>url.startsWith('/')&&!url.startsWith('//') ? `${base}${url}` : url;
 function Listing({items,title}:{items:Item[];title:string}) {
@@ -18,12 +21,14 @@ function Listing({items,title}:{items:Item[];title:string}) {
   <h3><a href={href(item.url)}>{item.title}</a></h3><p>{item.summary}</p>
  </li>)}</ul>{enhanced&&pageCount>1&&<Pagination ref={nav} page={page} pageCount={pageCount} onPageChange={next=>{pendingFocus.current=true;setPage(next);}} label={`${title} pages`}/>}</>;
 }
-function SectionView({section}:{section:Section}){
- return <section aria-labelledby={section.id}><h2 id={section.id} tabIndex={-1}>{section.title}</h2>
-  {section.body&&<p>{section.body}</p>}
+function SectionView({section,pageId}:{section:Section;pageId:string}){
+ return <section data-section={section.id} {...(section.kind==='table'?{'aria-label':`${section.title} section`}:{'aria-labelledby':section.id})}><h2 id={section.id} tabIndex={-1}>{section.title}</h2>
+  {section.body&&<div className="recipe-prose" dangerouslySetInnerHTML={{__html:bodies[`${pageId}-${section.id}`]}}/>}
   {section.kind==='cards'&&<ul className="recipe-cards">{section.items!.map(item=><li key={item.url}><h3><a href={href(item.url)}>{item.title}</a></h3><p>{item.summary}</p></li>)}</ul>}
   {section.kind==='facts'&&<DefinitionList items={section.facts!.map((fact,i)=>({id:`${section.id}-${i}`,term:fact.label,description:fact.value}))}/>}
   {section.kind==='listing'&&<Listing title={section.title} items={section.items!}/>}
+  {section.kind==='figure'&&<figure><img src={exampleImage(section.image!)} alt={section.alt!} width="960" height="640" loading="lazy"/><figcaption>{section.caption}</figcaption></figure>}
+  {section.kind==='table'&&<DataTable caption={section.title}><thead><tr>{section.headers!.map(header=><th key={header} scope="col">{header}</th>)}</tr></thead><tbody>{section.rows!.map((row,i)=><tr key={i}>{row.map((cell,j)=>j===0?<th key={j} scope="row">{cell}</th>:<td key={j}>{cell}</td>)}</tr>)}</tbody></DataTable>}
   {section.actions&&<ul className="recipe-actions">{section.actions.map(action=><li key={action.url}><a href={href(action.url)}>{action.label}</a></li>)}</ul>}
  </section>;
 }
@@ -31,8 +36,12 @@ export function App({id}:{id:string}) {
  const page=pages.find(item=>item.id===id);
  if(!page) throw Error(`Unported catalog route: ${id}`);
  return <div className={family} {...{[`data-${family}`]:'light'}}><AppShell brand={<a href={href('/examples/home/')}>Northlight Field Institute</a>} navigationLabel="Example navigation" navigationPlacement="top" navigation={<><a href={href('/examples/home/')}>Home</a><a href={href('/examples/about/')}>About</a><a href={href('/examples/archive/')}>Archive</a></>} utilities={<span>Fictional examples</span>}>
-  <Article title={page.title} eyebrow={page.category} summary={page.summary} {...('date' in page && page.date ? {metadata:<time dateTime={page.date}>{page.date}</time>}: {})}>
-   <div data-example={page.id} data-semantic-class={page.semantic_class}>{page.sections.map(section=><SectionView key={section.id} section={section as Section}/>)}</div>
+  <Article title={page.title} eyebrow={page.category} summary={page.summary} {...('date' in page && page.date ? {metadata:<><time dateTime={page.date}>{new Intl.DateTimeFormat('en-US',{year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(`${page.date}T00:00:00Z`))}</time>{'author' in page && page.author && <> · {page.author}</>}</>}: {})}>
+   <div data-example={page.id} data-semantic-class={page.semantic_class}>
+   {'author' in page && page.author && <nav aria-label="Article context"><a href={href('/examples/person/')}>About {page.author}</a> · <a href={href('/examples/archive/')}>All writing</a></nav>}
+   {'tags' in page && page.tags && <ul aria-label="Article subjects">{page.tags.map(tag=><li key={tag}><a href={href('/examples/categories/')}>{tag}</a></li>)}</ul>}
+   {'event' in page && page.event && <aside aria-label="Event details"><p><strong>Event details</strong></p><p><time dateTime={page.event.start}>{page.event.display_start}</time> to <time dateTime={page.event.end}>{page.event.display_end}</time> · {page.event.timezone}</p><p>{page.event.location} · {page.event.registration}</p></aside>}
+   {page.sections.map(section=><SectionView key={section.id} section={section as Section} pageId={page.id}/>)}</div>
   </Article>
  </AppShell></div>;
 }
