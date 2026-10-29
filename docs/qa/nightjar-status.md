@@ -203,3 +203,7 @@ Commit `a318f60` makes end-date-only URLs display Custom range in all three fram
 ### Astro listing asset isolation
 
 Commit `af3939a` loads the Astro listing enhancement only on pages with listings. In a local Chromium 151, 1440px root-path measurement, Martlet About JavaScript fell from 1,891 raw / 856 gzip bytes to 1,312 / 537 and one script request was removed. Targeted tests passed for both families at root/subpaths: About omits the controller, Archive loads and advances, and no-JavaScript Archive retains all records. The full content suite with the print-palette isolation correction is still running. Initial measurements also found dashboards embedding unused fixture domains; further scoping is being investigated.
+
+### React operations URL validation
+
+Commit `11935fb` validates an initial React operations threshold URL. Invalid input now remains in the draft, reports and focuses the error and retains the default valid metrics until a valid threshold is applied. The regression failed before the fix; standalone and integrated React dashboard suites passed both families at root/subpaths, including rapid acknowledgement and no-JavaScript checks, and strict TypeScript passed.
