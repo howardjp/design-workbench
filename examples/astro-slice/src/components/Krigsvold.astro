@@ -16,7 +16,7 @@ const links = [{href:href('/examples/home/'),label:'Home',current:page.id==='hom
   <SourceHeader slot="header" name={name} home={href('/examples/home/')} links={links} />
   <SourceMasthead page={page} />
   <nav class="nightjar-breadcrumb" aria-label="Breadcrumb"><a href={href('/examples/home/')}>Home</a> / <span aria-current="page">{page.title}</span></nav>
-  <Content page={page} href={href} base={base} Button={Button} />
+  {!page.dashboard && <Content page={page} href={href} base={base} Button={Button} />}
   <slot />
   <SourceFooter slot="footer" name={name} groups={[{label:'Explore',links}]} />
 </Layout>
