@@ -179,3 +179,7 @@ Commit `11c3663` connects the three React dashboards and dashboard overview, and
 ### React no-JavaScript chart labels
 
 Commit `985c0a5` addresses the narrow-screen fallback recorded above. Server-rendered analytics and operations charts start with a compact 240-unit SVG capped at 240px; hydrated charts retain adaptive resizing and exact-data disclosures remain available. Dedicated tests passed both families at root/subpaths for 320/1440 no-JavaScript label geometry, category-label overlap, data disclosures, overflow and hydrated resizing; strict TypeScript passed. A 320px no-JavaScript Krigsvold category chart was visually inspected. The desktop no-JavaScript chart intentionally remains compact; full visual and manual accessibility review remains open.
+
+### React rapid acknowledgement
+
+Commit `6404df3` fixes a React operations race: two batched clicks could both read the prior alert state, losing a toggle and duplicating the acknowledgement event. The updated handler tracks the latest local alert state synchronously and resets it consistently. A regression failed before the change and passed in both families at root/subpaths, requiring one acknowledgement and one reopening event; the operations suite, existing recovery/axe and no-JavaScript checks also passed. The catalog integration is being rebased onto this correction.
