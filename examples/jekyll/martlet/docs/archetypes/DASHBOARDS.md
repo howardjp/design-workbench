@@ -27,7 +27,7 @@ Northlight is fictional. Data includes 168 daily category observations over 56 d
 
 ## Analytics
 
-The default range is October 22–28, 2026. Quick ranges cover 7, 14 and 28 days; custom start/end dates and category selection scope all metrics, charts, source records, and CSV export. Inputs outside the fixture or in reversed order produce a focusable alert, retain the last valid results, and disable export until corrected.
+The default range is October 22–28, 2026. Quick ranges cover 7, 14 and 28 days; custom start/end dates and category selection scope all metrics, charts, source records, and CSV export. Inputs outside the fixture or in reversed order produce a focusable alert, retain the last valid results, and disable export until corrected. Category labels are rendered as text.
 
 Metrics: sessions, downloads, completion rate (`sum(completions) / sum(sessions)`), and mean duration (`sum(duration_seconds) / sum(sessions)`). Comparisons use the immediately preceding equal-length period only when fully available. Missing comparisons say unavailable. The charts show session and download trends and category totals against the preceding period. Exact values are available through native disclosures and accessible tables, including dates, category and units. CSV export contains the filtered source records.
 
@@ -82,7 +82,7 @@ CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/dashboard-fr
 
 Omit `CHROMIUM_PATH` when Playwright's Chromium is installed. Astro and React default to their `dist` directories; use `NIGHTJAR_ASTRO_ROOT` or `NIGHTJAR_REACT_ROOT` to point at different directories containing `martlet` and `krigsvold` builds. These fixtures must all be built with an empty/root base path. The disposable Jekyll directory can be removed after testing.
 
-The schema-valid arbitrary-ID directory regression builds isolated fixture copies and checks independent add, edit and bulk actions across families, frameworks and base paths: `node examples/page-archetypes/tests/administration-identifiers.mjs`.
+The hostile category and directory-text regression runs with `node examples/page-archetypes/tests/dashboard-text.mjs` and checks both initial and interactive pages across families, frameworks and base paths. The schema-valid arbitrary-ID directory regression builds isolated fixture copies and checks independent add, edit and bulk actions across families, frameworks and base paths: `node examples/page-archetypes/tests/administration-identifiers.mjs`.
 
 Hostile operations text and IDs can be checked with `node examples/page-archetypes/tests/operations-text.mjs`. Schema-valid duplicate or future operations observations are checked with `node examples/page-archetypes/tests/operations-invalid.mjs` and its `--future` option. Schema-valid partial operations fixtures (including disjoint samples) can be checked with `node examples/page-archetypes/tests/operations-partial.mjs` and the `--disjoint` option. The schema-valid reordered operations fixture is checked, including its no-JavaScript service table, with `node examples/page-archetypes/tests/operations-order.mjs`.
 
