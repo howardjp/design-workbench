@@ -289,3 +289,7 @@ Commit `05ecc45` makes Jekyll and Astro's initial no-JavaScript analytics tables
 ### Composed gallery dialogs
 
 Two Jekyll gallery sections previously emitted duplicate dialog-heading IDs and routed every image to the first dialog. A reserved section identifier also collided with the generated dialog-title ID in Astro. Jekyll galleries now scope controls and dialogs per instance and restore opener focus; both adapters name their dialogs without generated IDs. Disposable two-gallery Jekyll and Astro fixtures passed both families at root and subpaths for independent image content, unique IDs, Escape focus return, axe and no-JavaScript links. React already has a separate two-gallery composition suite.
+
+### Reading typography and form controls
+
+Commit `1285d26` aligns Astro masthead and section heading roles with Jekyll and makes Astro/React local form text controls use root-responsive 16px sizing with narrow-screen containment. A documented cross-framework regression passed all six family/framework combinations for article, documentation, contact and sign-up at 320/1440px, including 200% contact text and no-JavaScript. The initial 48-page/viewport Chromium audit found no page overflow, browser errors or WCAG-tagged axe violations. Full Astro and React 47-route suites passed both languages at root/subpaths. Martlet Jekyll form controls use Cambo while Astro/React retain their existing Lato control role; exact visual and manual assistive-technology parity remain open. Evidence and commands are in `examples/page-archetypes/READING-VERIFICATION.md`.
