@@ -354,3 +354,5 @@ The integrated-branch `operations-invalid.mjs`, `operations-partial.mjs` and `te
 ### Composed search navigation
 
 Two catalog search sections previously reused query IDs; Jekyll and Astro also duplicated the index ID and enhanced only the first form. The adapters now give each control its own label association and named search landmark; static adapters scope their index and results to each section. Controls on the same page share the URL query and synchronize on submission and history navigation without discarding host history state. Disposable two-search catalog builds test all frameworks, both families and root/subpaths for unique IDs, synchronized keyboard search, back navigation, axe and no-JavaScript browse links. The Jekyll inert-index injection regression remains in place. Distinct section titles are used by this fixture; duplicate titles and arbitrary host-page IDs are not covered.
+
+The integrated-branch `search-composition.mjs` and `test:examples` rerun passed after `d19083f` across both languages × all three frameworks × root/subpaths.
