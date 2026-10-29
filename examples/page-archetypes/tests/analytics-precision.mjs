@@ -47,10 +47,12 @@ try {
     if(javascriptEnabled){
      const initial=(await page.locator('[aria-label="Analytics summary"] output').allTextContents())[0];
      assert.equal(initial,'7,686');
+     await page.getByLabel('Start date',{exact:true}).fill('2026-10-28');await page.getByLabel('End date',{exact:true}).fill('2026-10-22');await page.getByRole('button',{name:'Apply filters'}).click();for(const name of ['Start date','End date'])assert.equal(await page.getByLabel(name,{exact:true}).getAttribute('aria-describedby'),'analytics-error','range errors are associated before a subsequent data error');
      await page.getByLabel('Start date',{exact:true}).fill('2026-10-10');await page.getByLabel('End date',{exact:true}).fill('2026-10-10');await page.getByRole('button',{name:'Apply filters'}).click();
      assert.match(await page.getByRole('alert').innerText(),/Analytics totals exceed supported safe integer precision/);
      assert.notEqual(await page.getByLabel('Start date',{exact:true}).getAttribute('aria-invalid'),'true');
      assert.notEqual(await page.getByLabel('End date',{exact:true}).getAttribute('aria-invalid'),'true');
+     for(const name of ['Start date','End date'])assert.equal(await page.getByLabel(name,{exact:true}).getAttribute('aria-describedby'),null,'data errors are not attributed to date fields');
      assert.match(await page.getByRole('status').filter({hasText:'Analytics data is unavailable'}).innerText(),/previous valid results remain visible/i);
      assert.equal((await page.locator('[aria-label="Analytics summary"] output').allTextContents())[0],initial);
      assert.equal(await page.getByRole('button',{name:'Download filtered CSV'}).isDisabled(),true);
@@ -68,6 +70,7 @@ try {
     if(javascriptEnabled){
      assert.notEqual(await page.getByLabel('Start date',{exact:true}).getAttribute('aria-invalid'),'true');
      assert.notEqual(await page.getByLabel('End date',{exact:true}).getAttribute('aria-invalid'),'true');
+     for(const name of ['Start date','End date'])assert.equal(await page.getByLabel(name,{exact:true}).getAttribute('aria-describedby'),null,'data errors are not attributed to date fields');
      await page.getByLabel('Start date',{exact:true}).fill('2026-10-13');await page.getByLabel('End date',{exact:true}).fill('2026-10-12');await page.getByRole('button',{name:'Apply filters'}).click();
      assert.match(await page.getByRole('status').filter({hasText:'Invalid filters'}).innerText(),/No valid results are available/);
      assert.equal(await page.getByRole('button',{name:'Download filtered CSV'}).isDisabled(),true);
