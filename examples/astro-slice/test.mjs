@@ -12,6 +12,11 @@ assert.match(renderMarkdown('[local](/examples/about/)', '/preview/'), /href="\/
 assert.match(renderMarkdown('![view](/images/view.svg)', '/preview/'), /src="\/preview\/images\/view.svg"/);
 assert.doesNotMatch(renderMarkdown('[bad](javascript:alert(1))'), /href=/);
 assert.doesNotMatch(renderMarkdown('<script>alert(1)</script>'), /<script>/);
+assert.doesNotMatch(renderMarkdown('<math><mi>E</mi></math>'), /<math>/);
+const hostileFixture=renderMarkdown('<math xmlns="http://www.w3.org/1998/Math/MathML"><mi onload="alert(1)">E</mi></math><script>alert(1)</script><img src="javascript:alert(1)" onerror="alert(1)">', '/', {fixtureMarkup:true,docId:'test'});
+assert.match(hostileFixture, /<math/);
+assert.doesNotMatch(hostileFixture, /onload|onerror|<script|javascript:/i);
+assert.throws(()=>renderMarkdown('x[^a]\n\n[^a]: note', '/', {docId:'bad" onmouseover="alert(1)'}), /Invalid Markdown document ID/);
 
 const pages = catalog.pages.filter(page => supported.includes(page.id));
 const browser = await chromium.launch({ headless: true, ...(process.env.CHROMIUM_PATH ? {executablePath: process.env.CHROMIUM_PATH} : {}) });
@@ -49,7 +54,7 @@ try {
         for (const section of record.sections) {
           assert.equal(await page.locator(`section[aria-labelledby="${section.id}"] h2`).innerText(),section.title);
           if (section.body) {
-            const expected = await page.evaluate(html => { const d = document.createElement('div'); d.innerHTML = html; return d.textContent.replace(/\s+/g,' ').trim(); }, renderMarkdown(section.body, base));
+            const expected = await page.evaluate(html => { const d = document.createElement('div'); d.innerHTML = html; return d.textContent.replace(/\s+/g,' ').trim(); }, renderMarkdown(section.body, base, {fixtureMarkup: record.id === 'stress-test', docId:`${record.id}-${section.id}`}));
             const actual = (await page.locator(`section[aria-labelledby="${section.id}"] .recipe-prose`).textContent()).replace(/\s+/g,' ').trim();
             assert.equal(actual, expected);
           }
@@ -141,7 +146,7 @@ try {
             await page.setViewportSize({width:320,height:800});
           }
         }
-        if (['home','guide','person','article','event','archive','search','contact','sign-up','two-factor','gallery','collection-item','workspace','fleet','chat','sensors','scene','faq','pricing','report','patterns'].includes(record.id)) {
+        if (['home','guide','person','article','event','archive','search','contact','sign-up','two-factor','gallery','collection-item','workspace','fleet','chat','sensors','scene','faq','pricing','report','patterns','stress-test'].includes(record.id)) {
           const results=await new AxeBuilder({page}).analyze();
           assert.deepEqual(results.violations.map(({id,nodes})=>({id,html:nodes.map(n=>n.html)})), [], `Axe violations: ${family} ${base} ${record.id}`);
         }
@@ -235,6 +240,34 @@ try {
           await page.keyboard.press('Space');
           assert.equal(await details.evaluate(el=>el.open),false);
         }
+        if (record.id === 'stress-test') {
+          assert.equal(await page.locator('#hierarchy + .recipe-prose h3').count(),1);
+          assert.equal(await page.locator('#hierarchy + .recipe-prose h4').count(),1);
+          assert.equal(await page.locator('#hierarchy + .recipe-prose h5').count(),1);
+          assert.equal(await page.locator('#hierarchy + .recipe-prose h6').count(),1);
+          assert.equal(await page.locator('#prose + .recipe-prose blockquote').count(),1);
+          assert.equal(await page.locator('#prose + .recipe-prose ol > li > ul').count(),1);
+          const code=page.locator('#code + .recipe-prose pre');
+          assert.equal(await code.getAttribute('tabindex'),'0');
+          assert.equal(await code.getAttribute('aria-label'),'Code example');
+          await code.focus();
+          assert.equal(await code.evaluate(el=>el===document.activeElement),true);
+          const maths=page.locator('#code + .recipe-prose math');
+          assert.equal(await maths.count(),1);
+          assert.equal(await maths.evaluate(el=>el.namespaceURI),'http://www.w3.org/1998/Math/MathML');
+          assert.equal(await maths.locator('msup').count(),1);
+          assert.equal(await page.locator('#code + .recipe-prose var').count(),3);
+          const footnote=page.locator('#prose + .recipe-prose .footnote-ref a');
+          const noteTarget=await footnote.getAttribute('href');
+          assert.equal(noteTarget,'#fn-stress-test-prose-1');
+          await footnote.focus(); await page.keyboard.press('Enter');
+          assert.equal(new URL(page.url()).hash,noteTarget);
+          const back=page.locator('#prose + .recipe-prose .footnote-backref');
+          await back.click();
+          assert.equal(new URL(page.url()).hash,'#fnref-stress-test-prose-1');
+          const ids=await page.locator('[id]').evaluateAll(nodes=>nodes.map(node=>node.id));
+          assert.equal(new Set(ids).size,ids.length,'Fixture IDs must remain unique');
+        }
         if (record.id === 'reference') {
           assert.equal(await page.locator(`time[datetime="${record.date}"]`).count(),1);
           assert.ok((await page.locator('main').innerText()).includes(record.author));
@@ -293,12 +326,12 @@ try {
           assert.equal(await nav.locator('[data-page-status]').innerText(), 'Page 1 of 2');
         }
         if (record.id === 'search') {
-          await page.goto(`${origin}${base}examples/search/?q=deliberately%20long%20title`);
+          await page.goto(`${origin}${base}examples/search/?q=Working%20with%20application%20data`);
           const query=page.getByLabel('Search the example record');
-          assert.equal(await query.inputValue(), 'deliberately long title');
-          const unavailable=page.locator('[data-search-results] li').filter({hasText:'A deliberately long title about the ordinary details that tend to break a beautifully composed page'});
+          assert.equal(await query.inputValue(), 'Working with application data');
+          const unavailable=page.locator('[data-search-results] li').filter({hasText:'Working with application data'});
           assert.equal(await unavailable.locator('a').count(),0);
-          assert.equal(await unavailable.locator('[data-destination]').getAttribute('data-destination'), `${base}examples/stress-test/`);
+          assert.equal(await unavailable.locator('[data-destination]').getAttribute('data-destination'), `${base}examples/dashboard-components/`);
           assert.equal(await unavailable.getByText('Not yet available in this Astro preview.').count(),1);
           await query.fill('shoreline');
           await page.getByRole('button',{name:'Search',exact:true}).click();

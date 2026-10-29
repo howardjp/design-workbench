@@ -20,7 +20,7 @@ const formatDate = date => new Intl.DateTimeFormat('en-US', {year:'numeric',mont
   {page.semantic_class === 'catalog-index' && <Catalog href={href} />}
   {page.sections.map(section => <section aria-labelledby={section.id}>
     <h2 id={section.id}>{section.title}</h2>
-    {section.body && <div class="recipe-prose" set:html={renderMarkdown(section.body, base)} />}
+    {section.body && <div class="recipe-prose" set:html={renderMarkdown(section.body, base, {fixtureMarkup: page.id === 'stress-test', docId:`${page.id}-${section.id}`})} />}
     {section.kind === 'cards' && <ul class="recipe-list">{section.items.map(item => <li><h3><a href={href(item.url)}>{item.title}</a></h3><p>{item.summary}</p></li>)}</ul>}
     {section.kind === 'listing' && <div data-listing>
       <ul class="recipe-entries">{section.items.map(item => <li data-list-item>
@@ -48,6 +48,7 @@ const formatDate = date => new Intl.DateTimeFormat('en-US', {year:'numeric',mont
 </div>
 <style>
 .recipe { max-width: 72rem; margin-inline: auto; padding: 0 1.5rem 3rem; }
+.recipe-prose { overflow-wrap:anywhere; }
 .recipe section { margin-block: 2.5rem; }
 .recipe-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: 1.5rem; }
 .recipe-entries { list-style: none; padding: 0; }
