@@ -79,3 +79,7 @@ Commit `ad42b88` extends the Astro experiment to 17 selected catalog records per
 ### Astro article, event and listing behavior
 
 Commit `d9f9745` expands the experimental Astro adapter to 21 selected records per language. It adds article author/date/tags/context, event time/zone/registration information, responsive captioned tables and progressive pagination for longer listings. The independent suite passed for both families at root and subpath: content, destinations, assets, 320px overflow, keyboard pagination, no-JavaScript and print fallbacks, with axe on six representative pages per build. Eleven distinct linked destinations remain unported. A separate visual comparison of Krigsvold about found missing source masthead, mark, grouped footer, breadcrumb, appearance toggle and aligned label/content composition. These remain open visual gaps; no visual parity is claimed.
+
+### Astro catalog and search
+
+Commit `cab41d6` adds a browsable catalog and local search over all 50 shared records; 22 recipe pages are implemented in the experiment. Direct query restoration, bounded input, text-safe results, no-JavaScript catalog fallback and availability labels were tested in both families at root and subpaths, alongside existing pagination and representative axe checks. The remaining 28 records are labeled unavailable but currently still link to unimplemented routes; removing those broken navigation targets is outstanding. Source-shell fidelity and the other interaction contracts remain open.
