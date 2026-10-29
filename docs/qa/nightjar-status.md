@@ -195,3 +195,7 @@ The earlier dark-print change `0914c64` placed both families' palette declaratio
 ### Cross-framework workspace filtering
 
 Commit `e33b8be` reapplies a workspace's active filter after a review changes a record. Previously React could keep a now-hidden record selected and actionable; Jekyll and Astro could leave the nonmatching row visible. The change clears selection when the record leaves scope, updates the visible results and restores focus appropriately. The React regression failed before the fix; React workspace/chat checks passed both families at root/subpaths, targeted Jekyll checks passed both families, and focused Astro workspace/fleet checks passed all four configurations. A full Astro suite is running with the separately integrated CSS-isolation correction.
+
+### Cross-framework analytics URL state
+
+Commit `a318f60` makes end-date-only URLs display Custom range in all three frameworks and validates initial React URL ranges. Invalid React ranges retain default results, show/focus an error and disable CSV until corrected. The React invalid-range regression failed before the change; the independently run Jekyll dashboard suite passed 57/57, Astro analytics and standalone/integrated React dashboard suites passed both families at root/subpaths, `test:examples` and strict React TypeScript passed. Both Jekyll exports were synchronized.
