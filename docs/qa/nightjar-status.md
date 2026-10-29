@@ -693,6 +693,8 @@ Commit `db57e34` rejects whitespace-only required names in contact and sign-up e
 
 Commit `c22ccf1` keeps Jekyll/Astro dashboard controls disabled until their handlers and initial rendering succeed, and displays an unavailable/reload explanation when enhancement is blocked or fails. A synthetic interruption after the former early enable allowed a Jekyll administration editor to navigate with fictional person fields in a native GET. React administration also retains its static directory when an initial history write fails and retains locally saved records if a later write fails, returning to a disabled fallback; React analytics and operations provide the same visible blocked-script explanation. The independent and integrated 12-build Chromium matrix passed both families × three frameworks × root/subpaths, covering normal actions, JS/no-JS, blocked scripts, early interruption, applicable history failures, static tables, no unintended navigation and reload recovery. Focused dashboard behavior, model, strict React type, source-archive and manifest checks passed independently. The integrated follow-on parity command initially omitted its required Jekyll root path; after fresh paired builds and setting that path, all six parity cases and model checks passed. This is bounded failure-path evidence, not coverage of all later Jekyll/Astro host failures or every React hydration error. CI now runs the new initialization matrix.
 
+An apparent React analytics Category naming mismatch was traced to Playwright's exact label-text locator, not the computed accessible name. Chromium's native accessibility tree reports `Category` for All, Research and Publications in both families and all three frameworks. Commit `1d9bcaf` adds role/name checks to the initialization regression; the independent full 12-build matrix and integrated four-build React subset passed. Firefox/WebKit native accessibility trees and screen readers were not inspected.
+
 Hosted portable run `40870681820` at `e2f2341` subsequently passed all six jobs, including Firefox and WebKit gallery smoke; the separate workbench workflow passed all three engines. The later form-initialization fix has its own hosted run pending.
 
 ### Event time metadata
@@ -704,6 +706,8 @@ The first hosted event-time run failed its canonical-export check because the ne
 ### Event ordering
 
 Commit `1d29e12` adds a visible warning when both event timestamps are valid but the end instant precedes the start, accounting for offsets and milliseconds. It retains valid `<time>` metadata, allows equal instants and makes no ordering claim when either timestamp is invalid. A reversed-offset fixture one millisecond apart reproduced the missing warning before the change. Independent and integrated checks passed 12 JavaScript/Liquid boundaries, including pre-1970 fractions and extreme offsets, plus both families × three frameworks × root/subpaths with JS/no-JS and Jekyll safe mode. The browser fixture covers reversed instants, equal instants across midnight, correctly ordered instants with reversed local dates and an invalid start. Source archive, manifest, model and strict React checks passed; CI includes both the parity and adversarial fixture tests. Display-label and named-timezone consistency remain unverified.
+
+Hosted portable workflows at `d56f4c5` and `8e7eba3` completed successfully across all six jobs, including the event parity and adversarial tests. Firefox/WebKit smoke retains its documented axe incomplete results.
 
 ### Search after history update failure
 
