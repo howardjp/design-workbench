@@ -163,3 +163,7 @@ Commit `61ff6cd` expands React to 41 paired routes with query-backed search, six
 ### React workspace and chat components
 
 Commit `68d0625` adds isolated controlled React workspaces and local chat. Two concurrent workspace instances have distinct accessible detail names; the fixture supports keyboard selection, review, filtering and reset, with complete server-rendered records. Chat rejects whitespace, renders entered text safely, resets locally and does not send a POST. Independent Chromium tests passed both families at root/subpaths for two instances, keyboard/focus, no-JavaScript, 320px, light/dark axe and no network submission; focused TypeScript passed. Catalog wiring and full visual/manual accessibility review remain open.
+
+### React simulation components
+
+Commit `4969c99` adds standalone controlled station and scene simulations with per-instance IDs/state, canonical content and base-aware images. Server-rendered snapshots remain available and controls are disabled until hydration; no device or service is contacted. Strict TypeScript and four independent Chromium configurations passed, including simultaneous instances, keyboard, status, image decoding, reset, unique IDs, 320/1440 reflow, light/dark axe and no-JavaScript. Catalog integration remains pending.
