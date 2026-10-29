@@ -27,6 +27,8 @@ Build with `npm run build` at the workspace root. `npm run pack:react` produces 
 
 See the [component contracts](https://github.com/k3jph/design-workbench/blob/react-v0.1.0/docs/components.md) for properties, states, keyboard behavior, and acceptance criteria for every export. Checkbox is binary; mixed state is not yet a public contract. Fieldset keeps the native legend and disabled-group behavior. Disclosure uses native details/summary toggling.
 
+Field creates its own stable hint and error IDs even when the caller supplies the input `id`, so another control can safely use names such as `reference-hint`. The render-prop `aria-describedby` contains the IDs actually used. Consumers that previously referenced the undocumented `<id>-hint` or `<id>-error` names directly should use that association, or explicitly pass unique `hintId` and `errorId` values to preserve their existing references. As with any HTML ID, caller-provided IDs must be unique in the document. Independently mounted React roots must use distinct `identifierPrefix` values.
+
 ErrorSummary accepts a title, message/targetId error entries, native div ref, and optional recovery children. Focus it after a failed operation; its links focus explicit Field IDs or focusable fieldsets, and retain native fragment navigation if a target cannot be focused. Modified clicks retain native link behavior. Field now accepts an optional explicit id, retaining generated IDs by default. ErrorSummary does not manage application drafts or trigger focus itself.
 
 

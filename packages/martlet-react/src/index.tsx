@@ -51,19 +51,24 @@ export function Field({
   label,
   hint,
   error,
+  hintId: providedHintId,
+  errorId: providedErrorId,
   children,
 }: {
   id?: string;
   label: string;
   hint?: string;
   error?: string;
+  hintId?: string;
+  errorId?: string;
   children: (props: FieldControl) => ReactNode;
 }) {
   const generatedId = useId();
   const id = providedId ?? generatedId;
-  const descriptions =
-    [hint && `${id}-hint`, error && `${id}-error`].filter(Boolean).join(" ") ||
-    undefined;
+  // Description IDs belong to this Field, independent of a caller-supplied control ID.
+  const hintId = providedHintId ?? `${generatedId}-hint`;
+  const errorId = providedErrorId ?? `${generatedId}-error`;
+  const descriptions = [hint && hintId, error && errorId].filter(Boolean).join(" ") || undefined;
   return (
     <div className="martlet-field">
       <label htmlFor={id}>{label}</label>
@@ -73,12 +78,12 @@ export function Field({
         "aria-invalid": error ? true : undefined,
       })}
       {hint && (
-        <p id={`${id}-hint`} className="martlet-hint">
+        <p id={hintId} className="martlet-hint">
           {hint}
         </p>
       )}
       {error && (
-        <p id={`${id}-error`} className="martlet-error">
+        <p id={errorId} className="martlet-error">
           {error}
         </p>
       )}

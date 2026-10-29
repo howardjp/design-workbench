@@ -33,6 +33,7 @@
     "test:pagination-consumer": "node scripts/test-pagination-consumer.mjs",
     "test:tabs-consumer": "node scripts/test-tabs-consumer.mjs",
     "test:error-summary-consumer": "node scripts/test-error-summary-consumer.mjs",
+    "test:fields-consumer": "node scripts/test-fields-consumer.mjs",
     "test:examples": "node examples/page-archetypes/scripts/verify.mjs && node --test examples/page-archetypes/tests/dashboard-model.test.mjs",
     "test:dashboards": "playwright test --config playwright.dashboard.config.ts",
     "test:search-safety": "node --test examples/page-archetypes/tests/search-index-safety.test.mjs",
