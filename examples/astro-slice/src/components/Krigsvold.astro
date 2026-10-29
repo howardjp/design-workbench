@@ -7,6 +7,7 @@ const PageLayout = ['document', 'reading', 'dossier'].includes(page.composition)
 ---
 <PageLayout title={page.title} summary={page.summary} bodyClass="krigsvold-source-profile">
   <SiteHeader slot="header" name="Northlight Field Institute" home={href('/examples/home/')} links={[{href:href('/examples/home/'),label:'Home',current:page.id==='home'},{href:href('/examples/about/'),label:'About',current:page.id==='about'}]} />
+  {page.semantic_class === 'article' && <p slot="metadata"><time datetime={page.date}>{new Intl.DateTimeFormat('en-US', {year:'numeric',month:'long',day:'numeric',timeZone:'UTC'}).format(new Date(`${page.date}T00:00:00Z`))}</time> · {page.author}</p>}
   <Content page={page} href={href} base={base} Button={Button} />
   <SiteFooter slot="footer"><p>Northlight Field Institute · Fictional example</p></SiteFooter>
 </PageLayout>

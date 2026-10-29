@@ -30,7 +30,7 @@ try {
       const rel = decodeURIComponent(url.pathname.slice(base.length));
       const file = resolve(directory, rel.endsWith('/') ? rel+'index.html' : rel);
       if (!file.startsWith(directory + '/')) { res.writeHead(403).end(); return; }
-      try { const data=await readFile(file); const mime={'.html':'text/html','.css':'text/css','.woff2':'font/woff2','.woff':'font/woff','.svg':'image/svg+xml'}; res.writeHead(200, {'Content-Type':mime[extname(file)] || 'application/octet-stream'}).end(data); } catch { res.writeHead(404).end(); }
+      try { const data=await readFile(file); const mime={'.html':'text/html','.css':'text/css','.woff2':'font/woff2','.woff':'font/woff','.svg':'image/svg+xml','.js':'text/javascript'}; res.writeHead(200, {'Content-Type':mime[extname(file)] || 'application/octet-stream'}).end(data); } catch { res.writeHead(404).end(); }
     });
     await new Promise(r=>server.listen(0,'127.0.0.1',r));
     try {
@@ -54,32 +54,72 @@ try {
             assert.equal(actual, expected);
           }
           if (section.kind === 'listing') for (const item of section.items) {
-            const row = page.locator(`section[aria-labelledby="${section.id}"] li`).filter({has:page.getByRole('link',{name:item.title,exact:true})});
-            assert.equal(await row.locator('p').last().innerText(), item.summary);
+            const row = page.locator(`section[aria-labelledby="${section.id}"] li`).filter({has:page.locator('a').filter({hasText:item.title})});
+            assert.equal(await row.locator('p').last().textContent(), item.summary);
             if (item.date) assert.equal(await row.locator('time').getAttribute('datetime'), item.date);
-            if (item.tag) assert.match(await row.innerText(), new RegExp(item.tag));
+            if (item.tag) assert.match(await row.textContent(), new RegExp(item.tag));
+          }
+          if (section.kind === 'table') {
+            const table=page.locator(`section[aria-labelledby="${section.id}"] table`);
+            assert.equal(await table.locator('caption').innerText(), section.title);
+            assert.deepEqual(await table.locator('thead th').allTextContents(), section.headers);
+            for (let i=0; i<section.rows.length; i++) assert.deepEqual(await table.locator('tbody tr').nth(i).locator('th, td').allTextContents(), section.rows[i]);
           }
           if (section.kind === 'facts') for (const fact of section.facts) {
             const row=page.locator(`section[aria-labelledby="${section.id}"] dl > div`).filter({has:page.getByText(fact.label,{exact:true})});
             assert.equal(await row.locator('dd').innerText(),fact.value);
           }
           for (const link of [...(section.actions ?? []), ...(section.items ?? []).map(i=>({label:i.title,url:i.url}))]) {
-            assert.equal(await page.locator(`section[aria-labelledby="${section.id}"]`).getByRole('link',{name:link.label,exact:true}).getAttribute('href'),base.replace(/\/$/,'')+link.url);
+            assert.equal(await page.locator(`section[aria-labelledby="${section.id}"] a`).filter({hasText:link.label}).getAttribute('href'),base.replace(/\/$/,'')+link.url);
             assert.ok(catalog.pages.some(p => link.url === `/examples/${p.id}/`), `Unknown catalog destination ${link.url}`);
           }
         }
         assert.deepEqual(missing, [], 'Page resources must load');
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'No horizontal overflow at 320px');
-        if (['home','guide','person'].includes(record.id)) {
+        if (['home','guide','person','article','event','archive'].includes(record.id)) {
           const results=await new AxeBuilder({page}).analyze();
-          assert.deepEqual(results.violations.map(({id})=>id), [], 'Axe violations');
+          assert.deepEqual(results.violations.map(({id,nodes})=>({id,html:nodes.map(n=>n.html)})), [], `Axe violations: ${family} ${base} ${record.id}`);
+        }
+        if (record.id === 'article') {
+          assert.equal(await page.locator(`time[datetime="${record.date}"]`).count(),1);
+          assert.ok((await page.locator('main').innerText()).includes(record.author));
+          for (const tag of record.tags) assert.equal(await page.getByRole('link',{name:tag,exact:true}).getAttribute('href'), `${base}examples/categories/`);
+          assert.equal(await page.getByRole('link',{name:'All writing'}).getAttribute('href'), `${base}examples/archive/`);
+        }
+        if (record.id === 'event') {
+          for (const value of [record.event.start, record.event.end]) assert.equal(await page.locator(`time[datetime="${value}"]`).count(),1);
+          for (const value of [record.event.location,record.event.registration,record.event.timezone]) assert.ok((await page.locator('aside').innerText()).includes(value));
+        }
+        if (record.id === 'archive') {
+          const nav = page.locator('[data-pagination]');
+          assert.equal(await page.locator('[data-list-item]:visible').count(), 3);
+          assert.equal(await nav.locator('[data-page-status]').innerText(), 'Page 1 of 2');
+          assert.equal(await nav.locator('[data-previous]').isDisabled(), true);
+          await nav.locator('[data-next]').focus();
+          await page.keyboard.press('Enter');
+          assert.equal(await nav.locator('[data-page-status]').innerText(), 'Page 2 of 2');
+          assert.equal(await page.locator('[data-list-item]:visible').count(), 3);
+          assert.equal(await nav.locator('[data-next]').isDisabled(), true);
+          assert.equal(await nav.locator('[data-previous]').evaluate(el=>el===document.activeElement), true);
+          await page.emulateMedia({media:'print'});
+          assert.equal(await page.locator('[data-list-item]:visible').count(), 6);
+          assert.equal(await nav.isVisible(), false);
+          await page.emulateMedia({media:'screen'});
+          await nav.locator('[data-previous]').click();
+          assert.equal(await nav.locator('[data-page-status]').innerText(), 'Page 1 of 2');
         }
         if (record.id === 'guide') assert.equal(await page.locator('#arrival + .recipe-prose ol li').count(),4);
         if (record.id === 'opportunity') assert.equal(await page.locator('#requirements + .recipe-prose ul li').count(),3);
         if (record.id === 'changelog') assert.equal(await page.locator('#v1-2 + .recipe-prose h3').count(),2);
         await context.close();
       }
-      console.log(`${family} ${base}: 17 pages, content, routes, assets and 320px; representative axe passed`);
+      const noJs=await browser.newContext({javaScriptEnabled:false});
+      const staticPage=await noJs.newPage();
+      await staticPage.goto(`${origin}${base}examples/archive/`);
+      assert.equal(await staticPage.locator('[data-list-item]:visible').count(), 6);
+      assert.equal(await staticPage.locator('[data-pagination]').isVisible(), false);
+      await noJs.close();
+      console.log(`${family} ${base}: ${pages.length} pages; content, routes, pagination, print, no-JS and representative axe passed`);
     } finally { server.closeAllConnections(); await new Promise(r=>server.close(r)); }
   }
 } finally { await browser.close(); }

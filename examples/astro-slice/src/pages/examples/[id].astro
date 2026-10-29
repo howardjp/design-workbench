@@ -6,8 +6,7 @@ export function getStaticPaths() {
   const selected = catalog.pages.filter(page => supported.includes(page.id));
   if (selected.length !== supported.length) throw new Error('A selected catalog record is missing');
   for (const page of selected) for (const section of page.sections) {
-    if (section.kind && !['cards', 'facts', 'listing'].includes(section.kind)) throw new Error(`Unsupported section: ${section.kind}`);
-    if (section.kind === 'listing' && section.items.length > 3) throw new Error('Listing pagination is not implemented');
+    if (section.kind && !['cards', 'facts', 'listing', 'table'].includes(section.kind)) throw new Error(`Unsupported section: ${section.kind}`);
   }
   return selected.map(page => ({params: {id: page.id}, props: {page}}));
 }
