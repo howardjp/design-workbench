@@ -9,6 +9,8 @@ import AxeBuilder from '@axe-core/playwright';
 const roots=[['Jekyll',process.env.NIGHTJAR_JEKYLL_ROOT],['Astro',process.env.NIGHTJAR_ASTRO_ROOT||'examples/astro-slice/dist'],['React',process.env.NIGHTJAR_REACT_ROOT||'examples/react-catalog/dist']];
 if(!roots[0][1])throw Error('Set NIGHTJAR_JEKYLL_ROOT to paired root-path builds');
 const catalog=JSON.parse(await readFile('examples/page-archetypes/content/catalog.json','utf8'));
+const appearance=process.env.NIGHTJAR_AXE_APPEARANCE;
+if(appearance&&!['light','dark'].includes(appearance))throw Error('NIGHTJAR_AXE_APPEARANCE must be light or dark');
 const browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{})});
 const issues=[];let groups=0;
 try {
@@ -22,13 +24,16 @@ try {
   });
   await new Promise(r=>server.listen(0,'127.0.0.1',r));
   try {
-   const context=await browser.newContext({viewport:{width:1280,height:900}}),page=await context.newPage();
+   const context=await browser.newContext({viewport:{width:1280,height:900}});
+   if(appearance)await context.addInitScript(value=>{localStorage.setItem('nightjar-appearance',value);localStorage.setItem('design-appearance',value)},appearance);
+   const page=await context.newPage();
    let scanned=0;
    for(const record of catalog.pages){
     if(process.env.NIGHTJAR_AXE_ROUTE && process.env.NIGHTJAR_AXE_ROUTE!==record.id)continue;
     scanned++;
     const label=`${framework}/${family}/${record.id}`,response=await page.goto(`http://127.0.0.1:${server.address().port}/examples/${record.id}/`,{waitUntil:'load'});
     assert.equal(response.status(),200,label);
+    if(appearance){if(framework==='React')await page.waitForFunction(value=>document.querySelector('.source-shell')?.dataset.mode===value,appearance);else await page.waitForFunction(value=>document.documentElement.dataset.appearance===value,appearance);}
     const result=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
     for(const violation of result.violations){const issue={label,id:violation.id,nodes:violation.nodes.map(node=>({target:node.target,summary:node.failureSummary}))};issues.push(issue);console.error(JSON.stringify(issue));}
     if(framework==='Astro'&&record.id==='contact'){

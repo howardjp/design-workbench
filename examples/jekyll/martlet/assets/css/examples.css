@@ -25,6 +25,7 @@
 .example-section__body, .example-section__label { min-width: 0; }
 .example-prose { max-width: 68ch; }
 .example-prose blockquote { border-inline-start: 3px solid var(--ex-link); margin-inline: 0; padding-inline-start: 1.5rem; }
+html[data-appearance=dark] .example-prose :is(blockquote,.footnotes) { color: var(--ex-text); }
 .example-prose :is(ul,ol) { padding-inline-start: 1.5rem; }
 .example-prose pre { overflow-x: auto; max-width: 100%; padding: 1.25rem; background: var(--ex-panel); color: var(--ex-text); }
 .example-prose code { font-family: var(--ex-mono); font-size: .9em; }
@@ -95,6 +96,7 @@
 .example-messages { padding-inline-start: 1.5rem; max-width: 48rem; }
 .example-messages li { margin-bottom: 1.5rem; }
 .example-local-index { font-size: .95rem; }
+html[data-appearance=dark] .example-local-index .eyebrow { color: var(--ex-link); }
 .example-local-index ol { list-style: none; padding: 0; }
 .example-local-index li { margin-bottom: .6rem; }
 .example-category-nav { display: flex; gap: .75rem 1.25rem; flex-wrap: wrap; padding-block: 1rem 2rem; margin-bottom: 2rem; border-bottom: 1px solid var(--ex-line); }
