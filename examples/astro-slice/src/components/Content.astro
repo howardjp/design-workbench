@@ -62,6 +62,7 @@ const formatDate = date => new Intl.DateTimeFormat('en-US', {year:'numeric',mont
 .recipe figure { margin-inline: 0; }
 .recipe figure img { max-width: 100%; height: auto; }
 .recipe-table { max-width: 100%; overflow-x: auto; }
+.recipe-table :is(th,td) { min-inline-size: 8rem; }
 .recipe-tags { display: flex; gap: 1rem; padding: 0; list-style: none; }
 @media print { [data-list-item][hidden] { display: list-item !important; } [data-pagination] { display: none !important; } }
 .recipe-actions { list-style: none; padding: 0; display: flex; gap: 1rem; flex-wrap: wrap; }

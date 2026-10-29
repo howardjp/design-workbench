@@ -277,3 +277,7 @@ Enhanced gallery links previously cancelled modified clicks across all three fra
 ### Empty analytics fixture
 
 Commit `fc09481` permits an empty analytics array in the shared schema and renders an explicit no-data state across Jekyll, Astro and React without fabricated metrics or CSV, retaining navigation and the synthetic-data notice. The previous React implementation failed during server rendering with an empty fixture. A temporary-fixture regression passed both languages × three frameworks × root/subpath × JavaScript/no-JavaScript, with 320px, navigation and scoped axe checks. Existing nonempty analytics suites passed (Jekyll 18/18; Astro and React both families/root/subpath), as did strict React TypeScript and `test:examples`. This covers a fully empty source; sparse or malformed samples remain separate cases. Static no-JavaScript ordering of reversed fixtures is under review.
+
+### Dense table reflow
+
+An adversarial report table with 19 columns collapsed into a 334–350px table in Astro and 668–785px in React at a 320px viewport, making some columns only one or two characters wide. Astro and both React table components now keep an 8rem minimum cell width, matching the existing Jekyll adapter; wide tables scroll within their named, keyboard-focusable region. A Chromium check passed both families in Jekyll, Astro and React with 100 added rows, 19 columns, long unbroken words, document bounds and keyboard scrolling. This synthetic stress check does not measure the rendering performance of unbounded data sets.

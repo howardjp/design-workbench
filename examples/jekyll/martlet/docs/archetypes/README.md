@@ -36,6 +36,8 @@ The same paired builds also support `CHROMIUM_PATH=/usr/bin/chromium node exampl
 
 Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/gallery-link-contract.mjs` against those paired builds to verify modified image links, keyboard dialog focus return and direct image access without JavaScript.
 
+Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/dense-table-reflow.mjs` against the same builds to check 100-row, 19-column tables with long words at 320px. The check verifies useful column widths and a named, keyboard-scrollable region; users must scroll horizontally to inspect wide tables.
+
 Simulation controls derive IDs from the unique section ID using reserved `_simulation-` and `_scene-` prefixes. Existing links to the former fixed `#simulation-mode`, `#ventilation`, or `#scene-view` control IDs must be updated.
 
 For the multiple-simulation composition check, also install the locked Astro example dependencies with `npm ci --prefix examples/astro-slice --ignore-scripts`, then run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/simulation-composition.mjs` from the workbench root. Omit `CHROMIUM_PATH` if Playwright’s Chromium is installed. The check builds disposable fixtures; Ruby, Bundler and both Jekyll lockfiles must be available.
