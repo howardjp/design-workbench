@@ -170,18 +170,30 @@ export function Dialog({
   children: ReactNode;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const suppressedCloseEvents = useRef(0);
   const id = useId();
   useLayoutEffect(() => {
     const dialog = ref.current;
     if (!dialog) return;
     if (open && !dialog.open) dialog.showModal();
-    if (!open && dialog.open) dialog.close();
+    if (!open && dialog.open) {
+      // The close event is queued; distinguish prop-driven closes from native ones.
+      suppressedCloseEvents.current += 1;
+      dialog.close();
+    }
   }, [open]);
   return (
     <dialog
       className="martlet-dialog"
       ref={ref}
       aria-labelledby={id}
+      onClose={() => {
+        if (suppressedCloseEvents.current > 0) {
+          suppressedCloseEvents.current -= 1;
+        } else if (open && !ref.current?.open) {
+          onDismiss();
+        }
+      }}
       onCancel={(event) => {
         event.preventDefault();
         onDismiss();

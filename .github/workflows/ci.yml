@@ -34,6 +34,7 @@ jobs:
       - run: npx playwright install --with-deps ${{ matrix.browser }}
         timeout-minutes: 10
       - run: npm run test:browser
+      - run: npm run test:dialog-consumer
       - name: Test the packaged reference bytes
         run: |
           export DESIGN_PREVIEW_ARTIFACT_VERSION="$(node -p "JSON.parse(require('fs').readFileSync('docs/distribution.json')).preview.version")-sha.$DESIGN_SOURCE_COMMIT"
