@@ -191,7 +191,8 @@
       status.textContent = 'Added to this preview. Not sent to anyone; cleared when you leave or reload.';
       input.focus();
     });
-    input.addEventListener('input', () => input.setCustomValidity(''));
+    input.addEventListener('input', () => { input.setCustomValidity(''); status.textContent = 'Messages remain in page memory. Nothing is delivered.'; });
+    input.addEventListener('invalid', () => { status.textContent = input.validity.valueMissing || input.validity.customError ? 'Enter a message before adding it.' : 'Check the message and try again.'; });
     chat.querySelector('[data-clear-chat]').addEventListener('click', () => {
       messages.replaceChildren(...original.map(node => node.cloneNode(true)));
       input.value = ''; input.setCustomValidity(''); status.textContent = 'Conversation reset. Nothing was delivered.';
