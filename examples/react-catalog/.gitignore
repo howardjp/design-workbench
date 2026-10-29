@@ -3,6 +3,6 @@ analytics-dist/
 operations-dist/
 nav-dist/
 administration-dist/
-src/rendered.json
-
 interactive-specimen-dist/
+simulation-dist/
+src/rendered.json
