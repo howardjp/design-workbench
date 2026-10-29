@@ -456,6 +456,22 @@ export function Pagination({
   const current = Number.isFinite(page)
     ? Math.min(count, Math.max(1, Math.trunc(page)))
     : 1;
+  const previousRef = useRef<HTMLButtonElement>(null);
+  const nextRef = useRef<HTMLButtonElement>(null);
+  const focusedControl = useRef<"previous" | "next" | null>(null);
+  useLayoutEffect(() => {
+    if (disabled || count === 1) {
+      focusedControl.current = null;
+      return;
+    }
+    const active = document.activeElement;
+    if (active !== document.body && active !== previousRef.current && active !== nextRef.current) {
+      focusedControl.current = null;
+      return;
+    }
+    if (focusedControl.current === "next" && current === count && current > 1) previousRef.current?.focus();
+    else if (focusedControl.current === "previous" && current === 1 && count > 1) nextRef.current?.focus();
+  }, [current, count, disabled]);
   return (
     <nav
       {...props}
@@ -463,6 +479,9 @@ export function Pagination({
       className={`martlet-pagination ${className}`}
     >
       <Button
+        ref={previousRef}
+        onFocus={() => { focusedControl.current = "previous"; }}
+        onBlur={(event) => { if (!event.currentTarget.disabled) focusedControl.current = null; }}
         variant="secondary"
         disabled={disabled || current === 1}
         onClick={() => onPageChange(current - 1)}
@@ -473,6 +492,9 @@ export function Pagination({
         Page {current} of {count}
       </p>
       <Button
+        ref={nextRef}
+        onFocus={() => { focusedControl.current = "next"; }}
+        onBlur={(event) => { if (!event.currentTarget.disabled) focusedControl.current = null; }}
         variant="secondary"
         disabled={disabled || current === count}
         onClick={() => onPageChange(current + 1)}
