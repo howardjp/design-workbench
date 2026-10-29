@@ -167,3 +167,7 @@ Commit `68d0625` adds isolated controlled React workspaces and local chat. Two c
 ### React simulation components
 
 Commit `4969c99` adds standalone controlled station and scene simulations with per-instance IDs/state, canonical content and base-aware images. Server-rendered snapshots remain available and controls are disabled until hydration; no device or service is contacted. Strict TypeScript and four independent Chromium configurations passed, including simultaneous instances, keyboard, status, image decoding, reset, unique IDs, 320/1440 reflow, light/dark axe and no-JavaScript. Catalog integration remains pending.
+
+### React gallery component
+
+Commit `29f9775` adds a standalone React gallery using canonical image content, base-aware allowlisted assets, SSR direct links and a native labelled dialog with focus restoration. When JavaScript or `showModal` is unavailable, image links remain usable. Both family/root/subpath Chromium runs passed two simultaneous galleries, keyboard Enter/Escape and focus, alt/caption, 320px, light/dark axe and no-JS/no-`showModal` navigation; strict TypeScript passed. Catalog wiring, visual parity, manual assistive technology and other engines remain open.
