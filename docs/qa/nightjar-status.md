@@ -338,3 +338,5 @@ Commit `cafd402` sorts service observations by timestamp before selecting the la
 ### Composed workspace recovery
 
 Multiple Jekyll workspaces previously shared filter and detail IDs; Astro workspace IDs could also collide with valid section IDs. After resolving those collisions, automated axe exposed duplicate detail landmark names when workspaces were composed. Both adapters now namespace filter IDs by section and name detail regions by workspace title, matching React’s scoped naming. Disposable catalog fixtures passed all three frameworks, both families and root/subpaths for unique IDs, independent filter/review/reset, keyboard focus recovery, axe and no-JavaScript content. This check covers distinct workspace titles; arbitrary host IDs and duplicate titles need separate evaluation.
+
+The integrated-branch `workspace-composition.mjs` and `test:examples` rerun passed after `2cb40b5`, including both languages × all three frameworks × root/subpaths.
