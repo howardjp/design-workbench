@@ -1,9 +1,9 @@
 /* Framework-neutral progressive enhancement. No remote requests or persistent user data. */
 (() => {
   'use strict';
-  document.querySelectorAll('[data-demo-fields]').forEach(fieldset => { fieldset.disabled = false; });
   document.querySelectorAll('[data-demo-form]').forEach(form => {
-    const status = form.querySelector('[data-form-status]');
+    const status = form.querySelector('[data-form-status]'), fields = form.querySelector('[data-demo-fields]'), fallback = form.nextElementSibling;
+    if (!status || !fields || !fallback?.matches('[data-form-fallback]')) return;
     form.addEventListener('submit', event => {
       event.preventDefault();
       if (!form.reportValidity()) return;
@@ -17,6 +17,7 @@
     form.addEventListener('input', () => { status.textContent = ''; });
     form.addEventListener('change', () => { status.textContent = ''; });
     form.addEventListener('reset', () => { status.textContent = ''; });
+    fields.disabled = false; fallback.hidden = true;
   });
 
   document.querySelectorAll('[data-listing]').forEach(listing => {
@@ -180,10 +181,13 @@
 
   document.querySelectorAll('[data-conversation]').forEach(conversation => {
     const chat = conversation.querySelector('[data-chat]');
+    if (!chat) return;
     const messages = conversation.querySelector('[data-messages]');
-    const original = [...messages.children].map(node => node.cloneNode(true));
     const input = chat.querySelector('textarea');
     const status = chat.querySelector('[data-chat-status]');
+    const fields = chat.querySelector('[data-demo-fields]'), reset = chat.querySelector('[data-clear-chat]'), fallback = conversation.querySelector('[data-chat-fallback]');
+    if (!messages || !input || !status || !fields || !reset || !fallback) return;
+    const original = [...messages.children].map(node => node.cloneNode(true));
     chat.addEventListener('submit', event => {
       event.preventDefault();
       if (!input.value.trim()) { input.setCustomValidity('Enter a message before adding it.'); input.reportValidity(); return; }
@@ -196,10 +200,11 @@
     });
     input.addEventListener('input', () => { input.setCustomValidity(''); const neutral = 'Messages remain in page memory. Nothing is delivered.'; if (status.textContent !== neutral) status.textContent = neutral; });
     input.addEventListener('invalid', () => { status.textContent = input.validity.valueMissing || input.validity.customError ? 'Enter a message before adding it.' : 'Check the message and try again.'; });
-    chat.querySelector('[data-clear-chat]').addEventListener('click', () => {
+    reset.addEventListener('click', () => {
       messages.replaceChildren(...original.map(node => node.cloneNode(true)));
       input.value = ''; input.setCustomValidity(''); status.textContent = 'Conversation reset. Nothing was delivered.';
     });
+    fields.disabled = false; fallback.hidden = true;
   });
 
   document.querySelectorAll('[data-sensors]').forEach(sensors => {

@@ -16,6 +16,7 @@ const legend = kind.replaceAll('-', ' ').replace(/^./, c=>c.toUpperCase());
   </fieldset>
   <p role="status" data-form-status></p>
 </form>
+<p data-form-fallback>This local form is unavailable.</p>
 <noscript><p>JavaScript is needed for local form validation. The demonstration form is disabled to prevent accidental submission.</p></noscript>
 <style>
 fieldset { display:grid; gap:.5rem; min-width:0; }
@@ -24,7 +25,8 @@ fieldset :is(input:not([type=checkbox]),select,textarea) { font-size:1rem; min-w
 </style>
 <script>
   document.querySelectorAll('[data-demo-form]').forEach(form => {
-    const status = form.querySelector('[data-form-status]');
+    const status = form.querySelector('[data-form-status]'), fields = form.querySelector('[data-demo-fields]'), fallback = form.nextElementSibling;
+    if (!status || !fields || !fallback?.matches('[data-form-fallback]')) return;
     form.addEventListener('submit', event => {
       event.preventDefault();
       if (!form.reportValidity()) return;
@@ -37,6 +39,6 @@ fieldset :is(input:not([type=checkbox]),select,textarea) { font-size:1rem; min-w
     form.addEventListener('input', () => { status.textContent = ''; });
     form.addEventListener('change', () => { status.textContent = ''; });
     form.addEventListener('reset', () => { status.textContent = ''; });
-    form.querySelector('[data-demo-fields]').disabled = false;
+    fields.disabled = false; fallback.hidden = true;
   });
 </script>

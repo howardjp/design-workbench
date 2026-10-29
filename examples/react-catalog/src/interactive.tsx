@@ -33,5 +33,5 @@ export function DemoForm({kind}:{kind:string}) {
   {kind==='contact'&&<><label htmlFor={`${formId}topic`}>Topic</label><select id={`${formId}topic`} name="topic"><option>Research</option><option>Visits</option><option>Corrections</option></select><label htmlFor={`${formId}message`}>Message</label><textarea id={`${formId}message`} name="message" required rows={6} maxLength={4000}/></>}
   {['newsletter','sign-up'].includes(kind)&&<label><input type="checkbox" required name="consent"/> I understand this is a local demonstration.</label>}
   <div className="demo-actions"><Button type="submit">Validate example</Button> <Button type="reset">Clear</Button></div>
- </fieldset><p role="status">{status}</p></form><noscript><p>JavaScript is needed for local form validation. The demonstration form is disabled to prevent accidental submission.</p></noscript></>;
+ </fieldset><p role="status">{status}</p></form>{!ready&&<p data-form-fallback>This local form is unavailable.</p>}<noscript><p>JavaScript is needed for local form validation. The demonstration form is disabled to prevent accidental submission.</p></noscript></>;
 }

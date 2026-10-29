@@ -4,6 +4,7 @@ const {Button} = Astro.props;
 <div data-conversation>
 <ol data-messages aria-label="Conversation"><li><strong>Mara · Example message</strong><p>Could we review the conditions note before publishing?</p></li><li><strong>Rowan · Example message</strong><p>Yes. Keep the uncertainty visible in the account.</p></li></ol>
 <form data-chat><fieldset disabled data-chat-fields><legend>Add a local message</legend><label>Message<textarea required maxlength="1000" rows="3"></textarea></label><div class="chat-actions"><Button type="submit">Add to this preview</Button> <Button type="button" data-clear-chat>Reset conversation</Button></div></fieldset><p role="status" data-chat-status>Messages remain in page memory. Nothing is delivered.</p></form>
+<p data-chat-fallback>Message composition is unavailable.</p>
 <noscript><p>Message composition requires JavaScript.</p></noscript>
 </div>
 <style>
@@ -14,10 +15,13 @@ label textarea { display:block; margin-top:.5rem; font-weight:400; }
 <script>
   document.querySelectorAll('[data-conversation]').forEach(conversation => {
     const chat = conversation.querySelector('[data-chat]');
+    if (!chat) return;
     const messages = conversation.querySelector('[data-messages]');
-    const original = [...messages.children].map(node => node.cloneNode(true));
     const input = chat.querySelector('textarea');
     const status = chat.querySelector('[data-chat-status]');
+    const fields = chat.querySelector('[data-chat-fields]'), reset = chat.querySelector('[data-clear-chat]'), fallback = conversation.querySelector('[data-chat-fallback]');
+    if (!messages || !input || !status || !fields || !reset || !fallback) return;
+    const original = [...messages.children].map(node => node.cloneNode(true));
     chat.addEventListener('submit', event => {
       event.preventDefault();
       if (!input.value.trim()) { input.setCustomValidity('Enter a message before adding it.'); input.reportValidity(); return; }
@@ -29,10 +33,10 @@ label textarea { display:block; margin-top:.5rem; font-weight:400; }
     });
     input.addEventListener('input', () => { input.setCustomValidity(''); const neutral = 'Messages remain in page memory. Nothing is delivered.'; if (status.textContent !== neutral) status.textContent = neutral; });
     input.addEventListener('invalid', () => { status.textContent = input.validity.valueMissing || input.validity.customError ? 'Enter a message before adding it.' : 'Check the message and try again.'; });
-    chat.querySelector('[data-clear-chat]').addEventListener('click', () => {
+    reset.addEventListener('click', () => {
       messages.replaceChildren(...original.map(node => node.cloneNode(true)));
       input.value = ''; input.setCustomValidity(''); status.textContent = 'Conversation reset. Nothing was delivered.';
     });
-    chat.querySelector('[data-chat-fields]').disabled = false;
+    fields.disabled = false; fallback.hidden = true;
   });
 </script>
