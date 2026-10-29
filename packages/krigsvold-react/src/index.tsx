@@ -2,6 +2,7 @@ import {
   useLayoutEffect,
   useId,
   useRef,
+  useState,
   type ReactNode,
   type ComponentPropsWithRef,
 } from "react";
@@ -583,6 +584,7 @@ export function Tabs({
 }) {
   const generatedId = useId();
   const buttons = useRef<(HTMLButtonElement | null)[]>([]);
+  const [focusedId, setFocusedId] = useState<string | null>(null);
   const enabled = items
     .map((item, index) => (item.disabled ? -1 : index))
     .filter((index) => index >= 0);
@@ -590,12 +592,17 @@ export function Tabs({
     (item) => item.id === value && !item.disabled,
   );
   const active = selected >= 0 ? selected : (enabled[0] ?? -1);
+  const focused = items.findIndex((item) => item.id === focusedId && !item.disabled);
+  const tabStop = focused >= 0 ? focused : active;
   return (
     <div {...props} className={`krigsvold-tabs ${className}`}>
       <div
         role="tablist"
         aria-label={label}
         aria-orientation={orientation}
+        onBlur={(event) => {
+          if (!(event.relatedTarget instanceof Node) || !event.currentTarget.contains(event.relatedTarget)) setFocusedId(null);
+        }}
         onKeyDown={(event) => {
           const target = (event.target as HTMLElement).closest('[role="tab"]');
           const index = buttons.current.findIndex(
@@ -633,8 +640,9 @@ export function Tabs({
             id={`${generatedId}-tab-${index}`}
             aria-controls={`${generatedId}-panel-${index}`}
             aria-selected={index === active}
-            tabIndex={index === active ? 0 : -1}
+            tabIndex={index === tabStop ? 0 : -1}
             disabled={item.disabled}
+            onFocus={() => setFocusedId(item.id)}
             onClick={() => onValueChange(item.id)}
           >
             {item.label}

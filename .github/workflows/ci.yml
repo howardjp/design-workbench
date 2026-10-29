@@ -36,6 +36,7 @@ jobs:
       - run: npm run test:browser
       - run: npm run test:dialog-consumer
       - run: npm run test:pagination-consumer
+      - run: npm run test:tabs-consumer
       - name: Test the packaged reference bytes
         run: |
           export DESIGN_PREVIEW_ARTIFACT_VERSION="$(node -p "JSON.parse(require('fs').readFileSync('docs/distribution.json')).preview.version")-sha.$DESIGN_SOURCE_COMMIT"
