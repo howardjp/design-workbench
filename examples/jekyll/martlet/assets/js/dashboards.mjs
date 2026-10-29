@@ -8,14 +8,14 @@ const navToggle=root.querySelector('.dash-nav-toggle'),nav=root.querySelector('#
 navToggle.addEventListener('click',()=>navToggle.setAttribute('aria-expanded',String(navToggle.getAttribute('aria-expanded')!=='true')));
 root.querySelector('.dash-sidebar').addEventListener('keydown',event=>{if(event.key==='Escape'){navToggle.setAttribute('aria-expanded','false');navToggle.focus();}});
 navToggle.hidden=false;root.dataset.ready='true';
-function updateURL(values){const url=new URL(location.href);for(const[key,value]of Object.entries(values))value===null?url.searchParams.delete(key):url.searchParams.set(key,String(value));history.replaceState(null,'',url);const peer=root.querySelector('[data-compare]');const compare=new URL(peer.href);compare.search=comparisonSearch(root.dataset.dashboard,url.search);peer.href=compare.href;}
+function updateURL(values,tolerateFailure=false){const url=new URL(location.href);for(const[key,value]of Object.entries(values))value===null?url.searchParams.delete(key):url.searchParams.set(key,String(value));try{history.replaceState(null,'',url);}catch(error){if(!tolerateFailure)throw error;return false;}const peer=root.querySelector('[data-compare]');const compare=new URL(peer.href);compare.search=comparisonSearch(root.dataset.dashboard,url.search);peer.href=compare.href;return true;}
 const number=value=>new Intl.NumberFormat('en-US').format(value);
 function analytics(){
   const fallback=root.querySelector('[data-dashboard-fallback]');if(!fallback)return;
   const form=root.querySelector('#analytics-filters');const start=form.elements.start,end=form.elements.end,category=form.elements.category,range=form.elements.range;const coverage={start:start.min,end:end.max};
   start.value=params.get('start')||start.value;end.value=params.get('end')||end.value;const requestedCategory=params.has('categoryId')?params.get('categoryId'):(params.get('category')==='All'?'':params.get('category')||'');if(fixture.categories.includes(requestedCategory))category.value=requestedCategory;
   if(params.has('start')||params.has('end'))range.value='custom';
-  let view;
+  let view,initializing=true;
   range.addEventListener('change',()=>{if(range.value!=='custom'){end.value='2026-10-28';start.value=new Date(Date.parse(end.value)-(Number(range.value)-1)*dayMillis).toISOString().slice(0,10);}});
   [start,end].forEach(input=>input.addEventListener('input',()=>{range.value='custom';}));
   const render=()=>{
@@ -23,7 +23,7 @@ function analytics(){
     error.hidden=!candidate.error;error.textContent=candidate.error;start.setAttribute('aria-invalid',String(!!candidate.error&&!candidate.dataError));end.setAttribute('aria-invalid',String(!!candidate.error&&!candidate.dataError));
     root.querySelector('[data-export-analytics]').disabled=!!candidate.error;
     if(candidate.error){status.textContent=candidate.dataError?(view?'Analytics data is unavailable for this range. The previous valid results remain visible.':candidate.error):(view?'Invalid filters. The previous valid results remain visible.':'Invalid filters. No valid results are available.');if(candidate.dataError)status.setAttribute('data-analytics-data-error','');else status.removeAttribute('data-analytics-data-error');error.tabIndex=-1;error.focus();return;}
-    status.removeAttribute('data-analytics-data-error');view=candidate;updateURL({start:start.value,end:end.value,category:category.value||'All',categoryId:category.value==='All'?'All':null});
+    status.removeAttribute('data-analytics-data-error');if(!updateURL({start:start.value,end:end.value,category:category.value||'All',categoryId:category.value==='All'?'All':null},!initializing)){root.querySelector('[data-export-analytics]').disabled=!view||!view.rows.length;status.textContent=view?'The address could not be updated. Previous results remain visible; your filters are retained. Try again.':'The address could not be updated. No results are available; your filters are retained. Try again.';return;}view=candidate;
     const hasRows=view.rows.length>0;root.querySelector('[data-export-analytics]').disabled=!hasRows;
     metric(root,'sessions',hasRows?number(view.totals.sessions):'Unavailable',analyticsComparison(view,'sessions'));metric(root,'downloads',hasRows?number(view.totals.downloads):'Unavailable',analyticsComparison(view,'downloads'));
     metric(root,'conversion',view.totals.conversion===null?'Unavailable':view.totals.conversion.toFixed(1)+'%',view.totals.conversion===null?'Unavailable without sessions.':'Completed tasks ÷ sessions.');metric(root,'mean_duration',view.totals.mean_duration===null?'Unavailable':Math.round(view.totals.mean_duration)+' s',view.totals.mean_duration===null?'Unavailable without sessions.':'Weighted by session count.');
@@ -35,7 +35,7 @@ function analytics(){
   };
   form.addEventListener('submit',event=>{event.preventDefault();render();});
   root.querySelector('[data-export-analytics]').addEventListener('click',()=>{if(view)downloadCSV('northlight-analytics.csv',[['Date','Category','Sessions','Downloads','Completed tasks'],...view.rows.map(row=>[row.date,row.category,row.sessions,row.downloads,row.completions])]);});
-  render();
+  render();initializing=false;
   form.querySelector('fieldset').disabled=false;fallback.hidden=true;
 }
 if(root.dataset.dashboard==='analytics' && root.querySelector('#analytics-filters'))analytics();
