@@ -41,7 +41,7 @@ The explicit state-preview control demonstrates ready, loading, error and empty 
 
 ## Operations
 
-Monitoring windows cover 6, 12 or 24 hourly samples. Service selection scopes trends, status, alert counts and activity. A whole-number warning threshold from 50–1000 ms classifies each service's latest latency; the line plot shows the mean across selected services and labels the threshold separately. Severity and acknowledgement filters scope the alert register. The unacknowledged summary explicitly counts all severities in the service scope.
+Monitoring windows cover 6, 12 or 24 hourly samples, ordered by timestamp rather than input position. Service selection scopes trends, status, alert counts and activity. A whole-number warning threshold from 50–1000 ms classifies each service's latest latency; the line plot shows the mean across selected services and labels the threshold separately. Severity and acknowledgement filters scope the alert register. The unacknowledged summary explicitly counts all severities in the service scope.
 
 Acknowledgement and undo update page memory and add an explicitly local timeline entry. Reset restores the original fixture. Availability is identified as a minimum sampled synthetic value, not a live SLA calculation. Status and severity use text and borders as well as semantic colours.
 
@@ -81,6 +81,8 @@ CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/dashboard-fr
 Omit `CHROMIUM_PATH` when Playwright's Chromium is installed. Astro and React default to their `dist` directories; use `NIGHTJAR_ASTRO_ROOT` or `NIGHTJAR_REACT_ROOT` to point at different directories containing `martlet` and `krigsvold` builds. These fixtures must all be built with an empty/root base path. The disposable Jekyll directory can be removed after testing.
 
 The schema-valid arbitrary-ID directory regression builds isolated fixture copies and checks independent add, edit and bulk actions across families, frameworks and base paths: `node examples/page-archetypes/tests/administration-identifiers.mjs`.
+
+The schema-valid reordered operations fixture is checked, including its no-JavaScript service table, with `node examples/page-archetypes/tests/operations-order.mjs`.
 
 ## Empty analytics fixture
 

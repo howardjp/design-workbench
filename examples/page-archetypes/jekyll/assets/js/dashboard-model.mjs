@@ -114,7 +114,7 @@ export function applyBulk(records,ids,status) {
 export function operationsView(fixture,{hours=6,threshold=250,service='All',severity='All',hideAcknowledged=false},alerts=fixture.alerts) {
   const limit=[6,12,24].includes(Number(hours))?Number(hours):6;
   const warning=Math.max(50,Math.min(1000,Number(threshold)||250));
-  const services=fixture.services.filter(item=>service==='All'||item.id===service).map(item=>({...item,samples:item.samples.slice(-limit)}));
+  const services=fixture.services.filter(item=>service==='All'||item.id===service).map(item=>({...item,samples:[...item.samples].sort((a,b)=>a.time.localeCompare(b.time)).slice(-limit)}));
   const points=services[0]?.samples.map((sample,index)=>({time:sample.time,latency_ms:Math.round(services.reduce((sum,item)=>sum+item.samples[index].latency_ms,0)/services.length)}))||[];
   const relevant=alerts.filter(alert=>(service==='All'||alert.service_id===service));
   const visible=relevant.filter(alert=>(severity==='All'||alert.severity===severity)&&(!hideAcknowledged||!alert.acknowledged));

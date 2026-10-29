@@ -129,3 +129,9 @@ test('new directory identifiers do not collide with arbitrary existing identifie
  assert.equal(nextPersonId([{id:'member-alpha'},{id:'P-001'},{id:'P-003'}]),'P-002');
  assert.equal(nextPersonId(fixture.people),'P-025');
 });
+
+test('operations samples are ordered by timestamp without mutating the fixture',()=>{
+ const reordered={...fixture,services:fixture.services.map(service=>({...service,samples:[...service.samples].reverse()}))};
+ assert.deepEqual(operationsView(reordered,{}),operationsView(fixture,{}));
+ assert.equal(reordered.services[0].samples[0],fixture.services[0].samples.at(-1));
+});
