@@ -114,9 +114,9 @@ function operations(){
   const initial={hours:params.get('hours')||'6',threshold:params.get('threshold')||'250',service:params.get('service')||'All',severity:params.get('severity')||'All'};
   for(const[name,value]of Object.entries(initial)){if(name==='threshold'||[...form.elements[name].options].some(option=>option.value===value))form.elements[name].value=value;}
   form.elements.hideAcknowledged.checked=params.get('hideAcknowledged')==='true';
-  let state;
+  let state={hours:6,threshold:250,service:'All',severity:'All',hideAcknowledged:false};
   const buttonClass=root.querySelector('[data-reset-operations]').className;
-  const render=(useApplied=false)=>{
+  const render=(useApplied=false,updateAddress=true)=>{
     const error=root.querySelector('#operations-error');
     if(!useApplied){
       const threshold=Number(form.elements.threshold.value);
@@ -125,7 +125,7 @@ function operations(){
       state={hours:Number(form.elements.hours.value),threshold,service:form.elements.service.value,severity:form.elements.severity.value,hideAcknowledged:form.elements.hideAcknowledged.checked};
     }
     const {threshold}=state;
-    const view=operationsView(fixture,state,alerts);updateURL(state);
+    const view=operationsView(fixture,state,alerts);if(updateAddress)updateURL(state);
     metric(root,'warnings',String(view.warnings),`Latest service latency ≥ ${threshold} ms.`);
     metric(root,'latency',view.latency+' ms','Mean of latest samples in scope.');
     metric(root,'open_alerts',String(view.open),'All severities in the selected service scope.');
@@ -145,6 +145,8 @@ function operations(){
   form.addEventListener('submit',event=>{event.preventDefault();render();});
   root.querySelector('#alert-table').addEventListener('click',event=>{const id=event.target.closest('[data-acknowledge]')?.dataset.acknowledge;if(!id)return;const target=alerts.find(alert=>alert.id===id);target.acknowledged=!target.acknowledged;localEvents.unshift({service_id:target.service_id,time:null,title:`${target.acknowledged?'Acknowledged':'Reopened'} ${id} locally.`});render(true);status.textContent=`${id} ${target.acknowledged?'acknowledged':'reopened'} locally. No live alert was changed.`;const replacement=root.querySelector(`[data-acknowledge="${id}"]`);if(replacement)replacement.focus();else form.elements.hideAcknowledged.focus();});
   root.querySelector('[data-reset-operations]').addEventListener('click',()=>{alerts=structuredClone(fixture.alerts);localEvents=[];form.reset();render();status.textContent='Operations preview reset to the original synthetic snapshot.';});
+  // Establish a valid default view before validating URL-provided draft controls.
+  render(true,false);
   render();
 }
 if(root.dataset.dashboard==='operations')operations();
