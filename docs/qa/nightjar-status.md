@@ -326,3 +326,7 @@ The integrated-branch `form-composition.mjs` and `test:examples` rerun passed af
 ### Operations invalid initial URL recovery
 
 Commit `b0440f9` establishes valid default Jekyll/Astro operations results before validating an invalid initial threshold URL, while retaining the invalid draft/URL and displaying its validation error. Previously the first render stayed blank and alert controls were inert despite claiming prior results were visible. The new cross-framework browser regression failed before the fix and passed all six family/framework combinations, including navigation and no-JavaScript checks; `test:examples` passed fixture verification and 12 model tests. Both Jekyll exports were synchronized.
+
+### Administration identifier allocation
+
+Commit `4164bf0` allocates an unused `P-` identifier for a new directory record even when existing schema-valid IDs are arbitrary strings. The former numeric-slicing approach could create duplicate `P-NaN` IDs and cause edits or bulk writes to affect more than one record. The pre-fix regression reproduced the collision; add/edit/selective-bulk flows passed after the fix for both families × three frameworks × root/subpath (12 builds). Fixture schema validation, `test:examples` (13 model tests), and strict Administration TypeScript passed. The allocator handles an empty input defensively, but the current fixture schema requires at least one person; no empty-directory fixture support is claimed.
