@@ -143,3 +143,7 @@ Commit `0914c64` addresses pale text when a dark screen appearance is printed wi
 ### React analytics component
 
 Commit `dad099b` adds an isolated paired React analytics component using controlled filter state, the shared synthetic fixture and calculation model, native family buttons, responsive SVG charts with data-table alternatives, local CSV and server-rendered source data. A standalone harness passed both families at root/subpaths for filtering and totals, CSV content, query restoration, invalid-date focus and recovery, light/dark axe, responsive overflow, no-JavaScript behavior and strict TypeScript. It is not yet wired into the catalog or dashboard navigation; visual parity, manual assistive-technology review, print and other engines remain unverified. The standalone harness is intended to keep chart and fixture cost out of simple content pages.
+
+### React operations component
+
+Commit `41bed8c` adds a standalone paired React operations dashboard with controlled draft/applied state, scope and threshold controls, acknowledgement/undo, local timeline, reset and focus recovery, accessible trend data and server-rendered no-JavaScript tables. Its independent Chromium suite passed both families at root/subpaths for state transitions, invalid pending draft preservation, URL restoration, focus, 320/1440 reflow, light/dark axe and no-JavaScript; strict TypeScript passed. Catalog route, shared navigation, comparison, visual fidelity, manual assistive technology and print remain open.
