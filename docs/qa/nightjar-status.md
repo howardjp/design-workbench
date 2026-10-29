@@ -135,3 +135,7 @@ Commit `20a5a29` updates the Astro experiment's Astro, markdown-it and sanitize-
 ### React catalog first increment
 
 Commit `2939aaf` adds a paired React catalog experiment using the existing workbench React/Vite toolchain and shared fixture, without new dependencies. Four independent Chromium configurations passed for 14 prerendered routes in each language at root/subpaths: content and links, family CSS isolation, no console errors or missing assets, 320px and representative desktop reflow, axe on home/archive/case-study, keyboard pagination/focus recovery, reload, print and no-JavaScript record visibility. Strict TypeScript and `npm run test:examples` also passed. The standalone slice still has 36 unported routes and links to some of them; Markdown-heavy, interactive and dashboard examples, native source shells and visual parity remain open. It is not release-ready.
+
+### Astro dark-appearance printing
+
+Commit `0914c64` addresses pale text when a dark screen appearance is printed without backgrounds. Print-only rules use the existing light semantic colors and leave saved screen appearance unchanged. The emulated-print test failed before the fix and passed afterward in both languages at root/subpaths for article and all three dashboard pages; a background-free Chromium PDF was visually inspected. Other engines and physical printers remain unverified.
