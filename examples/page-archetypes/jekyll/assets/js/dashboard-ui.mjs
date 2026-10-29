@@ -12,10 +12,14 @@ export function metric(root,id,value,comparison=''){
   const note=root.querySelector(`[data-comparison="${id}"]`);if(note)note.textContent=comparison;
 }
 function svgElement(tag,attrs={},text){const node=document.createElementNS(svgNS,tag);for(const[k,v]of Object.entries(attrs))node.setAttribute(k,v);if(text!==undefined)node.textContent=String(text);return node;}
-export function chart(root,id,rows,{label='Count',bars=false,previous=false,threshold=null}={}){
-  const mount=root.querySelector(`[data-chart="${id}"]`);mount.replaceChildren();
+// Keep the chart's coordinate space aligned with its available width. Scaling a
+// fixed 720-unit viewBox down to a phone also scales 13px labels to ~4px.
+const chartStates=new WeakMap();
+function drawChart(mount,id,rows,{label,bars,previous,threshold}){
+  mount.replaceChildren();
   const values=rows.flatMap(row=>[row.value,...(previous&&row.previous!==null?[row.previous]:[])]);
-  const max=Math.max(1,...values,threshold||0)*1.15;const width=720,height=240,left=48,right=16,top=18,bottom=42;
+  const max=Math.max(1,...values,threshold||0)*1.15;
+  const width=Math.min(720,mount.clientWidth||720),height=Math.max(160,Math.round(width/3)),left=48,right=16,top=18,bottom=width<420&&bars?52:42;
   const x=i=>left+(rows.length===1?.5:i/(rows.length-1))*(width-left-right);
   const y=value=>height-bottom-value/max*(height-top-bottom);
   const svg=svgElement('svg',{viewBox:`0 0 ${width} ${height}`,role:'img','aria-label':`${label}. ${rows.length} data points. Exact values are in the following data table.`});
@@ -24,13 +28,30 @@ export function chart(root,id,rows,{label='Count',bars=false,previous=false,thre
   if(bars){
     const defs=svgElement('defs');const pattern=svgElement('pattern',{id:`hatch-${id}`,width:8,height:8,patternUnits:'userSpaceOnUse'});pattern.append(svgElement('path',{d:'M-2 2L2 -2M0 8L8 0M6 10L10 6',stroke:'var(--dash-chart-secondary)','stroke-width':3}));defs.append(pattern);svg.append(defs);
     const slot=(width-left-right)/Math.max(1,rows.length),barWidth=slot*(previous?.27:.5);
-    rows.forEach((row,i)=>{const middle=left+slot*(i+.5);svg.append(svgElement('rect',{x:middle-(previous?barWidth+2:barWidth/2),y:y(row.value),width:barWidth,height:height-bottom-y(row.value),class:'dash-chart-primary'}));if(previous&&row.previous!==null)svg.append(svgElement('rect',{x:middle+2,y:y(row.previous),width:barWidth,height:height-bottom-y(row.previous),fill:`url(#hatch-${id})`}));svg.append(svgElement('text',{x:middle,y:height-14,'text-anchor':'middle',class:'dash-chart-label'},row.label));});
+    rows.forEach((row,i)=>{const middle=left+slot*(i+.5);svg.append(svgElement('rect',{x:middle-(previous?barWidth+2:barWidth/2),y:y(row.value),width:barWidth,height:height-bottom-y(row.value),class:'dash-chart-primary'}));if(previous&&row.previous!==null)svg.append(svgElement('rect',{x:middle+2,y:y(row.previous),width:barWidth,height:height-bottom-y(row.previous),fill:`url(#hatch-${id})`}));svg.append(svgElement('text',{x:middle,y:height-(width<420&&i%2===0?30:14),'text-anchor':'middle',class:'dash-chart-label'},row.label));});
   }else{
     svg.append(svgElement('polyline',{points:rows.map((row,i)=>`${x(i)},${y(row.value)}`).join(' '),class:'dash-chart-line',fill:'none'}));
-    rows.forEach((row,i)=>{svg.append(svgElement('circle',{cx:x(i),cy:y(row.value),r:3,class:'dash-chart-primary'}));if(i===0||i===rows.length-1||i===Math.floor(rows.length/2))svg.append(svgElement('text',{x:x(i),y:height-14,'text-anchor':i===0?'start':i===rows.length-1?'end':'middle',class:'dash-chart-label'},row.label));});
+    rows.forEach((row,i)=>{svg.append(svgElement('circle',{cx:x(i),cy:y(row.value),r:3,class:'dash-chart-primary'}));if(i===0||i===rows.length-1||(width>=420&&i===Math.floor(rows.length/2)))svg.append(svgElement('text',{x:x(i),y:height-14,'text-anchor':i===0?'start':i===rows.length-1?'end':'middle',class:'dash-chart-label'},row.label));});
   }
   if(threshold!==null)svg.append(svgElement('line',{x1:left,x2:width-right,y1:y(threshold),y2:y(threshold),class:'dash-chart-threshold'}));
   mount.append(svg);
+}
+export function chart(root,id,rows,{label='Count',bars=false,previous=false,threshold=null}={}){
+  const mount=root.querySelector(`[data-chart="${id}"]`);
+  const options={label,bars,previous,threshold};
+  let state=chartStates.get(mount);
+  if(!state){
+    state={id,rows,options,width:0};
+    chartStates.set(mount,state);
+    if(typeof ResizeObserver!=='undefined'){
+      new ResizeObserver(entries=>{
+        const width=entries[0].contentRect.width;
+        if(width>0&&Math.abs(width-state.width)>=1){state.width=width;drawChart(mount,state.id,state.rows,state.options);}
+      }).observe(mount);
+    }
+  }
+  Object.assign(state,{id,rows,options,width:mount.clientWidth});
+  drawChart(mount,id,rows,options);
   const headers=previous?['Category','Current sessions','Previous sessions']:['Label',label];
   tableRows(root.querySelector(`[data-chart-table="${id}"]`),rows.map(row=>previous?[row.label,row.value,row.previous??'Unavailable']:[row.label,row.value]),headers);
   root.querySelector(`[data-chart-summary="${id}"]`).textContent=previous?'Solid bars: current period. Striped bars: preceding period. Exact values appear in the data table.':`${rows.length} plotted observations.${threshold!==null?` Dashed line: warning threshold ${threshold} ms.`:''} Exact values appear in the data table.`;

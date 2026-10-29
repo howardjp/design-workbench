@@ -62,6 +62,31 @@ for(const family of ['martlet','krigsvold']){
   await page.getByRole('button',{name:'Apply monitoring controls'}).click();
   await expect(page.locator('#operations-error')).toBeVisible();
  });
+ test(`${family}: chart labels remain readable when the viewport changes`,async({page})=>{
+  await page.setViewportSize({width:1440,height:900});
+  await page.goto(route(family,'analytics'));
+  const chart=page.locator('[data-chart=sessions]');
+  await expect(chart.locator('svg')).toBeVisible();
+  const desktopWidth=await chart.locator('svg').evaluate(svg=>Number(svg.getAttribute('viewBox')!.split(' ')[2]));
+  await page.setViewportSize({width:320,height:900});
+  await expect.poll(async()=>chart.locator('svg').evaluate(svg=>{
+   const label=svg.querySelector('.dash-chart-label')!;
+   return label.getBoundingClientRect().height;
+  })).toBeGreaterThanOrEqual(11);
+  const categoryLabels=page.locator('[data-chart=categories] .dash-chart-label');
+  await expect.poll(async()=>categoryLabels.count()).toBe(7);
+  const boxes=await categoryLabels.evaluateAll(nodes=>nodes.slice(-3).map(node=>{
+   const r=node.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom};
+  }));
+  for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){
+   const a=boxes[i],b=boxes[j];expect(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top).toBe(true);
+  }
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  await page.getByText('View session trend data',{exact:true}).click();
+  await expect(page.locator('[data-chart-table=sessions] tbody tr')).toHaveCount(7);
+  await page.setViewportSize({width:1440,height:900});
+  await expect.poll(async()=>chart.locator('svg').evaluate(svg=>Number(svg.getAttribute('viewBox')!.split(' ')[2]))).toBeGreaterThan(desktopWidth-2);
+ });
  for(const width of [320,768,1100,1440])for(const view of ['analytics','administration','operations']){
   test(`${family}: ${view} at ${width}px`,async({page})=>{
    await page.setViewportSize({width,height:1000});await page.goto(route(family,view));await expect(page.locator('[data-dashboard]')).toHaveAttribute('data-ready','true');
