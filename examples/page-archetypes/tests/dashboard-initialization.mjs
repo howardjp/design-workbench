@@ -1,4 +1,4 @@
-// Builds isolated copies with deterministic over-precision data; never edits the source fixture.
+// Exercise dashboard initialization failures in isolated builds without modifying source fixtures.
 import assert from 'node:assert/strict';
 import {cpSync, mkdtempSync, readFileSync, writeFileSync, mkdirSync, symlinkSync, rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
@@ -8,7 +8,7 @@ import {createServer} from 'node:http';
 import {chromium} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import {Validator} from '@cfworker/json-schema';
-const root=process.cwd(),temp=mkdtempSync(join(tmpdir(),'nightjar-precision-'));
+const root=process.cwd(),temp=mkdtempSync(join(tmpdir(),'nightjar-dashboard-init-'));
 const skip=new Set(['node_modules','dist','_site','.astro','.jekyll-cache','test-results']);
 function run(command,args,cwd,extra={}){
  const child=spawnSync(command,args,{cwd,env:{...process.env,...extra},encoding:'utf8'});
