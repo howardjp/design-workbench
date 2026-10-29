@@ -61,7 +61,7 @@ With the same root builds, `CHROMIUM_PATH=/usr/bin/chromium node examples/page-a
 
 The same paired builds also support `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/enlarged-text-motion.mjs`. It tests 200% root font size and reduced-motion emulation at 320 and 768 pixels across the three dashboards, including keyboard navigation, focus return and filter submission. Root font-size scaling is not browser zoom; these checks do not establish full reduced-motion or assistive-technology support.
 
-Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/gallery-link-contract.mjs` against those paired builds to verify modified image links, keyboard dialog focus return and direct image access without JavaScript.
+Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/gallery-link-contract.mjs` against those paired builds to verify modified image links, keyboard dialog focus return and direct image access without JavaScript or when modal opening fails. For subpath builds, set `NIGHTJAR_GALLERY_BASE=/preview/` and point the paired build roots at outputs built for that base.
 
 Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/gallery-composition.mjs` to build disposable Jekyll and Astro pages with two galleries and a potentially conflicting section ID. It checks distinct accessible dialogs, Escape focus return, unique IDs, axe and direct links without JavaScript in both families at root and subpaths. Ruby, Bundler and the Astro dependencies are required.
 

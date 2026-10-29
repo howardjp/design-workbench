@@ -99,13 +99,13 @@
     let opener = null;
     gallery.querySelectorAll('[data-enlarge]').forEach(anchor => anchor.addEventListener('click', event => {
       if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      event.preventDefault();
-      opener = anchor;
       const image = dialog.querySelector('img');
       image.src = anchor.href;
       image.alt = anchor.querySelector('img').alt;
       dialog.querySelector('figcaption').textContent = anchor.dataset.caption;
-      dialog.showModal();
+      try { dialog.showModal(); } catch { return; }
+      event.preventDefault();
+      opener = anchor;
     }));
     dialog.querySelector('[data-close-dialog]').addEventListener('click', () => dialog.close());
     dialog.addEventListener('close', () => {
