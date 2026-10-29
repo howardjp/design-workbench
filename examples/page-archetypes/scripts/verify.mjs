@@ -14,6 +14,11 @@ const ids = new Set(catalog.pages.map(page => page.id));
 assert.equal(ids.size, catalog.pages.length, 'Page IDs must be unique');
 const urls = new Set([...ids].map(id => `/examples/${id}/`));
 urls.add('/examples/');
+const jekyllRoot=fs.realpathSync(path.join(root,'jekyll'));
+function fixtureFileExists(pathname) {
+  const candidate=path.resolve(jekyllRoot,`.${pathname}`),within=p=>{const relative=path.relative(jekyllRoot,p);return relative!=='..'&&!relative.startsWith(`..${path.sep}`)&&!path.isAbsolute(relative);};
+  return within(candidate)&&fs.existsSync(candidate)&&within(fs.realpathSync(candidate));
+}
 for (const page of catalog.pages) {
   const sectionIds = new Set(page.sections.map(section => section.id));
   assert.equal(sectionIds.size, page.sections.length, `${page.id}: duplicate section IDs`);
@@ -22,7 +27,7 @@ for (const page of catalog.pages) {
     const inspect = value => {
       if (!value || typeof value !== 'object') return;
       for (const [key, item] of Object.entries(value)) {
-        if (key === 'url') assert.ok(urls.has(item) || fs.existsSync(path.join(root, 'jekyll', item)), `Broken fixture destination: ${item}`);
+        if (key === 'url') { const pathname=item.split(/[?#]/,1)[0]; assert.ok(urls.has(pathname) || fixtureFileExists(pathname), `Broken fixture destination: ${item}`); }
         if (key === 'image') assert.ok(fs.existsSync(path.join(root, 'jekyll', item)), `Missing asset: ${item}`);
         if (typeof item === 'object') inspect(item);
       }
@@ -47,6 +52,10 @@ for (const family of ['martlet', 'krigsvold']) {
 for (const mutate of [
   c => { delete c.pages.find(p => p.id === 'event').event; },
   c => { c.pages[0].sections[0].actions[0].url = 'javascript:alert(1)'; },
+  c => { c.pages[0].sections[0].actions[0].download = '../unsafe.csv'; },
+  c => { c.pages[0].sections[0].actions[0].download = 'bad" onmouseover="x'; },
+  c => { c.pages[0].sections[0].actions[0].download = 'a'.repeat(129); },
+  c => { c.pages[0].sections[0].actions[0].download = ''; },
   c => { c.pages[0].sections[0].kind = 'unknown-widget'; },
   c => { delete c.pages.find(p => p.id === 'article').author; }
 ]) {

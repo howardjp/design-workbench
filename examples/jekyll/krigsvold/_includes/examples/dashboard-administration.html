@@ -7,6 +7,7 @@
     <div><label for="people-state">State preview</label><select name="state" id="people-state"><option value="ready">Ready</option><option value="loading">Loading</option><option value="error">Error</option><option value="empty">Empty</option></select></div>
   </div><button class="{% include examples/button-classes.html %}" type="submit">Apply directory filters</button><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-clear-people>Clear filters</button></fieldset>
 </form>
+<p data-dashboard-fallback>Interactive dashboard controls are unavailable. Reload to try again.</p>
 <p class="dash-status" role="status" data-dashboard-status>Published synthetic directory.</p>
 <section class="dash-panel" aria-labelledby="directory-title"><h2 id="directory-title">People directory</h2>
   <div class="dash-actions"><span data-selection-count>0 people selected.</span><button class="{% include examples/button-classes.html %}" type="button" data-bulk="Active" disabled>Activate selected</button><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-bulk="Suspended" disabled>Suspend selected</button><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-new-person disabled>Add person</button></div>
@@ -18,9 +19,9 @@
       <th scope="col" aria-sort="none"><button class="dash-sort" type="button" data-sort="email" disabled>Email</button></th>
       <th scope="col" aria-sort="none"><button class="dash-sort" type="button" data-sort="role" disabled>Role</button></th>
       <th scope="col" aria-sort="none"><button class="dash-sort" type="button" data-sort="status" disabled>Status</button></th><th scope="col">Action</th>
-    </tr></thead><tbody>{% assign people = site.data.dashboards.people | sort: 'name' %}{% for person in people limit:5 %}<tr><td>—</td><th scope="row">{{ person.name }}</th><td>{{ person.email }}</td><td>{{ person.role }}</td><td>{{ person.status }}</td><td>{{ person.id }}</td></tr>{% endfor %}</tbody></table>
+    </tr></thead><tbody>{% assign people = site.data.dashboards.people | sort: 'name' %}{% for person in people %}<tr><td>—</td><th scope="row">{{ person.name | escape }}</th><td>{{ person.email | escape }}</td><td>{{ person.role | escape }}</td><td>{{ person.status | escape }}</td><td>{{ person.id | escape }}</td></tr>{% endfor %}</tbody></table>
   </div>
-  <nav class="example-pagination" aria-label="People pages"><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-people-previous disabled>Previous page</button><span data-people-page>Page 1</span><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-people-next disabled>Next page</button></nav>
+  <nav class="example-pagination" aria-label="People pages"><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-people-previous disabled>Previous page</button><span data-people-page>All people</span><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-people-next disabled>Next page</button></nav>
 </section>
 <section class="dash-panel dash-editor" aria-labelledby="editor-title"><h2 id="editor-title" tabindex="-1">Person editor</h2><p>Use invented information only. Save updates the local directory; reload restores the fixture.</p>
   <form class="example-form" id="person-editor" novalidate>

@@ -2,7 +2,7 @@
 <section class="example-section example-section--{{ block.kind | default: 'prose' }}" aria-labelledby="{{ block.id | escape }}">
   <div class="example-section__label"><h2 id="{{ block.id | escape }}">{{ block.title | escape }}</h2></div>
   <div class="example-section__body">
-    {% if block.body %}<div class="example-prose">{{ block.body | markdownify }}</div>{% endif %}
+    {% if block.body %}<div class="example-prose">{{ block.body | markdownify | escape | nightjar_sanitize: site.baseurl }}</div>{% endif %}
     {% case block.kind %}
       {% when 'cards' %}{% include examples/cards.html items=block.items %}
       {% when 'listing' %}{% include examples/listing.html items=block.items id=block.id %}
@@ -12,13 +12,13 @@
       {% when 'stats' %}{% include examples/stats.html items=block.items %}
       {% when 'faq' %}{% include examples/faq.html items=block.items %}
       {% when 'plans' %}{% include examples/plans.html items=block.items %}
-      {% when 'form' %}{% include examples/form.html kind=block.form %}
-      {% when 'search' %}{% include examples/search.html %}
+      {% when 'form' %}{% include examples/form.html kind=block.form id=block.id %}
+      {% when 'search' %}{% include examples/search.html id=block.id title=block.title %}
       {% when 'gallery' %}{% include examples/gallery.html items=block.items %}
-      {% when 'workspace' %}{% include examples/workspace.html items=block.items %}
+      {% when 'workspace' %}{% include examples/workspace.html items=block.items id=block.id title=block.title %}
       {% when 'chat' %}{% include examples/chat.html %}
-      {% when 'sensors' %}{% include examples/sensors.html %}
-      {% when 'scene' %}{% include examples/scene.html %}
+      {% when 'sensors' %}{% include examples/sensors.html id=block.id %}
+      {% when 'scene' %}{% include examples/scene.html id=block.id %}
     {% endcase %}
     {% include examples/actions.html actions=block.actions %}
   </div>

@@ -16,11 +16,11 @@
 - Pagination shows a bounded slice, announces the page, and supports previous/next recovery. Without JavaScript all records remain available.
 - Workspace filtering announces counts, selection identifies the active record, local review updates it, filtering out the selection clears it, and reset restores the original state.
 - Chat rejects whitespace-only input and renders angle-bracket input as text, never executable markup. Reset and reload discard local messages.
-- Forms have labels, constraints, fieldset/legend, native invalid-input focus, local success status, and reset. Without JavaScript submission controls remain disabled. No form values reach a URL or remote service.
+- Forms have labels, constraints, fieldset/legend, native invalid-input focus, local success status, and reset. Editing a field or resetting clears the prior validation status, which applies only to the previously submitted values. Without JavaScript submission controls remain disabled. No form values reach a URL or remote service.
 - Gallery links work without JavaScript. Enhanced dialog supports labelled content, close, Escape, and focus return.
-- Sensor and scene controls announce updates and identify the simulated/static boundary.
+- Sensor and scene controls announce updates and identify the simulated/static boundary. Multiple instances retain unique labels and independent state; their controls remain disabled without JavaScript.
 - Appearance, navigation, and focus remain legible in light/dark states. Mobile navigation opens, closes on Escape, and returns focus.
-- At narrow widths, the document becomes a reading sequence; only bounded tables/code may scroll horizontally.
+- At narrow widths, the document becomes a reading sequence; only bounded tables/code may scroll horizontally. Long unbroken titles and field labels must wrap without clipping or page overflow in LTR and RTL direction; this is a reflow check, not a claim of complete internationalization support.
 - Print hides navigation and interactive controls and exposes all paginated records.
 
 ## Limits of automated evidence

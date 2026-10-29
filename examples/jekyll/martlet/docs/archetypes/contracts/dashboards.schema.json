@@ -62,8 +62,7 @@
           "duration_seconds"
         ],
         "additionalProperties": false
-      },
-      "minItems": 1
+      }
     },
     "people": {
       "type": "array",

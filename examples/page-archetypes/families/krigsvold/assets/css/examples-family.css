@@ -25,8 +25,14 @@
 @media (max-width: 64rem) { .example-document { display: block; } .example-document > .example-local-index { position: static; margin-bottom: 2rem; } }
 @media (max-width: 48rem) { .example-frame--landing .example-section, .example-frame--dossier .example-section, .example-frame--detail .example-section, .example-frame--collection .example-section { display: block; } .example-frame--collection .example-list > li { display: block; } }
 
+/* Table captions use the reading text role, not the inherited framework gray. */
+.example-root caption { color: var(--ex-text); }
+
 /* Native .btn supplies typography, geometry, transitions, and pressed states. */
 .example-root .btn { margin-bottom: 0; }
+/* Light and dark foreground/background roles change together; interpolating
+   their colors crosses low-contrast intermediate pairs. Retain non-color motion. */
+.example-root :is(.btn-dark-blue,.btn-outline-dark-blue) { transition-property: box-shadow, transform; }
 .example-root .btn-dark-blue { --bs-btn-active-bg: var(--navy-900); --bs-btn-active-border-color: var(--navy-900); --bs-btn-disabled-bg: var(--navy-900); }
 .example-root .btn-dark-blue:focus-visible { color: white; background: var(--blue-600); }
 .example-root .btn-outline-dark-blue { --bs-btn-color: var(--navy-900); --bs-btn-border-color: var(--navy-900); --bs-btn-hover-border-color: var(--navy-900); --bs-btn-active-bg: var(--navy-900); --bs-btn-active-border-color: var(--navy-900); }
@@ -39,3 +45,6 @@ html[data-appearance=dark] .example-root .btn-dark-blue:focus-visible { backgrou
 html[data-appearance=dark] .example-root .btn-outline-dark-blue { color: white; border-color: white; background: transparent; box-shadow: none; }
 html[data-appearance=dark] .example-root .btn-outline-dark-blue:hover:not(.active),
 html[data-appearance=dark] .example-root .btn-outline-dark-blue:focus-visible { color: var(--navy-950); border-color: var(--ice-200); background: var(--ice-200); opacity: 1; }
+
+/* Long titles must remain readable at every masthead breakpoint. */
+.page-masthead h1 { overflow-wrap:anywhere; }

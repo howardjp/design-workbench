@@ -17,13 +17,13 @@ layout: default
     </aside>
     <div class="dash-main" id="dashboard-main">
       <header class="dash-heading"><p class="eyebrow">{{ record.category | escape }}</p><h1 id="page-title">{{ record.title | escape }}</h1><p>{{ record.summary | escape }}</p>
-        <div class="dash-heading__meta"><span>Snapshot: <time datetime="{{ site.data.dashboards.as_of }}">28 Oct 2026, 20:00 UTC</time></span><a data-compare href="{{ site.data.dashboard_peer.url }}{{ page.url }}">Compare in {{ site.data.dashboard_peer.name }}</a></div>
+        <div class="dash-heading__meta"><span>Snapshot: {% assign snapshot_iso = site.data.dashboards.as_of | date: '%Y-%m-%dT%H:%M:%S+00:00' %}{% assign snapshot_epoch = site.data.dashboards.as_of | date: '%s' %}{% if snapshot_iso != site.data.dashboards.as_of or snapshot_epoch == site.data.dashboards.as_of %}Invalid snapshot timestamp{% else %}<time datetime="{{ site.data.dashboards.as_of | escape }}">{{ site.data.dashboards.as_of | date: '%d %b %Y, %H:%M' }}{% assign snapshot_seconds = site.data.dashboards.as_of | date: '%S' %}{% unless snapshot_seconds == '00' %}:{{ snapshot_seconds }}{% endunless %} UTC</time>{% endif %}</span><a data-compare href="{{ site.data.dashboard_peer.url }}{{ page.url }}">Compare in {{ site.data.dashboard_peer.name }}</a></div>
       </header>
       <p class="example-notice">Synthetic demonstration data. Changes remain in this page’s memory and reset on reload. No live people, systems, or services are connected.</p>
       {% if page.dashboard == 'analytics' %}{% include examples/dashboard-analytics.html %}{% endif %}
       {% if page.dashboard == 'administration' %}{% include examples/dashboard-administration.html %}{% endif %}
       {% if page.dashboard == 'operations' %}{% include examples/dashboard-operations.html %}{% endif %}
-      <noscript><p class="example-notice">Interactive filtering and charts require JavaScript. The published data tables remain available; controls are disabled.</p></noscript>
+      {% if page.dashboard == 'administration' %}<noscript><p class="example-notice">Interactive filtering and charts require JavaScript. The published data tables remain available; controls are disabled.</p></noscript>{% endif %}
       <p class="example-port-note"><a href="{{ '/examples/dashboard-components/' | relative_url }}">Reusable capabilities and interaction contracts</a> · Same data and behaviour in both languages.</p>
     </div>
   </div>
