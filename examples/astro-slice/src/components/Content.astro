@@ -3,6 +3,8 @@ import { renderMarkdown } from '../markdown.mjs';
 import Search from './Search.astro';
 import DemoForm from './DemoForm.astro';
 import Catalog from './Catalog.astro';
+import Gallery from './Gallery.astro';
+import { exampleImage } from '../assets.mjs';
 const {page, href, base, Button} = Astro.props;
 const formatDate = date => new Intl.DateTimeFormat('en-US', {year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(`${date}T00:00:00Z`));
 ---
@@ -27,6 +29,8 @@ const formatDate = date => new Intl.DateTimeFormat('en-US', {year:'numeric',mont
       </nav>}
     </div>}
     {section.kind === 'table' && <div class="recipe-table" role="region" aria-label={`${section.title} table`} tabindex="0"><table><caption>{section.title}</caption><thead><tr>{section.headers.map(header => <th scope="col">{header}</th>)}</tr></thead><tbody>{section.rows.map(row => <tr>{row.map((cell,index) => index === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>)}</tbody></table></div>}
+    {section.kind === 'figure' && <figure><img src={exampleImage(section.image)} alt={section.alt} width="960" height="640" loading="lazy" /><figcaption>{section.caption}</figcaption></figure>}
+    {section.kind === 'gallery' && <Gallery section={section} Button={Button} />}
     {section.kind === 'form' && <DemoForm kind={section.form} Button={Button} />}
     {section.kind === 'search' && <Search base={base} Button={Button} />}
     {section.kind === 'facts' && <dl>{section.facts.map(fact => <div><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl>}
@@ -44,6 +48,8 @@ const formatDate = date => new Intl.DateTimeFormat('en-US', {year:'numeric',mont
 .recipe dl > div { margin-block: 1rem; }
 .recipe dt { font-weight: 700; }
 .recipe dd { margin-inline-start: 0; }
+.recipe figure { margin-inline: 0; }
+.recipe figure img { max-width: 100%; height: auto; }
 .recipe-table { max-width: 100%; overflow-x: auto; }
 .recipe-tags { display: flex; gap: 1rem; padding: 0; list-style: none; }
 @media print { [data-list-item][hidden] { display: list-item !important; } [data-pagination] { display: none !important; } }

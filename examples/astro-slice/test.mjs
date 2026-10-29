@@ -59,6 +59,15 @@ try {
             if (item.date) assert.equal(await row.locator('time').getAttribute('datetime'), item.date);
             if (item.tag) assert.match(await row.textContent(), new RegExp(item.tag));
           }
+          if (section.kind === 'figure') {
+            const figure=page.locator(`section[aria-labelledby="${section.id}"] figure`);
+            const image=figure.locator('img');
+            assert.equal(await image.getAttribute('alt'), section.alt);
+            assert.equal(await figure.locator('figcaption').textContent(), section.caption);
+            assert.ok((await image.getAttribute('src')).startsWith(`${base}_astro/`));
+            await image.scrollIntoViewIfNeeded();
+            await page.waitForFunction(img=>img.complete && img.naturalWidth>0,await image.elementHandle());
+          }
           if (section.kind === 'table') {
             const table=page.locator(`section[aria-labelledby="${section.id}"] table`);
             assert.equal(await table.locator('caption').innerText(), section.title);
@@ -69,7 +78,7 @@ try {
             const row=page.locator(`section[aria-labelledby="${section.id}"] dl > div`).filter({has:page.getByText(fact.label,{exact:true})});
             assert.equal(await row.locator('dd').innerText(),fact.value);
           }
-          for (const link of [...(section.actions ?? []), ...(section.items ?? []).map(i=>({label:i.title,url:i.url}))]) {
+          for (const link of [...(section.actions ?? []), ...(section.items ?? []).filter(i=>i.url).map(i=>({label:i.title,url:i.url}))]) {
             assert.equal(await page.locator(`section[aria-labelledby="${section.id}"] a`).filter({hasText:link.label}).getAttribute('href'),base.replace(/\/$/,'')+link.url);
             assert.ok(catalog.pages.some(p => link.url === `/examples/${p.id}/`), `Unknown catalog destination ${link.url}`);
           }
@@ -109,7 +118,7 @@ try {
             await page.setViewportSize({width:320,height:800});
           }
         }
-        if (['home','guide','person','article','event','archive','search','contact','sign-up','two-factor'].includes(record.id)) {
+        if (['home','guide','person','article','event','archive','search','contact','sign-up','two-factor','gallery','collection-item'].includes(record.id)) {
           const results=await new AxeBuilder({page}).analyze();
           assert.deepEqual(results.violations.map(({id,nodes})=>({id,html:nodes.map(n=>n.html)})), [], `Axe violations: ${family} ${base} ${record.id}`);
         }
@@ -118,6 +127,41 @@ try {
           assert.ok((await page.locator('main').innerText()).includes(record.author));
           for (const tag of record.tags) assert.equal(await page.getByRole('link',{name:tag,exact:true}).getAttribute('href'), `${base}examples/categories/`);
           assert.equal(await page.getByRole('link',{name:'All writing'}).getAttribute('href'), `${base}examples/archive/`);
+        }
+        if (record.id === 'reference') {
+          assert.equal(await page.locator(`time[datetime="${record.date}"]`).count(),1);
+          assert.ok((await page.locator('main').innerText()).includes(record.author));
+          assert.equal(await page.locator('#example + .recipe-prose pre code').count(),1);
+        }
+        if (record.id === 'gallery') {
+          const entries=record.sections.find(s=>s.kind==='gallery').items;
+          const gallery=page.locator('[data-gallery]');
+          const links=gallery.locator('[data-enlarge]');
+          assert.equal(await links.count(),entries.length);
+          for (let i=0; i<entries.length; i++) {
+            const image=links.nth(i).locator('img');
+            assert.equal(await image.getAttribute('alt'),entries[i].alt);
+            assert.equal(await image.evaluate(el=>el.closest('figure').querySelector('figcaption').textContent),entries[i].caption);
+            assert.ok((await links.nth(i).getAttribute('href')).startsWith(`${base}_astro/`));
+            await image.scrollIntoViewIfNeeded();
+            await page.waitForFunction(img=>img.complete && img.naturalWidth>0,await image.elementHandle());
+          }
+          await links.first().focus();
+          await page.keyboard.press('Enter');
+          const dialog=page.getByRole('dialog',{name:'Image detail'});
+          assert.equal(await dialog.isVisible(),true);
+          assert.equal(await dialog.locator('img').getAttribute('alt'),entries[0].alt);
+          assert.equal(await dialog.locator('figcaption').textContent(),entries[0].caption);
+          const dialogAxe=await new AxeBuilder({page}).analyze();
+          assert.deepEqual(dialogAxe.violations.map(({id})=>id),[], 'Gallery dialog axe violations');
+          await page.keyboard.press('Escape');
+          assert.equal(await dialog.isVisible(),false);
+          assert.equal(await links.first().evaluate(el=>el===document.activeElement),true);
+          await links.nth(1).click();
+          assert.equal(await dialog.locator('img').getAttribute('alt'),entries[1].alt);
+          await dialog.getByRole('button',{name:'Close image'}).click();
+          assert.equal(await dialog.isVisible(),false);
+          assert.equal(await links.nth(1).evaluate(el=>el===document.activeElement),true);
         }
         if (record.id === 'event') {
           for (const value of [record.event.start, record.event.end]) assert.equal(await page.locator(`time[datetime="${value}"]`).count(),1);
@@ -142,12 +186,12 @@ try {
           assert.equal(await nav.locator('[data-page-status]').innerText(), 'Page 1 of 2');
         }
         if (record.id === 'search') {
-          await page.goto(`${origin}${base}examples/search/?q=A%20shoreline%20in%20three%20views`);
+          await page.goto(`${origin}${base}examples/search/?q=The%20observation%20desk`);
           const query=page.getByLabel('Search the example record');
-          assert.equal(await query.inputValue(), 'A shoreline in three views');
-          const unavailable=page.locator('[data-search-results] li').filter({hasText:'A shoreline in three views'});
+          assert.equal(await query.inputValue(), 'The observation desk');
+          const unavailable=page.locator('[data-search-results] li').filter({hasText:'The observation desk'});
           assert.equal(await unavailable.locator('a').count(),0);
-          assert.equal(await unavailable.locator('[data-destination]').getAttribute('data-destination'), `${base}examples/gallery/`);
+          assert.equal(await unavailable.locator('[data-destination]').getAttribute('data-destination'), `${base}examples/workspace/`);
           assert.equal(await unavailable.getByText('Not yet available in this Astro preview.').count(),1);
           await query.fill('shoreline');
           await page.getByRole('button',{name:'Search',exact:true}).click();
@@ -174,6 +218,10 @@ try {
         if (['contact','sign-in','sign-up','password-reset','two-factor','coming-soon'].includes(record.id)) {
           const form=page.locator('[data-demo-form]');
           assert.equal(await form.getByRole('button',{name:'Validate example'}).isDisabled(),false);
+          if (family === 'krigsvold') {
+            const resetBg = await form.getByRole('button',{name:'Clear'}).evaluate(el=>getComputedStyle(el).backgroundColor);
+            assert.equal(resetBg, 'rgba(0, 0, 0, 0)');
+          }
           const pageUrl=page.url();
           let requests=0; page.on('request',()=>requests++);
           await form.getByRole('button',{name:'Validate example'}).click();
@@ -230,6 +278,11 @@ try {
       assert.equal(await staticPage.locator('[data-pagination]').isVisible(), false);
       await staticPage.goto(`${origin}${base}examples/search/`);
       assert.equal(await staticPage.getByRole('link',{name:'Browse the complete example index'}).getAttribute('href'), `${base}examples/`);
+      await staticPage.goto(`${origin}${base}examples/gallery/`);
+      const staticImageLink=staticPage.locator('[data-enlarge]').first();
+      const staticImageHref=await staticImageLink.getAttribute('href');
+      assert.ok(staticImageHref.startsWith(`${base}_astro/`));
+      assert.equal((await staticPage.request.get(`${origin}${staticImageHref}`)).status(),200);
       await staticPage.goto(`${origin}${base}examples/sign-in/`);
       assert.equal(await staticPage.locator('[data-demo-fields] input').first().isDisabled(),true);
       assert.equal(await staticPage.getByRole('button',{name:'Validate example'}).isDisabled(),true);
