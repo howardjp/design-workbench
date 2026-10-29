@@ -169,8 +169,7 @@
     });
   }
 
-  const sensors = document.querySelector('[data-sensors]');
-  if (sensors) {
+  document.querySelectorAll('[data-sensors]').forEach(sensors => {
     const mode = sensors.querySelector('select'); const ventilation = sensors.querySelector('input');
     mode.disabled = false; ventilation.disabled = false;
     const update = () => {
@@ -178,17 +177,17 @@
       sensors.querySelector('[data-sensor-status]').textContent = `Simulation updated. Preview ventilation ${ventilation.checked ? 'enabled' : 'disabled'}. No real device is connected.`;
     };
     mode.addEventListener('change', update); ventilation.addEventListener('change', update);
-  }
-  const scene = document.querySelector('[data-scene]');
-  if (scene) {
+  });
+  document.querySelectorAll('[data-scene]').forEach(scene => {
     const select = scene.querySelector('select'); const image = scene.querySelector('img');
     const views = { coast: 'Illustrated coastline with observation markers.', station: 'Stylised field station beside water.', notebook: 'An open field notebook with observation lines.' };
     select.disabled = false;
     select.addEventListener('change', () => {
+      if (!Object.hasOwn(views, select.value)) return;
       image.src = new URL(`${select.value}.svg`, image.src).href;
       image.alt = views[select.value];
       scene.querySelector('[data-scene-caption]').textContent = `${select.selectedOptions[0].textContent} · Original fictional illustration.`;
       scene.querySelector('[data-scene-status]').textContent = `Showing ${select.selectedOptions[0].textContent}. No immersive device is connected.`;
     });
-  }
+  });
 })();

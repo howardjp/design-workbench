@@ -51,6 +51,10 @@ jobs:
         run: npm run test:search-safety
       - name: Verify paired dashboard behaviour, reflow, keyboard and accessibility
         run: npx playwright test --config playwright.dashboard.config.ts
+      - name: Verify independent station and scene compositions
+        run: |
+          npm ci --prefix examples/astro-slice --ignore-scripts
+          node examples/page-archetypes/tests/simulation-composition.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

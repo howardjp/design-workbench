@@ -13,7 +13,6 @@ export function getStaticPaths() {
   }
   if (selected.some(page => page.sections.filter(section => section.kind === 'form').length > 1)) throw new Error('Multiple forms on a page are not implemented');
   if (selected.some(page => page.sections.filter(section => section.kind === 'chat').length > 1)) throw new Error('Multiple chats on a page are not implemented');
-  if (selected.some(page => ['sensors','scene'].some(kind => page.sections.filter(section => section.kind === kind).length > 1))) throw new Error('Multiple instances of the same simulation are not implemented');
   return selected.map(page => ({params: {id: page.id}, props: {page}}));
 }
 const {page} = Astro.props;

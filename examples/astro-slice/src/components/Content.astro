@@ -35,7 +35,7 @@ const formatDate = date => new Intl.DateTimeFormat('en-US', {year:'numeric',mont
     {section.kind === 'table' && <div class="recipe-table" role="region" aria-label={`${section.title} table`} tabindex="0"><table><caption>{section.title}</caption><thead><tr>{section.headers.map(header => <th scope="col">{header}</th>)}</tr></thead><tbody>{section.rows.map(row => <tr>{row.map((cell,index) => index === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>)}</tbody></table></div>}
     {section.kind === 'figure' && <figure><img src={exampleImage(section.image)} alt={section.alt} width="960" height="640" loading="lazy" /><figcaption>{section.caption}</figcaption></figure>}
     {section.kind === 'gallery' && <Gallery section={section} Button={Button} />}
-    {['sensors','scene'].includes(section.kind) && <Simulations kind={section.kind} />}
+    {['sensors','scene'].includes(section.kind) && <Simulations kind={section.kind} id={section.id} />}
     {section.kind === 'faq' && <div>{section.items.map(item => <details><summary>{item.question}</summary><p>{item.answer}</p></details>)}</div>}
     {section.kind === 'stats' && <dl>{section.items.map(item => <div><dt>{item.label}</dt><dd>{item.value}</dd></div>)}</dl>}
     {section.kind === 'plans' && <div class="recipe-list">{section.items.map(item => <article><h3>{item.title}</h3><p>{item.price}</p><p>{item.summary}</p><ul>{item.features.map(feature=><li>{feature}</li>)}</ul><Button href={href(item.action.url)}>{item.action.label}</Button></article>)}</div>}

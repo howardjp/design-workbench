@@ -17,8 +17,8 @@
       {% when 'gallery' %}{% include examples/gallery.html items=block.items %}
       {% when 'workspace' %}{% include examples/workspace.html items=block.items %}
       {% when 'chat' %}{% include examples/chat.html %}
-      {% when 'sensors' %}{% include examples/sensors.html %}
-      {% when 'scene' %}{% include examples/scene.html %}
+      {% when 'sensors' %}{% include examples/sensors.html id=block.id %}
+      {% when 'scene' %}{% include examples/scene.html id=block.id %}
     {% endcase %}
     {% include examples/actions.html actions=block.actions %}
   </div>

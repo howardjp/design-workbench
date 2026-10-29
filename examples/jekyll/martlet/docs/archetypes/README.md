@@ -30,6 +30,10 @@ python3 examples/page-archetypes/scripts/verify-html.py examples/jekyll/martlet/
 python3 examples/page-archetypes/scripts/verify-html.py examples/jekyll/krigsvold/dist
 ```
 
+Simulation controls derive IDs from the unique section ID using reserved `_simulation-` and `_scene-` prefixes. Existing links to the former fixed `#simulation-mode`, `#ventilation`, or `#scene-view` control IDs must be updated.
+
+For the multiple-simulation composition check, also install the locked Astro example dependencies with `npm ci --prefix examples/astro-slice --ignore-scripts`, then run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/simulation-composition.mjs` from the workbench root. Omit `CHROMIUM_PATH` if Playwright’s Chromium is installed. The check builds disposable fixtures; Ruby, Bundler and both Jekyll lockfiles must be available.
+
 The build uses `bundle exec jekyll` by default. `JEKYLL_COMMAND_JSON` can select an installed Jekyll command as a JSON argument array. Builds also create a clean `dist/template.zip`, excluding Git, hosting identity, caches, dependencies, and prior output. Each standalone project can also be built with ordinary `bundle exec jekyll build --destination dist` (without regenerating the source archive).
 
 See [porting](PORTING.md), [acceptance criteria](ACCEPTANCE.md), and [verification evidence](VERIFICATION.md). These examples are experimental, not a declaration that every role has been promoted into a stable component package.
