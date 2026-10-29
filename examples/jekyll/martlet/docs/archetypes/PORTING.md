@@ -18,6 +18,8 @@ Sections are a discriminated union: prose (no `kind`), cards, listing, facts, fi
 - **React:** implement a typed discriminated union from the schema and a section renderer keyed by `kind`; use the family's existing components where their contracts fit. Keep browser state in the relevant component, with effect cleanup. Use the chosen router's base-path handling. Do not import both families' CSS or fonts into a single-family build.
 - **Shared:** reuse the content and acceptance criteria. The existing dependency-free browser script is a reference for behaviour, not a requirement to use imperative DOM code in React.
 
+The workbench's `examples/page-archetypes/INTERACTION-CONTRACTS.md` specifies cross-framework requirements for applied versus draft state, failed URL updates, exports, asynchronous focus, validation and readable transitions. Those contracts describe expected behavior and bounded regression evidence; they do not imply that every component or framework implements a particular controller API.
+
 Martlet demonstrates sustained reading, editorial collections, and a collection-to-focused-record flow. Krigsvold demonstrates aligned section labels, compact records, supporting facts, and a divided collection/active-record workspace. Both collapse to a logical reading order on small screens. Do not reduce this distinction to a token swap, or make either family unable to render the other family's content.
 
 Demo contact and sign-up forms reject required names or messages consisting only of whitespace; keep the user's text unchanged, clear the error when the field is corrected or reset, and retain native required-field validation for empty values. These are local demonstrations and do not submit data.
@@ -46,7 +48,7 @@ Do not show a success claim until the relevant live adapter confirms it. Keep lo
 5. Provide both family renditions and the same recovery/accessibility behaviour.
 6. Run parity, root/base-path, rendered-link, no-JavaScript, print, and browser checks.
 
-The 46 recipes cover the Material Kit catalog's general page roles plus reference documents, collection records, search, events, reports, exhibitions, change histories, and content stress testing. They do not reproduce Creative Tim source code or claim backend functionality.
+The 50 canonical recipes cover the Material Kit catalog's general page roles plus reference documents, collection records, search, events, reports, exhibitions, change histories, and content stress testing. They do not reproduce Creative Tim source code or claim backend functionality. The experimental scientific workspace is separate from that catalog.
 
 ## Design authorities
 
