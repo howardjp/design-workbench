@@ -139,7 +139,9 @@ function operations(){
   const initial={hours:params.get('hours')||'6',threshold:params.get('threshold')||'250',service:requestedService,severity:params.get('severity')||'All'};
   for(const[name,value]of Object.entries(initial)){if(name==='threshold'||[...form.elements[name].options].some(option=>option.value===value))form.elements[name].value=value;}
   form.elements.hideAcknowledged.checked=params.get('hideAcknowledged')==='true';
-  let state={hours:6,threshold:250,service:'All',serviceId:null,severity:'All',hideAcknowledged:false};
+  const defaultState={hours:6,threshold:250,service:'All',serviceId:null,severity:'All',hideAcknowledged:false};
+  let state={...defaultState},initializing=true,urlError=false;
+  const historyWarning=()=>urlError?' The address could not be updated. Previous results and local changes remain available; try again.':'';
   const buttonClass=root.querySelector('[data-reset-operations]').className;
   const render=(useApplied=false,updateAddress=true)=>{
     const error=root.querySelector('#operations-error');
@@ -147,10 +149,12 @@ function operations(){
       const threshold=Number(form.elements.threshold.value);
       if(!Number.isInteger(threshold)||threshold<50||threshold>1000){error.hidden=false;error.textContent='Enter a whole-number warning threshold from 50 to 1000 ms. Previous valid results remain visible.';form.elements.threshold.setAttribute('aria-invalid','true');form.elements.threshold.setAttribute('aria-describedby','threshold-help operations-error');error.tabIndex=-1;error.focus();return;}
       error.hidden=true;form.elements.threshold.removeAttribute('aria-invalid');form.elements.threshold.setAttribute('aria-describedby','threshold-help');
-      state={hours:Number(form.elements.hours.value),threshold,service:form.elements.service.value||'All',serviceId:form.elements.service.value==='All'?'All':null,severity:form.elements.severity.value,hideAcknowledged:form.elements.hideAcknowledged.checked};
+      const candidate={hours:Number(form.elements.hours.value),threshold,service:form.elements.service.value||'All',serviceId:form.elements.service.value==='All'?'All':null,severity:form.elements.severity.value,hideAcknowledged:form.elements.hideAcknowledged.checked};
+      if(updateAddress&&!updateURL(candidate,!initializing)){urlError=true;status.textContent=historyWarning().trim();return;}
+      if(updateAddress)urlError=false;state=candidate;
     }
     const {threshold}=state;
-    const view=operationsView(fixture,state,alerts);if(updateAddress)updateURL(state);
+    const view=operationsView(fixture,state,alerts);
     root.querySelector('[data-sample-coverage]').textContent=view.partial?'Partial sample coverage: the trend shows only times with observations from every selected service. Latest service readings may have different times.':'';
     metric(root,'warnings',String(view.warnings),`Latest service latency ≥ ${threshold} ms.`);
     metric(root,'latency',view.latency+' ms',view.staggered?'Mean of latest samples; sample times differ.':'Mean of latest samples in scope.');
@@ -166,14 +170,14 @@ function operations(){
     const events=[...localEvents,...fixture.activity].filter(event=>(state.serviceId===null&&state.service==='All')||event.service_id===(state.serviceId??state.service));
     const timeline=root.querySelector('[data-activity]');timeline.replaceChildren();for(const event of events){const item=element('li');if(event.time)item.append(element('time',event.time.slice(0,16).replace('T',' ')+' UTC',{datetime:event.time}));else item.append(element('span','Local preview action',{class:'example-help'}));item.append(element('p',event.title));timeline.append(item);}
     if(!events.length)timeline.append(element('li','No activity in the selected scope.'));
-    status.textContent=`${view.services.length} services · Last ${state.hours} hours · ${threshold} ms warning threshold · ${view.alerts.length} visible alerts.`;
+    status.textContent=`${view.services.length} services · Last ${state.hours} hours · ${threshold} ms warning threshold · ${view.alerts.length} visible alerts.${historyWarning()}`;
   };
   form.addEventListener('submit',event=>{event.preventDefault();render();});
-  root.querySelector('#alert-table').addEventListener('click',event=>{const id=event.target.closest('[data-acknowledge]')?.dataset.acknowledge;if(!id)return;const target=alerts.find(alert=>alert.id===id);target.acknowledged=!target.acknowledged;localEvents.unshift({service_id:target.service_id,time:null,title:`${target.acknowledged?'Acknowledged':'Reopened'} ${id} locally.`});render(true);status.textContent=`${id} ${target.acknowledged?'acknowledged':'reopened'} locally. No live alert was changed.`;const replacement=[...root.querySelectorAll('[data-acknowledge]')].find(button=>button.dataset.acknowledge===id);if(replacement)replacement.focus();else form.elements.hideAcknowledged.focus();});
-  root.querySelector('[data-reset-operations]').addEventListener('click',()=>{alerts=structuredClone(fixture.alerts);localEvents=[];form.reset();render();status.textContent='Operations preview reset to the original synthetic snapshot.';});
+  root.querySelector('#alert-table').addEventListener('click',event=>{const id=event.target.closest('[data-acknowledge]')?.dataset.acknowledge;if(!id)return;const target=alerts.find(alert=>alert.id===id);target.acknowledged=!target.acknowledged;localEvents.unshift({service_id:target.service_id,time:null,title:`${target.acknowledged?'Acknowledged':'Reopened'} ${id} locally.`});render(true,false);status.textContent=`${id} ${target.acknowledged?'acknowledged':'reopened'} locally. No live alert was changed.${historyWarning()}`;const replacement=[...root.querySelectorAll('[data-acknowledge]')].find(button=>button.dataset.acknowledge===id);if(replacement)replacement.focus();else form.elements.hideAcknowledged.focus();});
+  root.querySelector('[data-reset-operations]').addEventListener('click',()=>{if(!updateURL(defaultState,true)){urlError=true;status.textContent=`Reset could not be completed.${historyWarning()}`;return;}urlError=false;alerts=structuredClone(fixture.alerts);localEvents=[];form.reset();render(false,false);status.textContent='Operations preview reset to the original synthetic snapshot.';});
   // Establish a valid default view before validating URL-provided draft controls.
   render(true,false);
-  render();
+  render();initializing=false;
   form.querySelector('fieldset').disabled=false;fallback.hidden=true;
 }
 if(root.dataset.dashboard==='operations'&&root.querySelector('#operations-filters'))operations();
