@@ -2,6 +2,14 @@ import {test,expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 const route=(family:string,view:string)=>`/${family}/examples/dashboard-${view}/`;
 for(const family of ['martlet','krigsvold']){
+ test(`${family}: account examples associate sensitive-field guidance`,async({page})=>{
+  for(const id of ['sign-in','sign-up']){
+   await page.goto(`/${family}/examples/${id}/`);
+   await expect(page.getByLabel('Example password',{exact:true})).toHaveAccessibleDescription('Use an invented password of at least eight characters.');
+  }
+  await page.goto(`/${family}/examples/two-factor/`);
+  await expect(page.getByLabel('Six-digit example code',{exact:true})).toHaveAccessibleDescription('Any six digits demonstrate local format validation.');
+ });
  test(`${family}: analytics scope, exact data alternatives, invalid-range recovery`,async({page})=>{
   await page.goto(route(family,'analytics'));
   await expect(page.locator('[data-metric=sessions]')).toHaveText('7,686');
