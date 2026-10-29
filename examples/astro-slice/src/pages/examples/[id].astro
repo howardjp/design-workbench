@@ -1,17 +1,18 @@
 ---
 import catalog from '../../../../page-archetypes/content/catalog.json';
 import Shell from '@nightjar/shell';
+import { supported } from '../../supported.mjs';
 export function getStaticPaths() {
-  const selected = catalog.pages.filter(page => ['home', 'about'].includes(page.id));
-  if (selected.length !== 2) throw new Error('Expected the home and about catalog records');
+  const selected = catalog.pages.filter(page => supported.includes(page.id));
+  if (selected.length !== supported.length) throw new Error('A selected catalog record is missing');
   for (const page of selected) for (const section of page.sections) {
-    if (section.kind && section.kind !== 'cards') throw new Error(`Unsupported section: ${section.kind}`);
-    if (section.body && /[*_`\[\]<>\n]/.test(section.body)) throw new Error('This slice only renders plain-text body content');
+    if (section.kind && !['cards', 'facts', 'listing'].includes(section.kind)) throw new Error(`Unsupported section: ${section.kind}`);
+    if (section.kind === 'listing' && section.items.length > 3) throw new Error('Listing pagination is not implemented');
   }
   return selected.map(page => ({params: {id: page.id}, props: {page}}));
 }
 const {page} = Astro.props;
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const href = url => url.startsWith('/') ? `${base}${url}` : url;
+const base = import.meta.env.BASE_URL;
+const href = url => url.startsWith('/') && !url.startsWith('//') ? `${base.replace(/\/$/, '')}${url}` : url;
 ---
-<Shell page={page} href={href} />
+<Shell page={page} href={href} base={base} />

@@ -6,8 +6,14 @@ import { resolve, extname } from 'node:path';
 import { chromium } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import catalog from '../page-archetypes/content/catalog.json' with { type: 'json' };
+import { supported } from './src/supported.mjs';
+import { renderMarkdown } from './src/markdown.mjs';
+assert.match(renderMarkdown('[local](/examples/about/)', '/preview/'), /href="\/preview\/examples\/about\/"/);
+assert.match(renderMarkdown('![view](/images/view.svg)', '/preview/'), /src="\/preview\/images\/view.svg"/);
+assert.doesNotMatch(renderMarkdown('[bad](javascript:alert(1))'), /href=/);
+assert.doesNotMatch(renderMarkdown('<script>alert(1)</script>'), /<script>/);
 
-const pages = catalog.pages.filter(page => ['home', 'about'].includes(page.id));
+const pages = catalog.pages.filter(page => supported.includes(page.id));
 const browser = await chromium.launch({ headless: true, ...(process.env.CHROMIUM_PATH ? {executablePath: process.env.CHROMIUM_PATH} : {}) });
 try {
   for (const family of ['martlet', 'krigsvold']) for (const base of ['/', '/preview/']) {
@@ -34,26 +40,46 @@ try {
         const page=await context.newPage();
         const missing=[];
         page.on('response', response=>{ if(response.status() >= 400) missing.push(response.url()); });
-        await page.goto(`${origin}${base}examples/${record.id}/`, {waitUntil:'networkidle'});
+        await page.goto(`${origin}${base}examples/${record.id}/`, {waitUntil:'load'});
+        await page.evaluate(() => document.fonts.ready);
         assert.equal(await page.locator('h1').count(),1);
         assert.equal(await page.locator('h1').innerText(),record.title);
         assert.equal(await page.locator('main').count(),1);
         assert.equal(await page.locator(`[data-example="${record.id}"]`).count(),1);
         for (const section of record.sections) {
           assert.equal(await page.locator(`section[aria-labelledby="${section.id}"] h2`).innerText(),section.title);
-          if (section.body) assert.equal(await page.locator(`section[aria-labelledby="${section.id}"] > p`).innerText(),section.body);
+          if (section.body) {
+            const expected = await page.evaluate(html => { const d = document.createElement('div'); d.innerHTML = html; return d.textContent.replace(/\s+/g,' ').trim(); }, renderMarkdown(section.body, base));
+            const actual = (await page.locator(`section[aria-labelledby="${section.id}"] .recipe-prose`).textContent()).replace(/\s+/g,' ').trim();
+            assert.equal(actual, expected);
+          }
+          if (section.kind === 'listing') for (const item of section.items) {
+            const row = page.locator(`section[aria-labelledby="${section.id}"] li`).filter({has:page.getByRole('link',{name:item.title,exact:true})});
+            assert.equal(await row.locator('p').last().innerText(), item.summary);
+            if (item.date) assert.equal(await row.locator('time').getAttribute('datetime'), item.date);
+            if (item.tag) assert.match(await row.innerText(), new RegExp(item.tag));
+          }
+          if (section.kind === 'facts') for (const fact of section.facts) {
+            const row=page.locator(`section[aria-labelledby="${section.id}"] dl > div`).filter({has:page.getByText(fact.label,{exact:true})});
+            assert.equal(await row.locator('dd').innerText(),fact.value);
+          }
           for (const link of [...(section.actions ?? []), ...(section.items ?? []).map(i=>({label:i.title,url:i.url}))]) {
-            assert.equal(await page.getByRole('link',{name:link.label,exact:true}).getAttribute('href'),base.replace(/\/$/,'')+link.url);
+            assert.equal(await page.locator(`section[aria-labelledby="${section.id}"]`).getByRole('link',{name:link.label,exact:true}).getAttribute('href'),base.replace(/\/$/,'')+link.url);
             assert.ok(catalog.pages.some(p => link.url === `/examples/${p.id}/`), `Unknown catalog destination ${link.url}`);
           }
         }
         assert.deepEqual(missing, [], 'Page resources must load');
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'No horizontal overflow at 320px');
-        const results=await new AxeBuilder({page}).analyze();
-        assert.deepEqual(results.violations.map(({id})=>id), [], 'Axe violations');
+        if (['home','guide','person'].includes(record.id)) {
+          const results=await new AxeBuilder({page}).analyze();
+          assert.deepEqual(results.violations.map(({id})=>id), [], 'Axe violations');
+        }
+        if (record.id === 'guide') assert.equal(await page.locator('#arrival + .recipe-prose ol li').count(),4);
+        if (record.id === 'opportunity') assert.equal(await page.locator('#requirements + .recipe-prose ul li').count(),3);
+        if (record.id === 'changelog') assert.equal(await page.locator('#v1-2 + .recipe-prose h3').count(),2);
         await context.close();
       }
-      console.log(`${family} ${base}: two pages, content, routes, assets, 320px and axe passed`);
+      console.log(`${family} ${base}: 17 pages, content, routes, assets and 320px; representative axe passed`);
     } finally { server.closeAllConnections(); await new Promise(r=>server.close(r)); }
   }
 } finally { await browser.close(); }

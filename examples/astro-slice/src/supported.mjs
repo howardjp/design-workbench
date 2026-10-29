@@ -1,0 +1,1 @@
+export const supported = ['home','about','categories','documentation','service','software','guide','privacy','terms','changelog','opportunity','projects','category','careers','events','person','case-study'];

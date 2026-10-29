@@ -1,11 +1,12 @@
 ---
-import { LandingLayout, SiteHeader, SiteFooter } from '@martlet/astro';
+import { LandingLayout, ArticleLayout, SiteHeader, SiteFooter, Button } from '@martlet/astro';
 import '@martlet/theme/source-profile.css';
 import Content from './Content.astro';
-const {page, href} = Astro.props;
+const {page, href, base} = Astro.props;
+const PageLayout = ['document', 'reading', 'dossier'].includes(page.composition) ? ArticleLayout : LandingLayout;
 ---
-<LandingLayout title={page.title} summary={page.summary} bodyClass="martlet-source-profile">
+<PageLayout title={page.title} summary={page.summary} bodyClass="martlet-source-profile">
   <SiteHeader slot="header" name="Northlight Field Institute" home={href('/examples/home/')} links={[{href:href('/examples/home/'),label:'Home',current:page.id==='home'},{href:href('/examples/about/'),label:'About',current:page.id==='about'}]} />
-  <Content page={page} href={href} />
+  <Content page={page} href={href} base={base} Button={Button} />
   <SiteFooter slot="footer"><p>Northlight Field Institute · Fictional example</p></SiteFooter>
-</LandingLayout>
+</PageLayout>
