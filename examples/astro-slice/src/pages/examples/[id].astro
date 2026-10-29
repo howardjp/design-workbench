@@ -1,0 +1,17 @@
+---
+import catalog from '../../../../page-archetypes/content/catalog.json';
+import Shell from '@nightjar/shell';
+export function getStaticPaths() {
+  const selected = catalog.pages.filter(page => ['home', 'about'].includes(page.id));
+  if (selected.length !== 2) throw new Error('Expected the home and about catalog records');
+  for (const page of selected) for (const section of page.sections) {
+    if (section.kind && section.kind !== 'cards') throw new Error(`Unsupported section: ${section.kind}`);
+    if (section.body && /[*_`\[\]<>\n]/.test(section.body)) throw new Error('This slice only renders plain-text body content');
+  }
+  return selected.map(page => ({params: {id: page.id}, props: {page}}));
+}
+const {page} = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const href = url => url.startsWith('/') ? `${base}${url}` : url;
+---
+<Shell page={page} href={href} />

@@ -1,0 +1,11 @@
+---
+import { LandingLayout, SiteHeader, SiteFooter } from '@krigsvold/astro';
+import '@krigsvold/theme/source-profile.css';
+import Content from './Content.astro';
+const {page, href} = Astro.props;
+---
+<LandingLayout title={page.title} summary={page.summary} bodyClass="krigsvold-source-profile">
+  <SiteHeader slot="header" name="Northlight Field Institute" home={href('/examples/home/')} links={[{href:href('/examples/home/'),label:'Home',current:page.id==='home'},{href:href('/examples/about/'),label:'About',current:page.id==='about'}]} />
+  <Content page={page} href={href} />
+  <SiteFooter slot="footer"><p>Northlight Field Institute · Fictional example</p></SiteFooter>
+</LandingLayout>
