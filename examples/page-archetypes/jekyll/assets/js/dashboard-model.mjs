@@ -24,6 +24,7 @@ export function aggregate(rows) {
   return {...totals, conversion:totals.sessions ? 100*totals.completions/totals.sessions : 0, mean_duration:totals.sessions ? totals.duration_seconds/totals.sessions : 0};
 }
 export function analyticsView(fixture, {start, end, category='All'}) {
+  if (!fixture.analytics.length) return {error:'No analytics data is available in this snapshot.',empty:true};
   const min=fixture.analytics.reduce((date,row)=>row.date<date?row.date:date,fixture.analytics[0].date);
   const max=fixture.analytics.reduce((date,row)=>row.date>date?row.date:date,fixture.analytics[0].date);
   const error=rangeError(start,end,min,max);

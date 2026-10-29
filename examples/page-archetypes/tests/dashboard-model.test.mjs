@@ -66,3 +66,8 @@ test('analytics ordering is independent of input observation order',()=>{
  assert.deepEqual(analyticsView(shuffled,{...query,category:'Research'}),analyticsView(fixture,{...query,category:'Research'}));
  assert.equal(shuffled.analytics[0],fixture.analytics.at(-1),'caller data must not be mutated');
 });
+
+test('empty analytics data is explicit and does not invent zero observations',()=>{
+ const result=analyticsView({...fixture,analytics:[]},{start:'2026-10-22',end:'2026-10-28',category:'All'});
+ assert.deepEqual(result,{error:'No analytics data is available in this snapshot.',empty:true});
+});

@@ -40,7 +40,7 @@ function analytics(){
   root.querySelector('[data-export-analytics]').addEventListener('click',()=>{if(view)downloadCSV('northlight-analytics.csv',[['Date','Category','Sessions','Downloads','Completed tasks'],...view.rows.map(row=>[row.date,row.category,row.sessions,row.downloads,row.completions])]);});
   render();
 }
-if(root.dataset.dashboard==='analytics')analytics();
+if(root.dataset.dashboard==='analytics' && fixture.analytics.length)analytics();
 function administration(){
   let records=structuredClone(fixture.people),selected=new Set(),editing=null,pending=null,returnFocus=null;
   const filters=root.querySelector('#people-filters'),editor=root.querySelector('#person-editor');

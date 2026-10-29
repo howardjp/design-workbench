@@ -79,3 +79,9 @@ CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/dashboard-fr
 ```
 
 Omit `CHROMIUM_PATH` when Playwright's Chromium is installed. Astro and React default to their `dist` directories; use `NIGHTJAR_ASTRO_ROOT` or `NIGHTJAR_REACT_ROOT` to point at different directories containing `martlet` and `krigsvold` builds. These fixtures must all be built with an empty/root base path. The disposable Jekyll directory can be removed after testing.
+
+## Empty analytics fixture
+
+The shared dashboard schema accepts an empty `analytics` array. When it is empty, each Jekyll, Astro and React analytics page renders an explicit “No analytics data is available in this snapshot” status rather than presenting zero metrics or an export. Dashboard navigation remains available with and without JavaScript. The checked-in demonstration fixture remains nonempty. This is an empty-source state, not a claim that arbitrary missing, sparse, or malformed observations are supported.
+
+To exercise all six family/framework combinations with JavaScript enabled and disabled, install the workbench and Astro dependencies, build the React workspace packages, make the locked Jekyll/Bundler dependencies available, and run `CHROMIUM_PATH=/path/to/chromium npm run test:analytics-empty` from the workbench root. The test builds temporary copies with an empty fixture and leaves the checked-in data untouched. If Playwright's managed Chromium is installed, omit `CHROMIUM_PATH`.
