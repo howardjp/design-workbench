@@ -11,3 +11,7 @@
   --martlet-source-ink:#222a33; --martlet-source-heading:#0d2038; --martlet-source-support:#f1f5fb;
  }
 }
+
+/* Source example typography uses Cambo for editorial section labels and cards. */
+.martlet-source-profile .recipe[data-example] :is(h2,h3) { font-family:var(--martlet-font-serif); font-weight:400; }
+.martlet-source-profile .nightjar-masthead h1 { font-size:clamp(2rem,5.5vw,5rem); line-height:1.08; font-weight:400; }

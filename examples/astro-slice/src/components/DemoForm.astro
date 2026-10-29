@@ -18,6 +18,7 @@ const legend = kind.replaceAll('-', ' ').replace(/^./, c=>c.toUpperCase());
 <noscript><p>JavaScript is needed for local form validation. The demonstration form is disabled to prevent accidental submission.</p></noscript>
 <style>
 fieldset { display:grid; gap:.5rem; min-width:0; }
+fieldset :is(input:not([type=checkbox]),select,textarea) { font-size:1rem; min-width:0; max-width:100%; box-sizing:border-box; }
 .demo-actions { display:flex; gap:.75rem; flex-wrap:wrap; margin-top:1rem; }
 </style>
 <script>

@@ -20,3 +20,10 @@
   --krigsvold-danger:#9a3542; --krigsvold-warning:#79571f; --krigsvold-chart-1:#286a9d; --krigsvold-chart-2:#35644e;
   --krigsvold-source-ink:#17202a; --krigsvold-source-heading:#061325; --krigsvold-source-support:#eef8fa;
  }}
+
+/* Source example regions use sans labels/cards beneath the slab display. */
+.krigsvold-source-profile .recipe[data-example] :is(h2,h3) { font-family:var(--krigsvold-font-sans); }
+.krigsvold-source-profile .recipe[data-example] h2 { font-weight:600; }
+.krigsvold-source-profile .recipe[data-example] h3 { font-weight:700; }
+.krigsvold-source-profile .nightjar-masthead h1 { font-size:clamp(2.8rem,6vw,5.5rem); line-height:1; letter-spacing:-.045em; font-weight:600; }
+@media(max-width:575.98px) { .krigsvold-source-profile .nightjar-masthead h1 { font-size:clamp(2rem,9vw,2.8rem); overflow-wrap:anywhere; } }

@@ -8,3 +8,6 @@
 [data-example] figure {margin-inline:0}[data-example] figure img {max-width:100%;height:auto}
 
 .demo-fields {display:grid;gap:.5rem;min-width:0}.demo-actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem}
+
+/* Keep local form controls legible and responsive to the user's root text size. */
+.demo-fields :is(input:not([type=checkbox]),select,textarea) {font-size:1rem;min-width:0;max-width:100%;box-sizing:border-box}
