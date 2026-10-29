@@ -20,7 +20,13 @@ export function rangeError(start, end, min, max) {
   return '';
 }
 export function aggregate(rows) {
-  const totals = rows.reduce((sum, row) => ({ sessions:sum.sessions+row.sessions, downloads:sum.downloads+row.downloads, completions:sum.completions+row.completions, duration_seconds:sum.duration_seconds+row.duration_seconds }), {sessions:0,downloads:0,completions:0,duration_seconds:0});
+  const totals={sessions:0,downloads:0,completions:0,duration_seconds:0};
+  for(const row of rows) for(const key of Object.keys(totals)) {
+    const value=row[key];
+    if(!Number.isInteger(value)||value<0) throw new RangeError('Analytics observations must be nonnegative whole numbers.');
+    if(!Number.isSafeInteger(value)||!Number.isSafeInteger(totals[key]+value)) throw new RangeError('Analytics totals exceed supported safe integer precision.');
+    totals[key]+=value;
+  }
   return {...totals, conversion:totals.sessions ? 100*totals.completions/totals.sessions : null, mean_duration:totals.sessions ? totals.duration_seconds/totals.sessions : null};
 }
 // A complete period requires one or more observations for every expected date/category.
@@ -59,12 +65,19 @@ export function analyticsView(fixture, {start, end, category='All', coverage}) {
   const previousEnd=new Date(Date.parse(start)-dayMillis).toISOString().slice(0,10);
   const previousStart=new Date(Date.parse(start)-length*dayMillis).toISOString().slice(0,10);
   const previousRows=fixture.analytics.filter(row=>row.date>=previousStart&&row.date<=previousEnd&&(category==='All'||row.category===category));
-  const days=[...new Set(rows.map(row=>row.date))].map(date=>({date,...aggregate(rows.filter(row=>row.date===date))}));
-  const categories=fixture.categories.map(name=>({name,...aggregate(rows.filter(row=>row.category===name))}));
-  const expected=category==='All'?[...new Set(fixture.categories)]:[category];
-  const missingObservations=missingAnalyticsObservations(rows,start,length,expected);
-  const precedingComplete=previousStart>=min && missingAnalyticsObservations(previousRows,previousStart,length,expected)===0;
-  return {error:'', rows, days, categories, totals:aggregate(rows), missingObservations, previous:!missingObservations&&precedingComplete ? aggregate(previousRows) : null};
+  try {
+    const days=[...new Set(rows.map(row=>row.date))].map(date=>({date,...aggregate(rows.filter(row=>row.date===date))}));
+    const categories=fixture.categories.map(name=>({name,...aggregate(rows.filter(row=>row.category===name))}));
+    const expected=category==='All'?[...new Set(fixture.categories)]:[category];
+    const missingObservations=missingAnalyticsObservations(rows,start,length,expected);
+    const precedingComplete=previousStart>=min && missingAnalyticsObservations(previousRows,previousStart,length,expected)===0;
+    const previous=!missingObservations&&precedingComplete ? aggregate(previousRows) : null;
+    const previousCategories=previous ? fixture.categories.map(name=>({name,...aggregate(previousRows.filter(row=>row.category===name))})) : null;
+    return {error:'', rows, days, categories, totals:aggregate(rows), missingObservations, previous, previousCategories};
+  } catch(error) {
+    if(error instanceof RangeError) return {error:error.message,dataError:true};
+    throw error;
+  }
 }
 export function collectionView(records,{query='',status='All',sort='name',direction='asc',page=1,size=5},fields={search:['name','email','role','id'],sort:['name','email','role','status','id'],defaultSort:'name'}) {
   const needle=query.trim().toLocaleLowerCase();

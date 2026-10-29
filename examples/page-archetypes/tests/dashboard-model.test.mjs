@@ -104,3 +104,22 @@ test('sparse periods do not imply complete comparisons or missing zeros',()=>{
  const today=analyticsView(zeroPrior,{start:'2026-10-24',end:'2026-10-24',category:'Research'});
  assert.equal(analyticsComparison(today,'sessions'),'Comparison unavailable: preceding value is zero.');
 });
+
+test('analytics rejects counts and totals outside exact integer precision',()=>{
+ const row=(sessions)=>({sessions,downloads:0,completions:0,duration_seconds:0});
+ assert.equal(aggregate([row(Number.MAX_SAFE_INTEGER)]).sessions,Number.MAX_SAFE_INTEGER);
+ assert.throws(()=>aggregate([row(Number.MAX_SAFE_INTEGER),row(2)]),/supported safe integer precision/);
+ assert.throws(()=>aggregate([row(Number.MAX_SAFE_INTEGER+1)]),/supported safe integer precision/);
+ assert.throws(()=>aggregate([row(-1)]),/nonnegative whole numbers/);
+ const altered={...fixture,analytics:fixture.analytics.map(row=>row.date==='2026-10-24'&&row.category==='Research'?{...row,sessions:Number.MAX_SAFE_INTEGER}:row)};
+ assert.deepEqual(analyticsView(altered,{start:'2026-10-22',end:'2026-10-28',category:'All',coverage:{start:'2026-09-03',end:'2026-10-28'}}),{error:'Analytics totals exceed supported safe integer precision.',dataError:true});
+ for(const value of [-1,1.5]) {const invalid={...fixture,analytics:fixture.analytics.map(row=>row.date==='2026-10-24'&&row.category==='Research'?{...row,sessions:value}:row)};assert.deepEqual(analyticsView(invalid,{start:'2026-10-22',end:'2026-10-28',category:'All',coverage:{start:'2026-09-03',end:'2026-10-28'}}),{error:'Analytics observations must be nonnegative whole numbers.',dataError:true});}
+ const prior={...fixture,analytics:fixture.analytics.map(row=>row.date==='2026-10-20'&&row.category==='Research'?{...row,sessions:Number.MAX_SAFE_INTEGER}:row)};
+ const query={start:'2026-10-22',end:'2026-10-28',category:'All',coverage:{start:'2026-09-03',end:'2026-10-28'}};
+ assert.equal(analyticsView(prior,query).error,'Analytics totals exceed supported safe integer precision.');
+ const partial={...prior,analytics:prior.analytics.filter(row=>!(row.date==='2026-10-24'&&row.category==='Research'))};
+ assert.equal(analyticsView(partial,query).error,'');assert.equal(analyticsView(partial,query).previous,null);
+ const older={...fixture,analytics:fixture.analytics.map(row=>row.date==='2026-10-10'&&row.category==='Research'?{...row,sessions:Number.MAX_SAFE_INTEGER}:row)};
+ const recovered=analyticsView(older,{start:'2026-10-12',end:'2026-10-12',category:'All',coverage:{start:'2026-09-03',end:'2026-10-28'}});
+ assert.equal(recovered.error,'');assert.equal(recovered.previousCategories.length,3);
+});

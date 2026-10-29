@@ -20,19 +20,16 @@ function analytics(){
   [start,end].forEach(input=>input.addEventListener('input',()=>{range.value='custom';}));
   const render=()=>{
     const candidate=analyticsView(fixture,{start:start.value,end:end.value,category:category.value,coverage});const error=root.querySelector('#analytics-error');
-    error.hidden=!candidate.error;error.textContent=candidate.error;start.setAttribute('aria-invalid',String(!!candidate.error));end.setAttribute('aria-invalid',String(!!candidate.error));
+    error.hidden=!candidate.error;error.textContent=candidate.error;start.setAttribute('aria-invalid',String(!!candidate.error&&!candidate.dataError));end.setAttribute('aria-invalid',String(!!candidate.error&&!candidate.dataError));
     root.querySelector('[data-export-analytics]').disabled=!!candidate.error;
-    if(candidate.error){status.textContent='Invalid filters. The previous valid results remain visible.';error.tabIndex=-1;error.focus();return;}
-    view=candidate;updateURL({start:start.value,end:end.value,category:category.value});
+    if(candidate.error){status.textContent=candidate.dataError?(view?'Analytics data is unavailable for this range. The previous valid results remain visible.':candidate.error):(view?'Invalid filters. The previous valid results remain visible.':'Invalid filters. No valid results are available.');if(candidate.dataError)status.setAttribute('data-analytics-data-error','');else status.removeAttribute('data-analytics-data-error');error.tabIndex=-1;error.focus();return;}
+    status.removeAttribute('data-analytics-data-error');view=candidate;updateURL({start:start.value,end:end.value,category:category.value});
     const hasRows=view.rows.length>0;root.querySelector('[data-export-analytics]').disabled=!hasRows;
     metric(root,'sessions',hasRows?number(view.totals.sessions):'Unavailable',analyticsComparison(view,'sessions'));metric(root,'downloads',hasRows?number(view.totals.downloads):'Unavailable',analyticsComparison(view,'downloads'));
     metric(root,'conversion',view.totals.conversion===null?'Unavailable':view.totals.conversion.toFixed(1)+'%',view.totals.conversion===null?'Unavailable without sessions.':'Completed tasks ÷ sessions.');metric(root,'mean_duration',view.totals.mean_duration===null?'Unavailable':Math.round(view.totals.mean_duration)+' s',view.totals.mean_duration===null?'Unavailable without sessions.':'Weighted by session count.');
     chart(root,'sessions',view.days.map(day=>({label:day.date,value:day.sessions})),{label:'Sessions'});
     chart(root,'downloads',view.days.map(day=>({label:day.date,value:day.downloads})),{label:'Downloads'});
-    const count=Math.round((Date.parse(end.value)-Date.parse(start.value))/dayMillis)+1;
-    const priorEnd=new Date(Date.parse(start.value)-dayMillis).toISOString().slice(0,10),priorStart=new Date(Date.parse(start.value)-count*dayMillis).toISOString().slice(0,10);
-    const prior=view.previous?analyticsView(fixture,{start:priorStart,end:priorEnd,category:category.value,coverage}):null;
-    chart(root,'categories',view.categories.filter(row=>view.rows.some(item=>item.category===row.name)).map(row=>({label:row.name,value:row.sessions,previous:prior?.categories.find(item=>item.name===row.name).sessions??null})),{label:'Sessions by category',bars:true,previous:true});
+    chart(root,'categories',view.categories.filter(row=>view.rows.some(item=>item.category===row.name)).map(row=>({label:row.name,value:row.sessions,previous:view.previousCategories?.find(item=>item.name===row.name)?.sessions??null})),{label:'Sessions by category',bars:true,previous:true});
     tableRows(root.querySelector('#analytics-source'),view.rows.map(row=>[row.date,row.category,row.sessions,row.downloads,row.completions]),['Date','Category','Sessions','Downloads','Completed tasks']);
     status.textContent=`${view.days.length} days · category: ${category.value} · ${view.rows.length} source records · ${start.value} to ${end.value}. ${analyticsCoverageMessage(view)}`.trim();
   };
@@ -40,7 +37,7 @@ function analytics(){
   root.querySelector('[data-export-analytics]').addEventListener('click',()=>{if(view)downloadCSV('northlight-analytics.csv',[['Date','Category','Sessions','Downloads','Completed tasks'],...view.rows.map(row=>[row.date,row.category,row.sessions,row.downloads,row.completions])]);});
   render();
 }
-if(root.dataset.dashboard==='analytics' && fixture.analytics.length)analytics();
+if(root.dataset.dashboard==='analytics' && root.querySelector('#analytics-filters'))analytics();
 function administration(){
   let records=structuredClone(fixture.people),selected=new Set(),editing=null,pending=null,returnFocus=null;
   const filters=root.querySelector('#people-filters'),editor=root.querySelector('#person-editor');
