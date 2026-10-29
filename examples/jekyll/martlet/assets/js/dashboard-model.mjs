@@ -125,12 +125,13 @@ export function validOperationsTimestamp(value) {
   const time=Date.parse(value);
   return Number.isFinite(time)&&new Date(time).toISOString().replace('.000Z','+00:00')===value;
 }
-export function operationsSnapshotLabel(value) {
+export function dashboardSnapshotLabel(value) {
   if(!validOperationsTimestamp(value))return null;
   const date=new Date(value),months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const day=String(date.getUTCDate()).padStart(2,'0'),hours=String(date.getUTCHours()).padStart(2,'0'),minutes=String(date.getUTCMinutes()).padStart(2,'0'),seconds=date.getUTCSeconds();
   return `${day} ${months[date.getUTCMonth()]} ${date.getUTCFullYear()}, ${hours}:${minutes}${seconds?`:${String(seconds).padStart(2,'0')}`:''} UTC`;
 }
+export const operationsSnapshotLabel=dashboardSnapshotLabel;
 export const operationsCalendarError='Operations data unavailable: timestamps must be valid UTC calendar times.';
 export const operationsDataError='Operations data unavailable: service observations contain duplicate timestamps or readings after the snapshot.';
 export const operationsPrecisionError='Operations data unavailable: observations or totals exceed supported safe integer precision.';

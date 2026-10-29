@@ -1,8 +1,9 @@
 import {useEffect, useMemo, useRef, useState, type FormEvent} from 'react';
 import {Button, Dialog, family} from 'catalog-family';
 import fixture from '../../../page-archetypes/content/dashboards.json';
-import {collectionView, personControlLabels, applyBulk, validatePerson, nextPersonId} from '../../../page-archetypes/jekyll/assets/js/dashboard-model.mjs';
+import {collectionView, personControlLabels, applyBulk, validatePerson, nextPersonId, dashboardSnapshotLabel} from '../../../page-archetypes/jekyll/assets/js/dashboard-model.mjs';
 import './administration.css';
+const snapshotLabel=dashboardSnapshotLabel(fixture.as_of);
 type Person = {id:string; name:string; email:string; role:string; status:string};
 type Draft = Omit<Person,'id'>;
 type Scope = {query:string;status:string;sort:string;direction:'asc'|'desc';page:number;size:number};
@@ -38,7 +39,7 @@ export function Administration(){
  const pageChange=(step:number)=>{pageFocus.current=true;updateScope({...scope,page:view.page+step});};
  const errorField=(key:keyof Draft)=>errors[key]?{ 'aria-invalid':true, 'aria-describedby':`person-${key}-error` }:{};
  return <div className={`react-administration ${family}`} data-administration data-family={family}>
- <header><p className="adm-eyebrow">Dashboards</p><h1>Administration</h1><p>Manage the Northlight people directory with scoped selection, validation, and explicit local changes.</p><p>Snapshot: <time dateTime={fixture.as_of}>28 Oct 2026, 20:00 UTC</time></p></header>
+ <header><p className="adm-eyebrow">Dashboards</p><h1>Administration</h1><p>Manage the Northlight people directory with scoped selection, validation, and explicit local changes.</p><p>Snapshot: {snapshotLabel?<time dateTime={fixture.as_of}>{snapshotLabel}</time>:<span>Invalid snapshot timestamp</span>}</p></header>
  <p className="adm-notice">Synthetic demonstration data. Changes remain in this page’s memory and reset on reload. No live people, systems, or services are connected.</p>
  <form className="adm-toolbar" onSubmit={apply}><fieldset disabled={!enhanced}><legend>Directory filters and state preview</legend><div className="adm-controls">
  <label>Search people<input type="search" maxLength={120} value={filter.query} onChange={e=>setFilter({...filter,query:e.target.value})} placeholder="Name, email, role, or ID"/></label>

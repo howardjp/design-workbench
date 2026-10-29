@@ -1,6 +1,6 @@
 ---
 import fixture from '../../../page-archetypes/content/dashboards.json';
-import {analyticsView as initialAnalyticsView, analyticsCoverageMessage as initialCoverageMessage} from '../../../page-archetypes/jekyll/assets/js/dashboard-model.mjs';
+import {analyticsView as initialAnalyticsView, analyticsCoverageMessage as initialCoverageMessage, dashboardSnapshotLabel} from '../../../page-archetypes/jekyll/assets/js/dashboard-model.mjs';
 import {dashboardPayload,serializeForScript} from './fixture.mjs';
 import Button from '@nightjar/button';
 import DashboardNav from './DashboardNav.astro';
@@ -17,13 +17,14 @@ const initialStatus=initialView?.error || (initialView ? (initialCoverageMessage
 const json=serializeForScript(dashboardPayload('analytics',fixture));
 const charts=[{id:'sessions',title:'Session trend',description:'Daily sessions across the selected categories.'},{id:'downloads',title:'Download trend',description:'Daily downloads in the selected period.'},{id:'categories',title:'Category comparison',description:'Current sessions versus the preceding period of equal length, when available.'}];
 const chartRows = initialView && !initialView.error ? {sessions: initialView.days.map(day=>[day.date,day.sessions]), downloads: initialView.days.map(day=>[day.date,day.downloads]), categories: initialView.categories.filter(category=>initial.some(row=>row.category===category.name)).map(category=>[category.name,category.sessions,initialView.previousCategories?.find(previous=>previous.name===category.name)?.sessions ?? 'Unavailable'])} : {sessions:[],downloads:[],categories:[]};
+const snapshotLabel=dashboardSnapshotLabel(fixture.as_of);
 const metrics=[['sessions','Sessions'],['downloads','Downloads'],['conversion','Completion rate'],['mean_duration','Mean session duration']];
 ---
 <div class="analytics-app" data-analytics-dashboard data-family={family === "martlet" ? "m" : "k"} style={variables}>
   <DashboardNav href={href} current="analytics" />
   <div class="analytics-main">
     <header class="dashboard-heading"><p class="eyebrow">{page.category}</p><h1>{page.title}</h1><p>{page.summary}</p></header>
-    <p>Snapshot: <time datetime={fixture.as_of}>28 Oct 2026, 20:00 UTC</time> {peer && <a data-analytics-compare href={peer}>Compare in {peerFamily}</a>}</p>
+    <p>Snapshot: {snapshotLabel ? <time datetime={fixture.as_of}>{snapshotLabel}</time> : <span>Invalid snapshot timestamp</span>} {peer && <a data-analytics-compare href={peer}>Compare in {peerFamily}</a>}</p>
     <p class="analytics-notice">Synthetic demonstration data. Changes remain in this page’s memory and reset on reload. No live people, systems, or services are connected.</p>
     {fixture.analytics.length === 0 ? <p role="status" data-analytics-empty>No analytics data is available in this snapshot.</p> : <>
     <form id="analytics-filters" novalidate><fieldset disabled data-analytics-controls><legend>Analytics filters</legend><div class="analytics-controls">
