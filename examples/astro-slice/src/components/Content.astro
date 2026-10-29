@@ -41,7 +41,7 @@ const formatDate = date => new Intl.DateTimeFormat('en-US', {year:'numeric',mont
     {section.kind === 'plans' && <div class="recipe-list">{section.items.map(item => <article><h3>{item.title}</h3><p>{item.price}</p><p>{item.summary}</p><ul>{item.features.map(feature=><li>{feature}</li>)}</ul><Button href={href(item.action.url)}>{item.action.label}</Button></article>)}</div>}
     {section.kind === 'workspace' && <Workspace section={section} Button={Button} />}
     {section.kind === 'chat' && <Chat Button={Button} />}
-    {section.kind === 'form' && <DemoForm kind={section.form} Button={Button} />}
+    {section.kind === 'form' && <DemoForm kind={section.form} id={section.id} Button={Button} />}
     {section.kind === 'search' && <Search base={base} Button={Button} />}
     {section.kind === 'facts' && <dl>{section.facts.map(fact => <div><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl>}
     {section.actions && <ul class="recipe-actions">{section.actions.map(action => <li><Button href={href(action.url)}>{action.label}</Button></li>)}</ul>}

@@ -1,4 +1,4 @@
-import {useEffect,useState} from 'react';
+import {useEffect,useId,useState} from 'react';
 import {Button} from 'catalog-family';
 import type {CatalogEntry} from './data-types';
 const base=import.meta.env.BASE_URL.replace(/\/$/,'');
@@ -18,16 +18,17 @@ const formKinds=['contact','sign-in','sign-up','password-reset','two-factor','ne
 type FormKind=(typeof formKinds)[number];
 export function DemoForm({kind}:{kind:string}) {
  if(!formKinds.includes(kind as FormKind))throw Error(`Unsupported form: ${kind}`);
+ const id=useId(),formId=`form-${id}-`;
  const [ready,setReady]=useState(false),[status,setStatus]=useState('');useEffect(()=>setReady(true),[]);
  const title=kind.replaceAll('-',' ').replace(/^./,c=>c.toUpperCase());
  const submit=(event:React.FormEvent<HTMLFormElement>)=>{event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;form.querySelectorAll<HTMLInputElement>('input[type=password],input[name=code]').forEach(input=>{input.value='';});setStatus('Example validated locally. Nothing was sent, saved, or authenticated.');};
- return <><p id="form-notice">Local interface demonstration. Use invented values only. Nothing is sent, saved, subscribed, or authenticated.</p>
- <form onSubmit={submit} onInvalidCapture={()=>setStatus('')} onInput={()=>setStatus('')} onChange={()=>setStatus('')} onReset={()=>setStatus('')} aria-describedby="form-notice"><fieldset disabled={!ready} className="demo-fields"><legend>{title}</legend>
-  {['contact','sign-up'].includes(kind)&&<><label htmlFor="demo-name">Name</label><input id="demo-name" name="name" autoComplete="off" required maxLength={120}/></>}
-  {kind!=='two-factor'&&<><label htmlFor="demo-email">Email address</label><input id="demo-email" name="email" type="email" autoComplete="off" required maxLength={254}/></>}
-  {['sign-in','sign-up'].includes(kind)&&<><label htmlFor="demo-password">Example password</label><input id="demo-password" name="password" type="password" autoComplete="off" required minLength={8} maxLength={128} aria-describedby="password-help"/><p id="password-help">Use an invented password of at least eight characters.</p></>}
-  {kind==='two-factor'&&<><label htmlFor="demo-code">Six-digit example code</label><input id="demo-code" name="code" inputMode="numeric" pattern="[0-9]{6}" minLength={6} maxLength={6} autoComplete="off" required aria-describedby="code-help"/><p id="code-help">Any six digits demonstrate local format validation.</p></>}
-  {kind==='contact'&&<><label htmlFor="demo-topic">Topic</label><select id="demo-topic" name="topic"><option>Research</option><option>Visits</option><option>Corrections</option></select><label htmlFor="demo-message">Message</label><textarea id="demo-message" name="message" required rows={6} maxLength={4000}/></>}
+ return <><p id={`${formId}notice`}>Local interface demonstration. Use invented values only. Nothing is sent, saved, subscribed, or authenticated.</p>
+ <form data-demo-form={kind} onSubmit={submit} onInvalidCapture={()=>setStatus('')} onInput={()=>setStatus('')} onChange={()=>setStatus('')} onReset={()=>setStatus('')} aria-describedby={`${formId}notice`}><fieldset disabled={!ready} className="demo-fields"><legend>{title}</legend>
+  {['contact','sign-up'].includes(kind)&&<><label htmlFor={`${formId}name`}>Name</label><input id={`${formId}name`} name="name" autoComplete="off" required maxLength={120}/></>}
+  {kind!=='two-factor'&&<><label htmlFor={`${formId}email`}>Email address</label><input id={`${formId}email`} name="email" type="email" autoComplete="off" required maxLength={254}/></>}
+  {['sign-in','sign-up'].includes(kind)&&<><label htmlFor={`${formId}password`}>Example password</label><input id={`${formId}password`} name="password" type="password" autoComplete="off" required minLength={8} maxLength={128} aria-describedby={`${formId}password-help`}/><p id={`${formId}password-help`}>Use an invented password of at least eight characters.</p></>}
+  {kind==='two-factor'&&<><label htmlFor={`${formId}code`}>Six-digit example code</label><input id={`${formId}code`} name="code" inputMode="numeric" pattern="[0-9]{6}" minLength={6} maxLength={6} autoComplete="off" required aria-describedby={`${formId}code-help`}/><p id={`${formId}code-help`}>Any six digits demonstrate local format validation.</p></>}
+  {kind==='contact'&&<><label htmlFor={`${formId}topic`}>Topic</label><select id={`${formId}topic`} name="topic"><option>Research</option><option>Visits</option><option>Corrections</option></select><label htmlFor={`${formId}message`}>Message</label><textarea id={`${formId}message`} name="message" required rows={6} maxLength={4000}/></>}
   {['newsletter','sign-up'].includes(kind)&&<label><input type="checkbox" required name="consent"/> I understand this is a local demonstration.</label>}
   <div className="demo-actions"><Button type="submit">Validate example</Button> <Button type="reset">Clear</Button></div>
  </fieldset><p role="status">{status}</p></form><noscript><p>JavaScript is needed for local form validation. The demonstration form is disabled to prevent accidental submission.</p></noscript></>;

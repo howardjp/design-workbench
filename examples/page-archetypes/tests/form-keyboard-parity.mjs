@@ -33,7 +33,7 @@ try {
       page.on('pageerror', error => errors.push(error.message));
       for (const route of ['sign-in','two-factor']) {
         await page.goto(`${origin}/examples/${route}/`, {waitUntil:'networkidle'});
-        const form = page.locator('form[aria-describedby="form-notice"]');
+        const form = page.locator('form[data-demo-form]');
         const submit = form.getByRole('button', {name:'Validate example'});
         const status = form.getByRole('status');
         const secret = form.getByLabel(route === 'sign-in' ? 'Example password' : 'Six-digit example code');
