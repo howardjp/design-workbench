@@ -44,7 +44,7 @@ function SectionView({section,pageId,special,bodies,entries}:{section:Section;pa
 }
 export function App({data,special}:{data:CatalogPageData;special?:(section:unknown)=>ReactNode}) {
  const {id,page,rendered:bodies,entries}=data;
- if(id==='index') return <SourceShell current="index" title="All page examples"><Article title="All page examples" summary="Browse the shared Northlight collection."><ul>{entries.map(entry=><li key={entry.id}>{entry.available?<a href={href(`/examples/${entry.id}/`)}>{entry.title}</a>:<>{entry.title} (not yet available in this React preview)</>}</li>)}</ul></Article></SourceShell>;
+ if(id==='index') return <SourceShell current="index" title="All page examples"><Article title="All page examples" summary="Browse the shared Northlight collection."><ul>{entries.map(entry=><li key={entry.id}>{entry.available?<a href={href(`/examples/${entry.id}/`)}>{entry.title}</a>:<>{entry.title} (not yet available in this React preview)</>}</li>)}</ul><section aria-labelledby="experimental-applications"><h2 id="experimental-applications">Experimental applications</h2><p><a href={href('/examples/scientific-workspace/')}>Thermal analysis</a> · Explore an illustrative local calculation.</p></section></Article></SourceShell>;
  if(!page) throw Error(`Unported catalog route: ${id}`);
  return <SourceShell current={page.id} title={page.title}>
   <Article data-composition={page.composition} title={page.title} eyebrow={page.category} summary={page.summary} {...('date' in page && page.date ? {metadata:<>{formatCatalogDate(page.date)?<time dateTime={page.date}>{formatCatalogDate(page.date)}</time>:<span>Invalid date: {page.date}</span>}{'author' in page && page.author && <> · {page.author}</>}</>}: {})}>

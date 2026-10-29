@@ -19,6 +19,7 @@ const slug = value => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^
       {!supported.includes(entry.id) && <p>Not yet available in this Astro preview.</p>}
     </li>)}</ul>
   </section>)}
+  <section aria-labelledby="experimental-applications"><h2 id="experimental-applications">Experimental applications</h2><p><a href={href("/examples/scientific-workspace/")}>Thermal analysis</a> · Explore an illustrative local calculation.</p></section>
 </div>
 <style>
 .catalog { max-width:72rem; margin:auto; padding:0 1.5rem 3rem; }

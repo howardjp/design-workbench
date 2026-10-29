@@ -24,7 +24,7 @@ try {
  const {pages,validatePages,requiresSpecial}=await server.ssrLoadModule('/src/pages.ts');
  const {renderSpecial}=await server.ssrLoadModule('/src/special.tsx');
  validatePages();
- const out=resolve(root,'dist',family),template=await readFile(resolve(out,'index.html'),'utf8'),dashboardTemplate=await readFile(resolve(out,'dashboard.html'),'utf8');
+ const out=resolve(root,'dist',family),template=await readFile(resolve(out,'index.html'),'utf8'),dashboardTemplate=await readFile(resolve(out,'dashboard.html'),'utf8'),scientificTemplate=await readFile(resolve(out,'scientific.html'),'utf8');
  const manifest=JSON.parse(await readFile(resolve(out,'.vite/manifest.json'),'utf8'));
  const {DashboardFrame}=await server.ssrLoadModule('/src/dashboard/DashboardFrame.tsx');
  const entries=catalog.pages.map(({id,title,summary,category})=>({id,title,summary,category,available:selected.includes(id)}));
@@ -52,7 +52,10 @@ try {
   const styles=css.map(file=>`<link rel="stylesheet" crossorigin href="${base}${file}">`).join('');
   await writeFile(resolve(dir,'index.html'),renderDocument(dashboardTemplate,{styles,markup,title:`${name} · Northlight`,originalTitle:'<title>Northlight dashboard</title>'}));
  }
+ const {ScientificPage}=await server.ssrLoadModule('/src/scientific/Page.tsx');
+ const scientificDir=resolve(indexDir,'scientific-workspace');await mkdir(scientificDir,{recursive:true});
+ await writeFile(resolve(scientificDir,'index.html'),renderDocument(scientificTemplate,{markup:renderToString(React.createElement(ScientificPage)),title:'Thermal analysis · Northlight',originalTitle:'<title>Northlight scientific workspace</title>'}));
  // Generic entries cannot render unknown routes; publish only actual records.
- const {rm}=await import('node:fs/promises');await rm(resolve(out,'index.html'));await rm(resolve(out,'dashboard.html'));
- console.log(`${family}: prerendered ${pages.length} content routes, three dashboards and an index at ${base}`);
+ const {rm}=await import('node:fs/promises');await rm(resolve(out,'index.html'));await rm(resolve(out,'dashboard.html'));await rm(resolve(out,'scientific.html'));
+ console.log(`${family}: prerendered ${pages.length} content routes, three dashboards, a scientific workspace and an index at ${base}`);
 } finally {await server.close();}
