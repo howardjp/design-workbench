@@ -315,3 +315,5 @@ Jekyll and Astro search previously replaced the current browser history entry wi
 ### Analytics integer precision
 
 Commit `955cde4` rejects unsafe nonnegative integer observations or totals with an explicit data error rather than displaying rounded metrics. The three renderers show truthful unavailable values and guidance without JavaScript; hydrated controls allow a safe-range recovery, and later data errors retain prior valid results without marking valid dates invalid. The prior-of-prior chart calculation was removed so an out-of-scope overflow does not block recovery. Independent precision tests passed unsafe current, preceding and later-selection scenarios across both families, three frameworks and root/subpaths (36 configurations), with no-JS, 320px and scoped axe for current/preceding cases. Canonical, empty, sparse, reordered and gap analytics regressions, model tests and strict React types also passed. A combined-branch precision/model rerun is in progress.
+
+The integrated-branch `analytics-precision.mjs` and `test:examples` rerun also passed after `955cde4` using local Ruby/Bundler and system Chromium.
