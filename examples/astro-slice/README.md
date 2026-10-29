@@ -10,6 +10,8 @@ The observation and fleet workspaces support filtering, selection, local review 
 
 The station and scene controls are illustrative and disabled without JavaScript; they do not connect to real devices. Multiple simulations on one page use distinct section-derived IDs and independent state. Their control IDs use reserved `_simulation-` and `_scene-` prefixes; links to the previous fixed `#simulation-mode`, `#ventilation` or `#scene-view` IDs need updating. The report serves the shared example CSV. Recovery recipes are static example pages and do not configure HTTP error status or routing.
 
+Reading and document recipes include a native section index, matching the Jekyll examples. Its fragment links work without JavaScript and the index is omitted in print.
+
 The contact, account and newsletter forms validate locally with invented values; they send, save and authenticate nothing. They remain disabled without JavaScript, and example passwords and verification codes are cleared on validation.
 
 Markdown uses markdown-it and footnote parsing; local root-relative links and images respect the build base. Raw HTML remains disabled by default. Only the checked-in stress fixture enables raw markup, which is passed through a narrow HTML/MathML sanitizer before rendering; this fixture-specific option is not an ingestion policy for untrusted HTML. Code blocks are labelled and keyboard focusable, and footnote identifiers are scoped to their page section. Unsupported section kinds fail the build rather than silently disappearing. The three dashboard implementations reuse the shared synthetic fixture and framework-neutral behavior, with browser-local state; functional and visual parity remain subject to further review.

@@ -20,6 +20,7 @@ const {page, href, base, Button} = Astro.props;
   </>}
   {page.semantic_class === 'event' && <aside aria-label="Event details"><p><strong>Event details</strong></p><p><time datetime={page.event.start}>{page.event.display_start}</time> to <time datetime={page.event.end}>{page.event.display_end}</time> · {page.event.timezone}</p><p>{page.event.location} · {page.event.registration}</p></aside>}
   {page.semantic_class === 'catalog-index' && <Catalog href={href} />}
+  {['reading','document'].includes(page.composition) && <nav class="recipe-local-index" aria-label="On this page"><p>On this page</p><ol>{page.sections.map(section => <li><a href={`#${section.id}`}>{section.title}</a></li>)}</ol></nav>}
   {page.sections.map(section => <section aria-labelledby={section.id}>
     <h2 id={section.id}>{section.title}</h2>
     {section.body && <div class="recipe-prose" set:html={renderMarkdown(section.body, base, {fixtureMarkup: page.id === 'stress-test', docId:`${page.id}-${section.id}`})} />}
@@ -50,6 +51,10 @@ const {page, href, base, Button} = Astro.props;
 </div>
 <style>
 .recipe { max-width: 72rem; margin-inline: auto; padding: 0 1.5rem 3rem; overflow-wrap:anywhere; }
+.recipe-local-index { margin-block: 2rem; }
+.recipe-local-index p { font-weight: 700; }
+.recipe-local-index ol { list-style: none; padding: 0; }
+.recipe-local-index li { margin-block: .6rem; }
 .recipe-prose { overflow-wrap:anywhere; }
 .recipe section { margin-block: 2.5rem; }
 .recipe :is(h2,h3) { line-height:1.25; }
@@ -68,7 +73,7 @@ const {page, href, base, Button} = Astro.props;
 .recipe-table { max-width: 100%; overflow-x: auto; }
 .recipe-table :is(th,td) { min-inline-size: 8rem; }
 .recipe-tags { display: flex; gap: 1rem; padding: 0; list-style: none; }
-@media print { [data-list-item][hidden] { display: list-item !important; } [data-pagination] { display: none !important; } }
+@media print { [data-list-item][hidden] { display: list-item !important; } [data-pagination], .recipe-local-index { display: none !important; } }
 .recipe-actions { list-style: none; padding: 0; display: flex; gap: 1rem; flex-wrap: wrap; }
 </style>
 
