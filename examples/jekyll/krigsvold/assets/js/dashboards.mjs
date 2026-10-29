@@ -47,7 +47,7 @@ function administration(){
   const table=root.querySelector('#people-table'),body=table.tBodies[0],selectPage=root.querySelector('[data-select-page]');
   const dialog=root.querySelector('[data-bulk-dialog]');
   const buttonClass=root.querySelector('[data-new-person]').className;
-  let current;
+  let current,saving=false;
   const clearErrors=()=>{root.querySelector('#person-errors').hidden=true;for(const name of ['name','email','role','status']){editor.elements[name].removeAttribute('aria-invalid');editor.elements[name].removeAttribute('aria-describedby');root.querySelector(`#person-${name}-error`).hidden=true;}};
   const resetEditor=()=>{editing=null;editor.reset();clearErrors();root.querySelector('[data-editor-legend]').textContent='Add a person';};
   const updateSelection=()=>{
@@ -99,8 +99,9 @@ function administration(){
   root.querySelector('[data-new-person]').addEventListener('click',()=>{resetEditor();editor.elements.name.focus();});
   root.querySelector('[data-discard-person]').addEventListener('click',()=>{resetEditor();status.textContent='Draft discarded. Directory records are unchanged.';});
   editor.addEventListener('submit',event=>{
-    event.preventDefault();const draft=Object.fromEntries(['name','email','role','status'].map(name=>[name,editor.elements[name].value.trim()]));const errors=validatePerson(draft,records,editing);clearErrors();
+    event.preventDefault();if(saving)return;const draft=Object.fromEntries(['name','email','role','status'].map(name=>[name,editor.elements[name].value.trim()]));const errors=validatePerson(draft,records,editing);clearErrors();
     if(Object.keys(errors).length){const summary=root.querySelector('#person-errors');summary.hidden=false;summary.replaceChildren(element('p','Review the fields below. Your draft has been retained.'));const list=element('ul');for(const[name,message]of Object.entries(errors)){const li=element('li');const link=element('a',message,{href:`#person-${name}`});link.addEventListener('click',event=>{event.preventDefault();editor.elements[name].focus();});li.append(link);list.append(li);const input=editor.elements[name];input.setAttribute('aria-invalid','true');input.setAttribute('aria-describedby',`person-${name}-error`);const hint=root.querySelector(`#person-${name}-error`);hint.hidden=false;hint.textContent=message;}summary.append(list);summary.tabIndex=-1;summary.focus();return;}
+    saving=true;queueMicrotask(()=>{saving=false;});
     const id=editing||nextPersonId(records);
     records=editing?records.map(person=>person.id===editing?{id,...draft}:person):[...records,{id,...draft}];selected.clear();resetEditor();render();status.textContent=`Saved ${draft.name} (${id}) locally. Reload restores the original fixture.`;
   });

@@ -191,6 +191,7 @@ jobs:
               node examples/page-archetypes/tests/operations-precision.mjs rounding
               node examples/page-archetypes/tests/administration-identifiers.mjs
               node examples/page-archetypes/tests/administration-email.mjs
+              node examples/page-archetypes/tests/administration-rapid.mjs
               ;;
             *) exit 1 ;;
           esac
