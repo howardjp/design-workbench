@@ -55,6 +55,19 @@ jobs:
         run: |
           npm ci --prefix examples/astro-slice --ignore-scripts
           node examples/page-archetypes/tests/simulation-composition.mjs
+      - name: Verify multilingual long-content reflow across frameworks
+        env:
+          ASTRO_TELEMETRY_DISABLED: '1'
+        run: |
+          export NIGHTJAR_JEKYLL_ROOT="$RUNNER_TEMP/nightjar-i18n"
+          python3 examples/page-archetypes/scripts/build.py --family martlet --destination "$NIGHTJAR_JEKYLL_ROOT/martlet"
+          python3 examples/page-archetypes/scripts/build.py --family krigsvold --destination "$NIGHTJAR_JEKYLL_ROOT/krigsvold"
+          NIGHTJAR_FAMILY=martlet NIGHTJAR_BASE=/ npm --prefix examples/astro-slice run build
+          NIGHTJAR_FAMILY=krigsvold NIGHTJAR_BASE=/ npm --prefix examples/astro-slice run build
+          npm run build --workspaces
+          NIGHTJAR_FAMILY=martlet NIGHTJAR_BASE=/ node examples/react-catalog/build.mjs
+          NIGHTJAR_FAMILY=krigsvold NIGHTJAR_BASE=/ node examples/react-catalog/build.mjs
+          node examples/page-archetypes/tests/internationalization-stress.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

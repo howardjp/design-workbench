@@ -14,7 +14,7 @@
 .nightjar-header :focus-visible,.nightjar-footer :focus-visible { outline:3px solid #fff; outline-offset:3px; }
 .nightjar-masthead { background:#061325; color:#fff; }
 .nightjar-masthead__inner { max-width:80rem; padding:4rem 1.5rem 5rem; margin:auto; }
-.nightjar-masthead h1 { color:inherit; max-width:18ch; font-size:clamp(2.5rem,5vw,5rem); line-height:1.08; margin:.5rem 0 1rem; }
+.nightjar-masthead h1 { color:inherit; max-width:18ch; font-size:clamp(2.5rem,5vw,5rem); line-height:1.08; margin:.5rem 0 1rem; overflow-wrap:anywhere; }
 .nightjar-masthead p { color:inherit; max-width:65ch; }
 .nightjar-eyebrow { font:700 .75rem/1.5 sans-serif; letter-spacing:.12em; text-transform:uppercase; }
 .nightjar-footer { background:#061325; color:#fff; padding:4rem 1.5rem; }

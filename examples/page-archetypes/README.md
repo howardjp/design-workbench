@@ -30,6 +30,8 @@ python3 examples/page-archetypes/scripts/verify-html.py examples/jekyll/martlet/
 python3 examples/page-archetypes/scripts/verify-html.py examples/jekyll/krigsvold/dist
 ```
 
+The cross-framework long-content reflow check runs against already-built root-path sites. Set `NIGHTJAR_JEKYLL_ROOT` to a directory containing `martlet` and `krigsvold` Jekyll builds, build both Astro and React families at `/`, then run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/internationalization-stress.mjs`. Optional `NIGHTJAR_ASTRO_ROOT` and `NIGHTJAR_REACT_ROOT` select alternate paired output directories. The test checks multilingual unbroken titles and associated labels at 320 and 768 pixels in both LTR and RTL direction. It does not establish complete RTL, translation, locale formatting or assistive-technology support.
+
 Simulation controls derive IDs from the unique section ID using reserved `_simulation-` and `_scene-` prefixes. Existing links to the former fixed `#simulation-mode`, `#ventilation`, or `#scene-view` control IDs must be updated.
 
 For the multiple-simulation composition check, also install the locked Astro example dependencies with `npm ci --prefix examples/astro-slice --ignore-scripts`, then run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/simulation-composition.mjs` from the workbench root. Omit `CHROMIUM_PATH` if Playwright’s Chromium is installed. The check builds disposable fixtures; Ruby, Bundler and both Jekyll lockfiles must be available.

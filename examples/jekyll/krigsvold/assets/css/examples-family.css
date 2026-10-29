@@ -42,3 +42,6 @@ html[data-appearance=dark] .example-root .btn-dark-blue:focus-visible { backgrou
 html[data-appearance=dark] .example-root .btn-outline-dark-blue { color: white; border-color: white; background: transparent; box-shadow: none; }
 html[data-appearance=dark] .example-root .btn-outline-dark-blue:hover:not(.active),
 html[data-appearance=dark] .example-root .btn-outline-dark-blue:focus-visible { color: var(--navy-950); border-color: var(--ice-200); background: var(--ice-200); opacity: 1; }
+
+/* Long titles must remain readable at every masthead breakpoint. */
+.page-masthead h1 { overflow-wrap:anywhere; }

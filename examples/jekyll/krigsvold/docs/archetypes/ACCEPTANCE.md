@@ -20,7 +20,7 @@
 - Gallery links work without JavaScript. Enhanced dialog supports labelled content, close, Escape, and focus return.
 - Sensor and scene controls announce updates and identify the simulated/static boundary. Multiple instances retain unique labels and independent state; their controls remain disabled without JavaScript.
 - Appearance, navigation, and focus remain legible in light/dark states. Mobile navigation opens, closes on Escape, and returns focus.
-- At narrow widths, the document becomes a reading sequence; only bounded tables/code may scroll horizontally.
+- At narrow widths, the document becomes a reading sequence; only bounded tables/code may scroll horizontally. Long unbroken titles and field labels must wrap without clipping or page overflow in LTR and RTL direction; this is a reflow check, not a claim of complete internationalization support.
 - Print hides navigation and interactive controls and exposes all paginated records.
 
 ## Limits of automated evidence
