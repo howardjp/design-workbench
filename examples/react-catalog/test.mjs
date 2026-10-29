@@ -9,6 +9,7 @@ import catalog from '../page-archetypes/content/catalog.json' with {type:'json'}
 import selected from './src/selected.json' with {type:'json'};
 import {renderMarkdown} from '../page-archetypes/lib/markdown.mjs';
 import {renderDocument} from './src/template.mjs';
+import {pageDataElement,serializePageData} from './src/page-data.mjs';
 const tokens="$& $' $"+String.fromCharCode(96);
 const templated=renderDocument('<html><head><title>Old</title></head><body><!--app--></body></html>',{originalTitle:'<title>Old</title>',title:`Title ${tokens} <`,markup:`<p>${tokens}</p>`,styles:`<style>/* ${tokens} */</style>`});
 assert.ok(templated.includes(`<title>Title ${tokens.replaceAll('&','&amp;')} &lt;</title>`));assert.ok(templated.includes(`<p>${tokens}</p>`));assert.ok(templated.includes(`<style>/* ${tokens} */</style>`));
@@ -17,8 +18,11 @@ assert.ok(!renderMarkdown('[bad](javascript:alert(1))').includes('href="javascri
 assert.match(renderMarkdown('[home](/examples/home/)', '/preview/'), /href="\/preview\/examples\/home\/"/);
 const hostile=renderMarkdown('<math><mi onload="alert(1)">E</mi></math><script>alert(1)</script><img src="javascript:alert(1)" onerror="alert(1)">','/',{fixtureMarkup:true,docId:'security-test'});
 assert.doesNotMatch(hostile,/<script|onload|onerror|javascript:/i);assert.match(hostile,/<math>/);
+const payloadProbe={id:'probe',text:`</script><script>window.__nightjarInjected=true</script> ${tokens} <img src=x onerror=alert(1)>`};
+assert.deepEqual(JSON.parse(serializePageData(payloadProbe)),payloadProbe);assert.ok(!serializePageData(payloadProbe).includes('<'));
 const browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{})});
 try {
+ const securityContext=await browser.newContext(),securityPage=await securityContext.newPage();await securityPage.setContent(`<html><head>${pageDataElement(payloadProbe)}</head><body></body></html>`);assert.equal(await securityPage.evaluate(()=>window.__nightjarInjected===true),false);assert.deepEqual(await securityPage.locator('#catalog-page-data').evaluate(node=>JSON.parse(node.textContent)),payloadProbe);await securityContext.close();
  for(const family of ['martlet','krigsvold'])for(const base of ['/','/preview/']){
   const built=spawnSync(process.execPath,['examples/react-catalog/build.mjs'],{env:{...process.env,NIGHTJAR_FAMILY:family,NIGHTJAR_BASE:base},encoding:'utf8'});
   if(built.status!==0)throw Error(built.stdout+built.stderr);
@@ -48,6 +52,7 @@ try {
     const context=await browser.newContext({viewport:{width:320,height:800}}),page=await context.newPage(),errors=[];
     page.on('pageerror',error=>errors.push(error.message));page.on('console',message=>{if(message.type()==='error')errors.push(message.text())});page.on('response',response=>{if(response.status()>=400)errors.push(response.url())});
     await page.goto(`${origin}${base}examples/${record.id}/`,{waitUntil:'load'});
+    const payload=await page.locator('#catalog-page-data').evaluate(node=>JSON.parse(node.textContent));assert.equal(payload.id,record.id);assert.equal(payload.page.id,record.id);assert.ok(Object.keys(payload.rendered).every(key=>key.startsWith(`${record.id}-`)));assert.equal(payload.entries.length,record.id==='search'?50:0);
     assert.equal(await page.locator('h1').innerText(),record.title);assert.equal(await page.locator('main').count(),1);
     for(const section of record.sections){
      const region=page.locator(`section[data-section="${section.id}"]`);assert.equal(await region.locator('h2').innerText(),section.title);
@@ -65,7 +70,7 @@ try {
     }
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     assert.deepEqual(errors,[]);
-    if(record.id==='stress-test'){assert.equal(await page.locator('math').count(),1);assert.equal(await page.locator('script:not([type=module])').count(),0);assert.ok(await page.locator('a[href*="fn"]').count()>0);}
+    if(record.id==='stress-test'){assert.equal(await page.locator('math').count(),1);assert.equal(await page.locator('script:not([type=module]):not(#catalog-page-data)').count(),0);assert.equal(await page.locator('script#catalog-page-data[type="application/json"]').count(),1);assert.ok(await page.locator('a[href*="fn"]').count()>0);}
     if(record.id==='faq') assert.equal(await page.locator('details').count(),4);
     if(record.id==='pricing') assert.equal(await page.locator('section[data-section=plans] article').count(),3);
     if(record.id==='report'){const url=await page.getByRole('link',{name:'Download example data (CSV)'}).getAttribute('href');const response=await page.request.get(origin+url);assert.equal(response.status(),200);assert.ok((await response.text()).includes('North transect'));}

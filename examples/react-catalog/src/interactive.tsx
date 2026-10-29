@@ -1,17 +1,16 @@
 import {useEffect,useState} from 'react';
 import {Button} from 'catalog-family';
-import catalog from '../../page-archetypes/content/catalog.json';
-import selected from './selected.json';
+import type {CatalogEntry} from './data-types';
 const base=import.meta.env.BASE_URL.replace(/\/$/,'');
 
-export function Search() {
+export function Search({entries}:{entries:CatalogEntry[]}) {
  const [ready,setReady]=useState(false),[draft,setDraft]=useState(''),[query,setQuery]=useState('');
  useEffect(()=>{const url=new URL(location.href),initial=(url.searchParams.get('q')||'').trim().slice(0,200);initial?url.searchParams.set('q',initial):url.searchParams.delete('q');history.replaceState(history.state,'',url);setDraft(initial);setQuery(initial);setReady(true);},[]);
- const matches=query?catalog.pages.filter(page=>query.toLocaleLowerCase().split(/\s+/u).every(word=>`${page.title} ${page.summary} ${page.category}`.toLocaleLowerCase().includes(word))):[];
+ const matches=query?entries.filter(page=>query.toLocaleLowerCase().split(/\s+/u).every(word=>`${page.title} ${page.summary} ${page.category}`.toLocaleLowerCase().includes(word))):[];
  const submit=(event:React.FormEvent<HTMLFormElement>)=>{event.preventDefault();const value=draft.trim().slice(0,200);setDraft(value);setQuery(value);const url=new URL(location.href);value?url.searchParams.set('q',value):url.searchParams.delete('q');history.replaceState(history.state,'',url);};
  return <><form role="search" onSubmit={submit}><label htmlFor="example-query">Search the example record</label><div><input type="search" id="example-query" name="q" maxLength={200} value={draft} onChange={event=>setDraft(event.target.value)} disabled={!ready} placeholder="Try shoreline, workshop, or protocol"/> <Button type="submit" disabled={!ready}>Search</Button></div></form>
   <p role="status">{!query?'Enter a word or phrase to search the collection.':matches.length?`${matches.length} result${matches.length===1?'':'s'} for “${query}”.`:<>No results for “{query}”. Try fewer words or <a href={`${base}/examples/`}>browse the example index</a>.</>}</p>
-  <ul>{matches.map(entry=><li key={entry.id}><h3>{selected.includes(entry.id)?<a href={`${base}/examples/${entry.id}/`}>{entry.title}</a>:<span>{entry.title}</span>}</h3><p>{entry.summary}</p>{!selected.includes(entry.id)&&<p>Not yet available in this React preview.</p>}</li>)}</ul>
+  <ul>{matches.map(entry=><li key={entry.id}><h3>{entry.available?<a href={`${base}/examples/${entry.id}/`}>{entry.title}</a>:<span>{entry.title}</span>}</h3><p>{entry.summary}</p>{!entry.available&&<p>Not yet available in this React preview.</p>}</li>)}</ul>
   <noscript><p>Search requires JavaScript. <a href={`${base}/examples/`}>Browse the complete example index</a>.</p></noscript>
  </>;
 }

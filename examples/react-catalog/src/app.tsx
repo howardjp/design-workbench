@@ -1,10 +1,8 @@
 import {useEffect,useRef,useState} from 'react';
 import {Article,DefinitionList,Pagination,DataTable,Disclosure} from 'catalog-family';
-import {pages,specialKinds} from './pages';
+import type {CatalogPageData,CatalogEntry} from './data-types';
+const specialKinds=['gallery','workspace','chat','sensors','scene'];
 import type {ReactNode} from 'react';
-import catalog from '../../page-archetypes/content/catalog.json';
-import selected from './selected.json';
-import rendered from './rendered.json';
 import {exampleImage} from './assets';
 import {DemoForm,Search} from './interactive';
 import './style.css';
@@ -12,7 +10,6 @@ import {SourceShell} from './shell/SourceShell';
 
 type Item={title:string;summary:string;url:string;date?:string;tag?:string;question?:string;answer?:string;label?:string;value?:string;price?:string;features?:string[];action?:{label:string;url:string}};
 type Section={id:string;title:string;kind?:string;body?:string;items?:Item[];facts?:{label:string;value:string}[];actions?:{label:string;url:string}[];headers?:string[];rows?:string[][];image?:string;alt?:string;caption?:string;form?:string};
-const bodies:Record<string,string>=rendered;
 const base=import.meta.env.BASE_URL.replace(/\/$/,'');
 const href=(url:string)=>url.startsWith('/')&&!url.startsWith('//') ? `${base}${url}` : url;
 function Listing({items,title}:{items:Item[];title:string}) {
@@ -26,7 +23,7 @@ function Listing({items,title}:{items:Item[];title:string}) {
   <h3><a href={href(item.url)}>{item.title}</a></h3><p>{item.summary}</p>
  </li>)}</ul>{enhanced&&pageCount>1&&<Pagination ref={nav} page={page} pageCount={pageCount} onPageChange={next=>{pendingFocus.current=true;setPage(next);}} label={`${title} pages`}/>}</>;
 }
-function SectionView({section,pageId,special}:{section:Section;pageId:string;special?:(section:unknown)=>ReactNode}){
+function SectionView({section,pageId,special,bodies,entries}:{section:Section;pageId:string;special?:(section:unknown)=>ReactNode;bodies:Record<string,string>;entries:CatalogEntry[]}){
  return <section data-section={section.id} {...(section.kind==='table'?{'aria-label':`${section.title} section`}:{'aria-labelledby':section.id})}><h2 id={section.id} tabIndex={-1}>{section.title}</h2>
   {section.body&&<div className="recipe-prose" dangerouslySetInnerHTML={{__html:bodies[`${pageId}-${section.id}`]}}/>}
   {section.kind==='cards'&&<ul className="recipe-cards">{section.items!.map(item=><li key={item.url}><h3><a href={href(item.url)}>{item.title}</a></h3><p>{item.summary}</p></li>)}</ul>}
@@ -37,15 +34,15 @@ function SectionView({section,pageId,special}:{section:Section;pageId:string;spe
   {section.kind==='stats'&&<DefinitionList items={section.items!.map((item,i)=>({id:`${section.id}-${i}`,term:item.label!,description:item.value!}))}/>}
   {section.kind==='plans'&&<div className="recipe-cards">{section.items!.map(item=><article key={item.title}><h3>{item.title}</h3><p>{item.price}</p><p>{item.summary}</p><ul>{item.features!.map(feature=><li key={feature}>{feature}</li>)}</ul><a href={href(item.action!.url)}>{item.action!.label}</a></article>)}</div>}
   {section.kind==='form'&&<DemoForm kind={section.form!}/>}
-  {section.kind==='search'&&<Search/>}
+  {section.kind==='search'&&<Search entries={entries}/>}
   {section.kind&&specialKinds.includes(section.kind) && (special ? special(section) : (()=>{throw Error(`Missing interactive renderer for ${section.kind}`)})())}
   {section.kind==='table'&&<DataTable caption={section.title}><thead><tr>{section.headers!.map(header=><th key={header} scope="col">{header}</th>)}</tr></thead><tbody>{section.rows!.map((row,i)=><tr key={i}>{row.map((cell,j)=>j===0?<th key={j} scope="row">{cell}</th>:<td key={j}>{cell}</td>)}</tr>)}</tbody></DataTable>}
   {section.actions&&<ul className="recipe-actions">{section.actions.map(action=><li key={action.url}><a href={href(action.url)}>{action.label}</a></li>)}</ul>}
  </section>;
 }
-export function App({id,special}:{id:string;special?:(section:unknown)=>ReactNode}) {
- if(id==='index') return <SourceShell current="index" title="All page examples"><Article title="All page examples" summary="Browse the shared Northlight collection."><ul>{catalog.pages.map(entry=><li key={entry.id}>{selected.includes(entry.id)?<a href={href(`/examples/${entry.id}/`)}>{entry.title}</a>:<>{entry.title} (not yet available in this React preview)</>}</li>)}</ul></Article></SourceShell>;
- const page=pages.find(item=>item.id===id);
+export function App({data,special}:{data:CatalogPageData;special?:(section:unknown)=>ReactNode}) {
+ const {id,page,rendered:bodies,entries}=data;
+ if(id==='index') return <SourceShell current="index" title="All page examples"><Article title="All page examples" summary="Browse the shared Northlight collection."><ul>{entries.map(entry=><li key={entry.id}>{entry.available?<a href={href(`/examples/${entry.id}/`)}>{entry.title}</a>:<>{entry.title} (not yet available in this React preview)</>}</li>)}</ul></Article></SourceShell>;
  if(!page) throw Error(`Unported catalog route: ${id}`);
  return <SourceShell current={page.id} title={page.title}>
   <Article data-composition={page.composition} title={page.title} eyebrow={page.category} summary={page.summary} {...('date' in page && page.date ? {metadata:<><time dateTime={page.date}>{new Intl.DateTimeFormat('en-US',{year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(`${page.date}T00:00:00Z`))}</time>{'author' in page && page.author && <> · {page.author}</>}</>}: {})}>
@@ -53,7 +50,7 @@ export function App({id,special}:{id:string;special?:(section:unknown)=>ReactNod
    {'author' in page && page.author && <nav aria-label="Article context"><a href={href('/examples/person/')}>About {page.author}</a> · <a href={href('/examples/archive/')}>All writing</a></nav>}
    {'tags' in page && page.tags && <ul aria-label="Article subjects">{page.tags.map(tag=><li key={tag}><a href={href('/examples/categories/')}>{tag}</a></li>)}</ul>}
    {'event' in page && page.event && <aside aria-label="Event details"><p><strong>Event details</strong></p><p><time dateTime={page.event.start}>{page.event.display_start}</time> to <time dateTime={page.event.end}>{page.event.display_end}</time> · {page.event.timezone}</p><p>{page.event.location} · {page.event.registration}</p></aside>}
-   {page.sections.map(section=><SectionView key={section.id} section={section as Section} pageId={page.id} special={special}/>)}</div>
+   {page.sections.map(section=><SectionView key={section.id} section={section as Section} pageId={page.id} special={special} bodies={bodies} entries={entries}/>)}</div>
   </Article>
  </SourceShell>;
 }
