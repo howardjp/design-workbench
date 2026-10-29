@@ -135,3 +135,16 @@ test('operations samples are ordered by timestamp without mutating the fixture',
  assert.deepEqual(operationsView(reordered,{}),operationsView(fixture,{}));
  assert.equal(reordered.services[0].samples[0],fixture.services[0].samples.at(-1));
 });
+
+test('operations joins partial samples by timestamp and distinguishes missing coverage',()=>{
+ const partial={...fixture,services:fixture.services.map((service,index)=>({...service,samples:index===1?service.samples.slice(-5,-1):service.samples}))};
+ const view=operationsView(partial,{});
+ assert.equal(view.partial,true);assert.equal(view.staggered,true);
+ assert.deepEqual(view.points.map(point=>point.time.slice(11,16)),['16:00','17:00','18:00','19:00']);
+ for(const point of view.points) assert.equal(point.latency_ms,Math.round(partial.services.reduce((sum,service)=>sum+service.samples.find(sample=>sample.time===point.time).latency_ms,0)/partial.services.length));
+ assert.equal(view.latency,Math.round(partial.services.reduce((sum,service)=>sum+service.samples.at(-1).latency_ms,0)/partial.services.length));
+ const disjoint={...partial,services:partial.services.map((service,index)=>index===1?{...service,samples:fixture.services[1].samples.slice(-7,-6)}:service)};
+ assert.deepEqual(operationsView(disjoint,{}).points,[]);
+ const old={...fixture,services:fixture.services.map(service=>({...service,samples:service.samples.slice(0,1)}))};
+ assert.equal(operationsView(old,{}).availability,null);
+});

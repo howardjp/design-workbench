@@ -4,7 +4,7 @@ export function dashboardPayload(view, fixture) {
   switch (view) {
     case 'analytics': return {analytics:fixture.analytics,categories:fixture.categories};
     case 'administration': return {people:fixture.people};
-    case 'operations': return {services:fixture.services,alerts:fixture.alerts,activity:fixture.activity};
+    case 'operations': return {as_of:fixture.as_of,services:fixture.services,alerts:fixture.alerts,activity:fixture.activity};
     default: throw new Error(`Unsupported dashboard: ${view}`);
   }
 }

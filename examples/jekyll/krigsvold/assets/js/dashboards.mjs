@@ -126,14 +126,15 @@ function operations(){
     }
     const {threshold}=state;
     const view=operationsView(fixture,state,alerts);if(updateAddress)updateURL(state);
+    root.querySelector('[data-sample-coverage]').textContent=view.partial?'Partial sample coverage: the trend shows only times with observations from every selected service. Latest service readings may have different times.':'';
     metric(root,'warnings',String(view.warnings),`Latest service latency ≥ ${threshold} ms.`);
-    metric(root,'latency',view.latency+' ms','Mean of latest samples in scope.');
+    metric(root,'latency',view.latency+' ms',view.staggered?'Mean of latest samples; sample times differ.':'Mean of latest samples in scope.');
     metric(root,'open_alerts',String(view.open),'All severities in the selected service scope.');
     metric(root,'queue',String(view.queue),'Sum of latest queues in scope.');
     chart(root,'latency',view.points.map(point=>({label:point.time.slice(11,16)+' UTC',value:point.latency_ms})),{label:'Mean latency (ms)',threshold});
-    const services=root.querySelector('#service-table');tableRows(services,view.services.map(service=>[service.name,service.warning?'Warning':'Healthy',service.latest.latency_ms,service.latest.queue,service.latest.availability]),['Service','Status','Latency (ms)','Queue','Sample availability (%)']);
-    [...services.tBodies[0].rows].forEach((row,index)=>{const value=view.services[index].warning?'Warning':'Healthy';row.cells[1].replaceChildren(element('span',value,{class:'dash-badge dash-badge--'+value.toLowerCase()}));});
-    root.querySelector('[data-availability]').textContent=`Minimum sampled availability in this ${state.hours}-hour scope: ${view.availability.toFixed(1)}%. Synthetic sample values, not a live SLA measurement.`;
+    const services=root.querySelector('#service-table');tableRows(services,view.services.map(service=>[service.name,service.latest.time,service.warning?'Warning':'Healthy',service.latest.latency_ms,service.latest.queue,service.latest.availability]),['Service','Latest sample (UTC)','Status','Latency (ms)','Queue','Sample availability (%)']);
+    [...services.tBodies[0].rows].forEach((row,index)=>{const value=view.services[index].warning?'Warning':'Healthy';row.cells[2].replaceChildren(element('span',value,{class:'dash-badge dash-badge--'+value.toLowerCase()}));});
+    root.querySelector('[data-availability]').textContent=view.availability===null?'No availability samples in this monitoring window.':`Minimum sampled availability in this ${state.hours}-hour scope: ${view.availability.toFixed(1)}%. Synthetic sample values, not a live SLA measurement.`;
     const alertTable=root.querySelector('#alert-table'),body=alertTable.tBodies[0];body.replaceChildren();
     for(const alert of view.alerts){const row=body.insertRow();row.append(element('th',`${alert.id} · ${alert.title}`,{scope:'row'}));row.insertCell().textContent=fixture.services.find(service=>service.id===alert.service_id).name;row.insertCell().append(element('span',alert.severity,{class:'dash-badge dash-badge--'+alert.severity.toLowerCase()}));row.insertCell().textContent=alert.time.slice(0,16).replace('T',' ')+' UTC';row.insertCell().textContent=alert.acknowledged?'Acknowledged':'Unacknowledged';const button=element('button',alert.acknowledged?'Undo acknowledgement':'Acknowledge',{class:buttonClass,type:'button','aria-label':`${alert.acknowledged?'Undo acknowledgement':'Acknowledge'} ${alert.id}`});button.dataset.acknowledge=alert.id;row.insertCell().append(button);}
     root.querySelector('[data-alert-count]').textContent=view.alerts.length?`${view.alerts.length} alerts match the severity and acknowledgement filters.`:'No alerts match these filters.';

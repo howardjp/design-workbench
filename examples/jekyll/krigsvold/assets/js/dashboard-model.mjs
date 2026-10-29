@@ -114,10 +114,20 @@ export function applyBulk(records,ids,status) {
 export function operationsView(fixture,{hours=6,threshold=250,service='All',severity='All',hideAcknowledged=false},alerts=fixture.alerts) {
   const limit=[6,12,24].includes(Number(hours))?Number(hours):6;
   const warning=Math.max(50,Math.min(1000,Number(threshold)||250));
-  const services=fixture.services.filter(item=>service==='All'||item.id===service).map(item=>({...item,samples:[...item.samples].sort((a,b)=>a.time.localeCompare(b.time)).slice(-limit)}));
-  const points=services[0]?.samples.map((sample,index)=>({time:sample.time,latency_ms:Math.round(services.reduce((sum,item)=>sum+item.samples[index].latency_ms,0)/services.length)}))||[];
+  const end=Date.parse(fixture.as_of),start=end-(limit-1)*3600000;
+  const services=fixture.services.filter(item=>service==='All'||item.id===service).map(item=>{
+    const ordered=[...item.samples].sort((a,b)=>a.time.localeCompare(b.time));
+    return {...item,latest:ordered.at(-1),samples:ordered.filter(sample=>Date.parse(sample.time)>=start&&Date.parse(sample.time)<=end)};
+  });
+  // Plot only timestamps represented by every service; never pair by array position.
+  const samplesByService=services.map(item=>new Map(item.samples.map(sample=>[sample.time,sample])));
+  const points=(services[0]?.samples||[]).filter(sample=>samplesByService.every(samples=>samples.has(sample.time))).map(sample=>({time:sample.time,latency_ms:Math.round(samplesByService.reduce((sum,samples)=>sum+samples.get(sample.time).latency_ms,0)/services.length)}));
+  const commonTimes=new Set(points.map(point=>Date.parse(point.time)));
+  const partial=services.some(item=>item.samples.length!==limit)||Array.from({length:limit},(_,index)=>end-index*3600000).some(time=>!commonTimes.has(time));
+  const staggered=new Set(services.map(item=>item.latest.time)).size>1;
   const relevant=alerts.filter(alert=>(service==='All'||alert.service_id===service));
   const visible=relevant.filter(alert=>(severity==='All'||alert.severity===severity)&&(!hideAcknowledged||!alert.acknowledged));
-  const last=services.map(item=>({...item,latest:item.samples.at(-1),warning:item.samples.at(-1).latency_ms>=warning}));
-  return {services:last,points,alerts:visible,open:relevant.filter(alert=>!alert.acknowledged).length,warnings:last.filter(item=>item.warning).length,queue:last.reduce((sum,item)=>sum+item.latest.queue,0),latency:points.at(-1)?.latency_ms||0,availability:services.length?Math.min(...services.flatMap(item=>item.samples.map(sample=>sample.availability))):0,threshold:warning};
+  const last=services.map(item=>({...item,warning:item.latest.latency_ms>=warning}));
+  const availabilities=services.flatMap(item=>item.samples.map(sample=>sample.availability));
+  return {services:last,points,alerts:visible,open:relevant.filter(alert=>!alert.acknowledged).length,warnings:last.filter(item=>item.warning).length,queue:last.reduce((sum,item)=>sum+item.latest.queue,0),latency:last.length?Math.round(last.reduce((sum,item)=>sum+item.latest.latency_ms,0)/last.length):0,partial,staggered,availability:availabilities.length?Math.min(...availabilities):null,threshold:warning};
 }
