@@ -1,5 +1,5 @@
 <form class="example-search" action="{{ '/examples/search/' | relative_url }}" role="search">
-  <label for="example-query">Search the example record</label><div class="example-search__controls"><input type="search" id="example-query" name="q" maxlength="200" placeholder="Try shoreline, workshop, or protocol"><button type="submit">Search</button></div>
+  <label for="example-query">Search the example record</label><div class="example-search__controls"><input type="search" id="example-query" name="q" maxlength="200" placeholder="Try shoreline, workshop, or protocol"><button class="{% include examples/button-classes.html %}" type="submit">Search</button></div>
 </form>
 <p role="status" data-search-status>Enter a word or phrase to search the collection.</p>
 <ul class="example-list" data-search-results></ul>

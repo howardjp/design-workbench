@@ -29,3 +29,6 @@
 .example-frame--workspace .example-workspace { display: block; }
 .example-frame--workspace .example-records { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: 1.5rem; }
 .example-frame--workspace .example-workspace__detail { margin-top: 2rem; max-width: 48rem; }
+
+/* Source .button owns appearance; keyboard focus mirrors its native hover state. */
+.example-root .button:focus-visible { color: #fff; background: var(--color-navy-900); border-color: var(--color-navy-900); }

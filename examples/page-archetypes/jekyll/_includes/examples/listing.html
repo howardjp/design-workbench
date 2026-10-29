@@ -8,8 +8,8 @@
     {% endfor %}
   </ul>
   <nav class="example-pagination" aria-label="{{ include.id | escape }} pages" hidden>
-    <button type="button" data-previous>Previous</button>
+    <button class="{% include examples/button-classes.html %}" type="button" data-previous>Previous</button>
     <span data-page-status role="status"></span>
-    <button type="button" data-next>Next</button>
+    <button class="{% include examples/button-classes.html %}" type="button" data-next>Next</button>
   </nav>
 </div>

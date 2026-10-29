@@ -41,3 +41,9 @@ Do not show a success claim until the relevant live adapter confirms it. Keep lo
 6. Run parity, root/base-path, rendered-link, no-JavaScript, print, and browser checks.
 
 The 46 recipes cover the Material Kit catalog's general page roles plus reference documents, collection records, search, events, reports, exhibitions, change histories, and content stress testing. They do not reproduce Creative Tim source code or claim backend functionality.
+
+## Design authorities
+
+`https://jameshoward.us/` is authoritative for Martlet; `https://krigsvold.org/` is authoritative for Krigsvold. Reuse source markup/classes and interaction states before adding a new treatment. Record a concrete reason for any departure; generic fixture styling is not a reason to replace native typography, casing, geometry, or interaction.
+
+Buttons resolve through each family's `button-classes.html` adapter: Martlet uses the source `.button`; Krigsvold uses `.btn` and its native filled/outline variants. Dark Krigsvold reading surfaces use the source hero's ice/white contrast treatment. Keyboard focus mirrors hover while preserving a visible focus ring. Martlet post tags use the source `.post-tags` strip beneath the masthead and the existing `.pill-list`, not underlined links inside the masthead.

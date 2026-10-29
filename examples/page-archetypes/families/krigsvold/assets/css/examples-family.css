@@ -24,3 +24,18 @@
 .example-frame--workspace .example-section__label { border-bottom: 1px solid var(--ex-line); padding-bottom: .75rem; }
 @media (max-width: 64rem) { .example-document { display: block; } .example-document > .example-local-index { position: static; margin-bottom: 2rem; } }
 @media (max-width: 48rem) { .example-frame--landing .example-section, .example-frame--dossier .example-section, .example-frame--detail .example-section, .example-frame--collection .example-section { display: block; } .example-frame--collection .example-list > li { display: block; } }
+
+/* Native .btn supplies typography, geometry, transitions, and pressed states. */
+.example-root .btn { margin-bottom: 0; }
+.example-root .btn-dark-blue { --bs-btn-active-bg: var(--navy-900); --bs-btn-active-border-color: var(--navy-900); --bs-btn-disabled-bg: var(--navy-900); }
+.example-root .btn-dark-blue:focus-visible { color: white; background: var(--blue-600); }
+.example-root .btn-outline-dark-blue { --bs-btn-color: var(--navy-900); --bs-btn-border-color: var(--navy-900); --bs-btn-hover-border-color: var(--navy-900); --bs-btn-active-bg: var(--navy-900); --bs-btn-active-border-color: var(--navy-900); }
+.example-root .btn-outline-dark-blue:hover:not(.active) { color: var(--navy-900); }
+.example-root .btn-outline-dark-blue:focus-visible { color: white; background: var(--navy-900); }
+/* On dark reading surfaces, reuse the source hero's ice/white action states. */
+html[data-appearance=dark] .example-root .btn-dark-blue { background: var(--ice-200); color: var(--navy-950); }
+html[data-appearance=dark] .example-root .btn-dark-blue:hover,
+html[data-appearance=dark] .example-root .btn-dark-blue:focus-visible { background: white; color: var(--navy-950); }
+html[data-appearance=dark] .example-root .btn-outline-dark-blue { color: white; border-color: white; background: transparent; box-shadow: none; }
+html[data-appearance=dark] .example-root .btn-outline-dark-blue:hover:not(.active),
+html[data-appearance=dark] .example-root .btn-outline-dark-blue:focus-visible { color: var(--navy-950); border-color: var(--ice-200); background: var(--ice-200); opacity: 1; }

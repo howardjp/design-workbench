@@ -12,18 +12,13 @@
 .example-root h2 { font-size: clamp(1.5rem, 2.4vw, 2rem); margin: 0 0 1.25rem; scroll-margin-top: 8rem; }
 .example-root h3 { font-size: 1.2rem; margin: 0 0 .7rem; }
 .example-root p { margin: 0 0 1rem; }
-.example-root a { color: var(--ex-link); text-underline-offset: .2em; }
-.example-root a:hover { text-decoration: underline; }
+.example-root a:not(.example-button) { color: var(--ex-link); text-underline-offset: .2em; }
+.example-root a:not(.example-button):hover { text-decoration: underline; }
 .example-root :focus-visible { outline: 3px solid var(--ex-focus); outline-offset: 4px; }
-.example-root button, .example-button {
-  display: inline-flex; justify-content: center; align-items: center; gap: .5rem;
-  min-height: 2.75rem; padding: .65rem 1rem; border: 1px solid var(--ex-link);
-  border-radius: .2rem; color: var(--ex-on-accent) !important; background: var(--ex-link);
-  font: inherit; font-size: .95rem; font-weight: 700; cursor: pointer; text-decoration: none;
-}
-.example-root button:hover, .example-button:hover { filter: brightness(.94); }
-.example-root button:disabled { opacity: .6; cursor: default; }
-.example-root .example-button--secondary { background: transparent; color: var(--ex-link) !important; }
+/* Button appearance belongs to each family's native shell. */
+.example-root .example-button { text-decoration: none; }
+.example-root .example-button:hover { text-decoration: none; }
+.example-root .example-button:disabled { opacity: .6; cursor: default; }
 .example-wrap { width: calc(100% - 2.5rem); max-width: 74rem; margin-inline: auto; min-width: 0; }
 .example-reading { max-width: 46rem; }
 .example-section { margin-block: 0 3.5rem; min-width: 0; }
@@ -119,7 +114,7 @@
   .example-table-scroll { overflow: visible; }
   .example-root table { font-size: 9pt; }
   .example-root :is(th,td) { min-width: 0; padding: .4rem; }
-  .example-root a { text-decoration: underline; }
+  .example-root a:not(.example-button) { text-decoration: underline; }
   .example-root figure { break-inside: avoid; }
 }
 .example-root :is(label, legend) { color: var(--ex-text); }
