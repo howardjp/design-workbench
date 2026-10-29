@@ -76,6 +76,7 @@ jobs:
           node examples/page-archetypes/tests/zoom-reflow-equivalence.mjs
           node examples/page-archetypes/tests/form-keyboard-parity.mjs
           node examples/page-archetypes/tests/reading-framework-typography.mjs
+          node examples/page-archetypes/tests/card-action-parity.mjs
           node examples/page-archetypes/tests/internationalization-stress.mjs
           node examples/page-archetypes/tests/enlarged-text-motion.mjs
           node examples/page-archetypes/tests/gallery-link-contract.mjs
