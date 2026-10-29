@@ -35,6 +35,7 @@ jobs:
         run: |
           python3 examples/page-archetypes/tests/source-archive.test.py
           node examples/page-archetypes/tests/event-time-parity.mjs
+          node examples/page-archetypes/tests/event-order-parity.mjs
       - name: Build and verify root-hosted references
         run: |
           python3 examples/page-archetypes/scripts/build.py
@@ -223,6 +224,7 @@ jobs:
               node examples/page-archetypes/tests/analytics-empty.mjs
               node examples/page-archetypes/tests/catalog-structured-safety.mjs url
               node examples/page-archetypes/tests/catalog-structured-safety.mjs date
+              node examples/page-archetypes/tests/catalog-structured-safety.mjs order
               node examples/page-archetypes/tests/analytics-duplicates.mjs
               node examples/page-archetypes/tests/analytics-calendar.mjs
               node examples/page-archetypes/tests/analytics-calendar.mjs --month

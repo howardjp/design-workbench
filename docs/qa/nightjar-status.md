@@ -693,6 +693,10 @@ Commit `088b404` validates event start/end strings before emitting `<time dateti
 
 The first hosted event-time run failed its canonical-export check because the new porting-guide paragraph had not been synchronized into the two standalone Jekyll exports. Running the existing sync updated those two generated guides; the model and manifest checks passed afterward. The CI drift assertion remains in place, and a fresh hosted run is required.
 
+### Event ordering
+
+Commit `1d29e12` adds a visible warning when both event timestamps are valid but the end instant precedes the start, accounting for offsets and milliseconds. It retains valid `<time>` metadata, allows equal instants and makes no ordering claim when either timestamp is invalid. A reversed-offset fixture one millisecond apart reproduced the missing warning before the change. Independent and integrated checks passed 12 JavaScript/Liquid boundaries, including pre-1970 fractions and extreme offsets, plus both families × three frameworks × root/subpaths with JS/no-JS and Jekyll safe mode. The browser fixture covers reversed instants, equal instants across midnight, correctly ordered instants with reversed local dates and an invalid start. Source archive, manifest, model and strict React checks passed; CI includes both the parity and adversarial fixture tests. Display-label and named-timezone consistency remain unverified.
+
 ### Search after history update failure
 
 Commit `3e3c427` keeps local search results synchronized when a later `history.replaceState` call fails and displays a warning that the address may not reflect the search. Before the fix, a synthetic later SecurityError left another search at the old query and produced an uncaught exception. Independent and integrated paired composition checks passed both families × three frameworks × root/subpaths, including failure and subsequent recovery, no-result browse links, initial failure, blocked scripts, keyboard, axe and no-JS. Separate independent six-case history checks preserved host state, unrelated query parameters and fragments; strict React types and model tests passed. The initial-failure browse fallback remains in place.
