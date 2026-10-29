@@ -5,6 +5,7 @@ for(const family of ['martlet','krigsvold']){
  test(`${family}: analytics scope, exact data alternatives, invalid-range recovery`,async({page})=>{
   await page.goto(route(family,'analytics'));
   await expect(page.locator('[data-metric=sessions]')).toHaveText('7,686');
+  await expect(page.getByLabel('Category',{exact:true})).toHaveCSS('font-family',family==='martlet'?/Lato/:/Roboto/);
   await page.getByLabel('Date range',{exact:true}).selectOption('14');await page.getByLabel('Category',{exact:true}).selectOption('Research');await page.getByRole('button',{name:'Apply filters',exact:true}).click();
   await expect(page.locator('[data-metric=sessions]')).toHaveText('4,459');await expect(page.locator('#analytics-source tbody tr')).toHaveCount(14);
   await page.getByText('View session trend data',{exact:true}).click();await expect(page.locator('[data-chart-table=sessions] tbody tr')).toHaveCount(14);
