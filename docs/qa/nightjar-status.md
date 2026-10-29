@@ -394,3 +394,5 @@ Commit `3daab16` rejects unsafe per-sample latency/queue values and unsafe lates
 ### React pagination boundary focus
 
 The shared React Pagination component previously left focus on the document body after a keyboard activation disabled the focused control at the first or last page. Both families now move focus to the available direction when a focused pagination control becomes unavailable and the opposite direction is available; changes from outside the component and delayed updates after focus has moved do not reclaim it. Chromium consumer checks passed for both families, including both boundaries, two independent instances and external/delayed changes. `npm run check` passed 110 tests, and `npm run test:packages` installed and rendered both locally packed packages. The test is wired into the existing browser matrix; Firefox and WebKit have not yet been run locally. This changes workspace source, not the published npm archives.
+
+The combined-branch pagination consumer check passed both families after rebuilding the workspaces, using system Chromium. It covered boundary focus and external state changes; Firefox/WebKit remain unverified locally.
