@@ -139,3 +139,7 @@ Commit `2939aaf` adds a paired React catalog experiment using the existing workb
 ### Astro dark-appearance printing
 
 Commit `0914c64` addresses pale text when a dark screen appearance is printed without backgrounds. Print-only rules use the existing light semantic colors and leave saved screen appearance unchanged. The emulated-print test failed before the fix and passed afterward in both languages at root/subpaths for article and all three dashboard pages; a background-free Chromium PDF was visually inspected. Other engines and physical printers remain unverified.
+
+### React analytics component
+
+Commit `dad099b` adds an isolated paired React analytics component using controlled filter state, the shared synthetic fixture and calculation model, native family buttons, responsive SVG charts with data-table alternatives, local CSV and server-rendered source data. A standalone harness passed both families at root/subpaths for filtering and totals, CSV content, query restoration, invalid-date focus and recovery, light/dark axe, responsive overflow, no-JavaScript behavior and strict TypeScript. It is not yet wired into the catalog or dashboard navigation; visual parity, manual assistive-technology review, print and other engines remain unverified. The standalone harness is intended to keep chart and fixture cost out of simple content pages.
