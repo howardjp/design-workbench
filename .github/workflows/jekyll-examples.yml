@@ -120,6 +120,7 @@ jobs:
           node examples/react-catalog/test-workspace-chat.mjs
           node --test examples/page-archetypes/tests/thermal-model.test.mjs
           node examples/react-catalog/test-scientific.mjs
+          node examples/page-archetypes/tests/scientific-ports.mjs
       - name: Verify portable section navigation
         timeout-minutes: 10
         run: |

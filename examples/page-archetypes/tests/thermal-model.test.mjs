@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {thermalModel,thermalDefaults,thermalCsv,thermalNumber} from '../lib/thermal-model.mjs';
+import {thermalModel,thermalDefaults,thermalCsv,thermalNumber} from '../jekyll/assets/js/thermal-model.mjs';
 test('thermal model follows the exponential response and endpoints',()=>{
  const {errors,rows}=thermalModel(thermalDefaults);assert.deepEqual(errors,{});assert.equal(rows.length,6);assert.equal(rows[0].temperature,80);assert.equal(rows[0].minutes,0);assert.equal(rows.at(-1).minutes,10);assert.ok(Math.abs(rows[2].temperature-(20+60/Math.E))<1e-12);assert.ok(rows.every((row,index)=>index===0||row.temperature<rows[index-1].temperature));
 });
