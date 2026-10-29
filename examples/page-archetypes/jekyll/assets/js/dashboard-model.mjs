@@ -109,7 +109,7 @@ export function validatePerson(draft,records,id=null) {
   const errors={};
   if(draft.name.trim().length<2)errors.name='Enter a name of at least two characters.';
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(draft.email.trim()))errors.email='Enter an email address.';
-  else if(records.some(record=>record.id!==id&&record.email.toLocaleLowerCase()===draft.email.trim().toLocaleLowerCase()))errors.email='This email address is already in the directory.';
+  else if(records.some(record=>record.id!==id&&record.email.trim().toLocaleLowerCase()===draft.email.trim().toLocaleLowerCase()))errors.email='This email address is already in the directory.';
   if(!['Researcher','Editor','Coordinator'].includes(draft.role))errors.role='Choose an available role.';
   if(!['Active','Invited','Suspended'].includes(draft.status))errors.status='Choose an available status.';
   return errors;

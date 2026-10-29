@@ -175,3 +175,10 @@ test('directory controls disambiguate repeated names while preserving unique lab
  const labels=personControlLabels([{id:'A',name:'Alex Morgan'},{id:'B',name:' alex morgan '},{id:'C',name:'Avery Lee'}]);
  assert.equal(labels.get('A'),'Alex Morgan (A)');assert.equal(labels.get('B'),' alex morgan  (B)');assert.equal(labels.get('C'),'Avery Lee');
 });
+
+test('duplicate directory email checks normalize stored whitespace and case',()=>{
+ const records=[{id:'existing',email:'  dupe@example.invalid'}];
+ const draft={name:'New Person',email:'DUPE@example.invalid',role:'Editor',status:'Active'};
+ assert.equal(validatePerson(draft,records).email,'This email address is already in the directory.');
+ assert.equal(validatePerson(draft,records,'existing').email,undefined);
+});
