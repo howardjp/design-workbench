@@ -9,3 +9,9 @@ CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/reading-fram
 ```
 
 Set `NIGHTJAR_JEKYLL_ROOT` to the directory containing the two Jekyll builds. `NIGHTJAR_ASTRO_ROOT` and `NIGHTJAR_REACT_ROOT` optionally override the default Astro and React `dist` directories. Omit `CHROMIUM_PATH` when Playwright's Chromium is installed.
+
+`tests/form-keyboard-parity.mjs` uses the same builds and environment variables to check native keyboard validation, focus on invalid fields, linked format help, invalid resubmission after secrets are cleared, recovery, reset, and the no-JavaScript disabled state in all three frameworks:
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/form-keyboard-parity.mjs
+```

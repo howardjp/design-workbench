@@ -11,6 +11,8 @@
       // Do not retain even illustrative passwords or verification codes.
       form.querySelectorAll('[type=password], [name=code]').forEach(input => { input.value = ''; });
     });
+    // Native constraint validation runs before submit and emits a non-bubbling invalid event.
+    form.addEventListener('invalid', () => { status.textContent = ''; }, true);
     // A validation message describes the submitted values, not later edits.
     form.addEventListener('input', () => { status.textContent = ''; });
     form.addEventListener('change', () => { status.textContent = ''; });
