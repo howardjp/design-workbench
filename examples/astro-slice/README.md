@@ -17,6 +17,9 @@ Markdown uses markdown-it and footnote parsing; local root-relative links and im
 The catalog and search link all 50 fixture records. The dashboard workspace links all three applications. Set `NIGHTJAR_PEER_URL` to the absolute HTTP(S) base URL of the other family build to expose a cross-family comparison link; without it, no public host is assumed. Query state is retained when following that link. The shell uses a fictional host identity and does not introduce an invented mark. Complete navigation, authentic source marks, matching source-shell details and full cross-framework visual review remain open for both families.
 
 ```sh
+# From the workbench root: install shared renderer dependencies
+npm ci --ignore-scripts
+cd examples/astro-slice
 npm ci --ignore-scripts
 NIGHTJAR_FAMILY=martlet npm run build
 NIGHTJAR_FAMILY=krigsvold NIGHTJAR_BASE=/preview/ npm run build

@@ -7,7 +7,7 @@ import {chromium} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import catalog from '../page-archetypes/content/catalog.json' with {type:'json'};
 import selected from './src/selected.json' with {type:'json'};
-import {renderMarkdown} from '../astro-slice/src/markdown.mjs';
+import {renderMarkdown} from '../page-archetypes/lib/markdown.mjs';
 assert.ok(!renderMarkdown('<script>alert(1)</script> [bad](javascript:alert(1))').includes('<script>'));
 assert.ok(!renderMarkdown('[bad](javascript:alert(1))').includes('href="javascript:'));
 assert.match(renderMarkdown('[home](/examples/home/)', '/preview/'), /href="\/preview\/examples\/home\/"/);

@@ -5,7 +5,7 @@ import {mkdir,readFile,writeFile,copyFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import catalog from '../page-archetypes/content/catalog.json' with {type:'json'};
 import selected from './src/selected.json' with {type:'json'};
-import {renderMarkdown} from '../astro-slice/src/markdown.mjs';
+import {renderMarkdown} from '../page-archetypes/lib/markdown.mjs';
 const family=process.env.NIGHTJAR_FAMILY, base=process.env.NIGHTJAR_BASE || '/';
 if(!['martlet','krigsvold'].includes(family)||!/^\/(?:[a-zA-Z0-9_-]+\/)*$/.test(base))throw Error('Provide a family and an absolute directory base');
 const root=resolve('examples/react-catalog'),configFile=resolve(root,'vite.config.mjs');

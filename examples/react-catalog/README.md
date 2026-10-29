@@ -2,12 +2,11 @@
 
 This experimental workbench example uses the existing `@martlet/react` and `@krigsvold/react` workspace packages and the shared `page-archetypes/content/catalog.json`. It prerenders 29 selected catalog records for each family, then hydrates React-controlled archive pagination. Both families use their own `AppShell`, `Article`, `DefinitionList`, `DataTable` and `Pagination` components and theme 2.1.0. Build-time family selection keeps the other family's CSS and fonts out of the build.
 
-Run from the workbench root with Node 24 and the locked dependencies. The Markdown renderer reuses the existing Astro example's `markdown-it` dependencies; it is executed during build, not bundled into the React client.
+Run from the workbench root with Node 24 and the locked dependencies. The shared framework-neutral Markdown renderer uses the workbench's locked parser dependencies; it is executed during build, not bundled into the React client.
 
 ```sh
 npm ci --ignore-scripts
 npm run build --workspaces
-npm ci --prefix examples/astro-slice --ignore-scripts
 NIGHTJAR_FAMILY=martlet node examples/react-catalog/build.mjs
 NIGHTJAR_FAMILY=krigsvold NIGHTJAR_BASE=/preview/ node examples/react-catalog/build.mjs
 CHROMIUM_PATH=/usr/bin/chromium node examples/react-catalog/test.mjs
