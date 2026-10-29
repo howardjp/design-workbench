@@ -22,6 +22,6 @@ The masthead holds the title and context. Navigation leads to destinations. An i
 
 ## The complete example library
 
-[Explore all 46 page recipes]({{ '/examples/' | relative_url }}): publishing, projects, collections, people, documentation, commerce, events, reports, support, recovery, and application interfaces. The same fictional institute and content appear in both themes.
+[Explore all 50 page recipes]({{ '/examples/' | relative_url }}): publishing, projects, collections, people, documentation, commerce, events, reports, support, recovery, and application interfaces. The same fictional institute and content appear in both themes.
 
 [Read about integration boundaries]({{ '/examples/integrations/' | relative_url }}) before connecting forms, accounts, devices, or transactions to a live service.

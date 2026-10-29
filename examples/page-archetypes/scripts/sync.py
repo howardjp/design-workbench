@@ -19,6 +19,10 @@ def sync(family, target):
     overlay(ROOT / 'jekyll', target)
     overlay(ROOT / 'families' / family, target)
     (target / '_data').mkdir(parents=True, exist_ok=True)
+    shutil.copy2(ROOT / 'content/dashboards.json', target / '_data/dashboards.json')
+    (target / '_data/dashboard_navigation.json').write_text(json.dumps([{'id': view, 'title': view.capitalize(), 'url': '/examples/dashboard-' + view + '/'} for view in ['analytics', 'administration', 'operations']]))
+    peer = 'krigsvold' if family == 'martlet' else 'martlet'
+    (target / '_data/dashboard_peer.json').write_text(json.dumps({'name': peer.capitalize(), 'url': 'https://' + peer + '-jekyll.k3jph.chatgpt.site'}))
     (target / '_data/examples.json').write_text(json.dumps(catalog, indent=2, ensure_ascii=False) + '\n')
     examples = target / 'examples'
     examples.mkdir(exist_ok=True)
@@ -26,6 +30,7 @@ def sync(family, target):
         front = {'layout': 'example-' + record['composition'], 'permalink': '/examples/' + record['id'] + '/',
                  'title': record['title'], 'description': record['summary'], 'record_id': record['id'],
                  'eyebrow': record['category'] + ' · Fictional demonstration'}
+        if 'dashboard' in record: front['dashboard'] = record['dashboard']
         for key in ('date', 'author', 'tags'):
             if key in record: front[key] = record[key]
         # JSON is a YAML subset and avoids ambiguous date/scalar coercion.
@@ -53,6 +58,9 @@ permalink: /404.html
     if marker not in text:
         text = text.replace('</head>', marker + '\n<link rel="stylesheet" href="{{ "/assets/css/examples.css" | relative_url }}">\n<link rel="stylesheet" href="{{ "/assets/css/examples-family.css" | relative_url }}">\n</head>')
         text = text.replace('</body>', '<script src="{{ "/assets/js/examples.js" | relative_url }}" defer></script>\n</body>')
+    text = text.replace('{% include masthead.html %}', '{% unless page.dashboard %}{% include masthead.html %}{% endunless %}') if '{% unless page.dashboard %}' not in text else text
+    if 'dashboard-page' not in text:
+        text = text.replace('class="' + family + '"', 'class="' + family + '{% if page.dashboard %} dashboard-page{% endif %}"', 1)
     default.write_text(text)
     nav = target / '_data/navigation.yml'
     nav.write_text('''- title: Overview
@@ -69,9 +77,10 @@ permalink: /404.html
     index = target / 'index.md'
     text = index.read_text()
     if '## The complete example library' not in text:
-        text += '''\n## The complete example library\n\n[Explore all 46 page recipes]({{ '/examples/' | relative_url }}): publishing, projects, collections, people, documentation, commerce, events, reports, support, recovery, and application interfaces. The same fictional institute and content appear in both themes.\n\n[Read about integration boundaries]({{ '/examples/integrations/' | relative_url }}) before connecting forms, accounts, devices, or transactions to a live service.\n'''
+        text += '''\n## The complete example library\n\n[Explore all 50 page recipes]({{ '/examples/' | relative_url }}): publishing, projects, collections, people, documentation, commerce, events, reports, support, recovery, and application interfaces. The same fictional institute and content appear in both themes.\n\n[Read about integration boundaries]({{ '/examples/integrations/' | relative_url }}) before connecting forms, accounts, devices, or transactions to a live service.\n'''
+    text = text.replace('Explore all 46 page recipes', 'Explore all 50 page recipes')
     index.write_text(text)
-    for doc in ['README.md', 'PORTING.md', 'ACCEPTANCE.md', 'VERIFICATION.md']:
+    for doc in ['README.md', 'PORTING.md', 'ACCEPTANCE.md', 'VERIFICATION.md', 'DASHBOARDS.md', 'IMPLEMENTATION-REPORT.md']:
         destination = target / 'docs/archetypes' / doc
         destination.parent.mkdir(parents=True, exist_ok=True)
         if (ROOT / doc).exists(): shutil.copy2(ROOT / doc, destination)
@@ -81,6 +90,7 @@ permalink: /404.html
     config = target / '_config.yml'
     text = config.read_text().replace('package.json]', 'package.json, docs, template.zip]')
     config.write_text(text)
+    shutil.copy2(ROOT / 'contracts/dashboards.schema.json', schema_dir / 'dashboards.schema.json')
     print(f'{family}: {len(catalog["pages"])} recipes → {target}')
 
 if __name__ == '__main__':

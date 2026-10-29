@@ -54,3 +54,12 @@ for (const mutate of [
   assert.equal(validator.validate(invalid).valid, false, 'Contract accepted an invalid fixture');
 }
 console.log(`Verified ${catalog.pages.length} portable recipes, semantic contracts, destinations, parity, and both shell hashes.`);
+
+const dashboardData=JSON.parse(fs.readFileSync(path.join(root,'content/dashboards.json')));
+const dashboardSchema=JSON.parse(fs.readFileSync(path.join(root,'contracts/dashboards.schema.json')));
+const dashboardResult=new Validator(dashboardSchema,'2020-12',true).validate(dashboardData);
+assert.ok(dashboardResult.valid,JSON.stringify(dashboardResult.errors));
+for(const key of ['people','services','alerts'])assert.equal(new Set(dashboardData[key].map(item=>item.id)).size,dashboardData[key].length);
+for(const alert of dashboardData.alerts)assert.ok(dashboardData.services.some(service=>service.id===alert.service_id));
+for(const family of ['martlet','krigsvold'])assert.deepEqual(JSON.parse(fs.readFileSync(path.join(root,'../jekyll',family,'_data/dashboards.json'))),dashboardData);
+console.log('Verified shared synthetic dashboard data and referential integrity.');

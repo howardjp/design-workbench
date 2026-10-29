@@ -120,4 +120,4 @@ The [grammar coverage review](docs/qa/grammar-coverage-2026-10-24.md) records cl
 
 ## Portable page archetypes and Jekyll references
 
-[46 shared page recipes](examples/page-archetypes/README.md) now exercise both languages with identical fictional content, typed section roles, semantic article/event contracts, and separate family compositions. Complete standalone sources are in `examples/jekyll/martlet` and `examples/jekyll/krigsvold`; [porting guidance](examples/page-archetypes/PORTING.md) defines the path to Astro and React without parsing Liquid or copying rendered HTML.
+[50 shared page recipes](examples/page-archetypes/README.md) now exercise both languages with identical fictional content, typed section roles, semantic article/event contracts, and separate family compositions. Complete standalone sources are in `examples/jekyll/martlet` and `examples/jekyll/krigsvold`; [porting guidance](examples/page-archetypes/PORTING.md) defines the path to Astro and React without parsing Liquid or copying rendered HTML.

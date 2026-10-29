@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import tempfile
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,7 +20,12 @@ command = json.loads(os.environ.get('JEKYLL_COMMAND_JSON', '["bundle", "exec", "
 for family in ([args.family] if args.family else ['martlet', 'krigsvold']):
     source = REPO / 'examples/jekyll' / family
     destination = (args.destination or source / 'dist').resolve()
-    subprocess.run([*command, 'build', '--source', str(source), '--destination', str(destination), '--baseurl', args.baseurl, '--strict_front_matter', '--trace'], check=True, cwd=source)
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.yml') as override:
+        override.write('source_archive: true\n')
+        override.flush()
+        subprocess.run([*command, 'build', '--config', str(source / '_config.yml') + ',' + override.name,
+                        '--source', str(source), '--destination', str(destination), '--baseurl', args.baseurl,
+                        '--strict_front_matter', '--trace'], check=True, cwd=source)
     # Never archive hosting identity, credentials, generated output, or a prior archive.
     with zipfile.ZipFile(destination / 'template.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
         for file in sorted(source.rglob('*')):

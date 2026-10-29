@@ -1970,6 +1970,84 @@
         }
       ],
       "semantic_class": "section-library"
+    },
+    {
+      "id": "dashboard-analytics",
+      "title": "Analytics",
+      "summary": "Explore audience activity, downloads, and completed tasks across the Northlight programme.",
+      "category": "Dashboards",
+      "composition": "dashboard",
+      "semantic_class": "analytics-dashboard",
+      "sections": [
+        {
+          "id": "workspace",
+          "title": "Analytics workspace",
+          "body": "Shared synthetic analytics and controls."
+        }
+      ],
+      "dashboard": "analytics"
+    },
+    {
+      "id": "dashboard-components",
+      "title": "Working with application data",
+      "summary": "Reusable layouts, metrics, charts, collections, and interaction contracts within each design language.",
+      "category": "Dashboards",
+      "composition": "document",
+      "semantic_class": "reference",
+      "sections": [
+        {
+          "id": "composition",
+          "title": "One language, demanding applications",
+          "body": "The dashboard frame composes the existing source shell, native buttons, table and form styles, disclosures, status regions, and independent family tokens. The sidebar and bounded working area are an application composition, not a separate design system."
+        },
+        {
+          "id": "metrics",
+          "title": "Metrics and chart frames",
+          "body": "Metric values name their unit and comparison basis. Chart frames pair labelled SVGs with exact data tables. These capabilities have no chart-library dependency and load only on dashboard pages."
+        },
+        {
+          "id": "behaviour",
+          "title": "Portable behaviour",
+          "body": "Date filtering, aggregation, collection sorting and pagination, validation, bulk updates, thresholds, and acknowledgement rules live in framework-neutral modules. Both families use the same modules and synthetic fixture. Browser-local changes reset on reload."
+        },
+        {
+          "id": "authority",
+          "title": "Design authorities",
+          "body": "Jameshoward.us remains authoritative for Martlet; krigsvold.org remains authoritative for Krigsvold. The application layout extends the language to a working context while preserving source controls, typography, palette roles, and navigation identity."
+        }
+      ]
+    },
+    {
+      "id": "dashboard-administration",
+      "title": "Administration",
+      "summary": "Manage the Northlight people directory with scoped selection, validation, and explicit local changes.",
+      "category": "Dashboards",
+      "composition": "dashboard",
+      "semantic_class": "administration-dashboard",
+      "dashboard": "administration",
+      "sections": [
+        {
+          "id": "workspace",
+          "title": "Administration workspace",
+          "body": "Shared synthetic data and equivalent application behaviour."
+        }
+      ]
+    },
+    {
+      "id": "dashboard-operations",
+      "title": "Operations",
+      "summary": "Inspect service health, latency trends, alerts, and the activity record in a synthetic monitoring snapshot.",
+      "category": "Dashboards",
+      "composition": "dashboard",
+      "semantic_class": "operations-dashboard",
+      "dashboard": "operations",
+      "sections": [
+        {
+          "id": "workspace",
+          "title": "Operations workspace",
+          "body": "Shared synthetic data and equivalent application behaviour."
+        }
+      ]
     }
   ]
 }

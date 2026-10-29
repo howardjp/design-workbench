@@ -875,7 +875,8 @@
             "collection",
             "detail",
             "dossier",
-            "workspace"
+            "workspace",
+            "dashboard"
           ]
         },
         "semantic_class": {
@@ -919,7 +920,10 @@
             "service",
             "software",
             "taxonomy",
-            "taxonomy-index"
+            "taxonomy-index",
+            "analytics-dashboard",
+            "administration-dashboard",
+            "operations-dashboard"
           ]
         },
         "sections": {
@@ -946,6 +950,13 @@
         },
         "event": {
           "$ref": "#/$defs/event"
+        },
+        "dashboard": {
+          "enum": [
+            "analytics",
+            "administration",
+            "operations"
+          ]
         }
       },
       "required": [

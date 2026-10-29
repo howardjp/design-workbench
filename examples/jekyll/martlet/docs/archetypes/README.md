@@ -1,6 +1,6 @@
 # Page archetypes
 
-A portable, MIT-licensed collection of **46 page recipes** rendered independently by Martlet and Krigsvold. The fictional Northlight Field Institute supplies the same content to both. Neither family has capability exclusions.
+A portable, MIT-licensed collection of **50 page recipes** rendered independently by Martlet and Krigsvold. The fictional Northlight Field Institute supplies the same content to both. Neither family has capability exclusions.
 
 ## Source ownership
 
@@ -8,7 +8,7 @@ A portable, MIT-licensed collection of **46 page recipes** rendered independentl
 | --- | --- |
 | `content/catalog.json` | Authored content, semantic class, composition choice, sections, destinations, and fixture provenance |
 | `contracts/catalog.schema.json` | Versioned data contract, section discriminators, and semantic requirements |
-| `jekyll/_layouts/` | Seven composition frames: landing, reading, document, collection, detail, dossier, workspace |
+| `jekyll/_layouts/` | Eight composition frames: landing, reading, document, collection, detail, dossier, workspace, dashboard |
 | `jekyll/_includes/examples/` | Section renderers and class-specific context such as article navigation and event details |
 | `jekyll/assets/` | Shared interaction mechanics, original illustrations, and sample data |
 | `families/<family>/` | Family composition rules and mapping to existing shell roles |
@@ -39,3 +39,5 @@ See [porting](PORTING.md), [acceptance criteria](ACCEPTANCE.md), and [verificati
 Presentation: home, about, announcement. Publishing: article, archive, category, category index, changelog. People: profile, opportunities, opportunity detail. Research: project index, case study, reference document, report. Support: documentation index, guide, contact, FAQ, privacy, terms, search, integration guide. Commerce: service, place, plan comparison, software, product. Collections: index, object detail, exhibition. Events: index and detail. Accounts: sign-in, sign-up, reset, two-factor. Recovery: 404 and server-error specimen. Applications: observation workspace, messaging, station sensors, fleet register, scene viewer. Verification: stress test and section library.
 
 The application specimens are intentionally local. Identity, messaging delivery, payments, bookings, device access, and immersive rendering require service adapters. The integration guide explains each boundary in both demos. No real organisation, vacancy, event, measurement, transaction, or scientific finding is represented by the fixture content.
+
+The collection now includes three paired dashboard applications and their reusable capability reference. See [dashboard contracts](DASHBOARDS.md).

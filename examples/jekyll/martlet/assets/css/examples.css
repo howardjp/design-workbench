@@ -120,3 +120,6 @@
 .example-root :is(label, legend) { color: var(--ex-text); }
 .example-workspace__detail > button { margin: .5rem .5rem .5rem 0; }
 .example-records li > p:first-of-type { margin-top: .75rem; }
+
+/* General table density variant, shared by reference documents and applications. */
+.example-root .example-table-scroll[data-density=compact] :is(th,td) { padding: .45rem .7rem; }

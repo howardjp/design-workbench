@@ -14,6 +14,8 @@ Cloudflare Pages settings: build `bundle exec jekyll build --destination dist`; 
 
 ## Complete example library
 
-Browse `/examples/` for 46 matching content recipes. This standalone export contains its content in `_data/examples.json`, composition layouts in `_layouts/example-*.html`, and reusable section/class includes in `_includes/examples/`. The shared styles and browser enhancements live in `assets/css/examples.css` and `assets/js/examples.js`; the family's composition rules live in `assets/css/examples-family.css`.
+Browse `/examples/` for 50 matching content recipes. This standalone export contains its content in `_data/examples.json`, composition layouts in `_layouts/example-*.html`, and reusable section/class includes in `_includes/examples/`. The shared styles and browser enhancements live in `assets/css/examples.css` and `assets/js/examples.js`; the family's composition rules live in `assets/css/examples-family.css`.
 
 Canonical editable sources and regeneration tools are in `examples/page-archetypes` in [design-workbench](https://github.com/k3jph/design-workbench). See `docs/archetypes/` for the contract, porting boundaries, and verification criteria. Editing this exported project independently is supported, but those edits are not automatically imported back into the canonical adapter.
+
+The source-download link is enabled only by the workbench archive build. Ordinary standalone Jekyll builds omit it unless an archive is explicitly provided with `source_archive: true`.
