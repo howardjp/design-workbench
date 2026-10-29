@@ -83,3 +83,7 @@ Commit `d9f9745` expands the experimental Astro adapter to 21 selected records p
 ### Astro catalog and search
 
 Commit `cab41d6` adds a browsable catalog and local search over all 50 shared records; 22 recipe pages are implemented in the experiment. Direct query restoration, bounded input, text-safe results, no-JavaScript catalog fallback and availability labels were tested in both families at root and subpaths, alongside existing pagination and representative axe checks. The remaining 28 records are labeled unavailable but currently still link to unimplemented routes; removing those broken navigation targets is outstanding. Source-shell fidelity and the other interaction contracts remain open.
+
+### Astro shell increment
+
+Commit `bf6ed24` adds contextual source-informed family shells with a masthead, breadcrumb, grouped footer, responsive keyboard navigation and persisted appearance; Krigsvold gains aligned section regions and a secondary-action outline. On its independent 21-page branch the suite passed for both families at root/subpath, including menu/Escape/focus, no-JavaScript navigation, appearance persistence, dark-mode axe and geometry checks. Krigsvold About was visually inspected at 320 and 1440px. Exact original shell/mark, complete navigation and footer, manual screen-reader review and other engines remain open. The shell and subsequent search increment were merged; combined validation is pending.
