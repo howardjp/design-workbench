@@ -397,7 +397,11 @@ try {
           assert.equal(await form.locator('[data-form-status]').textContent(),'Example validated locally. Nothing was sent, saved, or authenticated.');
           if (['sign-in','sign-up'].includes(record.id)) assert.equal(await form.getByLabel('Example password').inputValue(),'');
           if (record.id === 'two-factor') assert.equal(await form.getByLabel('Six-digit example code').inputValue(),'');
+          if(record.id==='two-factor') await form.getByLabel('Six-digit example code').fill('654321');
+          else await form.getByLabel('Email address').fill('other@example.test');
+          assert.equal(await form.locator('[data-form-status]').textContent(),'');
           assert.equal(page.url(),pageUrl);
+          assert.equal(requests,0);          assert.equal(page.url(),pageUrl);
           assert.equal(requests,0);
           await form.getByRole('button',{name:'Clear'}).click();
           assert.equal(await form.locator('[data-form-status]').textContent(),'');

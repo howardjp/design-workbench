@@ -60,3 +60,22 @@ Charts accept labelled numeric rows, an optional previous value and an optional 
 ## Verification
 
 Run `npm run test:examples` after sync. The existing Jekyll workflow builds root and subpath variants from locked dependencies, then builds `/martlet` and `/krigsvold` test prefixes. `npm run test:dashboards` uses the existing Playwright and axe dependencies against those generated sites. It tests paired workflows, validation/recovery, scoped writes, safe text, responsive widths (320, 768, 1100 and 1440px), mobile navigation, and light/dark accessibility. Browser screenshots/traces are CI artifacts and establish the initial visual evidence; no historical dashboard baseline or comprehensive manual screen-reader certification is claimed.
+
+## Cross-framework behavioral comparison
+
+`tests/dashboard-framework-parity.mjs` executes representative identical workflows against root-path builds of both families in Jekyll, Astro and React. It compares scoped analytics and invalid-date recovery; monitoring acknowledgement with an unapplied threshold draft; keyboard confirmation and cancel focus; mobile navigation and overflow; and no-JavaScript navigation, source tables and disabled controls. It does not establish complete visual or manual accessibility parity. The same fixture values and expected behaviors are asserted in each implementation; family-specific styling is not pixel-compared.
+
+From the workbench root, install locked Node dependencies in both the workbench and `examples/astro-slice`, build the React workspaces, and install each standalone Jekyll project's locked gems. Then prepare isolated root-path builds and run:
+
+```sh
+export NIGHTJAR_JEKYLL_ROOT="$(mktemp -d)"
+python3 examples/page-archetypes/scripts/build.py --family martlet --destination "$NIGHTJAR_JEKYLL_ROOT/martlet"
+python3 examples/page-archetypes/scripts/build.py --family krigsvold --destination "$NIGHTJAR_JEKYLL_ROOT/krigsvold"
+NIGHTJAR_FAMILY=martlet NIGHTJAR_BASE=/ npm --prefix examples/astro-slice run build
+NIGHTJAR_FAMILY=krigsvold NIGHTJAR_BASE=/ npm --prefix examples/astro-slice run build
+NIGHTJAR_FAMILY=martlet NIGHTJAR_BASE=/ node examples/react-catalog/build.mjs
+NIGHTJAR_FAMILY=krigsvold NIGHTJAR_BASE=/ node examples/react-catalog/build.mjs
+CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/dashboard-framework-parity.mjs
+```
+
+Omit `CHROMIUM_PATH` when Playwright's Chromium is installed. Astro and React default to their `dist` directories; use `NIGHTJAR_ASTRO_ROOT` or `NIGHTJAR_REACT_ROOT` to point at different directories containing `martlet` and `krigsvold` builds. These fixtures must all be built with an empty/root base path. The disposable Jekyll directory can be removed after testing.

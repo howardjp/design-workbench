@@ -29,6 +29,9 @@ fieldset { display:grid; gap:.5rem; min-width:0; }
       status.textContent = 'Example validated locally. Nothing was sent, saved, or authenticated.';
       form.querySelectorAll('[type=password], [name=code]').forEach(input => { input.value = ''; });
     });
+    // A validation message describes the submitted values, not later edits.
+    form.addEventListener('input', () => { status.textContent = ''; });
+    form.addEventListener('change', () => { status.textContent = ''; });
     form.addEventListener('reset', () => { status.textContent = ''; });
     form.querySelector('[data-demo-fields]').disabled = false;
   });

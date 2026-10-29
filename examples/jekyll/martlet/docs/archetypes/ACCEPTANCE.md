@@ -16,7 +16,7 @@
 - Pagination shows a bounded slice, announces the page, and supports previous/next recovery. Without JavaScript all records remain available.
 - Workspace filtering announces counts, selection identifies the active record, local review updates it, filtering out the selection clears it, and reset restores the original state.
 - Chat rejects whitespace-only input and renders angle-bracket input as text, never executable markup. Reset and reload discard local messages.
-- Forms have labels, constraints, fieldset/legend, native invalid-input focus, local success status, and reset. Without JavaScript submission controls remain disabled. No form values reach a URL or remote service.
+- Forms have labels, constraints, fieldset/legend, native invalid-input focus, local success status, and reset. Editing a field or resetting clears the prior validation status, which applies only to the previously submitted values. Without JavaScript submission controls remain disabled. No form values reach a URL or remote service.
 - Gallery links work without JavaScript. Enhanced dialog supports labelled content, close, Escape, and focus return.
 - Sensor and scene controls announce updates and identify the simulated/static boundary.
 - Appearance, navigation, and focus remain legible in light/dark states. Mobile navigation opens, closes on Escape, and returns focus.

@@ -23,7 +23,7 @@ export function DemoForm({kind}:{kind:string}) {
  const title=kind.replaceAll('-',' ').replace(/^./,c=>c.toUpperCase());
  const submit=(event:React.FormEvent<HTMLFormElement>)=>{event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;form.querySelectorAll<HTMLInputElement>('input[type=password],input[name=code]').forEach(input=>{input.value='';});setStatus('Example validated locally. Nothing was sent, saved, or authenticated.');};
  return <><p id="form-notice">Local interface demonstration. Use invented values only. Nothing is sent, saved, subscribed, or authenticated.</p>
- <form onSubmit={submit} onReset={()=>setStatus('')} aria-describedby="form-notice"><fieldset disabled={!ready} className="demo-fields"><legend>{title}</legend>
+ <form onSubmit={submit} onInput={()=>setStatus('')} onChange={()=>setStatus('')} onReset={()=>setStatus('')} aria-describedby="form-notice"><fieldset disabled={!ready} className="demo-fields"><legend>{title}</legend>
   {['contact','sign-up'].includes(kind)&&<><label htmlFor="demo-name">Name</label><input id="demo-name" name="name" autoComplete="off" required maxLength={120}/></>}
   {kind!=='two-factor'&&<><label htmlFor="demo-email">Email address</label><input id="demo-email" name="email" type="email" autoComplete="off" required maxLength={254}/></>}
   {['sign-in','sign-up'].includes(kind)&&<><label htmlFor="demo-password">Example password</label><input id="demo-password" name="password" type="password" autoComplete="off" required minLength={8} maxLength={128} aria-describedby="password-help"/><p id="password-help">Use an invented password of at least eight characters.</p></>}

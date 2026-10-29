@@ -11,6 +11,9 @@
       // Do not retain even illustrative passwords or verification codes.
       form.querySelectorAll('[type=password], [name=code]').forEach(input => { input.value = ''; });
     });
+    // A validation message describes the submitted values, not later edits.
+    form.addEventListener('input', () => { status.textContent = ''; });
+    form.addEventListener('change', () => { status.textContent = ''; });
     form.addEventListener('reset', () => { status.textContent = ''; });
   });
 

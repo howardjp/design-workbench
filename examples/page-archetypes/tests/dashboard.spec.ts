@@ -10,6 +10,15 @@ for(const family of ['martlet','krigsvold']){
   await page.goto(`/${family}/examples/two-factor/`);
   await expect(page.getByLabel('Six-digit example code',{exact:true})).toHaveAccessibleDescription('Any six digits demonstrate local format validation.');
  });
+ test(`${family}: editing a validated example clears the prior status`,async({page})=>{
+  await page.goto(`/${family}/examples/sign-in/`);
+  await page.getByLabel('Email address',{exact:true}).fill('example@example.test');
+  await page.getByLabel('Example password',{exact:true}).fill('invented-password');
+  await page.getByRole('button',{name:'Validate example'}).click();
+  await expect(page.locator('[data-form-status]')).toContainText('Example validated locally.');
+  await page.getByLabel('Email address',{exact:true}).fill('other@example.test');
+  await expect(page.locator('[data-form-status]')).toBeEmpty();
+ });
  test(`${family}: analytics scope, exact data alternatives, invalid-range recovery`,async({page})=>{
   await page.goto(route(family,'analytics'));
   await expect(page.locator('[data-metric=sessions]')).toHaveText('7,686');
