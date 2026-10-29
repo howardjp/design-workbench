@@ -103,3 +103,7 @@ Commit `b7d080a` escapes `<` after serializing the Jekyll search index into its 
 ### Astro workspaces and messaging
 
 Commit `7aae638` adds observation and fleet workspaces and local conversation, reaching 36 of 50 catalog recipes per language. The shared workspace supports filtering, keyboard selection, local review, filtered-selection clearing and reset. Chat rejects whitespace, renders user input as text, resets locally and makes no submission. In the independent worktree, both family/root/subpath configurations passed content checks, workspace keyboard behavior, chat safety/no-network, no-JavaScript records/messages and disabled controls, and representative axe checks. Fourteen examples remain unported, and complete visual and functional parity are not established.
+
+### Astro simulations and static sections
+
+Commit `ae67d4f` ports station and scene simulations, FAQ, plan and statistic sections, and the original report CSV, bringing the adapter to 45 of 50 recipes per family. Four full Chromium configurations passed in the independent worktree for catalog content, original CSV bytes, keyboard simulation, native disclosures, no-JavaScript fallback, 320px reflow and 21 representative axe pages. The static recovery examples do not configure HTTP error status codes. The stress fixture and four dashboard-related records remain unported; the simulation adapter currently guards against duplicate instances rather than supporting them. Visual and comprehensive functional parity remain open.
