@@ -138,3 +138,9 @@ html[data-appearance=dark] .example-local-index .eyebrow { color: var(--ex-link)
 
 /* General table density variant, shared by reference documents and applications. */
 .example-root .example-table-scroll[data-density=compact] :is(th,td) { padding: .45rem .7rem; }
+/* The source shells' reduced-motion .01ms duration creates a transition even
+   on elements without one (including the root). Zero duration avoids a stale
+   frame when text size or appearance changes. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0s !important; }
+}
