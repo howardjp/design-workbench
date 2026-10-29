@@ -330,3 +330,7 @@ Commit `b0440f9` establishes valid default Jekyll/Astro operations results befor
 ### Administration identifier allocation
 
 Commit `4164bf0` allocates an unused `P-` identifier for a new directory record even when existing schema-valid IDs are arbitrary strings. The former numeric-slicing approach could create duplicate `P-NaN` IDs and cause edits or bulk writes to affect more than one record. The pre-fix regression reproduced the collision; add/edit/selective-bulk flows passed after the fix for both families × three frameworks × root/subpath (12 builds). Fixture schema validation, `test:examples` (13 model tests), and strict Administration TypeScript passed. The allocator handles an empty input defensively, but the current fixture schema requires at least one person; no empty-directory fixture support is claimed.
+
+### Operations sample ordering
+
+Commit `cafd402` sorts service observations by timestamp before selecting the latest value and monitoring window, including initial Jekyll and Astro no-JavaScript tables. The schema does not require source order; a reversed canonical fixture previously showed oldest values. The regression failed before the fix and passed both families × three frameworks × root/subpath with and without JavaScript, checking static latest values, chart data and metrics. `test:examples` passed 14 model tests. Unequal or misaligned service coverage remains under separate investigation.
