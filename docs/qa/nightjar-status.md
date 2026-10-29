@@ -436,3 +436,5 @@ The integrated-branch duplicate-name fixture passed both languages × all three 
 ### Operations fixture text and alert identifiers
 
 Commit `8418ece` escapes Jekyll's static service, alert and activity text and matches acknowledgement buttons by exact dataset value rather than interpolating arbitrary IDs into a CSS selector in the shared Jekyll/Astro controller. A schema-valid fixture containing hostile HTML and quote/bracket IDs reproduced an injected element before the fix. Independent tests passed both languages × three frameworks × root/subpaths with and without JavaScript, including select, acknowledge/undo, exact focus and no injected DOM; the existing partial-data matrix, `test:examples` and workflow YAML parse passed. The bounded operations CI group gains this 12-build test. A combined-branch rerun is in progress.
+
+The integrated-branch `operations-text.mjs` and `test:examples` rerun passed after `8418ece` for both languages × three frameworks × root/subpaths with and without JavaScript.
