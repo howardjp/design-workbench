@@ -1,4 +1,4 @@
-<div data-example-search>
+<div data-example-search data-browse-url="{{ '/examples/' | relative_url | escape }}">
 <form class="example-search" action="{{ '/examples/search/' | relative_url }}" role="search" aria-label="{{ include.title | escape }}">
   <label for="search:{{ include.id }}:query">Search the example record</label><div class="example-search__controls"><input type="search" id="search:{{ include.id }}:query" name="q" maxlength="200" placeholder="Try shoreline, workshop, or protocol"><button class="{% include examples/button-classes.html %}" type="submit">Search</button></div>
 </form>

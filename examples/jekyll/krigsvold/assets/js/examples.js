@@ -52,7 +52,13 @@
       if (!query) { status.textContent = 'Enter a word or phrase to search the collection.'; return; }
       const words = query.toLocaleLowerCase().split(/\s+/u);
       const matches = index.filter(entry => words.every(word => `${entry.title} ${entry.summary} ${entry.category}`.toLocaleLowerCase().includes(word)));
-      status.textContent = matches.length ? `${matches.length} result${matches.length === 1 ? '' : 's'} for “${query}”.` : `No results for “${query}”. Try fewer words or browse the example index.`;
+      if (matches.length) status.textContent = `${matches.length} result${matches.length === 1 ? '' : 's'} for “${query}”.`;
+      else {
+        const browse = document.createElement('a');
+        browse.href = container.dataset.browseUrl;
+        browse.textContent = 'browse the example index';
+        status.replaceChildren(document.createTextNode(`No results for “${query}”. Try fewer words or `), browse, document.createTextNode('.'));
+      }
       for (const entry of matches) {
         const li = document.createElement('li');
         const body = document.createElement('div');
