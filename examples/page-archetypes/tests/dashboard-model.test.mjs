@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {aggregate,analyticsView,rangeError,collectionView,applyBulk,validatePerson,nextPersonId,operationsView,comparisonSearch,analyticsCoverageMessage,analyticsComparison} from '../jekyll/assets/js/dashboard-model.mjs';
+import {aggregate,analyticsView,rangeError,collectionView,applyBulk,validatePerson,nextPersonId,operationsView,operationsDataIssue,comparisonSearch,analyticsCoverageMessage,analyticsComparison} from '../jekyll/assets/js/dashboard-model.mjs';
 const fixture=JSON.parse(fs.readFileSync(new URL('../content/dashboards.json',import.meta.url)));
 test('analytics computes rates from totals and duration from weighted observations',()=>{
  const totals=aggregate([{sessions:20,downloads:3,completions:4,duration_seconds:1200},{sessions:80,downloads:7,completions:6,duration_seconds:16800}]);
@@ -147,4 +147,15 @@ test('operations joins partial samples by timestamp and distinguishes missing co
  assert.deepEqual(operationsView(disjoint,{}).points,[]);
  const old={...fixture,services:fixture.services.map(service=>({...service,samples:service.samples.slice(0,1)}))};
  assert.equal(operationsView(old,{}).availability,null);
+});
+
+test('operations reject duplicate or post-snapshot observations',()=>{
+ assert.equal(operationsDataIssue(fixture),'');
+ for(const future of [false,true]){
+  const services=structuredClone(fixture.services),last=services[0].samples.at(-1);
+  services[0].samples.push(future?{...last,time:'2026-10-28T21:00:00+00:00'}:{...last,latency_ms:999});
+  const broken={...fixture,services};
+  assert.match(operationsDataIssue(broken),/duplicate timestamps or readings after the snapshot/);
+  assert.deepEqual(operationsView(broken,{}),{error:operationsDataIssue(broken)});
+ }
 });

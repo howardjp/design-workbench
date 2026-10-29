@@ -1,5 +1,6 @@
 ---
 import fixture from '../../../page-archetypes/content/dashboards.json';
+import {operationsDataIssue} from '../../../page-archetypes/jekyll/assets/js/dashboard-model.mjs';
 import {dashboardPayload,serializeForScript} from './fixture.mjs';
 import DashboardNav from './DashboardNav.astro';
 import {peerDashboardURL} from './peer.mjs';
@@ -18,6 +19,7 @@ const peerFamily=family==='martlet'?'Krigsvold':'Martlet';
 const values={'ex-text':'text','ex-muted':'muted','ex-bg':'bg','ex-panel':'panel','ex-line':'line','ex-link':'link','dash-ui-font':'font-sans','dash-number-font':family==='krigsvold'?'font-mono':'font-sans','dash-chart-primary':'chart-1','dash-chart-secondary':'chart-2','dash-warning':'warning','dash-danger':'danger','dash-success':'green','dash-overlay':'overlay-scrim'};
 const variables=Object.entries(values).map(([name,token])=>`--${name}:var(--${family}-${token})`).join(';');
 const metrics=[['warnings','Services under warning'],['latency','Latest mean latency'],['open_alerts','Unacknowledged alerts'],['queue','Queued observations']];
+const dataIssue=operationsDataIssue(fixture);
 const json=serializeForScript(dashboardPayload('operations',fixture));
 ---
 <style is:inline set:html={family==='martlet'?martletCSS:krigsvoldCSS}></style>
@@ -28,6 +30,7 @@ const json=serializeForScript(dashboardPayload('operations',fixture));
       <header class="dash-heading"><p class="eyebrow">{page.category}</p><h1>{page.title}</h1><p>{page.summary}</p></header>
       <p>Snapshot: <time datetime={fixture.as_of}>28 Oct 2026, 20:00 UTC</time> <a data-compare href={peer || href('/examples/dashboard-operations/')} hidden={!peer}>Compare in {peerFamily}</a></p>
       <p class="ops-notice">Synthetic demonstration data. Changes remain in this page’s memory and reset on reload. No live people, systems, or services are connected.</p>
+      {dataIssue ? <p role="alert">{dataIssue}</p> : <>
       <form class="dash-toolbar" id="operations-filters" novalidate><fieldset disabled data-dashboard-controls><legend>Operational scope and thresholds</legend><div class="dash-controls">
         <div><label for="operations-hours">Monitoring window</label><select name="hours" id="operations-hours"><option value="6">Last 6 hours</option><option value="12">Last 12 hours</option><option value="24">Last 24 hours</option></select></div>
         <div><label for="operations-service">Service</label><select name="service" id="operations-service"><option value="All">All services</option>{fixture.services.map(service=><option value={service.id}>{service.name}</option>)}</select></div>
@@ -41,6 +44,7 @@ const json=serializeForScript(dashboardPayload('operations',fixture));
       <section class="dash-panel" aria-labelledby="services-title"><h2 id="services-title">Service status</h2><p data-availability>Latest service readings may have different times. Availability is a sampled demonstration value, not a live SLA measurement.</p><div class="example-table-scroll" role="region" aria-label="Service status table" tabindex="0"><table id="service-table"><caption>Latest synthetic service measurements</caption><thead><tr><th scope="col">Service</th><th scope="col">Latest sample (UTC)</th><th scope="col">Status</th><th scope="col">Latency (ms)</th><th scope="col">Queue</th><th scope="col">Sample availability (%)</th></tr></thead><tbody>{fixture.services.map(service=>{const latest=[...service.samples].sort((a,b)=>a.time.localeCompare(b.time)).at(-1);return <tr><th scope="row">{service.name}</th><td>{latest.time}</td><td>See latency threshold</td><td>{latest.latency_ms}</td><td>{latest.queue}</td><td>{latest.availability}</td></tr>})}</tbody></table></div></section>
       <section class="dash-panel" aria-labelledby="alerts-title"><h2 id="alerts-title">Alerts</h2><p>Severity and acknowledgement are separate states. Acknowledgements change only this local preview.</p><p data-alert-count></p><div class="example-table-scroll" role="region" aria-label="Operational alerts table" tabindex="0"><table id="alert-table"><caption>Synthetic alert register</caption><thead><tr><th scope="col">Alert</th><th scope="col">Service</th><th scope="col">Severity</th><th scope="col">Opened (UTC)</th><th scope="col">Acknowledgement</th><th scope="col">Action</th></tr></thead><tbody>{fixture.alerts.map(alert=><tr><th scope="row">{alert.id} · {alert.title}</th><td>{alert.service_id}</td><td>{alert.severity}</td><td>{alert.time}</td><td>{alert.acknowledged?'Acknowledged':'Unacknowledged'}</td><td>JavaScript required</td></tr>)}</tbody></table></div></section>
       <noscript><p>Interactive filtering and charts require JavaScript. The published data tables remain available; controls are disabled.</p></noscript>
+      </>}
     </div>
   </div>
 </div>

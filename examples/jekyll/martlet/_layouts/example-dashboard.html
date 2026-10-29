@@ -23,7 +23,7 @@ layout: default
       {% if page.dashboard == 'analytics' %}{% include examples/dashboard-analytics.html %}{% endif %}
       {% if page.dashboard == 'administration' %}{% include examples/dashboard-administration.html %}{% endif %}
       {% if page.dashboard == 'operations' %}{% include examples/dashboard-operations.html %}{% endif %}
-      {% unless page.dashboard == 'analytics' %}<noscript><p class="example-notice">Interactive filtering and charts require JavaScript. The published data tables remain available; controls are disabled.</p></noscript>{% endunless %}
+      {% if page.dashboard == 'administration' %}<noscript><p class="example-notice">Interactive filtering and charts require JavaScript. The published data tables remain available; controls are disabled.</p></noscript>{% endif %}
       <p class="example-port-note"><a href="{{ '/examples/dashboard-components/' | relative_url }}">Reusable capabilities and interaction contracts</a> · Same data and behaviour in both languages.</p>
     </div>
   </div>

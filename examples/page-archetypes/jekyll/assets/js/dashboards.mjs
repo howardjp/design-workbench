@@ -150,4 +150,4 @@ function operations(){
   render(true,false);
   render();
 }
-if(root.dataset.dashboard==='operations')operations();
+if(root.dataset.dashboard==='operations'&&root.querySelector('#operations-filters'))operations();

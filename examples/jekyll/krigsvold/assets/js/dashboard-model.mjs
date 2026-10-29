@@ -111,7 +111,21 @@ export function applyBulk(records,ids,status) {
   const selected=new Set(ids);
   return records.map(record=>selected.has(record.id)?{...record,status}:record);
 }
+export const operationsDataError='Operations data unavailable: service observations contain duplicate timestamps or readings after the snapshot.';
+export function operationsDataIssue(fixture) {
+  const end=Date.parse(fixture.as_of);
+  return fixture.services.some(service=>{
+    const seen=new Set();
+    return service.samples.some(sample=>{
+      const time=Date.parse(sample.time),invalid=time>end||seen.has(time);
+      seen.add(time);
+      return invalid;
+    });
+  }) ? operationsDataError : '';
+}
 export function operationsView(fixture,{hours=6,threshold=250,service='All',severity='All',hideAcknowledged=false},alerts=fixture.alerts) {
+  const error=operationsDataIssue(fixture);
+  if(error) return {error};
   const limit=[6,12,24].includes(Number(hours))?Number(hours):6;
   const warning=Math.max(50,Math.min(1000,Number(threshold)||250));
   const end=Date.parse(fixture.as_of),start=end-(limit-1)*3600000;

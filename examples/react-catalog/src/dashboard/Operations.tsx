@@ -1,7 +1,7 @@
 import {useEffect,useRef,useState,type FormEvent} from 'react';
 import {Button,family} from 'catalog-family';
 import fixture from '../../../page-archetypes/content/dashboards.json';
-import {operationsView} from '../../../page-archetypes/jekyll/assets/js/dashboard-model.mjs';
+import {operationsDataIssue,operationsView} from '../../../page-archetypes/jekyll/assets/js/dashboard-model.mjs';
 import './operations.css';
 
 type Scope={hours:string;threshold:string;service:string;severity:string;hideAcknowledged:boolean};
@@ -20,6 +20,11 @@ function Trend({points,threshold}:{points:View['points'];threshold:number}){
  return <figure className="ro-chart" aria-labelledby="latency-title"><header><h2 id="latency-title">Latency trend</h2><p>Mean latency across selected services. The threshold applies separately to each service.</p></header><div className="ro-plot" ref={plot} data-ready={ready?'true':undefined}><svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`Mean latency in milliseconds. ${points.length} data points. Exact values are in the following data table.`}><title>Mean latency — synthetic data</title>{Array.from({length:4},(_,i)=>{const value=max*i/3;return <g key={i}><line x1={left} x2={width-right} y1={y(value)} y2={y(value)} className="ro-gridline"/><text x={left-8} y={y(value)+4} textAnchor="end" className="ro-label">{Math.round(value)}</text></g>})}<polyline points={points.map((p,i)=>`${x(i)},${y(p.latency_ms)}`).join(' ')} className="ro-line" fill="none"/>{points.map((p,i)=><g key={p.time}><circle cx={x(i)} cy={y(p.latency_ms)} r="3" className="ro-primary"/>{(i===0||i===points.length-1||(width>=420&&i===Math.floor(points.length/2)))&&<text x={x(i)} y={height-14} textAnchor={i===0?'start':i===points.length-1?'end':'middle'} className="ro-label">{p.time.slice(11,16)} UTC</text>}</g>)}<line x1={left} x2={width-right} y1={y(threshold)} y2={y(threshold)} className="ro-threshold"/></svg></div><figcaption>{points.length} plotted observations. Dashed line: warning threshold {threshold} ms. Exact values appear in the data table.</figcaption><details><summary>View latency trend data</summary><div className="ro-table" role="region" aria-label="Latency trend data" tabIndex={0}><table><caption>Latency trend — synthetic data</caption><thead><tr><th scope="col">Time</th><th scope="col">Mean latency (ms)</th></tr></thead><tbody>{points.map(p=><tr key={p.time}><th scope="row">{p.time.slice(11,16)} UTC</th><td>{p.latency_ms}</td></tr>)}</tbody></table></div></details></figure>;
 }
 export function Operations(){
+ const error=operationsDataIssue(fixture);
+ if(error)return <div className={`react-operations ${family}`} data-operations data-family={family}><header><p className="ro-eyebrow">Dashboards</p><h1>Operations</h1><p>Inspect service health, latency trends, alerts, and the activity record in a synthetic monitoring snapshot.</p><p>Snapshot: <time dateTime={fixture.as_of}>28 Oct 2026, 20:00 UTC</time></p></header><p className="ro-notice">Synthetic demonstration data.</p><p role="alert">{error}</p></div>;
+ return <OperationsReady/>;
+}
+function OperationsReady(){
  const [draft,setDraft]=useState<Scope>(initial),[applied,setApplied]=useState<Scope>(initial),[alerts,setAlerts]=useState<Alert[]>(()=>fixture.alerts.map(alert=>({...alert}))),[events,setEvents]=useState<Event[]>([]),[enhanced,setEnhanced]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
  const alertsRef=useRef(alerts);
  const errorRef=useRef<HTMLParagraphElement>(null),alertArea=useRef<HTMLTableElement>(null),hideRef=useRef<HTMLInputElement>(null),pendingFocus=useRef<string|null>(null);

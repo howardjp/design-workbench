@@ -41,7 +41,7 @@ The explicit state-preview control demonstrates ready, loading, error and empty 
 
 ## Operations
 
-Monitoring windows end at the snapshot time and start 5, 11 or 23 hours earlier, respectively; observations are ordered by timestamp rather than input position. If coverage is incomplete, the trend includes only timestamps present for every selected service and labels the coverage as partial. The latest reading for each service is shown with its timestamp, and a mean of differing latest times is identified as such; missing availability is unavailable rather than zero. The schema also accepts duplicate timestamps and observations after the snapshot. Their handling remains unresolved: duplicate readings have no defined precedence, and latest readings can fall after the snapshot. Service selection scopes trends, status, alert counts and activity. A whole-number warning threshold from 50–1000 ms classifies each service's latest latency; the line plot shows the mean across selected services and labels the threshold separately. Severity and acknowledgement filters scope the alert register. The unacknowledged summary explicitly counts all severities in the service scope.
+Monitoring windows end at the snapshot time and start 5, 11 or 23 hours earlier, respectively; observations are ordered by timestamp rather than input position. If coverage is incomplete, the trend includes only timestamps present for every selected service and labels the coverage as partial. The latest reading for each service is shown with its timestamp, and a mean of differing latest times is identified as such; missing availability is unavailable rather than zero. The schema permits duplicate timestamps and observations after the snapshot; the operations view explicitly rejects these ambiguous snapshots and reports the reason, including without JavaScript. The other dashboard views remain available. Service selection scopes trends, status, alert counts and activity. A whole-number warning threshold from 50–1000 ms classifies each service's latest latency; the line plot shows the mean across selected services and labels the threshold separately. Severity and acknowledgement filters scope the alert register. The unacknowledged summary explicitly counts all severities in the service scope.
 
 Acknowledgement and undo update page memory and add an explicitly local timeline entry. Reset restores the original fixture. Availability is identified as a minimum sampled synthetic value, not a live SLA calculation. Status and severity use text and borders as well as semantic colours.
 
@@ -53,7 +53,7 @@ Both switch the application sidebar to a disclosure below 64rem, reduce metric c
 
 ## Portable component contracts
 
-`collectionView(records, options, fields)` returns filtered rows, clamped page, page count, page size, and total; `fields` declares searchable keys, sortable keys and default sort. Records require stable IDs. `analyticsView` and `operationsView` are domain calculations, not visual components. `applyBulk` and `validatePerson` remain domain workflow helpers.
+`collectionView(records, options, fields)` returns filtered rows, clamped page, page count, page size, and total; `fields` declares searchable keys, sortable keys and default sort. Records require stable IDs. `analyticsView` and `operationsView` are domain calculations, not visual components. `operationsView` returns an `error` instead of calculated values when its snapshot has duplicate service timestamps or future observations. `applyBulk` and `validatePerson` remain domain workflow helpers.
 
 Charts accept labelled numeric rows, an optional previous value and an optional threshold. The Jekyll SVG adapter is replaceable; the data table and equivalent information are required. Metrics require a name, formatted unit, and explanation of comparison/aggregation. Reuse existing React controls and tables when porting; implement rendering and state in the framework's normal mechanisms, keeping these fixture and behaviour contracts. Do not copy imperative DOM controllers into React.
 
@@ -82,7 +82,7 @@ Omit `CHROMIUM_PATH` when Playwright's Chromium is installed. Astro and React de
 
 The schema-valid arbitrary-ID directory regression builds isolated fixture copies and checks independent add, edit and bulk actions across families, frameworks and base paths: `node examples/page-archetypes/tests/administration-identifiers.mjs`.
 
-Schema-valid partial operations fixtures (including disjoint samples) can be checked with `node examples/page-archetypes/tests/operations-partial.mjs` and the `--disjoint` option. The schema-valid reordered operations fixture is checked, including its no-JavaScript service table, with `node examples/page-archetypes/tests/operations-order.mjs`.
+Schema-valid duplicate or future operations observations are checked with `node examples/page-archetypes/tests/operations-invalid.mjs` and its `--future` option. Schema-valid partial operations fixtures (including disjoint samples) can be checked with `node examples/page-archetypes/tests/operations-partial.mjs` and the `--disjoint` option. The schema-valid reordered operations fixture is checked, including its no-JavaScript service table, with `node examples/page-archetypes/tests/operations-order.mjs`.
 
 ## Empty analytics fixture
 
