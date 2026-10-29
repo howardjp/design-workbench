@@ -145,8 +145,8 @@ function operations(){
     const error=root.querySelector('#operations-error');
     if(!useApplied){
       const threshold=Number(form.elements.threshold.value);
-      if(!Number.isInteger(threshold)||threshold<50||threshold>1000){error.hidden=false;error.textContent='Enter a whole-number warning threshold from 50 to 1000 ms. Previous valid results remain visible.';form.elements.threshold.setAttribute('aria-invalid','true');error.tabIndex=-1;error.focus();return;}
-      error.hidden=true;form.elements.threshold.removeAttribute('aria-invalid');
+      if(!Number.isInteger(threshold)||threshold<50||threshold>1000){error.hidden=false;error.textContent='Enter a whole-number warning threshold from 50 to 1000 ms. Previous valid results remain visible.';form.elements.threshold.setAttribute('aria-invalid','true');form.elements.threshold.setAttribute('aria-describedby','threshold-help operations-error');error.tabIndex=-1;error.focus();return;}
+      error.hidden=true;form.elements.threshold.removeAttribute('aria-invalid');form.elements.threshold.setAttribute('aria-describedby','threshold-help');
       state={hours:Number(form.elements.hours.value),threshold,service:form.elements.service.value||'All',serviceId:form.elements.service.value==='All'?'All':null,severity:form.elements.severity.value,hideAcknowledged:form.elements.hideAcknowledged.checked};
     }
     const {threshold}=state;
