@@ -95,3 +95,7 @@ Commit `790aaaf` adds six local form demonstrations (contact, sign-in, sign-up, 
 ### Astro gallery and figures
 
 Commit `d587e4f` adds gallery, collection-item, place, product and reference records, bringing the experimental adapter to 33 of 50 recipes per language. Canonical images are built into Astro; the image dialog supports keyboard open, Escape and close with focus return, while direct image links remain usable without JavaScript. The independent branch suite passed for both families at root and subpath, including alt text, caption and image loading, gallery accessibility, no-JS asset access, 320px reflow and prior shell, form, search and pagination checks. Seventeen recipes and their interactions remain unported; exact visual parity is still open.
+
+### Jekyll search JSON safety
+
+Commit `b7d080a` escapes `<` after serializing the Jekyll search index into its inert JSON script element. Previously an authored catalog value containing `</script>` could break out of the element. A rendered Jekyll build and Chromium regression using such a value in title, summary and category failed before the fix and passed afterward; `npm run test:search-safety` and `npm run test:examples` also passed after integration. The Jekyll CI workflow now runs the regression after Chromium installation. This is a defense for authored catalog data, not a claim that an untrusted CMS is deployed.
