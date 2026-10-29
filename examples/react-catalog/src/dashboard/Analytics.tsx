@@ -24,7 +24,7 @@ function Series({id,title,description,points,bars=false}:{id:string;title:string
 export function Analytics() {
  const [draft,setDraft]=useState<Filter>(initial),[applied,setApplied]=useState<Filter>(initial),[range,setRange]=useState('7'),[enhanced,setEnhanced]=useState(false),[error,setError]=useState('');
  const errorRef=useRef<HTMLParagraphElement>(null);
- useEffect(()=>{const params=new URLSearchParams(location.search);const candidate={start:params.get('start')||initial.start,end:params.get('end')||initial.end,category:fixture.categories.includes(params.get('category')||'')?params.get('category')!:initial.category};setDraft(candidate);if(!analyticsView(fixture,candidate).error)setApplied(candidate);if(params.has('start'))setRange('custom');setEnhanced(true);},[]);
+ useEffect(()=>{const params=new URLSearchParams(location.search);const candidate={start:params.get('start')||initial.start,end:params.get('end')||initial.end,category:fixture.categories.includes(params.get('category')||'')?params.get('category')!:initial.category};setDraft(candidate);const result=analyticsView(fixture,candidate);if(result.error)setError(result.error);else{setApplied(candidate);setError('');}if(params.has('start')||params.has('end'))setRange('custom');setEnhanced(true);},[]);
  useEffect(()=>{if(error)errorRef.current?.focus();},[error]);
  const view=validView(applied);const days=Math.round((Date.parse(applied.end)-Date.parse(applied.start))/dayMillis)+1;
  const previousEnd=new Date(Date.parse(applied.start)-dayMillis).toISOString().slice(0,10),previousStart=new Date(Date.parse(applied.start)-days*dayMillis).toISOString().slice(0,10);

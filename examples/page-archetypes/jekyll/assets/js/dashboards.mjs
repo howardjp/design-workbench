@@ -14,7 +14,7 @@ const number=value=>new Intl.NumberFormat('en-US').format(value);
 function analytics(){
   const form=root.querySelector('#analytics-filters');const start=form.elements.start,end=form.elements.end,category=form.elements.category,range=form.elements.range;
   start.value=params.get('start')||start.value;end.value=params.get('end')||end.value;if(fixture.categories.includes(params.get('category')))category.value=params.get('category');
-  if(params.has('start'))range.value='custom';
+  if(params.has('start')||params.has('end'))range.value='custom';
   let view;
   range.addEventListener('change',()=>{if(range.value!=='custom'){end.value='2026-10-28';start.value=new Date(Date.parse(end.value)-(Number(range.value)-1)*dayMillis).toISOString().slice(0,10);}});
   [start,end].forEach(input=>input.addEventListener('input',()=>{range.value='custom';}));

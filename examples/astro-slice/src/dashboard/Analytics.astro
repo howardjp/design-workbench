@@ -40,7 +40,7 @@ const root=document.querySelector('[data-analytics-dashboard]');
 const form=root.querySelector('#analytics-filters');
 const start=form.elements.start,end=form.elements.end,category=form.elements.category,range=form.elements.range;
 const params=new URL(location.href).searchParams;
-start.value=params.get('start')||start.value;end.value=params.get('end')||end.value;if(fixture.categories.includes(params.get('category')))category.value=params.get('category');if(params.has('start'))range.value='custom';
+start.value=params.get('start')||start.value;end.value=params.get('end')||end.value;if(fixture.categories.includes(params.get('category')))category.value=params.get('category');if(params.has('start')||params.has('end'))range.value='custom';
 form.querySelector('[data-analytics-controls]').disabled=false;
 const toggle=root.querySelector('.dash-nav-toggle');const navigation=root.querySelector('#dashboard-nav');toggle.hidden=false;root.dataset.ready='true';
 toggle.addEventListener('click',()=>toggle.setAttribute('aria-expanded',String(toggle.getAttribute('aria-expanded')!=='true')));navigation.parentElement.addEventListener('keydown',event=>{if(event.key==='Escape'){toggle.setAttribute('aria-expanded','false');toggle.focus();}});

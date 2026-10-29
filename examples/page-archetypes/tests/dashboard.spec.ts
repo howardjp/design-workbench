@@ -13,6 +13,11 @@ for(const family of ['martlet','krigsvold']){
   await page.getByLabel('Start date',{exact:true}).fill('2026-10-28');await page.getByLabel('End date',{exact:true}).fill('2026-10-22');await page.getByRole('button',{name:'Apply filters',exact:true}).click();
   await expect(page.locator('#analytics-error')).toBeVisible();await expect(page.locator('[data-metric=sessions]')).toHaveText('4,459');await expect(page.getByRole('button',{name:'Download filtered CSV'})).toBeDisabled();
  });
+ test(`${family}: an end-only URL is identified as a custom analytics range`,async({page})=>{
+  await page.goto(route(family,'analytics')+'?end=2026-10-25');
+  await expect(page.getByLabel('Date range',{exact:true})).toHaveValue('custom');
+  await expect(page.locator('#analytics-source tbody tr')).toHaveCount(12);
+ });
  test(`${family}: administration selection scope, confirmation, sorting and recovery`,async({page})=>{
   await page.goto(route(family,'administration'));
   await expect(page.locator('#people-table tbody tr')).toHaveCount(5);
