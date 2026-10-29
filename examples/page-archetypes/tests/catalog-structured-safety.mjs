@@ -8,12 +8,19 @@ import {createServer} from 'node:http';
 import {chromium} from '@playwright/test';
 import {Validator} from '@cfworker/json-schema';
 const root=process.cwd(),temp=mkdtempSync(join(tmpdir(),'nightjar-empty-'));
-const mode=process.argv[2]||'url';assert.ok(['url','date'].includes(mode));
+const mode=process.argv[2]||'url';assert.ok(['url','date','order'].includes(mode));
 const fixture=JSON.parse(readFileSync('examples/page-archetypes/content/catalog.json','utf8'));
 const payload='<img src=x onerror="window.__nightjarInjected=1">',url='/examples/article/?x=1&copy';
 const page=id=>fixture.pages.find(page=>page.id===id),section=(id,kind)=>page(id).sections.find(item=>item.kind===kind);
 const listing=section('archive','listing');listing.items[0].url=url;section('home','cards').items[0].url=url;
 section('home','cards').items[0].summary=`Card ${payload}`;section('place','figure').caption=`Caption ${payload}`;section('faq','faq').items[0].answer=`Answer ${payload}`;page('event').event.location=`Location ${payload}`;page('event').event.start=payload;page('event').event.end='2026-02-30T09:00:00-05:00';page('event').event.display_start=`Start ${payload}`;page('article').title=`Article ${payload}`;page('case-study').date='2026-10-20';
+if(mode==='order'){page('event').event.start='2026-11-14T10:00:00+02:00';page('event').event.end='2026-11-14T08:59:59.999+01:00';page('event').event.display_start='Example start';page('event').event.display_end='Example end';
+ for(const [id,start,end] of [
+  ['place','2026-01-01T23:00Z','2026-01-02T00:00+01:00'],
+  ['faq','2026-01-02T00:30+02:00','2026-01-01T23:45Z'],
+  ['home','2026-02-30T00:00Z','2026-01-01T00:00Z']
+ ]){const record=page(id);record.semantic_class='event';record.event={...page('event').event,start,end};}
+}
 if(mode==='date'){listing.items[0].date=payload;listing.items[1].date='2026-02-31';listing.items[2].date='0000-01-01';page('article').date='2026-02-31';page('case-study').date=payload;}
 const schema=JSON.parse(readFileSync('examples/page-archetypes/contracts/catalog.schema.json','utf8'));assert.ok(new Validator(schema,'2020-12',true).validate(fixture).valid,'Adversarial structured catalog must remain schema-valid');
 const skip=new Set(['node_modules','dist','_site','.astro','.jekyll-cache','test-results']);
@@ -51,7 +58,9 @@ try {
     await page.goto(`${origin}${base}examples/${route}/`,{waitUntil:'networkidle'});assert.ok((await page.locator('body').textContent()).includes(text),`${route}: literal structured text`);assert.equal(await page.locator('img[src="x"]').count(),0,`${route}: text must not create elements`);assert.equal(await page.evaluate(()=>window.__nightjarInjected),undefined);
     if(route==='archive'){const link=page.getByRole('link',{name:'What a shoreline remembers',exact:true});assert.equal(await link.getAttribute('href'),`${base}examples/article/?x=1&copy`,'URL query survives HTML parsing');assert.ok(await link.evaluate(node=>new URL(node.href).searchParams.has('copy')),'query key survives URL parsing');if(mode==='date'){assert.ok((await page.locator('body').textContent()).includes(`Invalid date: ${payload}`));assert.ok((await page.locator('body').textContent()).includes('Invalid date: 2026-02-31'));assert.ok((await page.locator('body').textContent()).includes('Invalid date: 0000-01-01'));assert.equal(await page.locator('time[datetime="2026-02-31"]').count(),0);}}
     if(route==='home')assert.equal(await page.getByRole('link',{name:'Read the coast',exact:true}).getAttribute('href'),`${base}examples/article/?x=1&copy`);
-    if(route==='event'){assert.equal(await page.locator('time').filter({hasText:`Start ${payload}`}).count(),0,'invalid start must not become a machine-readable time');assert.ok((await page.locator('body').textContent()).includes(`Start ${payload} (invalid start time)`));assert.equal(await page.locator('time[datetime="2026-02-30T09:00:00-05:00"]').count(),0,'impossible end must not become a machine-readable time');assert.ok((await page.locator('body').textContent()).includes('(invalid end time)'));}
+    if(route==='event'&&mode==='order'){assert.equal(await page.locator('time[datetime="2026-11-14T10:00:00+02:00"]').count(),1);assert.equal(await page.locator('time[datetime="2026-11-14T08:59:59.999+01:00"]').count(),1);assert.ok((await page.locator('body').textContent()).includes('Event end is earlier than its start.'));}
+    if(mode==='order'&&['place','faq','home'].includes(route)){assert.ok(!(await page.locator('body').textContent()).includes('Event end is earlier than its start.'),`${route}: valid chronological or invalid individual timestamp has no order warning`);if(route==='home'){assert.ok((await page.locator('body').textContent()).includes('(invalid start time)'));assert.equal(await page.locator('time[datetime="2026-01-01T00:00Z"]').count(),1);}else assert.equal(await page.locator('time').count(),2,`${route}: both valid timestamps retained`);}
+    if(route==='event'&&mode!=='order'){assert.equal(await page.locator('time').filter({hasText:`Start ${payload}`}).count(),0,'invalid start must not become a machine-readable time');assert.ok((await page.locator('body').textContent()).includes(`Start ${payload} (invalid start time)`));assert.equal(await page.locator('time[datetime="2026-02-30T09:00:00-05:00"]').count(),0,'impossible end must not become a machine-readable time');assert.ok((await page.locator('body').textContent()).includes('(invalid end time)'));assert.ok(!(await page.locator('body').textContent()).includes('Event end is earlier than its start.'),'invalid times do not produce an ordering claim');}
     if(route==='article'&&mode==='date'){assert.ok((await page.locator('body').textContent()).includes('Invalid date: 2026-02-31'));assert.equal(await page.locator('time[datetime="2026-02-31"]').count(),0);}
     if(route==='article'&&mode==='url'){const bodyText=await page.locator('body').textContent();assert.doesNotMatch(bodyText,/Invalid date:/);assert.match(bodyText,/Oct(?:ober)? 28, 2026/);}
     if(route==='case-study'&&mode==='url')assert.match(await page.locator('body').textContent(),/Oct(?:ober)? 20, 2026/,'date-only metadata remains visible');
