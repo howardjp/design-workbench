@@ -151,9 +151,9 @@
     count();
   });
 
-  const chat = document.querySelector('[data-chat]');
-  if (chat) {
-    const messages = document.querySelector('[data-messages]');
+  document.querySelectorAll('[data-conversation]').forEach(conversation => {
+    const chat = conversation.querySelector('[data-chat]');
+    const messages = conversation.querySelector('[data-messages]');
     const original = [...messages.children].map(node => node.cloneNode(true));
     const input = chat.querySelector('textarea');
     const status = chat.querySelector('[data-chat-status]');
@@ -172,7 +172,7 @@
       messages.replaceChildren(...original.map(node => node.cloneNode(true)));
       input.value = ''; input.setCustomValidity(''); status.textContent = 'Conversation reset. Nothing was delivered.';
     });
-  }
+  });
 
   document.querySelectorAll('[data-sensors]').forEach(sensors => {
     const mode = sensors.querySelector('select'); const ventilation = sensors.querySelector('input');

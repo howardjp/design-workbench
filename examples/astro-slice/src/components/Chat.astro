@@ -1,16 +1,20 @@
 ---
 const {Button} = Astro.props;
 ---
+<div data-conversation>
 <ol data-messages aria-label="Conversation"><li><strong>Mara · Example message</strong><p>Could we review the conditions note before publishing?</p></li><li><strong>Rowan · Example message</strong><p>Yes. Keep the uncertainty visible in the account.</p></li></ol>
-<form data-chat><fieldset disabled data-chat-fields><legend>Add a local message</legend><label for="chat-message">Message</label><textarea id="chat-message" required maxlength="1000" rows="3"></textarea><div class="chat-actions"><Button type="submit">Add to this preview</Button> <Button type="button" data-clear-chat>Reset conversation</Button></div></fieldset><p role="status" data-chat-status>Messages remain in page memory. Nothing is delivered.</p></form>
+<form data-chat><fieldset disabled data-chat-fields><legend>Add a local message</legend><label>Message<textarea required maxlength="1000" rows="3"></textarea></label><div class="chat-actions"><Button type="submit">Add to this preview</Button> <Button type="button" data-clear-chat>Reset conversation</Button></div></fieldset><p role="status" data-chat-status>Messages remain in page memory. Nothing is delivered.</p></form>
 <noscript><p>Message composition requires JavaScript.</p></noscript>
+</div>
 <style>
 fieldset { display:grid; gap:.5rem; min-width:0; }
+label textarea { display:block; margin-top:.5rem; font-weight:400; }
 .chat-actions { display:flex; flex-wrap:wrap; gap:.75rem; }
 </style>
 <script>
-  document.querySelectorAll('[data-chat]').forEach(chat => {
-    const messages = chat.parentElement.querySelector('[data-messages]');
+  document.querySelectorAll('[data-conversation]').forEach(conversation => {
+    const chat = conversation.querySelector('[data-chat]');
+    const messages = conversation.querySelector('[data-messages]');
     const original = [...messages.children].map(node => node.cloneNode(true));
     const input = chat.querySelector('textarea');
     const status = chat.querySelector('[data-chat-status]');

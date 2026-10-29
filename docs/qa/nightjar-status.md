@@ -293,3 +293,7 @@ Two Jekyll gallery sections previously emitted duplicate dialog-heading IDs and 
 ### Reading typography and form controls
 
 Commit `1285d26` aligns Astro masthead and section heading roles with Jekyll and makes Astro/React local form text controls use root-responsive 16px sizing with narrow-screen containment. A documented cross-framework regression passed all six family/framework combinations for article, documentation, contact and sign-up at 320/1440px, including 200% contact text and no-JavaScript. The initial 48-page/viewport Chromium audit found no page overflow, browser errors or WCAG-tagged axe violations. Full Astro and React 47-route suites passed both languages at root/subpaths. Martlet Jekyll form controls use Cambo while Astro/React retain their existing Lato control role; exact visual and manual assistive-technology parity remain open. Evidence and commands are in `examples/page-archetypes/READING-VERIFICATION.md`.
+
+### Composed conversation recovery
+
+Multiple Jekyll conversations previously reused a message-field ID and only the first received an interaction handler; Astro conversations also reused the ID. Both now associate their message labels without generated IDs and scope interaction state to each conversation. Disposable two-conversation fixtures passed both families and root/subpaths in Jekyll and Astro for independent submission and reset, whitespace-error recovery, keyboard focus, axe and disabled no-JavaScript controls. React uses per-instance state and IDs; its separate workspace/chat suite covers its composer behavior.
