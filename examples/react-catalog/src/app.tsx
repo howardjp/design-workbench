@@ -1,5 +1,5 @@
 import {useEffect,useRef,useState} from 'react';
-import {AppShell,Article,DefinitionList,Pagination,DataTable,Disclosure,family} from 'catalog-family';
+import {Article,DefinitionList,Pagination,DataTable,Disclosure} from 'catalog-family';
 import {pages,specialKinds} from './pages';
 import type {ReactNode} from 'react';
 import catalog from '../../page-archetypes/content/catalog.json';
@@ -8,6 +8,7 @@ import rendered from './rendered.json';
 import {exampleImage} from './assets';
 import {DemoForm,Search} from './interactive';
 import './style.css';
+import {SourceShell} from './shell/SourceShell';
 
 type Item={title:string;summary:string;url:string;date?:string;tag?:string;question?:string;answer?:string;label?:string;value?:string;price?:string;features?:string[];action?:{label:string;url:string}};
 type Section={id:string;title:string;kind?:string;body?:string;items?:Item[];facts?:{label:string;value:string}[];actions?:{label:string;url:string}[];headers?:string[];rows?:string[][];image?:string;alt?:string;caption?:string;form?:string};
@@ -43,16 +44,16 @@ function SectionView({section,pageId,special}:{section:Section;pageId:string;spe
  </section>;
 }
 export function App({id,special}:{id:string;special?:(section:unknown)=>ReactNode}) {
- if(id==='index') return <div className={family} {...{[`data-${family}`]:'light'}}><AppShell brand={<a href={href('/examples/home/')}>Northlight Field Institute</a>} navigationPlacement="top" navigation={<a href={href('/examples/home/')}>Home</a>} utilities={null}><Article title="All page examples" summary="Browse the shared Northlight collection."><ul>{catalog.pages.map(entry=><li key={entry.id}>{selected.includes(entry.id)?<a href={href(`/examples/${entry.id}/`)}>{entry.title}</a>:<>{entry.title} (not yet available in this React preview)</>}</li>)}</ul></Article></AppShell></div>;
+ if(id==='index') return <SourceShell current="index" title="All page examples"><Article title="All page examples" summary="Browse the shared Northlight collection."><ul>{catalog.pages.map(entry=><li key={entry.id}>{selected.includes(entry.id)?<a href={href(`/examples/${entry.id}/`)}>{entry.title}</a>:<>{entry.title} (not yet available in this React preview)</>}</li>)}</ul></Article></SourceShell>;
  const page=pages.find(item=>item.id===id);
  if(!page) throw Error(`Unported catalog route: ${id}`);
- return <div className={family} {...{[`data-${family}`]:'light'}}><AppShell brand={<a href={href('/examples/home/')}>Northlight Field Institute</a>} navigationLabel="Example navigation" navigationPlacement="top" navigation={<><a href={href('/examples/home/')}>Home</a><a href={href('/examples/about/')}>About</a><a href={href('/examples/archive/')}>Archive</a></>} utilities={<span>Fictional examples</span>}>
-  <Article title={page.title} eyebrow={page.category} summary={page.summary} {...('date' in page && page.date ? {metadata:<><time dateTime={page.date}>{new Intl.DateTimeFormat('en-US',{year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(`${page.date}T00:00:00Z`))}</time>{'author' in page && page.author && <> · {page.author}</>}</>}: {})}>
+ return <SourceShell current={page.id} title={page.title}>
+  <Article data-composition={page.composition} title={page.title} eyebrow={page.category} summary={page.summary} {...('date' in page && page.date ? {metadata:<><time dateTime={page.date}>{new Intl.DateTimeFormat('en-US',{year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(`${page.date}T00:00:00Z`))}</time>{'author' in page && page.author && <> · {page.author}</>}</>}: {})}>
    <div data-example={page.id} data-semantic-class={page.semantic_class}>
    {'author' in page && page.author && <nav aria-label="Article context"><a href={href('/examples/person/')}>About {page.author}</a> · <a href={href('/examples/archive/')}>All writing</a></nav>}
    {'tags' in page && page.tags && <ul aria-label="Article subjects">{page.tags.map(tag=><li key={tag}><a href={href('/examples/categories/')}>{tag}</a></li>)}</ul>}
    {'event' in page && page.event && <aside aria-label="Event details"><p><strong>Event details</strong></p><p><time dateTime={page.event.start}>{page.event.display_start}</time> to <time dateTime={page.event.end}>{page.event.display_end}</time> · {page.event.timezone}</p><p>{page.event.location} · {page.event.registration}</p></aside>}
    {page.sections.map(section=><SectionView key={section.id} section={section as Section} pageId={page.id} special={special}/>)}</div>
   </Article>
- </AppShell></div>;
+ </SourceShell>;
 }

@@ -28,6 +28,7 @@ try {
  const manifest=JSON.parse(await readFile(resolve(out,'.vite/manifest.json'),'utf8'));
  const {DashboardFrame}=await server.ssrLoadModule('/src/dashboard/DashboardFrame.tsx');
  const dashboards=[['analytics','Analytics'],['administration','Administration'],['operations','Operations']];
+ const marks=resolve(out,'assets/identity');await mkdir(marks,{recursive:true});await copyFile(resolve(`examples/jekyll/${family}/assets/mark.svg`),resolve(marks,`${family}-mark.svg`));
  const images=resolve(out,'assets/examples');await mkdir(images,{recursive:true});
  for(const file of ['station.svg','coast.svg','notebook.svg','observations.csv']) await copyFile(resolve('examples/page-archetypes/jekyll/assets/examples',file),resolve(images,file));
  for(const page of pages){
