@@ -494,3 +494,5 @@ The page-archetypes README now gives a complete paired Jekyll/Astro/React root-p
 ### Clean paired example setup
 
 Commit `1a713db` documents the complete paired root-path Jekyll/Astro/React build sequence, browser setup and `NIGHTJAR_JEKYLL_ROOT` directory layout in the canonical and synced READMEs. An independent clean Git archive passed fresh root/Astro npm installs, frozen Bundler installs using the existing local gem cache, all six builds, the 300-route content inventory, six dashboard parity cases and `test:examples`. Fresh Ruby-gem and Playwright-browser downloads were not exercised.
+
+The integrated-branch `analytics-calendar.mjs` day case and explicit `--month` case passed after `acebe4a` across both languages × three frameworks × root/subpaths with and without JavaScript; `test:examples` also passed. The initial positional `month` invocation repeated the day case; the explicit flag corrected that coverage.
