@@ -30,6 +30,31 @@ python3 examples/page-archetypes/scripts/verify-html.py examples/jekyll/martlet/
 python3 examples/page-archetypes/scripts/verify-html.py examples/jekyll/krigsvold/dist
 ```
 
+The cross-framework checks require a paired build directory that differs from the default Jekyll `dist` locations. From the workbench root, the following creates it and builds both families at `/`. It uses Node 24.19.x, Python 3, Ruby 3.2 and the Bundler version in each lockfile. For a nonprivileged Ruby setup, Bundler can be configured to install into `vendor/bundle` within each Jekyll project before `bundle install`.
+
+```sh
+npm ci --ignore-scripts
+npm ci --prefix examples/astro-slice --ignore-scripts
+(cd examples/jekyll/martlet && bundle install)
+(cd examples/jekyll/krigsvold && bundle install)
+
+export NIGHTJAR_JEKYLL_ROOT="$(mktemp -d "${TMPDIR:-/tmp}/nightjar-paired.XXXXXX")"
+python3 examples/page-archetypes/scripts/build.py --family martlet --destination "$NIGHTJAR_JEKYLL_ROOT/martlet"
+python3 examples/page-archetypes/scripts/build.py --family krigsvold --destination "$NIGHTJAR_JEKYLL_ROOT/krigsvold"
+NIGHTJAR_FAMILY=martlet NIGHTJAR_BASE=/ npm --prefix examples/astro-slice run build
+NIGHTJAR_FAMILY=krigsvold NIGHTJAR_BASE=/ npm --prefix examples/astro-slice run build
+npm run build --workspaces
+NIGHTJAR_FAMILY=martlet NIGHTJAR_BASE=/ node examples/react-catalog/build.mjs
+NIGHTJAR_FAMILY=krigsvold NIGHTJAR_BASE=/ node examples/react-catalog/build.mjs
+
+# Install Playwright Chromium, or set CHROMIUM_PATH to an existing executable.
+npx playwright install chromium
+node examples/page-archetypes/tests/content-semantic-inventory.mjs
+node examples/page-archetypes/tests/dashboard-framework-parity.mjs
+```
+
+These are local builds and checks; no site is published. The temporary Jekyll directory can be removed when the checks are complete. The checks below reuse these root-path builds unless they say they create their own fixtures. `CHROMIUM_PATH=/usr/bin/chromium` in the examples selects a system Chromium on Linux; omit that assignment when using Playwright's installed browser or set it to the executable on your system.
+
 The cross-framework long-content reflow check runs against already-built root-path sites. Set `NIGHTJAR_JEKYLL_ROOT` to a directory containing `martlet` and `krigsvold` Jekyll builds, build both Astro and React families at `/`, then run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/internationalization-stress.mjs`. Optional `NIGHTJAR_ASTRO_ROOT` and `NIGHTJAR_REACT_ROOT` select alternate paired output directories. The test checks multilingual unbroken titles and associated labels at 320 and 768 pixels in both LTR and RTL direction. It does not establish complete RTL, translation, locale formatting or assistive-technology support.
 
 The same paired builds also support `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/enlarged-text-motion.mjs`. It tests 200% root font size and reduced-motion emulation at 320 and 768 pixels across the three dashboards, including keyboard navigation, focus return and filter submission. Root font-size scaling is not browser zoom; these checks do not establish full reduced-motion or assistive-technology support.

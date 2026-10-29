@@ -486,3 +486,7 @@ Commit `96a09b9` derives analytics, administration and operations snapshot label
 ### Analytics observation calendar validation
 
 Commit `acebe4a` rejects impossible analytics observation dates anywhere in the snapshot with an explicit analytics-only unavailable state; it does not conflate this with operations or snapshot-label validation, and administration remains available. Independent normalized-invalid-day and invalid-month fixtures passed both languages × three frameworks × root/subpaths with and without JavaScript (24 builds); duplicate/sparse regressions, 24 model tests, strict React types and YAML parsing passed. The bounded analytics CI group adds two modes. An integrated rerun is in progress; the initial command passed a positional `month` argument although the test uses `--month`, so the explicit flag will be run separately.
+
+### Fresh-checkout example setup
+
+The page-archetypes README now gives a complete paired Jekyll/Astro/React root-path build and browser-check sequence, including the separate locked dependency installs and the directory shape required by cross-framework tests. A clean Git archive passed fresh root and Astro `npm ci`, both frozen Bundler installs using the existing local Ruby gem cache, all six root-path builds, the 300-route content inventory and all six dashboard behavior-parity cases. System Chromium was used; a fresh browser download and fresh Ruby gem download were not tested in that run.
