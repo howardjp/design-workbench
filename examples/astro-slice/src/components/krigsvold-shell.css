@@ -1,4 +1,6 @@
 .nightjar-header__inner { border:1px solid #ffffff33; border-radius:.4rem; }
+/* Enabling a control must not animate its background while its text color changes immediately. */
+button.krigsvold-button { transition:none; }
 /* The source example contract uses an outline for actions after the first. */
 .recipe-actions li:not(:first-child) .krigsvold-button, .demo-actions .krigsvold-button[type="reset"] { color:var(--krigsvold-text-strong); background:transparent; border-color:var(--krigsvold-text-strong); }
 .recipe-actions li:not(:first-child) .krigsvold-button:hover, .demo-actions .krigsvold-button[type="reset"]:hover { color:var(--krigsvold-on-accent); background:var(--krigsvold-accent); border-color:var(--krigsvold-accent); }

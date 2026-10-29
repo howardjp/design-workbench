@@ -1,5 +1,8 @@
 .nightjar-brand { font-family:var(--martlet-font-display,serif); }
 
+/* Enabling a control must not animate its background while its text color changes immediately. */
+button.martlet-button { transition:none; }
+
 /* Preserve readable paper output when dark screen appearance is selected. */
 @media print {
  html[data-martlet="dark"] {
