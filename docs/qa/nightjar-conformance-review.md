@@ -1,6 +1,6 @@
 # Nightjar conformance review
 
-This review accompanies the [300-cell canonical evidence snapshot](nightjar-conformance.md). The 50 catalog recipes are paired across two languages and three renderers; the experimental scientific workspace is tracked separately. A populated cell records bounded evidence, not approval or certification. The scientific route's later Chromium evidence is recorded at `7bd2269`, separately from the canonical snapshot at `22612d2`.
+This review accompanies the [300-cell canonical evidence snapshot](nightjar-conformance.md). The 50 catalog recipes are paired across two languages and three renderers; the experimental scientific workspace is tracked separately. A populated cell records bounded evidence, not approval or certification. The scientific route's later Chromium evidence is recorded at `a20e968`, separately from the canonical snapshot at `22612d2`.
 
 ## Evidence and limits
 
