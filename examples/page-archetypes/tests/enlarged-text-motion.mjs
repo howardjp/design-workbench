@@ -13,8 +13,18 @@ try {for(const [framework,source] of sources.filter(([name])=>only==='all'||name
  const directory=resolve(source,family),server=createServer(async(req,res)=>{const path=new URL(req.url,'http://localhost').pathname,file=resolve(directory,path.slice(1)+(path.endsWith('/')?'index.html':''));if(!file.startsWith(directory+'/')){res.writeHead(403).end();return}try{const data=await readFile(file),type={'.html':'text/html','.css':'text/css','.js':'text/javascript','.mjs':'text/javascript','.svg':'image/svg+xml','.woff':'font/woff','.woff2':'font/woff2'};res.writeHead(200,{'Content-Type':type[extname(file)]||'application/octet-stream'}).end(data)}catch{res.writeHead(404).end()}});await new Promise(r=>server.listen(0,'127.0.0.1',r));
  try{for(const width of [320,768])for(const kind of ['analytics','administration','operations']){
   const page=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'}),origin=`http://127.0.0.1:${server.address().port}`,context=`${framework}/${family} ${kind} ${width}px`;
-  await page.goto(`${origin}/examples/dashboard-${kind}/`,{waitUntil:'networkidle'});await page.addStyleTag({content:'html { font-size: 200% !important; }'});await page.evaluate(()=>document.fonts.ready);
+  await page.goto(`${origin}/examples/dashboard-${kind}/`,{waitUntil:'networkidle'});
+  const before=await page.evaluate(()=>getComputedStyle(document.documentElement).fontSize);
+  const scaleStyle=await page.addStyleTag({content:'html { font-size: 200% !important; }'});await page.evaluate(()=>document.fonts.ready);
   const state=await page.evaluate(()=>({font:getComputedStyle(document.documentElement).fontSize,reduced:matchMedia('(prefers-reduced-motion: reduce)').matches,viewport:innerWidth,document:document.documentElement.scrollWidth,clipped:[...document.querySelectorAll('button')].filter(b=>b.getClientRects().length&&b.scrollWidth>b.clientWidth+1).map(b=>b.textContent.trim())}));
+  if(state.font!=='32px'){
+   const details=await scaleStyle.evaluate(node=>{
+    const matched=[];const collect=rules=>{for(const rule of rules){if(rule instanceof CSSStyleRule && rule.style.getPropertyValue('font-size')){try{if(document.documentElement.matches(rule.selectorText))matched.push({selector:rule.selectorText,value:rule.style.getPropertyValue('font-size'),priority:rule.style.getPropertyPriority('font-size')})}catch{}}else if(rule instanceof CSSMediaRule){if(matchMedia(rule.conditionText).matches)collect(rule.cssRules)}else if(rule instanceof CSSGroupingRule)collect(rule.cssRules)}};
+    for(const sheet of document.styleSheets)try{collect(sheet.cssRules)}catch{}
+    return {connected:node.isConnected,text:node.textContent,rules:node.sheet?[...node.sheet.cssRules].map(rule=>rule.cssText):null,matched,rootInline:document.documentElement.getAttribute('style'),rootClass:document.documentElement.className,htmlCount:document.querySelectorAll('html').length,userAgent:navigator.userAgent,viewport:[innerWidth,innerHeight],computed:getComputedStyle(document.documentElement).fontSize};
+   });
+   console.error('Root text scaling diagnostic:',JSON.stringify({context,before,after:state.font,...details}));
+  }
   assert.equal(state.font,'32px',context);assert.equal(state.reduced,true,context);assert.ok(state.document<=state.viewport+1,`${context}: horizontal overflow ${JSON.stringify(state)}`);assert.deepEqual(state.clipped,[],`${context}: clipped button text`);
   const toggle=page.getByRole('button',{name:'Dashboard navigation',exact:true});await toggle.focus();await page.keyboard.press('Enter');await expect(toggle).toHaveAttribute('aria-expanded','true');await page.keyboard.press('Escape');await expect(toggle).toHaveAttribute('aria-expanded','false');assert.equal(await toggle.evaluate(el=>el===document.activeElement),true,`${context}: focus restored`);
   let button;
