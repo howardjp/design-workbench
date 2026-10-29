@@ -189,7 +189,7 @@ jobs:
       - name: Install the browser
         timeout-minutes: 10
         run: npx playwright install --with-deps "$NIGHTJAR_BROWSER"
-      - name: Check reading, forms and analytics across portable frameworks
+      - name: Check reading, forms, analytics and scientific workspace across portable frameworks
         run: NIGHTJAR_JEKYLL_ROOT="$RUNNER_TEMP/portable-browser-jekyll" node examples/page-archetypes/tests/portable-browser-smoke.mjs
 
   # Group the expensive isolated builds to bound parallelism and setup cost.

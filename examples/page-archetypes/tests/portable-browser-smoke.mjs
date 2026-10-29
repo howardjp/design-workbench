@@ -86,9 +86,25 @@ try{
    await page.getByText('View session trend data',{exact:true}).click();await expect(page.locator('figure').filter({has:page.getByRole('heading',{name:'Session trend',exact:true})}).locator('table tbody tr')).toHaveCount(14);
    const toggle=page.getByRole('button',{name:'Dashboard navigation',exact:true});await toggle.focus();await page.keyboard.press('Enter');await expect(toggle).toHaveAttribute('aria-expanded','true');await page.keyboard.press('Escape');await expect(toggle).toHaveAttribute('aria-expanded','false');await expect(toggle).toBeFocused();
    await checkAxe('filtered analytics with chart data open');
+   await open('scientific-workspace');
+   const science=page.locator(framework==='react'?'.scientific-workspace':'[data-science]');
+   const duration=science.getByLabel('Duration (min)'),run=science.getByRole('button',{name:'Run calculation'}),exportCsv=science.getByRole('button',{name:'Download results CSV'}),rows=science.locator('tbody tr');
+   await expect(rows).toHaveCount(6);await expect(rows.last()).toContainText('24.93');
+   await duration.fill('0');await run.click();await expect(science.getByRole('alert')).toContainText('Duration must be a number');await expect(duration).toHaveAttribute('aria-invalid','true');await expect(rows.last()).toContainText('24.93');
+   await science.getByRole('link',{name:/Duration must be a number/}).click();await expect(duration).toBeFocused();
+   if(appearance==='light'){
+    const priorDownload=page.waitForEvent('download');await exportCsv.click();const prior=await readFile(await (await priorDownload).path(),'utf8');assert.match(prior,/10\.00,24\.93/,'invalid draft retains previous CSV');
+   }
+   await duration.fill('5');await run.focus();await page.keyboard.press('Enter');await expect(science.getByRole('alert')).toHaveCount(0);await expect(rows.last()).toContainText('5.00');
+   if(appearance==='light'){
+    const nextDownload=page.waitForEvent('download');await exportCsv.click();const next=await readFile(await (await nextDownload).path(),'utf8');assert.match(next,/5\.00,/);assert.doesNotMatch(next,/10\.00,24\.93/);
+    const fallback=await browser.newContext({javaScriptEnabled:false,viewport:{width:320,height:900}});
+    try{const fp=await fallback.newPage();const response=await fp.goto(`${origin}/examples/scientific-workspace/`);assert.equal(response.status(),200);await expect(fp.getByRole('button',{name:'Run calculation'})).toBeDisabled();await expect(fp.getByRole('button',{name:'Download results CSV'})).toBeDisabled();await expect(fp.getByText('Interactive calculations are unavailable. The example results remain available; reload to try again.')).toBeVisible();await expect(fp.locator('main tbody tr')).toHaveCount(6);}finally{await fallback.close()}
+   }
+   await checkAxe('scientific calculation after validation and recovery');
    assert.deepEqual(errors,[],`${family} ${framework}: no page script errors`);
    assert.deepEqual(missing,[],`${family} ${framework}: all requested local resources load`);
-   await context.close();console.log(`${engine}: ${family} ${framework} ${appearance}: reading, form, dashboard and mobile keyboard${appearance==='light'?', gallery handover/reopen/fallback':''} passed; no WCAG-tagged axe violations`);
+   await context.close();console.log(`${engine}: ${family} ${framework} ${appearance}: reading, form, dashboard, scientific calculation and mobile keyboard${appearance==='light'?', gallery handover/reopen/fallback and scientific CSV/no-JS':''} passed; no WCAG-tagged axe violations`);
    }
   }finally{server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}
  }
