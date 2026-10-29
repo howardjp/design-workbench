@@ -17,7 +17,7 @@ const dashboards = ['analytics','administration','operations'].map(id => ({href:
   <script is:inline slot="head" define:vars={{family: 'krigsvold'}}>try { const mode=localStorage.getItem('nightjar-appearance')==='dark'?'dark':'light'; document.documentElement.dataset.appearance=mode;document.documentElement.setAttribute(`data-${family}`,mode); } catch {}</script>
   <SourceHeader slot="header" name="Krigsvold examples" home={href('/examples/')} links={links} mark={mark} />
   {!page.dashboard && <SourceMasthead page={page} />}
-  {!page.dashboard && <nav class="nightjar-breadcrumb" aria-label="Breadcrumb"><a href={href('/examples/home/')}>Home</a> / <span aria-current="page">{page.title}</span></nav>}
+  {!page.dashboard && page.id !== 'home' && <nav class="nightjar-breadcrumb" aria-label="Breadcrumb"><a href={href('/examples/home/')}>Home</a><span aria-hidden="true"> / </span>{page.id !== 'index' && <><a href={href('/examples/')}>Examples</a><span aria-hidden="true"> / </span></>}<span aria-current="page">{page.title}</span></nav>}
   {!page.dashboard && <Content page={page} href={href} base={base} Button={Button} />}
   <slot />
   <SourceFooter slot="footer" name={name} groups={[{label:'Explore',links},{label:'Dashboards',links:dashboards}]} />
