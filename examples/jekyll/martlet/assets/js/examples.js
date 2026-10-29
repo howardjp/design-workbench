@@ -4,8 +4,14 @@
   document.querySelectorAll('[data-demo-form]').forEach(form => {
     const status = form.querySelector('[data-form-status]'), fields = form.querySelector('[data-demo-fields]'), fallback = form.nextElementSibling;
     if (!status || !fields || !fallback?.matches('[data-form-fallback]')) return;
+    const freeText = form.querySelectorAll('[name=name], [name=message]');
+    const validateText = () => freeText.forEach(input => {
+      const label = input.name === 'name' ? 'name' : 'message';
+      input.setCustomValidity(input.value && !input.value.trim() ? `Enter a ${label} with at least one non-whitespace character.` : '');
+    });
     form.addEventListener('submit', event => {
       event.preventDefault();
+      validateText();
       if (!form.reportValidity()) return;
       status.textContent = 'Example validated locally. Nothing was sent, saved, or authenticated.';
       // Do not retain even illustrative passwords or verification codes.
@@ -14,9 +20,9 @@
     // Native constraint validation runs before submit and emits a non-bubbling invalid event.
     form.addEventListener('invalid', () => { status.textContent = ''; }, true);
     // A validation message describes the submitted values, not later edits.
-    form.addEventListener('input', () => { status.textContent = ''; });
-    form.addEventListener('change', () => { status.textContent = ''; });
-    form.addEventListener('reset', () => { status.textContent = ''; });
+    form.addEventListener('input', () => { validateText(); status.textContent = ''; });
+    form.addEventListener('change', () => { validateText(); status.textContent = ''; });
+    form.addEventListener('reset', () => { freeText.forEach(input => input.setCustomValidity('')); status.textContent = ''; });
     fields.disabled = false; fallback.hidden = true;
   });
 

@@ -20,6 +20,8 @@ Sections are a discriminated union: prose (no `kind`), cards, listing, facts, fi
 
 Martlet demonstrates sustained reading, editorial collections, and a collection-to-focused-record flow. Krigsvold demonstrates aligned section labels, compact records, supporting facts, and a divided collection/active-record workspace. Both collapse to a logical reading order on small screens. Do not reduce this distinction to a token swap, or make either family unable to render the other family's content.
 
+Demo contact and sign-up forms reject required names or messages consisting only of whitespace; keep the user's text unchanged, clear the error when the field is corrected or reset, and retain native required-field validation for empty values. These are local demonstrations and do not submit data.
+
 ## Service integrations
 
 | Capability | Required live adapter | Current specimen |
