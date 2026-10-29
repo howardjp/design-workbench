@@ -127,6 +127,53 @@ jobs:
             examples/jekyll/martlet/dist
             examples/jekyll/krigsvold/dist
 
+  # Exercise representative portable routes in the two engines not covered by
+  # the full Chromium example suite; do not repeat the large fixture matrix.
+  portable-browser-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [firefox, webkit]
+    env:
+      NIGHTJAR_BROWSER: ${{ matrix.browser }}
+      NIGHTJAR_JEKYLL_ROOT: ${{ runner.temp }}/portable-browser-jekyll
+      ASTRO_TELEMETRY_DISABLED: '1'
+      BUNDLE_FROZEN: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+      - name: Install dependencies and build portable sites
+        run: |
+          npm ci --ignore-scripts
+          npm ci --prefix examples/astro-slice --ignore-scripts
+          (cd examples/jekyll/martlet && bundle install)
+          (cd examples/jekyll/krigsvold && bundle install)
+          python3 examples/page-archetypes/scripts/build.py --family martlet --destination "$NIGHTJAR_JEKYLL_ROOT/martlet"
+          python3 examples/page-archetypes/scripts/build.py --family krigsvold --destination "$NIGHTJAR_JEKYLL_ROOT/krigsvold"
+          NIGHTJAR_FAMILY=martlet NIGHTJAR_BASE=/ npm --prefix examples/astro-slice run build
+          NIGHTJAR_FAMILY=krigsvold NIGHTJAR_BASE=/ npm --prefix examples/astro-slice run build
+          npm run build --workspaces
+          NIGHTJAR_FAMILY=martlet NIGHTJAR_BASE=/ node examples/react-catalog/build.mjs
+          NIGHTJAR_FAMILY=krigsvold NIGHTJAR_BASE=/ node examples/react-catalog/build.mjs
+      - name: Use the Ubuntu archive for browser dependencies
+        run: |
+          if [ -f /etc/apt/apt-mirrors.txt ]; then
+            sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' /etc/apt/apt-mirrors.txt
+          fi
+      - name: Install the browser
+        timeout-minutes: 10
+        run: npx playwright install --with-deps "$NIGHTJAR_BROWSER"
+      - name: Check reading, forms and analytics across portable frameworks
+        run: node examples/page-archetypes/tests/portable-browser-smoke.mjs
+
   # Group the expensive isolated builds to bound parallelism and setup cost.
   fixture-regressions:
     runs-on: ubuntu-latest
