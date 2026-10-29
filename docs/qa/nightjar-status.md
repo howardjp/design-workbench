@@ -466,3 +466,5 @@ The integrated-branch `operations-sentinel.mjs` and `test:examples` rerun passed
 ### Literal All analytics category
 
 Commit `e9e6352` distinguishes an explicit `categoryId=All` from legacy unscoped `category=All`, preserving existing URL meanings and peer comparison while using an empty all-categories option value. The schema permits `All` in the category list but restricts observation categories to Research/Publications/Workshops, so the literal category correctly yields no observations. Independent tests passed 12 family/framework/base builds with no-JS/default output, legacy URLs and scope restoration; hostile-text, sparse and precision matrices, 21 model tests, strict React types and YAML parsing passed. Administration's status enum excludes `All`, so no status change was needed. The DOM all-categories option value changed from `All` to empty; consumers relying on that markup need to account for it. A combined-branch rerun is in progress.
+
+The integrated-branch `analytics-sentinel.mjs` and `test:examples` rerun passed after `e9e6352` across both languages × three frameworks × root/subpaths.
