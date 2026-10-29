@@ -1,5 +1,6 @@
 ---
 import fixture from '../../../page-archetypes/content/dashboards.json';
+import {dashboardPayload,serializeForScript} from './fixture.mjs';
 import Button from '@nightjar/button';
 import DashboardNav from './DashboardNav.astro';
 import {peerDashboardURL} from './peer.mjs';
@@ -10,6 +11,7 @@ const peer=peerDashboardURL(process.env.NIGHTJAR_PEER_URL,'analytics');
 const peerFamily=family==='martlet'?'Krigsvold':'Martlet';
 const variables = Object.entries({ 'a-text':'text','a-muted':'muted','a-bg':'bg','a-panel':'panel','a-line':'line','a-accent':'accent','a-on':'on-accent','a-focus':'focus','a-disabled-bg':'disabled-bg','a-disabled-text':'disabled-text','dash-chart-primary':'chart-1','dash-chart-secondary':'chart-2','dash-warning':'warning','dash-ui-font':'font-sans','ex-muted':'muted' }).map(([name,token])=>`--${name}:var(--${family}-${token})`).join(';');
 const initial=fixture.analytics.filter(row=>row.date >= '2026-10-22');
+const json=serializeForScript(dashboardPayload('analytics',fixture));
 const charts=[{id:'sessions',title:'Session trend',description:'Daily sessions across the selected categories.'},{id:'downloads',title:'Download trend',description:'Daily downloads in the selected period.'},{id:'categories',title:'Category comparison',description:'Current sessions versus the preceding period of equal length, when available.'}];
 const metrics=[['sessions','Sessions'],['downloads','Downloads'],['conversion','Completion rate'],['mean_duration','Mean session duration']];
 ---
@@ -32,8 +34,9 @@ const metrics=[['sessions','Sessions'],['downloads','Downloads'],['conversion','
     <noscript><p>Interactive filtering and charts require JavaScript. The published data table remains available; controls are disabled.</p></noscript>
   </div>
 </div>
+<script type="application/json" id="analytics-data" is:inline set:html={json}></script>
 <script>
-import fixture from '../../../page-archetypes/content/dashboards.json';
+const fixture=JSON.parse(document.getElementById('analytics-data').textContent);
 import {analyticsView, dayMillis} from '../../../page-archetypes/jekyll/assets/js/dashboard-model.mjs';
 import {chart, metric, tableRows, downloadCSV} from '../../../page-archetypes/jekyll/assets/js/dashboard-ui.mjs';
 const root=document.querySelector('[data-analytics-dashboard]');

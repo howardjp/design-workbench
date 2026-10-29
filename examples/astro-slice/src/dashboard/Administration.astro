@@ -1,5 +1,6 @@
 ---
 import fixture from '../../../page-archetypes/content/dashboards.json';
+import {dashboardPayload,serializeForScript} from './fixture.mjs';
 import DashboardNav from './DashboardNav.astro';
 import {peerDashboardURL} from './peer.mjs';
 import MartletButton from '@martlet/astro/Button.astro';
@@ -16,7 +17,7 @@ const peer=peerDashboardURL(process.env.NIGHTJAR_PEER_URL,'administration');
 const peerFamily=family==='martlet'?'Krigsvold':'Martlet';
 const tokens={'ex-text':'text','ex-strong':'text','ex-muted':'muted','ex-bg':'bg','ex-panel':'panel','ex-line':'line','ex-link':'link','ex-focus':'link','dash-ui-font':'font-sans','dash-number-font':family==='krigsvold'?'font-mono':'font-sans','dash-chart-primary':'chart-1','dash-chart-secondary':'chart-2','dash-warning':'warning','dash-danger':'danger','dash-success':'green','dash-overlay':'overlay-scrim'};
 const variables=Object.entries(tokens).map(([name,token])=>`--${name}:var(--${family}-${token})`).join(';');
-const json=JSON.stringify(fixture).replace(/</g,'\\u003c');
+const json=serializeForScript(dashboardPayload('administration',fixture));
 const people=[...fixture.people].sort((a,b)=>a.name.localeCompare(b.name,'en'));
 ---
 <style is:inline set:html={family==='martlet'?martletCSS:krigsvoldCSS}></style>

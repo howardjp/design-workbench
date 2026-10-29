@@ -1,5 +1,6 @@
 ---
 import fixture from '../../../page-archetypes/content/dashboards.json';
+import {dashboardPayload,serializeForScript} from './fixture.mjs';
 import DashboardNav from './DashboardNav.astro';
 import {peerDashboardURL} from './peer.mjs';
 import MartletButton from '@martlet/astro/Button.astro';
@@ -17,7 +18,7 @@ const peerFamily=family==='martlet'?'Krigsvold':'Martlet';
 const values={'ex-text':'text','ex-muted':'muted','ex-bg':'bg','ex-panel':'panel','ex-line':'line','ex-link':'link','dash-ui-font':'font-sans','dash-number-font':family==='krigsvold'?'font-mono':'font-sans','dash-chart-primary':'chart-1','dash-chart-secondary':'chart-2','dash-warning':'warning','dash-danger':'danger','dash-success':'green','dash-overlay':'overlay-scrim'};
 const variables=Object.entries(values).map(([name,token])=>`--${name}:var(--${family}-${token})`).join(';');
 const metrics=[['warnings','Services under warning'],['latency','Latest mean latency'],['open_alerts','Unacknowledged alerts'],['queue','Queued observations']];
-const json=JSON.stringify(fixture).replace(/</g,'\\u003c');
+const json=serializeForScript(dashboardPayload('operations',fixture));
 ---
 <style is:inline set:html={family==='martlet'?martletCSS:krigsvoldCSS}></style>
 <div class="dash-app" data-dashboard="operations" data-family={family} style={variables}>
