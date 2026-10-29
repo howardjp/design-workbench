@@ -39,5 +39,8 @@
   "sign-up",
   "password-reset",
   "two-factor",
-  "coming-soon"
+  "coming-soon",
+  "dashboard-analytics",
+  "dashboard-administration",
+  "dashboard-operations"
 ]

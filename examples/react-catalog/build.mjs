@@ -6,9 +6,11 @@ import {resolve} from 'node:path';
 import catalog from '../page-archetypes/content/catalog.json' with {type:'json'};
 import selected from './src/selected.json' with {type:'json'};
 import {renderMarkdown} from '../page-archetypes/lib/markdown.mjs';
+import {peerDashboardURL} from './src/dashboard/peer.mjs';
 const family=process.env.NIGHTJAR_FAMILY, base=process.env.NIGHTJAR_BASE || '/';
 if(!['martlet','krigsvold'].includes(family)||!/^\/(?:[a-zA-Z0-9_-]+\/)*$/.test(base))throw Error('Provide a family and an absolute directory base');
 const root=resolve('examples/react-catalog'),configFile=resolve(root,'vite.config.mjs');
+peerDashboardURL(process.env.NIGHTJAR_PEER_URL,'analytics');
 // Only the checked-in stress fixture opts into the shared HTML/MathML allowlist.
 // Other records use raw HTML disabled. This is not an untrusted ingestion API.
 const rendered={};
@@ -20,7 +22,10 @@ try {
  const {App}=await server.ssrLoadModule('/src/app.tsx');
  const {pages,validatePages}=await server.ssrLoadModule('/src/pages.ts');
  validatePages();
- const out=resolve(root,'dist',family),template=await readFile(resolve(out,'index.html'),'utf8');
+ const out=resolve(root,'dist',family),template=await readFile(resolve(out,'index.html'),'utf8'),dashboardTemplate=await readFile(resolve(out,'dashboard.html'),'utf8');
+ const manifest=JSON.parse(await readFile(resolve(out,'.vite/manifest.json'),'utf8'));
+ const {DashboardFrame}=await server.ssrLoadModule('/src/dashboard/DashboardFrame.tsx');
+ const dashboards=[['analytics','Analytics'],['administration','Administration'],['operations','Operations']];
  const images=resolve(out,'assets/examples');await mkdir(images,{recursive:true});
  for(const file of ['station.svg','coast.svg','notebook.svg','observations.csv']) await copyFile(resolve('examples/page-archetypes/jekyll/assets/examples',file),resolve(images,file));
  for(const page of pages){
@@ -28,7 +33,16 @@ try {
   const markup=renderToString(React.createElement(App,{id:page.id}));
   await writeFile(resolve(dir,'index.html'),template.replace('<!--app-->',markup).replace('<title>Northlight examples</title>',`<title>${page.title.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))} · Northlight</title>`));
  }
- // The generic entry cannot render an unknown route; publish only actual records.
- await (await import('node:fs/promises')).rm(resolve(out,'index.html'));
- console.log(`${family}: prerendered ${pages.length} catalog routes at ${base}`);
+ const indexDir=resolve(out,'examples');await mkdir(indexDir,{recursive:true});
+ await writeFile(resolve(indexDir,'index.html'),template.replace('<!--app-->',renderToString(React.createElement(App,{id:'index'}))).replace('<title>Northlight examples</title>','<title>All page examples · Northlight</title>'));
+ for(const [id,name] of dashboards){
+  const module=await server.ssrLoadModule(`/src/dashboard/${name}.tsx`);const dir=resolve(indexDir,`dashboard-${id}`);await mkdir(dir,{recursive:true});
+  const markup=renderToString(React.createElement(DashboardFrame,{current:id},React.createElement(module[name])));
+  const css=manifest[`src/dashboard/${name}.tsx`]?.css;if(!css?.length)throw Error(`Missing ${name} stylesheet in build manifest`);
+  const styles=css.map(file=>`<link rel="stylesheet" crossorigin href="${base}${file}">`).join('');
+  await writeFile(resolve(dir,'index.html'),dashboardTemplate.replace('</head>',`${styles}</head>`).replace('<!--app-->',markup).replace('<title>Northlight dashboard</title>',`<title>${name} · Northlight</title>`));
+ }
+ // Generic entries cannot render unknown routes; publish only actual records.
+ const {rm}=await import('node:fs/promises');await rm(resolve(out,'index.html'));await rm(resolve(out,'dashboard.html'));
+ console.log(`${family}: prerendered ${pages.length} content routes, three dashboards and an index at ${base}`);
 } finally {await server.close();}

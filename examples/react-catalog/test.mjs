@@ -19,11 +19,17 @@ try {
   const built=spawnSync(process.execPath,['examples/react-catalog/build.mjs'],{env:{...process.env,NIGHTJAR_FAMILY:family,NIGHTJAR_BASE:base},encoding:'utf8'});
   if(built.status!==0)throw Error(built.stdout+built.stderr);
   const dir=resolve('examples/react-catalog/dist',family), routeDir=resolve(dir,'examples');
-  const ids=await readdir(routeDir);assert.equal(ids.length,selected.length);
-  const records=catalog.pages.filter(page=>ids.includes(page.id));assert.equal(records.length,selected.length);
+  const ids=(await readdir(routeDir,{withFileTypes:true})).filter(entry=>entry.isDirectory()).map(entry=>entry.name);assert.equal(ids.length,selected.length);
+  const records=catalog.pages.filter(page=>ids.includes(page.id)&&!('dashboard' in page && page.dashboard));assert.equal(records.length,selected.length-3);
   const assets=resolve(dir,'assets'),files=await readdir(assets);
-  const css=(await Promise.all(files.filter(name=>name.endsWith('.css')).map(name=>readFile(resolve(assets,name),'utf8')))).join('\n');
+  // Check the CSS actually loaded by ordinary pages, in addition to font assets.
+  // Separate dashboard styles contain scoped selectors for both families.
+  const homeHtml=await readFile(resolve(dir,'examples/home/index.html'),'utf8');
+  const sheets=[...homeHtml.matchAll(/<link rel="stylesheet"[^>]*href="([^"]+)"/g)].map(match=>match[1]);
+  assert.ok(sheets.length>0);const css=(await Promise.all(sheets.map(href=>readFile(resolve(dir,href.slice(base.length)),'utf8')))).join('\n');
   assert.match(css,new RegExp(family));assert.doesNotMatch(css,new RegExp(family==='martlet'?'krigsvold':'martlet'));
+  assert.ok(files.some(name=>family==='martlet'?/lato-/i.test(name):/roboto-/i.test(name)));
+  assert.ok(!files.some(name=>family==='martlet'?/roboto-/i.test(name):/lato-|cinzel-|cambo-/i.test(name)));
   const server=createServer(async(req,res)=>{
    const path=new URL(req.url,'http://localhost').pathname;
    if(!path.startsWith(base)){res.writeHead(404).end();return}
