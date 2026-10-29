@@ -207,3 +207,7 @@ Commit `af3939a` loads the Astro listing enhancement only on pages with listings
 ### React operations URL validation
 
 Commit `11935fb` validates an initial React operations threshold URL. Invalid input now remains in the draft, reports and focuses the error and retains the default valid metrics until a valid threshold is applied. The regression failed before the fix; standalone and integrated React dashboard suites passed both families at root/subpaths, including rapid acknowledgement and no-JavaScript checks, and strict TypeScript passed.
+
+### Dashboard cross-framework checks and mobile width
+
+Commits `1f7896e` and `529ebc4` correct redundant React mobile dashboard padding and add a reproducible representative cross-framework dashboard test. At 320px the administration form grew from 192/200px to 272/280px (Martlet/Krigsvold) while retaining the family AppShell gutter; a corrected Martlet screen was visually inspected. The independent integrated React dashboard suite passed both families at root/subpaths, including hydrated and no-JavaScript geometry. The new comparison passed all six family/framework combinations for analytics filters and error focus, operations acknowledgement with pending drafts, keyboard confirmation/cancel and focus, mobile navigation/overflow and no-JavaScript content. It is representative rather than complete visual or manual accessibility conformance; React still differs in source mark and full site chrome.
