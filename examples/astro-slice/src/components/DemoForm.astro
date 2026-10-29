@@ -1,0 +1,35 @@
+---
+const {kind, Button} = Astro.props;
+const legend = kind.replaceAll('-', ' ').replace(/^./, c=>c.toUpperCase());
+---
+<p id="form-notice">Local interface demonstration. Use invented values only. Nothing is sent, saved, subscribed, or authenticated.</p>
+<form data-demo-form={kind} aria-describedby="form-notice">
+  <fieldset disabled data-demo-fields><legend>{legend}</legend>
+    {['contact','sign-up'].includes(kind) && <><label for="demo-name">Name</label><input id="demo-name" name="name" autocomplete="off" required maxlength="120" /></>}
+    {kind !== 'two-factor' && <><label for="demo-email">Email address</label><input id="demo-email" name="email" type="email" autocomplete="off" required maxlength="254" /></>}
+    {['sign-in','sign-up'].includes(kind) && <><label for="demo-password">Example password</label><input id="demo-password" name="password" type="password" autocomplete="off" required minlength="8" maxlength="128" aria-describedby="password-help" /><p id="password-help">Use an invented password of at least eight characters.</p></>}
+    {kind === 'two-factor' && <><label for="demo-code">Six-digit example code</label><input id="demo-code" name="code" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="off" required aria-describedby="code-help" /><p id="code-help">Any six digits demonstrate local format validation.</p></>}
+    {kind === 'contact' && <><label for="demo-topic">Topic</label><select id="demo-topic" name="topic"><option>Research</option><option>Visits</option><option>Corrections</option></select><label for="demo-message">Message</label><textarea id="demo-message" name="message" required rows="6" maxlength="4000"></textarea></>}
+    {['newsletter','sign-up'].includes(kind) && <label><input type="checkbox" required name="consent" /> I understand this is a local demonstration.</label>}
+    <div class="demo-actions"><Button type="submit">Validate example</Button> <Button type="reset">Clear</Button></div>
+  </fieldset>
+  <p role="status" data-form-status></p>
+</form>
+<noscript><p>JavaScript is needed for local form validation. The demonstration form is disabled to prevent accidental submission.</p></noscript>
+<style>
+fieldset { display:grid; gap:.5rem; min-width:0; }
+.demo-actions { display:flex; gap:.75rem; flex-wrap:wrap; margin-top:1rem; }
+</style>
+<script>
+  document.querySelectorAll('[data-demo-form]').forEach(form => {
+    const status = form.querySelector('[data-form-status]');
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+      status.textContent = 'Example validated locally. Nothing was sent, saved, or authenticated.';
+      form.querySelectorAll('[type=password], [name=code]').forEach(input => { input.value = ''; });
+    });
+    form.addEventListener('reset', () => { status.textContent = ''; });
+    form.querySelector('[data-demo-fields]').disabled = false;
+  });
+</script>

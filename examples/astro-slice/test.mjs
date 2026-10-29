@@ -109,7 +109,7 @@ try {
             await page.setViewportSize({width:320,height:800});
           }
         }
-        if (['home','guide','person','article','event','archive','search'].includes(record.id)) {
+        if (['home','guide','person','article','event','archive','search','contact','sign-up','two-factor'].includes(record.id)) {
           const results=await new AxeBuilder({page}).analyze();
           assert.deepEqual(results.violations.map(({id,nodes})=>({id,html:nodes.map(n=>n.html)})), [], `Axe violations: ${family} ${base} ${record.id}`);
         }
@@ -145,14 +145,20 @@ try {
           await page.goto(`${origin}${base}examples/search/?q=A%20shoreline%20in%20three%20views`);
           const query=page.getByLabel('Search the example record');
           assert.equal(await query.inputValue(), 'A shoreline in three views');
-          const unavailable=page.locator('[data-search-results] li').filter({has:page.getByRole('link',{name:'A shoreline in three views',exact:true})});
+          const unavailable=page.locator('[data-search-results] li').filter({hasText:'A shoreline in three views'});
+          assert.equal(await unavailable.locator('a').count(),0);
+          assert.equal(await unavailable.locator('[data-destination]').getAttribute('data-destination'), `${base}examples/gallery/`);
           assert.equal(await unavailable.getByText('Not yet available in this Astro preview.').count(),1);
           await query.fill('shoreline');
           await page.getByRole('button',{name:'Search',exact:true}).click();
           const matching=catalog.pages.filter(entry=>`${entry.title} ${entry.summary} ${entry.category}`.toLocaleLowerCase().includes('shoreline'));
           assert.equal(await page.locator('[data-search-results] li').count(), matching.length);
           assert.equal(new URL(page.url()).searchParams.get('q'), 'shoreline');
-          for (const entry of matching) assert.equal(await page.locator('[data-search-results]').getByRole('link',{name:entry.title,exact:true}).getAttribute('href'), `${base}examples/${entry.id}/`);
+          for (const entry of matching) {
+            const heading = page.locator('[data-search-results]').getByRole('heading',{name:entry.title,exact:true});
+            if (supported.includes(entry.id)) assert.equal(await heading.getByRole('link',{name:entry.title,exact:true}).getAttribute('href'), `${base}examples/${entry.id}/`);
+            else { assert.equal(await heading.locator('a').count(),0); assert.equal(await heading.locator('span').getAttribute('data-destination'), `${base}examples/${entry.id}/`); }
+          }
           await query.fill('<img src=x onerror=alert(1)>');
           await page.getByRole('button',{name:'Search',exact:true}).click();
           assert.equal(await page.locator('[data-search-results] img').count(),0);
@@ -165,6 +171,37 @@ try {
           assert.equal(new URL(page.url()).searchParams.has('q'), false);
           assert.equal(await page.locator('[data-search-results] li').count(),0);
         }
+        if (['contact','sign-in','sign-up','password-reset','two-factor','coming-soon'].includes(record.id)) {
+          const form=page.locator('[data-demo-form]');
+          assert.equal(await form.getByRole('button',{name:'Validate example'}).isDisabled(),false);
+          const pageUrl=page.url();
+          let requests=0; page.on('request',()=>requests++);
+          await form.getByRole('button',{name:'Validate example'}).click();
+          assert.equal(await form.evaluate(el=>el.checkValidity()),false);
+          assert.equal(await form.locator('[data-form-status]').textContent(),'');
+          if (['contact','sign-up'].includes(record.id)) await form.getByLabel('Name',{exact:true}).fill('Example Person');
+          if (record.id !== 'two-factor') await form.getByLabel('Email address').fill('example@example.test');
+          if (['sign-in','sign-up'].includes(record.id)) {
+            await form.getByLabel('Example password').fill('short');
+            assert.equal(await form.getByLabel('Example password').evaluate(el=>el.checkValidity()),false);
+            await form.getByLabel('Example password').fill('invented-password');
+          }
+          if (record.id === 'two-factor') {
+            await form.getByLabel('Six-digit example code').fill('123');
+            assert.equal(await form.getByLabel('Six-digit example code').evaluate(el=>el.checkValidity()),false);
+            await form.getByLabel('Six-digit example code').fill('123456');
+          }
+          if (record.id === 'contact') await form.getByLabel('Message').fill('An invented message.');
+          if (['coming-soon','sign-up'].includes(record.id)) await form.getByLabel('I understand this is a local demonstration.').check();
+          await form.getByRole('button',{name:'Validate example'}).click();
+          assert.equal(await form.locator('[data-form-status]').textContent(),'Example validated locally. Nothing was sent, saved, or authenticated.');
+          if (['sign-in','sign-up'].includes(record.id)) assert.equal(await form.getByLabel('Example password').inputValue(),'');
+          if (record.id === 'two-factor') assert.equal(await form.getByLabel('Six-digit example code').inputValue(),'');
+          assert.equal(page.url(),pageUrl);
+          assert.equal(requests,0);
+          await form.getByRole('button',{name:'Clear'}).click();
+          assert.equal(await form.locator('[data-form-status]').textContent(),'');
+        }
         if (record.id === 'guide') assert.equal(await page.locator('#arrival + .recipe-prose ol li').count(),4);
         if (record.id === 'opportunity') assert.equal(await page.locator('#requirements + .recipe-prose ul li').count(),3);
         if (record.id === 'changelog') assert.equal(await page.locator('#v1-2 + .recipe-prose h3').count(),2);
@@ -175,7 +212,11 @@ try {
       await indexPage.goto(`${origin}${base}examples/`);
       assert.equal(await indexPage.locator('h1').count(), 1);
       assert.equal(await indexPage.locator('.catalog h3').count(), catalog.pages.length);
-      for (const entry of catalog.pages) assert.equal(await indexPage.getByRole('link',{name:entry.title,exact:true}).getAttribute('href'), `${base}examples/${entry.id}/`);
+      for (const entry of catalog.pages) {
+        const heading = indexPage.locator('.catalog').getByRole('heading',{name:entry.title,exact:true});
+        if (supported.includes(entry.id)) assert.equal(await heading.getByRole('link',{name:entry.title,exact:true}).getAttribute('href'), `${base}examples/${entry.id}/`);
+        else { assert.equal(await heading.locator('a').count(),0); assert.equal(await heading.locator('span').getAttribute('data-destination'), `${base}examples/${entry.id}/`); }
+      }
       const indexAxe=await new AxeBuilder({page:indexPage}).analyze();
       assert.deepEqual(indexAxe.violations.map(({id,nodes})=>({id,html:nodes.map(n=>n.html)})), [], `Axe violations: ${family} ${base} catalog index`);
       assert.equal(await indexPage.getByText('Not yet available in this Astro preview.',{exact:true}).count(), catalog.pages.length-supported.length);
@@ -189,6 +230,10 @@ try {
       assert.equal(await staticPage.locator('[data-pagination]').isVisible(), false);
       await staticPage.goto(`${origin}${base}examples/search/`);
       assert.equal(await staticPage.getByRole('link',{name:'Browse the complete example index'}).getAttribute('href'), `${base}examples/`);
+      await staticPage.goto(`${origin}${base}examples/sign-in/`);
+      assert.equal(await staticPage.locator('[data-demo-fields] input').first().isDisabled(),true);
+      assert.equal(await staticPage.getByRole('button',{name:'Validate example'}).isDisabled(),true);
+      assert.match(await staticPage.locator('noscript').textContent(), /JavaScript is needed for local form validation/);
       await noJs.close();
       console.log(`${family} ${base}: ${pages.length} pages; content, routes, pagination, print, no-JS and representative axe passed`);
     } finally { server.closeAllConnections(); await new Promise(r=>server.close(r)); }

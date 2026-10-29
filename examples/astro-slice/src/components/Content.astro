@@ -1,6 +1,7 @@
 ---
 import { renderMarkdown } from '../markdown.mjs';
 import Search from './Search.astro';
+import DemoForm from './DemoForm.astro';
 import Catalog from './Catalog.astro';
 const {page, href, base, Button} = Astro.props;
 const formatDate = date => new Intl.DateTimeFormat('en-US', {year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(`${date}T00:00:00Z`));
@@ -26,6 +27,7 @@ const formatDate = date => new Intl.DateTimeFormat('en-US', {year:'numeric',mont
       </nav>}
     </div>}
     {section.kind === 'table' && <div class="recipe-table" role="region" aria-label={`${section.title} table`} tabindex="0"><table><caption>{section.title}</caption><thead><tr>{section.headers.map(header => <th scope="col">{header}</th>)}</tr></thead><tbody>{section.rows.map(row => <tr>{row.map((cell,index) => index === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>)}</tbody></table></div>}
+    {section.kind === 'form' && <DemoForm kind={section.form} Button={Button} />}
     {section.kind === 'search' && <Search base={base} Button={Button} />}
     {section.kind === 'facts' && <dl>{section.facts.map(fact => <div><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl>}
     {section.actions && <ul class="recipe-actions">{section.actions.map(action => <li><Button href={href(action.url)}>{action.label}</Button></li>)}</ul>}

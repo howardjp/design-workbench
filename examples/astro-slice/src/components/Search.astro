@@ -35,10 +35,11 @@ const json = JSON.stringify(index).replace(/</g, '\\u003c');
       for (const entry of matches) {
         const item = document.createElement('li');
         const heading = document.createElement('h3');
-        const link = document.createElement('a');
-        link.href = entry.url;
-        link.textContent = entry.title;
-        heading.append(link);
+        const label = document.createElement(entry.available ? 'a' : 'span');
+        if (entry.available) label.href = entry.url;
+        else label.dataset.destination = entry.url;
+        label.textContent = entry.title;
+        heading.append(label);
         const summary = document.createElement('p');
         summary.textContent = entry.summary;
         item.append(heading, summary);

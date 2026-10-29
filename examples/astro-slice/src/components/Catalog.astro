@@ -14,7 +14,7 @@ const slug = value => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^
     <h2 id={slug(category)}>{category}</h2>
     <ul>{catalog.pages.filter(entry => entry.category === category).map(entry => <li>
       <p>{entry.semantic_class.replace(/-/g, ' ')}</p>
-      <h3><a href={href(`/examples/${entry.id}/`)}>{entry.title}</a></h3>
+      <h3>{supported.includes(entry.id) ? <a href={href(`/examples/${entry.id}/`)}>{entry.title}</a> : <span data-destination={href(`/examples/${entry.id}/`)}>{entry.title}</span>}</h3>
       <p>{entry.summary}</p>
       {!supported.includes(entry.id) && <p>Not yet available in this Astro preview.</p>}
     </li>)}</ul>
