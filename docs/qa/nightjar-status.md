@@ -460,3 +460,5 @@ The integrated-branch `administration-email.mjs` and `test:examples` rerun passe
 ### Literal All service identifier
 
 Commit `0460b44` distinguishes a schema-valid service ID `All` from the all-services filter. Existing `service=All` URLs retain their meaning; the literal ID uses `serviceId=All`, survives reload and scopes service, alerts, activity and peer comparison. An empty option value represents all services because the schema disallows empty IDs. The independent schema-valid fixture reproduced the pre-fix ambiguity and passed both languages × three frameworks × root/subpath with and without JavaScript (12 builds), including legacy links, selection, clearing and scoping. Hostile-text and partial-data matrices, 19 model tests and strict React types passed. The CI group gains this fixture; an integrated-branch rerun is in progress.
+
+The integrated-branch `operations-sentinel.mjs` and `test:examples` rerun passed after `0460b44` across both languages × three frameworks × root/subpaths.
