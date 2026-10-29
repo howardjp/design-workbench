@@ -94,3 +94,7 @@ html[data-appearance=dark] body.dashboard-page .site-header { background: var(--
 .dash-app table .example-button { white-space: nowrap; }
 .dash-app table th { overflow-wrap: normal; }
 .dash-app :is(input,select,textarea,legend) { font-family: var(--dash-ui-font); }
+/* New application contexts resolve text roles instead of inheriting fixed host defaults. */
+.example-root .dash-heading h1 { color: var(--ex-strong); }
+.dash-app caption { color: var(--ex-muted); }
+html[data-appearance=dark] .dash-app .eyebrow { color: var(--ex-link); }

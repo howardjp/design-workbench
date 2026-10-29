@@ -53,7 +53,7 @@ for(const family of ['martlet','krigsvold']){
 test('paired initial and filtered views have identical functional results',async({page})=>{
  const read=async(family:string)=>{await page.goto(route(family,'analytics')+'?start=2026-10-15&end=2026-10-28&category=Research');await expect(page.locator('[data-metric=sessions]')).toHaveText('4,459');return page.locator('[data-metric]').allTextContents();};
  expect(await read('martlet')).toEqual(await read('krigsvold'));
- for(const view of ['administration','operations']){await page.goto(route('martlet',view));const first=await page.locator(view==='administration'?'#people-table tbody':'#service-table tbody').innerText();await page.goto(route('krigsvold',view));expect(await page.locator(view==='administration'?'#people-table tbody':'#service-table tbody').innerText()).toEqual(first);}
+ for(const view of ['administration','operations']){await page.goto(route('martlet',view));const first=await page.locator(view==='administration'?'#people-table tbody':'#service-table tbody').textContent();await page.goto(route('krigsvold',view));expect(await page.locator(view==='administration'?'#people-table tbody':'#service-table tbody').textContent()).toEqual(first);}
 });
 
 for(const family of ['martlet','krigsvold'])test(`${family}: publishing primitives remain native`,async({page})=>{
