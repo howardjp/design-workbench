@@ -229,3 +229,7 @@ Commit `04755cb` derives each dashboard's embedded data from the canonical fixtu
 ### Cross-framework form status
 
 Commit `0a777ed` clears an example form's local validation-success message when a user edits a field, preventing stale success from describing changed values. It updates the shared acceptance contract and synchronizes both Jekyll exports, including previously stale dashboard comparison documentation. The targeted Jekyll regression failed before the fix and passed for both families; both Jekyll builds, `test:examples`, strict React TypeScript, and the full Astro and React 47-page suites passed in both languages at root/subpaths in the independent worktree.
+
+### Conformance evidence snapshot
+
+Commit `4e8a5de` adds a dated 50-row readable matrix and 300-cell JSON snapshot across both languages and all three frameworks. It distinguishes route/build and sampled browser evidence from unassessed full visual, manual accessibility and performance conformance. `node scripts/qa/nightjar-conformance.mjs --check` passed on the integrated branch; the independent validation deliberately corrupted a cell and confirmed the checker failed before restoring it. This checker verifies inventory and snapshot consistency; it does not rerun browser tests or certify parity.
