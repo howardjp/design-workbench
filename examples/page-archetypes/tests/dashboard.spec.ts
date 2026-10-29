@@ -90,3 +90,12 @@ for(const family of ['martlet','krigsvold'])test(`${family}: publishing primitiv
  await expect(action).toHaveCSS('text-decoration-line','none');
  if(family==='martlet'){await expect(page.locator('.post-tags .pill-list a')).toHaveCount(2);expect(await page.locator('.post-tags').evaluate(node=>!node.closest('.page-intro'))).toBe(true);}
 });
+
+for(const family of ['martlet','krigsvold'])for(const mode of ['light','dark'])test(`${family}: stress-test table caption ${mode} contrast`,async({page})=>{
+ await page.goto(`/${family}/examples/stress-test/`);
+ if(mode==='dark')await page.locator('[data-appearance-toggle]').first().click();
+ const caption=page.locator('.example-root caption');
+ await expect(caption).toHaveText('A wide table');
+ const results=await new AxeBuilder({page}).include('.example-root caption').withRules(['color-contrast']).analyze();
+ expect(results.violations).toEqual([]);
+});
