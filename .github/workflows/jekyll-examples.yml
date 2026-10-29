@@ -81,6 +81,18 @@ jobs:
           node examples/page-archetypes/tests/form-composition.mjs
           node examples/page-archetypes/tests/workspace-composition.mjs
           node examples/page-archetypes/tests/search-composition.mjs
+      # These suites rebuild their own root/subpath output, so run them after
+      # checks that consume the root-path builds above.
+      - name: Verify Astro and React source shells and React compositions
+        timeout-minutes: 10
+        env:
+          ASTRO_TELEMETRY_DISABLED: '1'
+        run: |
+          (cd examples/astro-slice && node test-source-shell.mjs)
+          node examples/react-catalog/test-source-shell.mjs
+          node examples/react-catalog/test-gallery.mjs
+          node examples/react-catalog/test-simulation.mjs
+          node examples/react-catalog/test-workspace-chat.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
