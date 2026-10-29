@@ -167,6 +167,7 @@ jobs:
               node examples/page-archetypes/tests/operations-partial.mjs --disjoint
               node examples/page-archetypes/tests/operations-invalid.mjs
               node examples/page-archetypes/tests/operations-invalid.mjs --future
+              node examples/page-archetypes/tests/operations-text.mjs
               node examples/page-archetypes/tests/operations-precision.mjs observation
               node examples/page-archetypes/tests/operations-precision.mjs queue
               node examples/page-archetypes/tests/operations-precision.mjs latency
