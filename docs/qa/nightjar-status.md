@@ -99,3 +99,7 @@ Commit `d587e4f` adds gallery, collection-item, place, product and reference rec
 ### Jekyll search JSON safety
 
 Commit `b7d080a` escapes `<` after serializing the Jekyll search index into its inert JSON script element. Previously an authored catalog value containing `</script>` could break out of the element. A rendered Jekyll build and Chromium regression using such a value in title, summary and category failed before the fix and passed afterward; `npm run test:search-safety` and `npm run test:examples` also passed after integration. The Jekyll CI workflow now runs the regression after Chromium installation. This is a defense for authored catalog data, not a claim that an untrusted CMS is deployed.
+
+### Astro workspaces and messaging
+
+Commit `7aae638` adds observation and fleet workspaces and local conversation, reaching 36 of 50 catalog recipes per language. The shared workspace supports filtering, keyboard selection, local review, filtered-selection clearing and reset. Chat rejects whitespace, renders user input as text, resets locally and makes no submission. In the independent worktree, both family/root/subpath configurations passed content checks, workspace keyboard behavior, chat safety/no-network, no-JavaScript records/messages and disabled controls, and representative axe checks. Fourteen examples remain unported, and complete visual and functional parity are not established.
