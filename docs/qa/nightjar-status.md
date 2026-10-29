@@ -550,3 +550,5 @@ The integrated-branch `catalog-structured-safety.mjs` URL and date modes and `te
 ### Markdown links under subpaths
 
 A disposable paired fixture reproduced Jekyll root-relative Markdown links and images escaping a `/preview` deployment, and Astro/React adding that prefix twice to already-prefixed paths. Jekyll now rebases within the existing HTML sanitizer, and the shared Astro/React renderer applies the prefix once. The expanded hostile-content regression checks root and subpath links/images, already-prefixed paths including query boundaries, near-prefix paths, ordinary relative paths, fragments and protocol-relative URLs, while retaining dangerous-URL and Jekyll `--safe` checks. A path already beginning with the configured deployment prefix is treated as already prefixed; use a relative URL when a distinct root path happens to share that prefix.
+
+The integrated-branch Markdown subpath/security regression, source-manifest check and `test:examples` passed after `470962f`, including all 12 language/framework/base combinations with JS/no-JS and both inert Jekyll safe-mode fallbacks.
