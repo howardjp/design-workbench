@@ -7,9 +7,10 @@ export function getStaticPaths() {
   if (selected.length !== supported.length) throw new Error('A selected catalog record is missing');
   for (const page of selected) for (const section of page.sections) {
     if (section.kind === 'form' && !['contact','sign-in','sign-up','password-reset','two-factor','newsletter'].includes(section.form)) throw new Error(`Unsupported form: ${section.form}`);
-    if (section.kind && !['cards', 'facts', 'listing', 'table', 'search', 'form', 'figure', 'gallery'].includes(section.kind)) throw new Error(`Unsupported section: ${section.kind}`);
+    if (section.kind && !['cards', 'facts', 'listing', 'table', 'search', 'form', 'figure', 'gallery', 'workspace', 'chat'].includes(section.kind)) throw new Error(`Unsupported section: ${section.kind}`);
   }
   if (selected.some(page => page.sections.filter(section => section.kind === 'form').length > 1)) throw new Error('Multiple forms on a page are not implemented');
+  if (selected.some(page => page.sections.filter(section => section.kind === 'chat').length > 1)) throw new Error('Multiple chats on a page are not implemented');
   return selected.map(page => ({params: {id: page.id}, props: {page}}));
 }
 const {page} = Astro.props;

@@ -118,7 +118,7 @@ try {
             await page.setViewportSize({width:320,height:800});
           }
         }
-        if (['home','guide','person','article','event','archive','search','contact','sign-up','two-factor','gallery','collection-item'].includes(record.id)) {
+        if (['home','guide','person','article','event','archive','search','contact','sign-up','two-factor','gallery','collection-item','workspace','fleet','chat'].includes(record.id)) {
           const results=await new AxeBuilder({page}).analyze();
           assert.deepEqual(results.violations.map(({id,nodes})=>({id,html:nodes.map(n=>n.html)})), [], `Axe violations: ${family} ${base} ${record.id}`);
         }
@@ -127,6 +127,57 @@ try {
           assert.ok((await page.locator('main').innerText()).includes(record.author));
           for (const tag of record.tags) assert.equal(await page.getByRole('link',{name:tag,exact:true}).getAttribute('href'), `${base}examples/categories/`);
           assert.equal(await page.getByRole('link',{name:'All writing'}).getAttribute('href'), `${base}examples/archive/`);
+        }
+        if (['workspace','fleet'].includes(record.id)) {
+          const fixture=record.sections.find(section=>section.kind==='workspace').items;
+          const workspace=page.locator('[data-workspace]');
+          const rows=workspace.locator('[data-record]');
+          const filter=workspace.getByLabel('Filter records');
+          const review=workspace.getByRole('button',{name:'Mark reviewed locally'});
+          const reset=workspace.getByRole('button',{name:'Reset demonstration'});
+          let requests=0; page.on('request',()=>requests++);
+          assert.equal(await rows.count(),fixture.length);
+          assert.equal(await workspace.locator('[data-record-count]').textContent(),`${fixture.length} of ${fixture.length} records shown.`);
+          assert.equal(await review.isDisabled(),true);
+          await rows.nth(1).getByRole('button',{name:fixture[1].title}).focus();
+          await page.keyboard.press('Enter');
+          assert.equal(await rows.nth(1).getByRole('button',{name:fixture[1].title}).getAttribute('aria-pressed'),'true');
+          assert.ok((await workspace.locator('[data-active-record]').textContent()).includes(fixture[1].summary));
+          await review.click();
+          assert.equal(await rows.nth(1).locator('[data-record-status]').textContent(),'Reviewed locally');
+          assert.equal(await workspace.locator('[data-workspace-status]').textContent(),'Marked reviewed in page memory. No server record was changed.');
+          await filter.fill(fixture[0].title);
+          assert.equal(await rows.locator(':scope:visible').count(),1);
+          assert.equal(await review.isDisabled(),true);
+          assert.ok((await workspace.locator('[data-active-record]').textContent()).includes('outside this filter'));
+          await reset.click();
+          assert.equal(await rows.nth(1).locator('[data-record-status]').textContent(),fixture[1].status);
+          assert.equal(await filter.inputValue(),'');
+          assert.equal(await rows.locator(':scope:visible').count(),fixture.length);
+          assert.equal(requests,0);
+        }
+        if (record.id === 'chat') {
+          const form=page.locator('[data-chat]');
+          const input=form.getByLabel('Message');
+          const list=page.locator('[data-messages]');
+          let requests=0; page.on('request',()=>requests++);
+          assert.equal(await list.locator('li').count(),2);
+          await input.fill('   ');
+          await form.getByRole('button',{name:'Add to this preview'}).click();
+          assert.equal(await input.evaluate(el=>el.validity.customError),true);
+          assert.equal(await list.locator('li').count(),2);
+          await input.fill('<img src=x onerror=alert(1)>');
+          await form.getByRole('button',{name:'Add to this preview'}).click();
+          assert.equal(await list.locator('li').count(),3);
+          assert.equal(await list.locator('li').last().locator('p').textContent(),'<img src=x onerror=alert(1)>');
+          assert.equal(await list.locator('img').count(),0);
+          assert.equal(await input.inputValue(),'');
+          assert.equal(await input.evaluate(el=>el===document.activeElement),true);
+          assert.equal(await form.locator('[data-chat-status]').textContent(),'Added to this preview. Not sent to anyone; cleared when you leave or reload.');
+          await form.getByRole('button',{name:'Reset conversation'}).click();
+          assert.equal(await list.locator('li').count(),2);
+          assert.equal(await form.locator('[data-chat-status]').textContent(),'Conversation reset. Nothing was delivered.');
+          assert.equal(requests,0);
         }
         if (record.id === 'reference') {
           assert.equal(await page.locator(`time[datetime="${record.date}"]`).count(),1);
@@ -186,12 +237,12 @@ try {
           assert.equal(await nav.locator('[data-page-status]').innerText(), 'Page 1 of 2');
         }
         if (record.id === 'search') {
-          await page.goto(`${origin}${base}examples/search/?q=The%20observation%20desk`);
+          await page.goto(`${origin}${base}examples/search/?q=Conditions%20at%20the%20station`);
           const query=page.getByLabel('Search the example record');
-          assert.equal(await query.inputValue(), 'The observation desk');
-          const unavailable=page.locator('[data-search-results] li').filter({hasText:'The observation desk'});
+          assert.equal(await query.inputValue(), 'Conditions at the station');
+          const unavailable=page.locator('[data-search-results] li').filter({hasText:'Conditions at the station'});
           assert.equal(await unavailable.locator('a').count(),0);
-          assert.equal(await unavailable.locator('[data-destination]').getAttribute('data-destination'), `${base}examples/workspace/`);
+          assert.equal(await unavailable.locator('[data-destination]').getAttribute('data-destination'), `${base}examples/sensors/`);
           assert.equal(await unavailable.getByText('Not yet available in this Astro preview.').count(),1);
           await query.fill('shoreline');
           await page.getByRole('button',{name:'Search',exact:true}).click();
@@ -287,6 +338,13 @@ try {
       assert.equal(await staticPage.locator('[data-demo-fields] input').first().isDisabled(),true);
       assert.equal(await staticPage.getByRole('button',{name:'Validate example'}).isDisabled(),true);
       assert.match(await staticPage.locator('noscript').textContent(), /JavaScript is needed for local form validation/);
+      await staticPage.goto(`${origin}${base}examples/workspace/`);
+      assert.equal(await staticPage.locator('[data-record]').count(),3);
+      assert.equal(await staticPage.getByLabel('Filter records').isDisabled(),true);
+      assert.equal(await staticPage.locator('[data-select-record]').first().isDisabled(),true);
+      await staticPage.goto(`${origin}${base}examples/chat/`);
+      assert.equal(await staticPage.locator('[data-messages] li').count(),2);
+      assert.equal(await staticPage.getByLabel('Message').isDisabled(),true);
       await noJs.close();
       console.log(`${family} ${base}: ${pages.length} pages; content, routes, pagination, print, no-JS and representative axe passed`);
     } finally { server.closeAllConnections(); await new Promise(r=>server.close(r)); }

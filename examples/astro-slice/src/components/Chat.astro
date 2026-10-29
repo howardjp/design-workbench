@@ -1,0 +1,33 @@
+---
+const {Button} = Astro.props;
+---
+<ol data-messages aria-label="Conversation"><li><strong>Mara · Example message</strong><p>Could we review the conditions note before publishing?</p></li><li><strong>Rowan · Example message</strong><p>Yes. Keep the uncertainty visible in the account.</p></li></ol>
+<form data-chat><fieldset disabled data-chat-fields><legend>Add a local message</legend><label for="chat-message">Message</label><textarea id="chat-message" required maxlength="1000" rows="3"></textarea><div class="chat-actions"><Button type="submit">Add to this preview</Button> <Button type="button" data-clear-chat>Reset conversation</Button></div></fieldset><p role="status" data-chat-status>Messages remain in page memory. Nothing is delivered.</p></form>
+<noscript><p>Message composition requires JavaScript.</p></noscript>
+<style>
+fieldset { display:grid; gap:.5rem; min-width:0; }
+.chat-actions { display:flex; flex-wrap:wrap; gap:.75rem; }
+</style>
+<script>
+  document.querySelectorAll('[data-chat]').forEach(chat => {
+    const messages = chat.parentElement.querySelector('[data-messages]');
+    const original = [...messages.children].map(node => node.cloneNode(true));
+    const input = chat.querySelector('textarea');
+    const status = chat.querySelector('[data-chat-status]');
+    chat.addEventListener('submit', event => {
+      event.preventDefault();
+      if (!input.value.trim()) { input.setCustomValidity('Enter a message before adding it.'); input.reportValidity(); return; }
+      const item = document.createElement('li');
+      const name = document.createElement('strong'); name.textContent = 'You · Local preview';
+      const text = document.createElement('p'); text.textContent = input.value.trim();
+      item.append(name, text); messages.append(item); input.value = '';
+      status.textContent = 'Added to this preview. Not sent to anyone; cleared when you leave or reload.'; input.focus();
+    });
+    input.addEventListener('input', () => input.setCustomValidity(''));
+    chat.querySelector('[data-clear-chat]').addEventListener('click', () => {
+      messages.replaceChildren(...original.map(node => node.cloneNode(true)));
+      input.value = ''; input.setCustomValidity(''); status.textContent = 'Conversation reset. Nothing was delivered.';
+    });
+    chat.querySelector('[data-chat-fields]').disabled = false;
+  });
+</script>
