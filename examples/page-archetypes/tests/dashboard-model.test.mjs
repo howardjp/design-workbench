@@ -55,3 +55,14 @@ test('peer comparison receives only the selected dashboard view state',()=>{
  assert.equal(comparisonSearch('analytics','?token=private'),'');
  assert.throws(()=>comparisonSearch('unknown',search));
 });
+
+test('analytics ordering is independent of input observation order',()=>{
+ const query={start:'2026-10-22',end:'2026-10-28',category:'All'};
+ const expected=analyticsView(fixture,query);
+ const shuffled={...fixture,analytics:[...fixture.analytics].reverse()};
+ const actual=analyticsView(shuffled,query);
+ assert.equal(actual.error,'');
+ assert.deepEqual(actual,expected);
+ assert.deepEqual(analyticsView(shuffled,{...query,category:'Research'}),analyticsView(fixture,{...query,category:'Research'}));
+ assert.equal(shuffled.analytics[0],fixture.analytics.at(-1),'caller data must not be mutated');
+});

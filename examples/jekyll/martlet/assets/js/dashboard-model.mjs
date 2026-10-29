@@ -24,10 +24,12 @@ export function aggregate(rows) {
   return {...totals, conversion:totals.sessions ? 100*totals.completions/totals.sessions : 0, mean_duration:totals.sessions ? totals.duration_seconds/totals.sessions : 0};
 }
 export function analyticsView(fixture, {start, end, category='All'}) {
-  const min=fixture.analytics[0].date, max=fixture.analytics.at(-1).date;
+  const min=fixture.analytics.reduce((date,row)=>row.date<date?row.date:date,fixture.analytics[0].date);
+  const max=fixture.analytics.reduce((date,row)=>row.date>date?row.date:date,fixture.analytics[0].date);
   const error=rangeError(start,end,min,max);
   if(error) return {error};
-  const rows=fixture.analytics.filter(row=>row.date>=start&&row.date<=end&&(category==='All'||row.category===category));
+  const categoryOrder=new Map(fixture.categories.map((name,index)=>[name,index]));
+  const rows=fixture.analytics.filter(row=>row.date>=start&&row.date<=end&&(category==='All'||row.category===category)).sort((a,b)=>a.date.localeCompare(b.date)||(categoryOrder.get(a.category)??Infinity)-(categoryOrder.get(b.category)??Infinity)||a.category.localeCompare(b.category));
   const length=Math.round((Date.parse(end)-Date.parse(start))/dayMillis)+1;
   const previousEnd=new Date(Date.parse(start)-dayMillis).toISOString().slice(0,10);
   const previousStart=new Date(Date.parse(start)-length*dayMillis).toISOString().slice(0,10);
