@@ -1,6 +1,6 @@
 ---
 import fixture from '../../../page-archetypes/content/dashboards.json';
-import {operationsDataIssue,operationsView} from '../../../page-archetypes/jekyll/assets/js/dashboard-model.mjs';
+import {operationsDataIssue,operationsSnapshotLabel,operationsView} from '../../../page-archetypes/jekyll/assets/js/dashboard-model.mjs';
 import {dashboardPayload,serializeForScript} from './fixture.mjs';
 import DashboardNav from './DashboardNav.astro';
 import {peerDashboardURL} from './peer.mjs';
@@ -20,6 +20,7 @@ const values={'ex-text':'text','ex-muted':'muted','ex-bg':'bg','ex-panel':'panel
 const variables=Object.entries(values).map(([name,token])=>`--${name}:var(--${family}-${token})`).join(';');
 const metrics=[['warnings','Services under warning'],['latency','Latest mean latency'],['open_alerts','Unacknowledged alerts'],['queue','Queued observations']];
 const dataIssue=operationsDataIssue(fixture);
+const snapshotLabel=operationsSnapshotLabel(fixture.as_of);
 const initialView=dataIssue ? null : operationsView(fixture,{});
 const json=serializeForScript(dashboardPayload('operations',fixture));
 ---
@@ -29,7 +30,7 @@ const json=serializeForScript(dashboardPayload('operations',fixture));
     <DashboardNav href={href} current="operations" />
     <div class="dash-main">
       <header class="dash-heading"><p class="eyebrow">{page.category}</p><h1>{page.title}</h1><p>{page.summary}</p></header>
-      <p>Snapshot: <time datetime={fixture.as_of}>28 Oct 2026, 20:00 UTC</time> <a data-compare href={peer || href('/examples/dashboard-operations/')} hidden={!peer}>Compare in {peerFamily}</a></p>
+      <p>Snapshot: {snapshotLabel ? <time datetime={fixture.as_of}>{snapshotLabel}</time> : <span>Invalid snapshot timestamp</span>} <a data-compare href={peer || href('/examples/dashboard-operations/')} hidden={!peer}>Compare in {peerFamily}</a></p>
       <p class="ops-notice">Synthetic demonstration data. Changes remain in this page’s memory and reset on reload. No live people, systems, or services are connected.</p>
       {dataIssue ? <p role="alert">{dataIssue}</p> : <>
       <form class="dash-toolbar" id="operations-filters" novalidate><fieldset disabled data-dashboard-controls><legend>Operational scope and thresholds</legend><div class="dash-controls">

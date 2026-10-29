@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {aggregate,analyticsView,rangeError,collectionView,personControlLabels,applyBulk,validatePerson,nextPersonId,operationsView,operationsDataIssue,comparisonSearch,analyticsCoverageMessage,analyticsComparison} from '../jekyll/assets/js/dashboard-model.mjs';
+import {aggregate,analyticsView,rangeError,collectionView,personControlLabels,applyBulk,validatePerson,nextPersonId,operationsView,operationsDataIssue,validOperationsTimestamp,operationsSnapshotLabel,comparisonSearch,analyticsCoverageMessage,analyticsComparison} from '../jekyll/assets/js/dashboard-model.mjs';
 const fixture=JSON.parse(fs.readFileSync(new URL('../content/dashboards.json',import.meta.url)));
 test('analytics computes rates from totals and duration from weighted observations',()=>{
  const totals=aggregate([{sessions:20,downloads:3,completions:4,duration_seconds:1200},{sessions:80,downloads:7,completions:6,duration_seconds:16800}]);
@@ -199,4 +199,10 @@ test('literal All category is distinguishable from the all-categories filter',()
 test('repeated category declarations are deduplicated without dropping observations',()=>{
  const copy=structuredClone(fixture);copy.categories.push('Research');const row=copy.analytics.find(item=>item.date==='2026-10-28'&&item.category==='Research');copy.analytics.push({...row,sessions:row.sessions+1});
  const view=analyticsView(copy,{start:'2026-10-22',end:'2026-10-28',category:'Research'});assert.equal(view.rows.length,8);assert.equal(view.categories.filter(item=>item.name==='Research').length,1);assert.equal(view.totals.sessions,view.rows.reduce((sum,item)=>sum+item.sessions,0));assert.equal(view.categories.find(item=>item.name==='Research').sessions,view.totals.sessions);
+});
+
+test('operations reject impossible UTC calendar timestamps across snapshot data',()=>{
+ assert.equal(validOperationsTimestamp('2026-02-31T19:00:00+00:00'),false);assert.equal(validOperationsTimestamp('2026-10-28T20:99:00+00:00'),false);
+ assert.equal(operationsSnapshotLabel('2026-10-28T20:00:00+00:00'),'28 Oct 2026, 20:00 UTC');assert.equal(operationsSnapshotLabel('2026-10-28T20:00:30+00:00'),'28 Oct 2026, 20:00:30 UTC');
+ for(const type of ['sample','snapshot','alert','activity']){const copy=structuredClone(fixture),bad='2026-02-31T19:00:00+00:00';if(type==='sample')copy.services[0].samples[0].time=bad;if(type==='snapshot')copy.as_of=bad;if(type==='alert')copy.alerts[0].time=bad;if(type==='activity')copy.activity[0].time=bad;assert.match(operationsDataIssue(copy),/valid UTC calendar times/);assert.deepEqual(operationsView(copy,{}),{error:operationsDataIssue(copy)});}
 });

@@ -170,6 +170,11 @@ jobs:
               node examples/page-archetypes/tests/operations-partial.mjs --disjoint
               node examples/page-archetypes/tests/operations-invalid.mjs
               node examples/page-archetypes/tests/operations-invalid.mjs --future
+              node examples/page-archetypes/tests/operations-calendar.mjs sample
+              node examples/page-archetypes/tests/operations-calendar.mjs snapshot
+              node examples/page-archetypes/tests/operations-calendar.mjs alert
+              node examples/page-archetypes/tests/operations-calendar.mjs activity
+              node examples/page-archetypes/tests/operations-calendar.mjs valid-snapshot
               node examples/page-archetypes/tests/operations-text.mjs
               node examples/page-archetypes/tests/operations-sentinel.mjs
               node examples/page-archetypes/tests/operations-precision.mjs observation
