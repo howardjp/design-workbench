@@ -27,6 +27,12 @@ for(const family of ['martlet','krigsvold']){
   await page.getByLabel('State preview',{exact:true}).selectOption('loading');await expect(page.locator('[data-directory-state]')).toContainText('Loading state preview');await page.getByLabel('State preview',{exact:true}).selectOption('error');await page.getByRole('button',{name:'Retry directory'}).click();await expect(page.locator('[data-directory-region]')).toBeVisible();
   await page.getByLabel('Search people',{exact:true}).fill('nonexistent-record');await page.getByRole('button',{name:'Apply directory filters'}).click();await expect(page.locator('[data-directory-state]')).toContainText('No people match');
  });
+ test(`${family}: malformed page in a shared directory URL recovers to the first page`,async({page})=>{
+  await page.goto(route(family,'administration')+'?page=1.5');
+  await expect(page.locator('[data-people-page]')).toHaveText('Page 1 of 5');
+  await expect(page.locator('#people-table tbody tr')).toHaveCount(5);
+  await expect(page.getByRole('button',{name:'Previous page',exact:true})).toBeDisabled();
+ });
  test(`${family}: operations controls, thresholds and acknowledgement`,async({page})=>{
   await page.goto(route(family,'operations'));
   await expect(page.locator('[data-metric=warnings]')).toHaveText('1');

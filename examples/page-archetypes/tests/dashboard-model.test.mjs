@@ -21,6 +21,14 @@ test('collection pages clamp after filtering and bulk writes affect only selecte
  const result=applyBulk(fixture.people,['P-001'],'Suspended');assert.equal(result[0].status,'Suspended');assert.deepEqual(result.slice(1),fixture.people.slice(1));assert.notEqual(result,fixture.people);
  assert.throws(()=>applyBulk(fixture.people,['P-001'],'Deleted'));
 });
+test('collection rejects fractional and non-finite page numbers from URLs',()=>{
+ for(const page of [1.5,Infinity,NaN,'not-a-page']) {
+  const view=collectionView(fixture.people,{page,size:5});
+  assert.equal(view.page,1);
+  assert.equal(view.rows.length,5);
+ }
+ assert.equal(collectionView(fixture.people,{page:999,size:5}).page,5);
+});
 test('editing permits the same record email but rejects a duplicate on another person',()=>{
  const person=fixture.people[0];assert.deepEqual(validatePerson(person,fixture.people,person.id),{});
  assert.ok(validatePerson({...person,id:'new'},fixture.people).email);

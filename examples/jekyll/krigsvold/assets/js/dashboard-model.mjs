@@ -31,7 +31,8 @@ export function collectionView(records,{query='',status='All',sort='name',direct
   filtered.sort((a,b)=>String(a[safeSort]).localeCompare(String(b[safeSort]),'en')*(direction==='desc'?-1:1)||String(a.id).localeCompare(String(b.id)));
   const pageSize=[5,10,20].includes(Number(size))?Number(size):5;
   const pages=Math.max(1,Math.ceil(filtered.length/pageSize));
-  const current=Math.max(1,Math.min(Number(page)||1,pages));
+  const requestedPage=Number(page);
+  const current=Number.isSafeInteger(requestedPage) ? Math.max(1,Math.min(requestedPage,pages)) : 1;
   return {filtered,rows:filtered.slice((current-1)*pageSize,current*pageSize),page:current,pages,size:pageSize,total:filtered.length};
 }
 export function validatePerson(draft,records,id=null) {
