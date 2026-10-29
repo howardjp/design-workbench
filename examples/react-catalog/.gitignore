@@ -2,4 +2,5 @@ dist/
 analytics-dist/
 operations-dist/
 nav-dist/
+administration-dist/
 src/rendered.json
