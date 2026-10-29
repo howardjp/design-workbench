@@ -418,3 +418,7 @@ The combined-branch Field consumer and packed-package checks passed for both fam
 ### Additional public control audit
 
 A disposable SSR/hydrated Chromium consumer found no defect in the bounded cases checked in both families: controlled Switch and disabled state, native radio arrow selection and reset, Fieldset descriptions, checkbox/file reset, controlled and independent Disclosure keyboard/external state, encoded TableOfContents fragment navigation, axe and no-JavaScript native switch/disclosure operation. No source or test change resulted; Firefox, WebKit and manual assistive technology remain unverified. After the latest component fixes, integrated `npm run check` passed 110 tests and `nightjar-conformance.mjs --check` verified the 300 inventory cells.
+
+### Desktop zoom reflow equivalent
+
+The available headless Chromium environment has no window-automation tools; setting its profile default-zoom preference did not change measured viewport or device pixel ratio. A CDP device-metrics check instead emulates a 1280×900 desktop’s CSS viewport at 200% and 400% using 640×450/DPR 2 and 320×225/DPR 4. Across Jekyll, Astro and React, both families and seven representative content, form and dashboard routes, it passed document reflow, button clipping, keyboard menu/dialog focus, form/search/dashboard actions and selected no-JavaScript fallbacks. This is viewport and density emulation, not genuine desktop browser zoom: zoom controls, browser chrome, visual scaling and rasterization remain unverified.

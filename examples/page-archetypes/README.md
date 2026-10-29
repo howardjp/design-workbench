@@ -48,6 +48,8 @@ Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/content
 
 Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/dashboard-static-chart-data.mjs` against the same paired builds to compare four no-JavaScript chart data tables to the shared dashboard model. Sparse, disjoint and unsafe fixtures are exercised by the separate analytics and operations regression suites.
 
+Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/zoom-reflow-equivalence.mjs` against the same paired builds to exercise reflow and keyboard behavior at 640×450 and 320×225 CSS pixels with device pixel ratios 2 and 4. These emulate the CSS viewport of a 1280×900 desktop at 200% and 400% zoom; they do not operate the browser's zoom controls or validate zoom rasterization, browser chrome or pinch zoom.
+
 Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/search-composition.mjs` to check two search sections in disposable catalog builds across all three frameworks, both families and root/subpaths. Both controls share the page query, synchronize on submission and history navigation, and retain keyboard and no-JavaScript access.
 
 Run `CHROMIUM_PATH=/usr/bin/chromium node examples/page-archetypes/tests/dense-table-reflow.mjs` against the same builds to check 100-row, 19-column tables with long words at 320px. The check verifies useful column widths and a named, keyboard-scrollable region; users must scroll horizontally to inspect wide tables.
