@@ -1,4 +1,4 @@
-import {analyticsView,collectionView,validatePerson,applyBulk,operationsView,dayMillis} from './dashboard-model.mjs';
+import {analyticsView,collectionView,validatePerson,applyBulk,operationsView,dayMillis,comparisonSearch} from './dashboard-model.mjs';
 import {element,tableRows,metric,chart,downloadCSV} from './dashboard-ui.mjs';
 const root=document.querySelector('[data-dashboard]');
 const fixture=JSON.parse(document.getElementById('dashboard-data').textContent);
@@ -9,7 +9,7 @@ const navToggle=root.querySelector('.dash-nav-toggle'),nav=root.querySelector('#
 navToggle.hidden=false;root.dataset.ready='true';
 navToggle.addEventListener('click',()=>navToggle.setAttribute('aria-expanded',String(navToggle.getAttribute('aria-expanded')!=='true')));
 root.querySelector('.dash-sidebar').addEventListener('keydown',event=>{if(event.key==='Escape'){navToggle.setAttribute('aria-expanded','false');navToggle.focus();}});
-function updateURL(values){const url=new URL(location.href);for(const[key,value]of Object.entries(values))url.searchParams.set(key,String(value));history.replaceState(null,'',url);const peer=root.querySelector('[data-compare]');const compare=new URL(peer.href);compare.search=url.search;peer.href=compare.href;}
+function updateURL(values){const url=new URL(location.href);for(const[key,value]of Object.entries(values))url.searchParams.set(key,String(value));history.replaceState(null,'',url);const peer=root.querySelector('[data-compare]');const compare=new URL(peer.href);compare.search=comparisonSearch(root.dataset.dashboard,url.search);peer.href=compare.href;}
 const number=value=>new Intl.NumberFormat('en-US').format(value);
 function analytics(){
   const form=root.querySelector('#analytics-filters');const start=form.elements.start,end=form.elements.end,category=form.elements.category,range=form.elements.range;

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {aggregate,analyticsView,rangeError,collectionView,applyBulk,validatePerson,operationsView} from '../jekyll/assets/js/dashboard-model.mjs';
+import {aggregate,analyticsView,rangeError,collectionView,applyBulk,validatePerson,operationsView,comparisonSearch} from '../jekyll/assets/js/dashboard-model.mjs';
 const fixture=JSON.parse(fs.readFileSync(new URL('../content/dashboards.json',import.meta.url)));
 test('analytics computes rates from totals and duration from weighted observations',()=>{
  const totals=aggregate([{sessions:20,downloads:3,completions:4,duration_seconds:1200},{sessions:80,downloads:7,completions:6,duration_seconds:16800}]);
@@ -45,4 +45,13 @@ test('collection behaviour accepts another record vocabulary without a new grid'
  const records=[{id:'b',title:'Beta',status:'Active'},{id:'a',title:'Alpha',status:'Active'}];
  const view=collectionView(records,{query:'Alpha',sort:'untrusted',size:5},{search:['title'],sort:['title'],defaultSort:'title'});
  assert.equal(view.total,1);assert.equal(view.rows[0].id,'a');
+});
+
+test('peer comparison receives only the selected dashboard view state',()=>{
+ const search='?token=private&start=2026-10-15&category=Research&category=Other&q=Mara+Ellis&status=Active&service=SVC-04&hideAcknowledged=true';
+ assert.equal(comparisonSearch('analytics',search),'start=2026-10-15&category=Research');
+ assert.equal(comparisonSearch('administration',search),'q=Mara+Ellis&status=Active');
+ assert.equal(comparisonSearch('operations',search),'service=SVC-04&hideAcknowledged=true');
+ assert.equal(comparisonSearch('analytics','?token=private'),'');
+ assert.throws(()=>comparisonSearch('unknown',search));
 });

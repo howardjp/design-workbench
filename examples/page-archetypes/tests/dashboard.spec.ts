@@ -130,6 +130,22 @@ test('paired initial and filtered views have identical functional results',async
  for(const view of ['administration','operations']){await page.goto(route('martlet',view));const first=await page.locator(view==='administration'?'#people-table tbody':'#service-table tbody').textContent();await page.goto(route('krigsvold',view));expect(await page.locator(view==='administration'?'#people-table tbody':'#service-table tbody').textContent()).toEqual(first);}
 });
 
+for(const family of ['martlet','krigsvold'])for(const view of ['analytics','administration','operations'])test(`${family}: ${view} comparison omits unrelated URL parameters`,async({page})=>{
+ await page.goto(route(family,view)+'?token=private');
+ const compare=page.locator('[data-compare]');
+ await expect(compare).toHaveAttribute('href', /dashboard-/);
+ expect(new URL(await compare.getAttribute('href')!, page.url()).searchParams.has('token')).toBe(false);
+ if(view==='administration'){
+  await page.getByLabel('Search people',{exact:true}).fill('Mara Ellis');
+  await page.getByRole('button',{name:'Apply directory filters'}).click();
+  await page.getByLabel('Table density',{exact:true}).selectOption('compact');
+  const url=new URL(await compare.getAttribute('href')!,page.url());
+  expect(url.searchParams.get('q')).toBe('Mara Ellis');
+  expect(url.searchParams.get('density')).toBe('compact');
+  expect(url.searchParams.has('token')).toBe(false);
+ }
+});
+
 for(const family of ['martlet','krigsvold'])test(`${family}: workspace review re-evaluates active filters`,async({page})=>{
  await page.goto(`/${family}/examples/workspace/`);
  const workspace=page.locator('[data-workspace]');

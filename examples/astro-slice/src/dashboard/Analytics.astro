@@ -37,7 +37,7 @@ const metrics=[['sessions','Sessions'],['downloads','Downloads'],['conversion','
 <script type="application/json" id="analytics-data" is:inline set:html={json}></script>
 <script>
 const fixture=JSON.parse(document.getElementById('analytics-data').textContent);
-import {analyticsView, dayMillis} from '../../../page-archetypes/jekyll/assets/js/dashboard-model.mjs';
+import {analyticsView, dayMillis, comparisonSearch} from '../../../page-archetypes/jekyll/assets/js/dashboard-model.mjs';
 import {chart, metric, tableRows, downloadCSV} from '../../../page-archetypes/jekyll/assets/js/dashboard-ui.mjs';
 const root=document.querySelector('[data-analytics-dashboard]');
 const form=root.querySelector('#analytics-filters');
@@ -55,7 +55,7 @@ function render(){
   const candidate=analyticsView(fixture,{start:start.value,end:end.value,category:category.value});const error=root.querySelector('#analytics-error');
   error.hidden=!candidate.error;error.textContent=candidate.error;start.setAttribute('aria-invalid',String(!!candidate.error));end.setAttribute('aria-invalid',String(!!candidate.error));root.querySelector('[data-export-analytics]').disabled=!!candidate.error;
   if(candidate.error){status.textContent='Invalid filters. The previous valid results remain visible.';error.tabIndex=-1;error.focus();return;}
-  view=candidate;const url=new URL(location.href);for(const [key,value] of Object.entries({start:start.value,end:end.value,category:category.value}))url.searchParams.set(key,value);history.replaceState(null,'',url);const compare=root.querySelector('[data-analytics-compare]');if(compare){const peer=new URL(compare.href);peer.search=url.search;compare.href=peer.href;}
+  view=candidate;const url=new URL(location.href);for(const [key,value] of Object.entries({start:start.value,end:end.value,category:category.value}))url.searchParams.set(key,value);history.replaceState(null,'',url);const compare=root.querySelector('[data-analytics-compare]');if(compare){const peer=new URL(compare.href);peer.search=comparisonSearch('analytics',url.search);compare.href=peer.href;}
   const comparisons=id=>view.previous&&view.previous[id]?`${((view.totals[id]/view.previous[id]-1)*100).toFixed(1)}% versus preceding period.`:'No complete preceding period available.';
   metric(root,'sessions',number(view.totals.sessions),comparisons('sessions'));metric(root,'downloads',number(view.totals.downloads),comparisons('downloads'));metric(root,'conversion',view.totals.conversion.toFixed(1)+'%','Completed tasks ÷ sessions.');metric(root,'mean_duration',Math.round(view.totals.mean_duration)+' s','Weighted by session count.');
   chart(root,'sessions',view.days.map(day=>({label:day.date,value:day.sessions})),{label:'Sessions'});chart(root,'downloads',view.days.map(day=>({label:day.date,value:day.downloads})),{label:'Downloads'});

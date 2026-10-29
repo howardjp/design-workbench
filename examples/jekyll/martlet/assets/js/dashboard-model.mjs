@@ -1,5 +1,17 @@
 /* Portable behaviour and calculations. No DOM, theme, framework, or network dependencies. */
 export const dayMillis = 86400000;
+// Only intentional view state crosses to the separately configured peer host.
+const comparisonKeys = Object.freeze({
+  analytics:['start','end','category'],
+  administration:['q','status','sort','direction','page','size','density'],
+  operations:['hours','threshold','service','severity','hideAcknowledged']
+});
+export function comparisonSearch(route, search) {
+  if (!Object.hasOwn(comparisonKeys, route)) throw new Error('Unsupported dashboard route');
+  const incoming = new URLSearchParams(search), outgoing = new URLSearchParams();
+  for (const key of comparisonKeys[route]) if (incoming.has(key)) outgoing.set(key, incoming.get(key));
+  return outgoing.toString();
+}
 export function rangeError(start, end, min, max) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(start) || !/^\d{4}-\d{2}-\d{2}$/.test(end)) return 'Enter both dates.';
   if ([start,end].some(value=>!Number.isFinite(Date.parse(value))||new Date(Date.parse(value)).toISOString().slice(0,10)!==value)) return 'Enter valid calendar dates.';
