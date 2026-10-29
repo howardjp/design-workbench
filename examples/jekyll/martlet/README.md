@@ -6,7 +6,7 @@ A genuine Jekyll template using the consolidated Martlet Astro shell.
 - `bundle exec jekyll serve`
 - `bundle exec jekyll build --destination dist`
 
-Layouts: default, wide page with optional left index, and narrow post with inline contents. Date, author, summary, and tags live in the masthead. Header/footer are shared includes; navigation and site identity are configurable. Appearance is progressive enhancement; content and links remain available without JavaScript.
+Layouts: default, wide page with optional left index, and narrow post with inline contents. Date, author, and summary live in the masthead; tags use the source post-tag strip below it. Header/footer are shared includes; navigation and site identity are configurable. Appearance is progressive enhancement; content and links remain available without JavaScript.
 
 The exported CSS is vendored intact, with its SHA-256 in `_data/shell.json`. Fonts and marks are self-hosted. Jekyll adaptations are separate. Original source websites are untouched.
 
