@@ -66,5 +66,5 @@ body { margin:0; }
 .source-shell--reading .recipe-cards > li + li { margin-block-start:0; }
 
 /* Source example cards have their own rule; prose heading ornaments do not apply here. */
-.source-shell--reading .recipe-cards > li { border-block-start:1px solid var(--ss-line); padding-block:1.5rem; }
+.source-shell--reading .recipe-cards > :is(li,article) { border-block-start:1px solid var(--ss-line); padding-block:1.5rem; }
 .source-shell--editorial [data-example] h2::after { content:none; }

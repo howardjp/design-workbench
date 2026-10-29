@@ -1,5 +1,5 @@
 import {useEffect,useRef,useState} from 'react';
-import {Article,DefinitionList,Pagination,DataTable,Disclosure} from 'catalog-family';
+import {Article,DefinitionList,Pagination,DataTable,Disclosure,family} from 'catalog-family';
 import type {CatalogPageData,CatalogEntry} from './data-types';
 const specialKinds=['gallery','workspace','chat','sensors','scene'];
 import type {ReactNode} from 'react';
@@ -32,12 +32,12 @@ function SectionView({section,pageId,special,bodies,entries}:{section:Section;pa
   {section.kind==='figure'&&<figure><img src={exampleImage(section.image!)} alt={section.alt!} width="960" height="640" loading="lazy"/><figcaption>{section.caption}</figcaption></figure>}
   {section.kind==='faq'&&<div>{section.items!.map((item,i)=><Disclosure key={i} summary={item.question}>{item.answer}</Disclosure>)}</div>}
   {section.kind==='stats'&&<DefinitionList items={section.items!.map((item,i)=>({id:`${section.id}-${i}`,term:item.label!,description:item.value!}))}/>}
-  {section.kind==='plans'&&<div className="recipe-cards">{section.items!.map(item=><article key={item.title}><h3>{item.title}</h3><p>{item.price}</p><p>{item.summary}</p><ul>{item.features!.map(feature=><li key={feature}>{feature}</li>)}</ul><a href={href(item.action!.url)}>{item.action!.label}</a></article>)}</div>}
+  {section.kind==='plans'&&<div className="recipe-cards">{section.items!.map(item=><article key={item.title}><h3>{item.title}</h3><p>{item.price}</p><p>{item.summary}</p><ul>{item.features!.map(feature=><li key={feature}>{feature}</li>)}</ul><a className={`${family}-button ${family}-button--primary recipe-action`} href={href(item.action!.url)}>{item.action!.label}</a></article>)}</div>}
   {section.kind==='form'&&<DemoForm kind={section.form!}/>}
   {section.kind==='search'&&<Search entries={entries} title={section.title}/>}
   {section.kind&&specialKinds.includes(section.kind) && (special ? special(section) : (()=>{throw Error(`Missing interactive renderer for ${section.kind}`)})())}
   {section.kind==='table'&&<DataTable caption={section.title}><thead><tr>{section.headers!.map(header=><th key={header} scope="col">{header}</th>)}</tr></thead><tbody>{section.rows!.map((row,i)=><tr key={i}>{row.map((cell,j)=>j===0?<th key={j} scope="row">{cell}</th>:<td key={j}>{cell}</td>)}</tr>)}</tbody></DataTable>}
-  {section.actions&&<ul className="recipe-actions">{section.actions.map(action=><li key={action.url}><a href={href(action.url)}>{action.label}</a></li>)}</ul>}
+  {section.actions&&<ul className="recipe-actions">{section.actions.map((action,index)=><li key={action.url}><a className={`${family}-button ${family}-button--${family==='krigsvold'&&index>0?'secondary':'primary'} recipe-action`} href={href(action.url)}>{action.label}</a></li>)}</ul>}
  </section>;
 }
 export function App({data,special}:{data:CatalogPageData;special?:(section:unknown)=>ReactNode}) {

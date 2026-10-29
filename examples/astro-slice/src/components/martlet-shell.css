@@ -13,5 +13,9 @@
 }
 
 /* Source example typography uses Cambo for editorial section labels and cards. */
+.martlet-source-profile .recipe[data-example] h3 { font-size:1.2rem; line-height:1.25; }
 .martlet-source-profile .recipe[data-example] :is(h2,h3) { font-family:var(--martlet-font-serif); font-weight:400; }
 .martlet-source-profile .nightjar-masthead h1 { font-size:clamp(2rem,5.5vw,5rem); line-height:1.08; font-weight:400; }
+
+/* Source cards group related paths with a quiet leading rule. */
+.martlet-source-profile .recipe[data-example] .recipe-list > * { border-block-start:1px solid var(--martlet-line); padding-block:1.5rem; min-width:0; }
