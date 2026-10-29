@@ -504,3 +504,7 @@ Commit `c39a3e6` restores family-styled React action anchors (including pricing)
 The integrated-branch `card-action-parity.mjs` rerun passed after `c39a3e6` against freshly built root sites in all six language/framework combinations. No installed screen reader, Firefox or WebKit executable was found locally; those manual and cross-engine reviews remain open.
 
 Commit `1139fcc` wires the already-passing card/action parity check into the existing read-only root-build CI sequence, before any suite that replaces those outputs. It uses the same paired build paths as the preceding reading check. No remote workflow was triggered.
+
+### Final bounded fixture CI rehearsal
+
+A fresh archived checkout at `60559b3` passed the exact three CI fixture groups with two CPUs per group: analytics coverage 132 builds in 11m11.5s; analytics precision 36 in 3m33.4s; operations/directory 216 in 15m15.3s. Operations and coverage ran concurrently on separate CPU pairs, with precision following coverage while operations continued. Locked root/Astro npm installs, workspace builds and frozen Bundler installs passed using cached gems and system Chromium 151. Every page-archetype `.mjs` test was wired directly or through an npm alias at that snapshot. The longest fixture phase was below its 30-minute cap locally, but hosted setup, browser download and GitHub runtime remain unmeasured. No remote workflow, release or push was triggered.
