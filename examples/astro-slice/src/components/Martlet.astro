@@ -14,6 +14,7 @@ const links = [{href:href('/examples/home/'),label:'Home',current:page.id==='hom
 const dashboards = ['analytics','administration','operations'].map(id => ({href:href(`/examples/dashboard-${id}/`),label:id[0].toUpperCase()+id.slice(1)}));
 ---
 <Layout title={page.title} description={page.summary} bodyClass="martlet-source-profile">
+  <link slot="head" rel="icon" type="image/svg+xml" href={mark} />
   <script is:inline slot="head" define:vars={{family: 'martlet'}}>try { const mode=localStorage.getItem('nightjar-appearance')==='dark'?'dark':'light'; document.documentElement.dataset.appearance=mode;document.documentElement.setAttribute(`data-${family}`,mode); } catch {}</script>
   <SourceHeader slot="header" name="Martlet examples" home={href('/examples/')} links={links} mark={mark} />
   {!page.dashboard && <SourceMasthead page={page} />}
