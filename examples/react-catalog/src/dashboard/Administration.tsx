@@ -26,7 +26,7 @@ export function Administration(){
  useEffect(()=>{if(!selectAll.current)return;const count=view.rows.filter(person=>selected.has(person.id)).length;selectAll.current.indeterminate=count>0&&count<view.rows.length;},[selected,view.rows]);
  useEffect(()=>{if(Object.keys(errors).length)errorRef.current?.focus();},[errors]);
  useEffect(()=>{if(!pageFocus.current)return;pageFocus.current=false;if(view.page===1)nextRef.current?.focus();else if(view.page===view.pages)previousRef.current?.focus();},[view.page,view.pages]);
- const updateURL=(next:Scope,d=density)=>{const url=new URL(location.href);for(const [k,v] of Object.entries({q:next.query,status:next.status,sort:next.sort,direction:next.direction,page:next.page,size:next.size,density:d}))url.searchParams.set(k,String(v));try{history.replaceState(null,'',url);}catch{setEnhanced(false);}};
+ const updateURL=(next:Scope,d=density)=>{const url=new URL(location.href);for(const [k,v] of Object.entries({q:next.query,status:next.status,sort:next.sort,direction:next.direction,page:next.page,size:next.size,density:d}))url.searchParams.set(k,String(v));try{history.replaceState(history.state,'',url);}catch{setEnhanced(false);}};
  const updateScope=(next:Scope)=>{const bounded=collectionView(records,next);const value={...next,page:bounded.page};setScope(value);updateURL(value);};
  useEffect(()=>{if(!enhanced)return;if(scope.page!==view.page){const bounded={...scope,page:view.page};setScope(bounded);updateURL(bounded);}else updateURL(scope);},[enhanced,scope,view.page]);
  const apply=(event:FormEvent)=>{event.preventDefault();const next={...scope,query:filter.query.trim(),status:filter.status,size:filter.size,page:1};setSelected(new Set());updateScope(next);};
