@@ -601,6 +601,17 @@ export function Tabs({
   const active = selected >= 0 ? selected : (enabled[0] ?? -1);
   const focused = items.findIndex((item) => item.id === focusedId && !item.disabled);
   const tabStop = focused >= 0 ? focused : active;
+  const lastFocusedTab = useRef<HTMLButtonElement | null>(null);
+  useLayoutEffect(() => {
+    const previous = lastFocusedTab.current;
+    if (previous && (!previous.isConnected || previous.disabled)) {
+      lastFocusedTab.current = null;
+      const document = previous.ownerDocument;
+      if (document.hasFocus() && (document.activeElement === document.body || document.activeElement === previous)) {
+        buttons.current[active]?.focus();
+      }
+    }
+  });
   return (
     <div {...props} className={`krigsvold-tabs ${className}`}>
       <div
@@ -608,7 +619,13 @@ export function Tabs({
         aria-label={label}
         aria-orientation={orientation}
         onBlur={(event) => {
-          if (!(event.relatedTarget instanceof Node) || !event.currentTarget.contains(event.relatedTarget)) setFocusedId(null);
+          if (!(event.relatedTarget instanceof Node) || !event.currentTarget.contains(event.relatedTarget)) {
+            setFocusedId(null);
+            const prior = lastFocusedTab.current;
+            // Keep the last tab only when React has just disabled or removed it;
+            // an ordinary blur, including a move to outside content, clears it.
+            if (event.relatedTarget || !prior || (prior.isConnected && !prior.disabled)) lastFocusedTab.current = null;
+          }
         }}
         onKeyDown={(event) => {
           const target = (event.target as HTMLElement).closest('[role="tab"]');
@@ -649,7 +666,7 @@ export function Tabs({
             aria-selected={index === active}
             tabIndex={index === tabStop ? 0 : -1}
             disabled={item.disabled}
-            onFocus={() => setFocusedId(item.id)}
+            onFocus={(event) => { lastFocusedTab.current = event.currentTarget; setFocusedId(item.id); }}
             onClick={() => onValueChange(item.id)}
           >
             {item.label}
