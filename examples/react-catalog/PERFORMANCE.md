@@ -44,3 +44,30 @@ CHROMIUM_PATH=/usr/bin/chromium node examples/react-catalog/measure-performance.
 ```
 
 Omit `CHROMIUM_PATH` when the Playwright browser is installed. The script emits one JSON line per family/route, including request paths, byte categories and median timings, and asserts content/dashboard chunk separation and the no-JavaScript baseline.
+
+## Nightjar II static-article assessment
+
+On 2026-10-30, the article route was measured from fresh root-path builds at candidate `5138a89` in all three frameworks using `examples/page-archetypes/tests/measure-article-transfer.mjs`. This compares the same authored article **within each family**; the shells and navigation are different implementations and do not offer identical features or asset sets. Node 24.19 and Chromium 151 ran on managed Debian 13. Each value is the median of three fresh 1440×900 browser contexts against a loopback server with `Cache-Control: no-store`, gzip at Node's default settings for HTML, JavaScript, CSS and SVG, and WOFF/WOFF2 sent as stored. Numbers are response-body bytes for resources actually requested, not HTTP headers, all possible fonts, cached/CDN traffic, timings or total page-load measurements. Inline scripts count in HTML. No unexpected external requests or page errors occurred; Astro's browser-generated `/favicon.ico` request returned 404 and its error body is excluded. No-JavaScript checks confirmed the article heading and links, not full accessibility.
+
+| Family | Framework | HTML | JS | CSS | Requested fonts | SVG/images | Total response bodies |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Martlet | Jekyll | 2,345 | 4,623 | 24,341 | 86,636 | 18,388 | 136,333 |
+| Martlet | Astro | 1,908 | 545 | 9,710 | 71,432 | 9,194 | 92,789 |
+| Martlet | React | 2,301 | 76,945 | 10,475 | 71,432 | 9,194 | 170,347 |
+| Krigsvold | Jekyll | 2,519 | 4,626 | 86,471 | 80,508 | 6,620 | 180,744 |
+| Krigsvold | Astro | 1,916 | 545 | 13,069 | 58,308 | 457 | 74,295 |
+| Krigsvold | React | 2,308 | 76,975 | 12,901 | 58,308 | 457 | 150,949 |
+
+React requests about 76.4 KB more compressed external JavaScript than Astro for this article in each family. Of the React JavaScript, the `SourceShell`-named shared chunk is 66,507 bytes for Martlet and 66,509 for Krigsvold (86.4%); its build contains React DOM hydration as well as shared shell/runtime code. This is a chunk attribution, not a measurement of CPU, render latency or what can safely be removed. Krigsvold's Jekyll `shell.css` alone is 593,642 raw / 80,900 gzip bytes in this build, accounting for most of its measured CSS; it contains source-informed rules and should not be reduced without cascade, provenance and visual-regression review. These observations should not be compared directly to the earlier measurement as a controlled before/after: the candidate and build graph changed.
+
+No selective-hydration change is included in this assessment. The static article has no local form, search, pagination or gallery state, but its React `SourceShell` owns menu state, Escape/focus return, appearance and storage, responsive visibility, initialization and no-JavaScript fallback. Replacing it only on selected routes with a second imperative controller would duplicate that contract and create different failure and focus behavior; hydrating a React-only header island would still need a reviewed ownership and SSR-ID boundary for the shared shell. Neither approach has yet established enough behavior and maintenance evidence to justify changing all static pages. Do not remove hydration or fonts merely because the byte difference is large.
+
+The existing React source-shell regression passed both families at root and `/preview` after these measurements, covering menu keyboard/Escape focus, saved appearance, links, narrow reflow, dark axe, print and no-JavaScript fallback. This is Chromium evidence, not screen-reader or cross-browser certification. A follow-up should prototype a **single shared** shell interaction boundary, define ownership and SSR/hydration failure behavior, compare actual before/after response bytes and changes to the shipped bundle, and run those checks plus blocked scripts, hash/deep links, both families, root/subpath and all affected interactive recipes before adopting it. Review the Krigsvold Jekyll source-shell CSS separately; do not infer unused or safe-to-remove rules from its size alone.
+
+To reproduce the cross-framework article observation after installing locked dependencies and building the React workspaces, build the two Jekyll sites at `/` into a paired directory, build both Astro and React families at `/`, then run:
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium NIGHTJAR_JEKYLL_ROOT=/absolute/path/to/paired-jekyll node examples/page-archetypes/tests/measure-article-transfer.mjs
+```
+
+Set `NIGHTJAR_ASTRO_ROOT` or `NIGHTJAR_REACT_ROOT` to override their paired output directories. Run the source-shell behavior suite separately with `CHROMIUM_PATH=/usr/bin/chromium node examples/react-catalog/test-source-shell.mjs`; it rebuilds its own root and subpath outputs.
