@@ -140,6 +140,9 @@ jobs:
       - name: Verify dashboard initialization failures
         timeout-minutes: 10
         run: node examples/page-archetypes/tests/dashboard-initialization.mjs
+      - name: Verify local form validity and recovery
+        timeout-minutes: 10
+        run: node examples/page-archetypes/tests/form-stale-validity.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -208,6 +211,9 @@ jobs:
           name: nightjar-ii-contrast-${{ matrix.browser }}
           path: ${{ runner.temp }}/nightjar-ii-contrast-${{ matrix.browser }}/
           if-no-files-found: ignore
+      - name: Check form validity recovery in the selected browser
+        timeout-minutes: 5
+        run: NIGHTJAR_TEST_PREBUILT=1 NIGHTJAR_JEKYLL_ROOT="$RUNNER_TEMP/portable-browser-jekyll" node examples/page-archetypes/tests/form-stale-validity.mjs
 
   # Group the expensive isolated builds to bound parallelism and setup cost.
   fixture-regressions:
