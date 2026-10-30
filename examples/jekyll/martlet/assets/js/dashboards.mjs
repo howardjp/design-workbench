@@ -52,8 +52,10 @@ function administration(){
   let current,saving=false,initializing=true;
   const addressWarning=element('p','',{role:'status'});status.after(addressWarning);
   const syncAddress=()=>{const updated=updateURL({q:state.query,status:state.status,sort:state.sort,direction:state.direction,page:state.page,size:state.size,density:filters.elements.density.value},!initializing);addressWarning.textContent=updated?'':'The address could not be updated. Local changes remain available; try applying the filters again.';};
+  const editorFields=['name','email','role','status'];const editorValues=()=>Object.fromEntries(editorFields.map(name=>[name,editor.elements[name].value]));let editorBaseline=editorValues();
+  const allowEditorChange=()=>{if(editorFields.every(name=>editor.elements[name].value===editorBaseline[name]))return true;status.textContent='Unsaved changes. Save or discard this draft before changing the editor.';editor.elements.name.focus();return false;};
   const clearErrors=()=>{root.querySelector('#person-errors').hidden=true;for(const name of ['name','email','role','status']){editor.elements[name].removeAttribute('aria-invalid');editor.elements[name].removeAttribute('aria-describedby');root.querySelector(`#person-${name}-error`).hidden=true;}};
-  const resetEditor=()=>{editing=null;editor.reset();clearErrors();root.querySelector('[data-editor-legend]').textContent='Add a person';};
+  const resetEditor=()=>{editing=null;editor.reset();editorBaseline=editorValues();clearErrors();root.querySelector('[data-editor-legend]').textContent='Add a person';};
   const updateSelection=()=>{
     root.querySelector('[data-selection-count]').textContent=`${selected.size} people selected across result pages. Changing filters clears selection.`;
     root.querySelectorAll('[data-bulk]').forEach(button=>button.disabled=!selected.size||filters.elements.state.value!=='ready');
@@ -100,8 +102,8 @@ function administration(){
   for(const[selector,step]of [['[data-people-previous]',-1],['[data-people-next]',1]])root.querySelector(selector).addEventListener('click',()=>{state.page+=step;render();const next=root.querySelector(selector);if(next.disabled)root.querySelector(step===1?'[data-people-previous]':'[data-people-next]').focus();});
   body.addEventListener('change',event=>{const id=event.target.dataset.selectPerson;if(!id)return;event.target.checked?selected.add(id):selected.delete(id);updateSelection();});
   selectPage.addEventListener('change',()=>{current.rows.forEach(person=>selectPage.checked?selected.add(person.id):selected.delete(person.id));body.querySelectorAll('[data-select-person]').forEach(input=>input.checked=selected.has(input.dataset.selectPerson));updateSelection();});
-  body.addEventListener('click',event=>{const id=event.target.closest('[data-edit-person]')?.dataset.editPerson;if(!id)return;const person=records.find(item=>item.id===id);editing=id;clearErrors();for(const field of ['name','email','role','status'])editor.elements[field].value=person[field];root.querySelector('[data-editor-legend]').textContent=`Edit ${person.name} (${person.id})`;editor.elements.name.focus();});
-  root.querySelector('[data-new-person]').addEventListener('click',()=>{resetEditor();editor.elements.name.focus();});
+  body.addEventListener('click',event=>{const id=event.target.closest('[data-edit-person]')?.dataset.editPerson;if(!id)return;if(editing===id){editor.elements.name.focus();return;}if(!allowEditorChange())return;const person=records.find(item=>item.id===id);editing=id;clearErrors();for(const field of editorFields)editor.elements[field].value=person[field];editorBaseline=editorValues();root.querySelector('[data-editor-legend]').textContent=`Edit ${person.name} (${person.id})`;status.textContent=`Editing ${person.name} (${person.id}).`;editor.elements.name.focus();});
+  root.querySelector('[data-new-person]').addEventListener('click',()=>{if(!allowEditorChange())return;resetEditor();status.textContent='Adding a person.';editor.elements.name.focus();});
   root.querySelector('[data-discard-person]').addEventListener('click',()=>{resetEditor();status.textContent='Draft discarded. Directory records are unchanged.';});
   editor.addEventListener('submit',event=>{
     event.preventDefault();if(saving)return;const draft=Object.fromEntries(['name','email','role','status'].map(name=>[name,editor.elements[name].value.trim()]));const errors=validatePerson(draft,records,editing);clearErrors();
