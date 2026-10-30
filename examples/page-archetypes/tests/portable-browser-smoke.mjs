@@ -1,17 +1,19 @@
 // Bounded cross-engine checks against independently built portable examples.
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
-import {readFile} from 'node:fs/promises';
-import {extname,resolve} from 'node:path';
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import {extname,resolve,join} from 'node:path';
 import {chromium,firefox,webkit,expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import catalog from '../content/catalog.json' with {type:'json'};
+import {captureIncompleteTargets} from './contrast-incomplete-evidence.mjs';
 
 const engine=process.env.NIGHTJAR_BROWSER || 'chromium';
 const browsers={chromium,firefox,webkit};
 if(!browsers[engine]) throw Error('NIGHTJAR_BROWSER must be chromium, firefox, or webkit');
 const roots={jekyll:process.env.NIGHTJAR_JEKYLL_ROOT,astro:process.env.NIGHTJAR_ASTRO_ROOT||'examples/astro-slice/dist',react:process.env.NIGHTJAR_REACT_ROOT||'examples/react-catalog/dist'};
 if(!roots.jekyll) throw Error('NIGHTJAR_JEKYLL_ROOT must contain the paired root-path Jekyll builds');
+const evidence=process.env.NIGHTJAR_CONTRAST_EVIDENCE;if(evidence)await mkdir(evidence,{recursive:true});
 async function serve(root){
   const server=createServer(async(req,res)=>{
     const path=new URL(req.url,'http://localhost').pathname, name=decodeURIComponent(path.slice(1)),file=resolve(root,name.endsWith('/')?`${name}index.html`:name);
@@ -47,6 +49,15 @@ try{
     assert.deepEqual(violations,[],`${engine} ${family} ${framework} ${appearance} ${state}: WCAG-tagged axe violations`);
     const incomplete=result.incomplete.filter(rule=>rule.nodes.length).map(rule=>({id:rule.id,targets:rule.nodes.map(node=>node.target)}));
     if(incomplete.length)console.log(`${engine} ${family} ${framework} ${appearance} ${state}: axe requires manual review: ${JSON.stringify(incomplete)}`);
+    const contrast=incomplete.find(rule=>rule.id==='color-contrast');
+    if(evidence&&contrast){
+     const name=[engine,family,framework,appearance,state].join('-').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'');
+     const targets=await captureIncompleteTargets(page,contrast.targets);
+     assert.deepEqual(targets.map(record=>record.target),contrast.targets,`${name}: every axe target is retained in evidence`);
+     const screenshot=`${name}.png`;
+     await page.screenshot({path:join(evidence,screenshot),fullPage:true});
+     await writeFile(join(evidence,`${name}.json`),JSON.stringify({engine,family,framework,appearance,state,url:page.url(),axeResult:'incomplete',screenshot,targets},null,2)+'\n');
+    }
    }
    await open('article');
    await expect(page.getByRole('heading',{name:catalog.pages.find(item=>item.id==='article').title,exact:true})).toBeVisible();
