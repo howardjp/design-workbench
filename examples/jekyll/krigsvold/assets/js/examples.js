@@ -17,13 +17,15 @@
       // Do not retain even illustrative passwords or verification codes.
       form.querySelectorAll('[type=password], [name=code]').forEach(input => { input.value = ''; });
     });
-    // Native constraint validation runs before submit and emits a non-bubbling invalid event.
+    // Explicit reportValidity still emits a non-bubbling invalid event.
     form.addEventListener('invalid', () => { status.textContent = ''; }, true);
     // A validation message describes the submitted values, not later edits.
     form.addEventListener('input', () => { validateText(); status.textContent = ''; });
     form.addEventListener('change', () => { validateText(); status.textContent = ''; });
     form.addEventListener('reset', () => { freeText.forEach(input => input.setCustomValidity('')); status.textContent = ''; });
-    fields.disabled = false; fallback.hidden = true;
+    // Recheck custom errors at submission even if a host changed a value without
+    // dispatching input. reportValidity above still enforces native constraints.
+    form.noValidate = true; fields.disabled = false; fallback.hidden = true;
   });
 
   document.querySelectorAll('[data-listing]').forEach(listing => {
