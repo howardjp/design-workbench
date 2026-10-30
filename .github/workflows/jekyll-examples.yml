@@ -104,7 +104,7 @@ jobs:
         timeout-minutes: 6
         run: |
           sudo apt-get update
-          sudo apt-get install -y xdotool xvfb
+          sudo apt-get install -y xdotool xvfb xauth
           NIGHTJAR_JEKYLL_ROOT="$RUNNER_TEMP/nightjar-i18n" xvfb-run -a --server-args="-screen 0 1280x900x24 -nolisten tcp" node examples/page-archetypes/tests/real-browser-zoom.mjs
       - name: Verify large directory and duplicate-name controls
         timeout-minutes: 10
