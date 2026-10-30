@@ -472,8 +472,10 @@ export function Pagination({
       focusedControl.current = null;
       return;
     }
-    const active = document.activeElement;
-    if (active !== document.body && active !== previousRef.current && active !== nextRef.current) {
+    const owner = previousRef.current?.ownerDocument;
+    if (!owner) return;
+    const active = owner.activeElement;
+    if (active !== owner.body && active !== previousRef.current && active !== nextRef.current) {
       focusedControl.current = null;
       return;
     }
