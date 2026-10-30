@@ -83,6 +83,7 @@ jobs:
           node examples/page-archetypes/tests/axe-route-inventory.mjs
           NIGHTJAR_AXE_APPEARANCE=dark node examples/page-archetypes/tests/axe-route-inventory.mjs
           node examples/page-archetypes/tests/contrast-bounded.mjs
+          node examples/page-archetypes/tests/contrast-enable-transition.mjs
           node examples/page-archetypes/tests/dashboard-static-chart-data.mjs
           node examples/page-archetypes/tests/zoom-reflow-equivalence.mjs
           node examples/page-archetypes/tests/print-media-inventory.mjs
@@ -191,6 +192,15 @@ jobs:
         run: npx playwright install --with-deps "$NIGHTJAR_BROWSER"
       - name: Check reading, forms, analytics and scientific workspace across portable frameworks
         run: NIGHTJAR_JEKYLL_ROOT="$RUNNER_TEMP/portable-browser-jekyll" node examples/page-archetypes/tests/portable-browser-smoke.mjs
+      - name: Measure bounded contrast contexts and capture review evidence
+        run: NIGHTJAR_JEKYLL_ROOT="$RUNNER_TEMP/portable-browser-jekyll" NIGHTJAR_CONTRAST_SCREENSHOTS="$RUNNER_TEMP/nightjar-ii-contrast-$NIGHTJAR_BROWSER" node examples/page-archetypes/tests/contrast-bounded.mjs
+      - name: Upload contrast review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightjar-ii-contrast-${{ matrix.browser }}
+          path: ${{ runner.temp }}/nightjar-ii-contrast-${{ matrix.browser }}/
+          if-no-files-found: ignore
 
   # Group the expensive isolated builds to bound parallelism and setup cost.
   fixture-regressions:
