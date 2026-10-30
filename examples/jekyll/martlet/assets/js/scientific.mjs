@@ -3,7 +3,7 @@ for(const root of document.querySelectorAll('[data-science]')) {
  const form=root.querySelector('[data-science-form]'),fields=root.querySelector('[data-science-fields]'),fallback=root.querySelector('[data-science-fallback]'),download=root.querySelector('[data-science-download]'),errors=root.querySelector('[data-science-errors]'),status=root.querySelector('[data-science-status]');
  let applied={...thermalDefaults},rows=thermalModel(applied).rows;
  const keys=Object.keys(thermalDefaults),draft=()=>Object.fromEntries(keys.map(key=>[key,form.elements[key].value]));
- const updateStatus=()=>{const pending=draft();status.textContent=keys.some(key=>pending[key]!==applied[key])?'Parameters have changed. Results show the last successful calculation.':'Results show the current calculation.'};
+ const updateStatus=()=>{const pending=draft(),message=keys.some(key=>pending[key]!==applied[key])?'Parameters have changed. Results show the last successful calculation.':'Results show the current calculation.';if(status.textContent!==message)status.textContent=message;};
  function draw(){
   const temperatures=rows.map(row=>Number(thermalNumber(row.temperature))),low=Math.min(...temperatures),high=Math.max(...temperatures),spread=high-low;
   root.querySelector('polyline').setAttribute('points',rows.map((row,index)=>`${20+index*52},${spread===0?70:120-(temperatures[index]-low)/spread*100}`).join(' '));

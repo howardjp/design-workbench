@@ -1,7 +1,7 @@
 .science-workspace { max-width:75rem; margin:2rem auto; padding:0 1rem; }
 :where(body.martlet,body.martlet-source-profile) .science-workspace { font-family:var(--martlet-font-sans, Lato, sans-serif); --science-action:var(--martlet-accent); --science-action-text:var(--martlet-on-accent); }
 :where(body.krigsvold,body.krigsvold-source-profile) .science-workspace { font-family:var(--krigsvold-font-sans, Roboto, sans-serif); --science-action:var(--krigsvold-accent); --science-action-text:var(--krigsvold-on-accent); }
-.science-regions { display:grid; gap:2.5rem; }
+.science-regions { display:grid; gap:2.5rem; overflow-wrap:anywhere; }
 .science-regions section { min-width:0; }
 .science-regions fieldset { display:grid; gap:1rem; min-width:0; }
 .science-regions label { display:block; font-weight:700; }
