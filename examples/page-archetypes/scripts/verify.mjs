@@ -36,6 +36,10 @@ for (const page of catalog.pages) {
   }
   assert.ok(!JSON.stringify(page).match(/{[{%]|className=|class=/), `${page.id}: framework syntax in content contract`);
 }
+const shellOrigins = {
+  martlet: {repository:'martlettheme/martlettheme', commit:'b588542b36cb67ed84a57700ce26ce845d475df9', digest:'6eb74f3e3de2071386c8c0822ce3ea65e7b0fa61d41cb0a3670a0b68c54fc1d5'},
+  krigsvold: {repository:'krigsvoldtheme/krigsvoldtheme', commit:'fa4a66c8675d9258f733250f1e32149c3622ea39', digest:'7f2796e82976a575f3552ee57d61ab202598beecd51f75dba8a7011c78d37508'}
+};
 for (const family of ['martlet', 'krigsvold']) {
   const site = path.join(root, '../jekyll', family);
   assert.deepEqual(JSON.parse(fs.readFileSync(path.join(site, '_data/examples.json'))), catalog, `${family}: stale content export`);
@@ -47,6 +51,11 @@ for (const family of ['martlet', 'krigsvold']) {
   const shell = JSON.parse(fs.readFileSync(path.join(site, '_data/shell.json')));
   const { createHash } = await import('node:crypto');
   assert.equal(createHash('sha256').update(fs.readFileSync(path.join(site, 'assets/css/shell.css'))).digest('hex'), shell.sha256, `${family}: authoritative shell changed`);
+  const origin = shellOrigins[family];
+  assert.equal(shell.contract, 'docs/source-shell/CONTRACT.md', `${family}: shell contract path`);
+  assert.equal(shell.contract_source, `https://github.com/${origin.repository}/blob/${origin.commit}/${shell.contract}`, `${family}: immutable shell contract source`);
+  assert.equal(shell.contract_sha256, origin.digest, `${family}: pinned shell contract digest`);
+  assert.equal(createHash('sha256').update(fs.readFileSync(path.join(site, shell.contract))).digest('hex'), origin.digest, `${family}: shell contract snapshot changed`);
 }
 // Negative tests ensure contract checks reject missing semantic requirements and unsafe destinations.
 for (const mutate of [
