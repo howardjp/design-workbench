@@ -1,4 +1,4 @@
-.science-regions { display:grid; gap:2.5rem; }
+.science-regions { display:grid; gap:2.5rem; overflow-wrap:anywhere; }
 .science-regions form fieldset { display:grid; gap:1rem; }
 .science-regions figure { margin:1.5rem 0; }
 .science-regions svg { display:block; max-width:100%; width:30rem; height:auto; }
