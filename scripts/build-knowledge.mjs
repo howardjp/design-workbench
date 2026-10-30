@@ -235,7 +235,7 @@ for (const family of ["martlet", "krigsvold"]) {
         type: "module",
         license: "MIT",
         engines: { node: ">=24.19.0 <25" },
-        dependencies: { "@modelcontextprotocol/server": "2.3.1", zod: "4.3.6" },
+        dependencies: { "@modelcontextprotocol/server": "2.3.1", zod: "4.6.7" },
       },
       null,
       2,
