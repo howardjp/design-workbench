@@ -20,7 +20,12 @@ function git(repo,args){
 export function createBundle(repo,commit){
  assert.match(commit,full,'Full lowercase commit ID required');
  assert.equal(git(repo,['rev-parse','--verify',`${commit}^{commit}`]).toString().trim(),commit,'Commit does not resolve exactly');
- const files=paths.map(path=>{const content=git(repo,['show',`${commit}:${path}`]);return {path,sha256:digest(content),base64:content.toString('base64')};});
+ const files=paths.map(path=>{
+  const entry=git(repo,['ls-tree',commit,'--',path]).toString('utf8').trimEnd();
+  assert.match(entry,/^100(?:644|755) blob [0-9a-f]{40}\t/,`Fixture must be a tracked regular file: ${path}`);
+  const content=git(repo,['show',`${commit}:${path}`]);JSON.parse(content.toString('utf8'));
+  return {path,sha256:digest(content),base64:content.toString('base64')};
+ });
  return Buffer.from(JSON.stringify({version:1,source_commit:commit,files},null,2)+'\n');
 }
 export function verifyBundle(bytes,commit,expectedDigest){
