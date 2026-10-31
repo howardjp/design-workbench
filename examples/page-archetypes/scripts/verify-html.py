@@ -37,7 +37,9 @@ for file,doc in documents.items():
         target=urlsplit(urljoin(public,link)); path=unquote(target.path)
         if a.baseurl and not(path==a.baseurl or path.startswith(a.baseurl+'/')):
             errors.append(f'{relative}: lost baseurl in {link}');continue
-        local=root/path.removeprefix(a.baseurl).lstrip('/')
+        local=(root/path.removeprefix(a.baseurl).lstrip('/')).resolve()
+        if not local.is_relative_to(root):
+            errors.append(f'{relative}: destination escapes site root in {link}');continue
         if local.is_dir():local=local/'index.html'
         count+=1
         if not local.exists():errors.append(f'{relative}: missing {link}')

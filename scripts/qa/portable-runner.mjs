@@ -4,8 +4,9 @@
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
+import {mkdtempSync, rmSync} from 'node:fs';
 import {lstat, mkdtemp, mkdir, readFile, readdir, rm, writeFile} from 'node:fs/promises';
-import {tmpdir} from 'node:os';
+import {devNull, tmpdir} from 'node:os';
 import {dirname, join, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {chromium, firefox, webkit} from '@playwright/test';
@@ -20,11 +21,19 @@ function run(program,args,opts={}) {
  if(result.status!==0) throw Error(`${program} ${args.join(' ')} failed (${result.status}):\n${result.stderr||result.stdout}`);
  return result.stdout;
 }
+// These are strictly local object reads, never Git network operations. Ignore
+// inherited Git selectors/config and replacement refs so a reported object ID
+// cannot silently resolve to different content.
+function gitEnv(extra={}){
+ const env={...process.env};for(const key of Object.keys(env))if(key.startsWith('GIT_'))delete env[key];
+ return {...env,GIT_NO_REPLACE_OBJECTS:'1',GIT_CONFIG_NOSYSTEM:'1',GIT_CONFIG_GLOBAL:devNull,GIT_ATTR_NOSYSTEM:'1',...extra};
+}
+function git(repo,args){return run('git',['-C',repo,...args],{env:gitEnv()});}
 export function pinned(repo,commit){
  assert.ok(fullCommit.test(commit),'Every input needs a full 40-character lowercase commit ID; moving refs are not accepted');
- const actual=run('git',['-C',repo,'rev-parse','--verify',`${commit}^{commit}`]).trim();
+ const actual=git(repo,['rev-parse','--verify',`${commit}^{commit}`]).trim();
  assert.equal(actual,commit,`Missing or non-commit pin in ${repo}`);
- const entries=run('git',['-C',repo,'ls-tree','-r',commit]).split('\n');
+ const entries=git(repo,['ls-tree','-r',commit]).split('\n');
  assert.ok(!entries.some(entry=>/^(120000|160000) /.test(entry)),`${repo}@${commit}: symlinks and submodules are not supported; snapshot all required sources explicitly`);
 }
 export function validateManifest(manifest){
@@ -40,20 +49,31 @@ export function validateManifest(manifest){
   assert.ok(keys.includes(target.repository),`${key}: unknown repository`);
   if(target.inputs!==undefined){assert.ok(Array.isArray(target.inputs)&&new Set(target.inputs).size===target.inputs.length&&target.inputs.every(name=>keys.includes(name)),`${key}: inputs must be unique known repositories`);}
   assert.ok(Array.isArray(target.commands)&&target.commands.length,`${key}: build commands required`);
-  for(const command of target.commands){assert.ok(Array.isArray(command)&&command.length&&command.every(value=>typeof value==='string'&&value.length),`${key}: each command must be a nonempty argument array`);}
+  for(const command of target.commands){
+   assert.ok(Array.isArray(command)&&command.length&&command.every(value=>typeof value==='string'&&value.length),`${key}: each command must be a nonempty argument array`);
+   for(const arg of command)for(const match of arg.matchAll(/\{source:([a-z][a-z0-9_-]*)\}/g))assert.ok(match[1]===target.repository||(target.inputs||[]).includes(match[1]),`${key}: source ${match[1]} must be the target repository or a declared input`);
+  }
  }
  return manifest;
 }
-export function readPin(repo,commit,path){return run('git',['-C',repo,'show',`${commit}:${path}`]);}
+export function readPin(repo,commit,path){return git(repo,['show',`${commit}:${path}`]);}
 export function archive(repo,commit,dest){
- const result=spawnSync('git',['-C',repo,'archive','--format=tar',commit],{maxBuffer:128*1024*1024});
- if(result.error||result.status!==0)throw result.error||Error(`git archive failed for ${repo}@${commit}`);
- const extracted=spawnSync('tar',['-xf','-','-C',dest],{input:result.stdout,maxBuffer:4*1024*1024});
- if(extracted.error||extracted.status!==0)throw extracted.error||Error(`git archive extraction failed for ${repo}@${commit}`);
+ // A clean temporary bare repository uses the source's object database but
+ // not its untracked .git/info/attributes or repository-specific Git config.
+ const objectDirectory=resolve(repo,git(repo,['rev-parse','--git-path','objects']).trim()),bare=mkdtempSync(join(tmpdir(),'nightjar-git-archive-'));
+ try{
+  run('git',['init','--bare','--quiet','--template=',bare],{env:gitEnv()});
+  const result=spawnSync('git',[`--git-dir=${bare}`,'-c',`core.attributesFile=${devNull}`,'archive','--format=tar',commit],{env:gitEnv({GIT_OBJECT_DIRECTORY:objectDirectory}),maxBuffer:128*1024*1024});
+  if(result.error||result.status!==0)throw result.error||Error(`git archive failed for ${repo}@${commit}`);
+  const extracted=spawnSync('tar',['-xf','-','-C',dest],{input:result.stdout,maxBuffer:4*1024*1024});
+  if(extracted.error||extracted.status!==0)throw extracted.error||Error(`git archive extraction failed for ${repo}@${commit}`);
+ }finally{rmSync(bare,{recursive:true,force:true});}
 }
-function expand(arg,context){
+export function expand(arg,context){
  return arg.replace(/\{(output|baseSlash|base|source:[a-z][a-z0-9_-]*)\}/g,(_,key)=>{
-  const value=key.startsWith('source:')?context.sources[key.slice(7)]:context[key];assert.notEqual(value,undefined,`Unknown placeholder ${key}`);return value;
+  const sourceName=key.startsWith('source:')?key.slice(7):null;
+  if(sourceName)assert.ok(Object.hasOwn(context.sources,sourceName),`Unknown placeholder ${key}`);
+  const value=sourceName?context.sources[sourceName]:context[key];assert.notEqual(value,undefined,`Unknown placeholder ${key}`);return value;
  });
 }
 const norm=value=>value.replace(/\s+/g,' ').trim();
@@ -94,7 +114,7 @@ export async function execute(manifest,{browserName='chromium',output,requireMat
  if(requireMatrix)assert.equal(manifest.targets.length,6,'complete matrix requires both families and all three frameworks');
  if(output){try{await lstat(resolve(output));throw Error('Output already exists; choose a new result path');}catch(error){if(error.code!=='ENOENT')throw error;}}
  const runnerFile=fileURLToPath(import.meta.url),verifier=join(here,'../../examples/page-archetypes/scripts/verify-html.py'),hashFile=async path=>createHash('sha256').update(await readFile(path)).digest('hex');
- const runnerCommit=run('git',['-C',here,'rev-parse','HEAD']).trim(),scriptHash=await hashFile(runnerFile),verifierHash=await hashFile(verifier),dirty=!!run('git',['-C',here,'status','--porcelain','--untracked-files=all']).trim();
+ const runnerCommit=git(here,['rev-parse','HEAD']).trim(),scriptHash=await hashFile(runnerFile),verifierHash=await hashFile(verifier),dirty=!!git(here,['status','--porcelain','--untracked-files=all']).trim();
  const repos={};for(const [name,spec] of Object.entries(manifest.repositories)){const path=resolve(spec.path);pinned(path,spec.commit);repos[name]={path,commit:spec.commit};}
  const fixtureRepo=repos[manifest.fixture.repository],catalogText=readPin(fixtureRepo.path,fixtureRepo.commit,manifest.fixture.catalog),dashboardText=readPin(fixtureRepo.path,fixtureRepo.commit,manifest.fixture.dashboards);
  const catalog=JSON.parse(catalogText),dashboards=JSON.parse(dashboardText);assert.equal(catalog.pages.length,50,'canonical fixture must have 50 examples');assert.equal(new Set(catalog.pages.map(p=>p.id)).size,50,'duplicate catalog ID');
@@ -112,12 +132,12 @@ export async function execute(manifest,{browserName='chromium',output,requireMat
    const outputHash=await digestTree(outputPath); // reject output symlinks before traversing rendered documents
    const htmlCheck=run('python3',[join(here,'../../examples/page-archetypes/scripts/verify-html.py'),outputPath,'--baseurl',base]);
    const audited=await auditSite(page,outputPath,base||'/',catalog,dashboards,`${target.family}/${target.framework}${base||'/'}`);
-   results.push({family:target.family,framework:target.framework,base:base||'/',source:target.repository,source_commit:repos[target.repository].commit,declared_inputs:Object.fromEntries((target.inputs||[]).map(name=>[name,repos[name].commit])),build_commands:target.commands,output_tree_sha256:outputHash,html_check:htmlCheck.trim(),...audited});
+   results.push({family:target.family,framework:target.framework,base:base||'/',source:target.repository,source_commit:repos[target.repository].commit,declared_inputs:Object.fromEntries((target.inputs||[]).map(name=>[name,repos[name].commit])),declared_input_consumption:'not_verified',build_commands:target.commands,output_tree_sha256:outputHash,html_check:htmlCheck.trim(),...audited});
    console.log(`${target.family}/${target.framework}${base||'/'}: 50 static routes, local links and experimental static results checked`);
   }
   await context.close();
-  assert.equal(await hashFile(runnerFile),scriptHash,'Runner changed during execution');assert.equal(await hashFile(verifier),verifierHash,'HTML verifier changed during execution');assert.equal(run('git',['-C',here,'rev-parse','HEAD']).trim(),runnerCommit,'Runner commit changed during execution');
-  const result={version:1,runner_scope:'Static content, local link/fragment inventory and experimental static-result presence only. Not full conformance or an accessibility audit.',network_policy:'Runner performs no fetch; build commands are trusted code and network isolation is not enforced.',runner:{commit:runnerCommit,script_sha256:scriptHash,html_verifier_sha256:verifierHash,worktree_dirty:dirty},fixture:{repository:manifest.fixture.repository,commit:fixtureRepo.commit,catalog_path:manifest.fixture.catalog,dashboards_path:manifest.fixture.dashboards,catalog_sha256:createHash('sha256').update(catalogText).digest('hex'),dashboards_sha256:createHash('sha256').update(dashboardText).digest('hex')},repositories:Object.fromEntries(Object.entries(repos).map(([name,repo])=>[name,{commit:repo.commit}])),browser:{engine:browserName,version:browser.version()},node:process.version,javascript:'disabled',results,missing:families.flatMap(f=>frameworks.map(fr=>`${f}/${fr}`)).filter(key=>!manifest.targets.some(t=>`${t.family}/${t.framework}`===key)),not_assessed:['interactive behavior','JavaScript failure recovery','automated accessibility','contrast incomplete findings','visual identity','manual assistive technology','physical print','performance']};
+  assert.equal(await hashFile(runnerFile),scriptHash,'Runner changed during execution');assert.equal(await hashFile(verifier),verifierHash,'HTML verifier changed during execution');assert.equal(git(here,['rev-parse','HEAD']).trim(),runnerCommit,'Runner commit changed during execution');
+  const result={version:1,runner_scope:'Static content, local link/fragment inventory and experimental static-result presence only. Not full conformance or an accessibility audit.',network_policy:'Runner performs no fetch; build commands are trusted code and network isolation is not enforced.',runner:{commit:runnerCommit,script_sha256:scriptHash,html_verifier_sha256:verifierHash,worktree_dirty:dirty},fixture:{repository:manifest.fixture.repository,commit:fixtureRepo.commit,catalog_path:manifest.fixture.catalog,dashboards_path:manifest.fixture.dashboards,catalog_sha256:createHash('sha256').update(catalogText).digest('hex'),dashboards_sha256:createHash('sha256').update(dashboardText).digest('hex')},repositories:Object.fromEntries(Object.entries(repos).map(([name,repo])=>[name,{commit:repo.commit}])),browser:{engine:browserName,version:browser.version()},node:process.version,javascript:'disabled',results,missing:families.flatMap(f=>frameworks.map(fr=>`${f}/${fr}`)).filter(key=>!manifest.targets.some(t=>`${t.family}/${t.framework}`===key)),not_assessed:['declared package input consumption','interactive behavior','JavaScript failure recovery','automated accessibility','contrast incomplete findings','visual identity','manual assistive technology','physical print','performance']};
   if(output)await writeFile(resolve(output),JSON.stringify(result,null,2)+'\n',{flag:'wx'});return result;
  }finally{if(browser)await browser.close();await rm(temp,{recursive:true,force:true});}
 }
