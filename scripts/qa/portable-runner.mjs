@@ -38,6 +38,7 @@ export function validateManifest(manifest){
  const seen=new Set();for(const target of manifest.targets){
   assert.ok(families.includes(target.family)&&frameworks.includes(target.framework),'unknown family or framework');const key=`${target.family}/${target.framework}`;assert.ok(!seen.has(key),`duplicate target ${key}`);seen.add(key);
   assert.ok(keys.includes(target.repository),`${key}: unknown repository`);
+  if(target.inputs!==undefined){assert.ok(Array.isArray(target.inputs)&&new Set(target.inputs).size===target.inputs.length&&target.inputs.every(name=>keys.includes(name)),`${key}: inputs must be unique known repositories`);}
   assert.ok(Array.isArray(target.commands)&&target.commands.length,`${key}: build commands required`);
   for(const command of target.commands){assert.ok(Array.isArray(command)&&command.length&&command.every(value=>typeof value==='string'&&value.length),`${key}: each command must be a nonempty argument array`);}
  }
@@ -111,7 +112,7 @@ export async function execute(manifest,{browserName='chromium',output,requireMat
    const outputHash=await digestTree(outputPath); // reject output symlinks before traversing rendered documents
    const htmlCheck=run('python3',[join(here,'../../examples/page-archetypes/scripts/verify-html.py'),outputPath,'--baseurl',base]);
    const audited=await auditSite(page,outputPath,base||'/',catalog,dashboards,`${target.family}/${target.framework}${base||'/'}`);
-   results.push({family:target.family,framework:target.framework,base:base||'/',source:target.repository,source_commit:repos[target.repository].commit,build_commands:target.commands,output_tree_sha256:outputHash,html_check:htmlCheck.trim(),...audited});
+   results.push({family:target.family,framework:target.framework,base:base||'/',source:target.repository,source_commit:repos[target.repository].commit,declared_inputs:Object.fromEntries((target.inputs||[]).map(name=>[name,repos[name].commit])),build_commands:target.commands,output_tree_sha256:outputHash,html_check:htmlCheck.trim(),...audited});
    console.log(`${target.family}/${target.framework}${base||'/'}: 50 static routes, local links and experimental static results checked`);
   }
   await context.close();
