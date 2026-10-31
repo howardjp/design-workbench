@@ -1,6 +1,7 @@
 name: Verify local React extraction rehearsal
 on:
   pull_request:
+    branches: [nightjar/ii-integration-candidate]
     paths:
       - 'scripts/nightjar3/**'
       - 'scripts/test-*-consumer.mjs'
