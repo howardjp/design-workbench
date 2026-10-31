@@ -38,6 +38,7 @@
     "starter/src/pages/layouts.astro": "8823d0cae002ea879d4972b094a8ce57996651fc6a5a52c81ecef21c209fa35e",
     "starter/src/scripts/form-demo.js": "63689b27a402ba532e2f808e0964a23414b175b22314bdff70004047bcf2b14e"
   },
+  "diagnosticNote": "form-checks.mjs adds failure-only computed-style and axe diagnostics to the source-candidate harness; assertions are unchanged.",
   "patchedStarterFiles": {
     "starter/astro.config.mjs": "cb4760b8178695decc482f56eeb48189c8f1b79c53f5310d82fde7ebf1785948",
     "starter/package.json": "5786214d563e7ed5111715875a5376b6ebccb7dcdbcac513f5f6c1ebc86d5de7",
@@ -54,7 +55,7 @@
   "sourceCandidate": "9e2cced9b4397c04f444a864c8eda4c0b43e75b2",
   "testHarnessFiles": {
     "browser.mjs": "5f6cbc0e100e8ee73ace642f4906cb6ee2f39f408cdf71635ca3ce9f769ae528",
-    "form-checks.mjs": "071adf8107a38edfe9c481aa3796c24f4f8a014a6f699c12d7d8aa48fcf5138d",
+    "form-checks.mjs": "89f1981be397f2cfa3955ce6c05df43fa02754e4fbd13c6a568ed4127279415b",
     "subpath-check.mjs": "47c51f0fb303d2cc834443c08264a8ccde26f8024a7670468c8b9eb78329332b"
   }
 }
