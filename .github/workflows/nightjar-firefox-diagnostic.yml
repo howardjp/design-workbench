@@ -11,6 +11,10 @@ jobs:
   diagnostic:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [headless, headed]
     env:
       BUNDLE_FROZEN: 'true'
       NIGHTJAR_BROWSER: firefox
@@ -27,4 +31,10 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: cd examples/jekyll/martlet && bundle install
       - run: npx playwright install --with-deps firefox
-      - run: node examples/page-archetypes/tests/form-stale-validity.mjs
+      - run: sudo apt-get update && sudo apt-get install -y xvfb xauth xdotool
+      - run: |
+          if [ '${{ matrix.mode }}' = headed ]; then
+            NIGHTJAR_HEADED=1 xvfb-run -a node examples/page-archetypes/tests/form-stale-validity.mjs
+          else
+            node examples/page-archetypes/tests/form-stale-validity.mjs
+          fi
