@@ -1,6 +1,7 @@
 import hashlib
 import json
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -41,6 +42,29 @@ class JekyllRehearsalTest(unittest.TestCase):
             self.assertNotEqual(refused.returncode, 0)
             self.assertIn('must be absent', refused.stderr)
             self.assertEqual(git(first / 'jekyll-martlet', 'status', '--porcelain'), '')
+            rejected_ref = subprocess.run([sys.executable, str(SCRIPT), '--destination', str(parent), '--source-commit', 'main'], capture_output=True, text=True)
+            self.assertNotEqual(rejected_ref.returncode, 0)
+            self.assertIn('full lowercase 40-character SHA', rejected_ref.stderr)
+            rejected_old = subprocess.run([sys.executable, str(SCRIPT), '--destination', str(parent), '--source-commit', '5138a89fc2956d9019d5bd720c987b8b9e24533b'], capture_output=True, text=True)
+            self.assertNotEqual(rejected_old.returncode, 0)
+            self.assertIn('descend from the frozen baseline', rejected_old.stderr)
+            # Exercise dirty-source refusal in a disposable clone, never the shared source worktree.
+            clone = parent / 'dirty-clone'
+            subprocess.run(['git', 'clone', '-q', '--shared', '--no-checkout', str(ROOT), str(clone)], check=True)
+            subprocess.run(['git', '-C', str(clone), 'checkout', '-q', '--detach', BASE], check=True)
+            helper = clone / 'scripts/qa/jekyll-rehearsal'
+            helper.mkdir(parents=True)
+            for name in ('build.py', 'verify.py'):
+                shutil.copy2(ROOT / 'scripts/qa/jekyll-rehearsal' / name, helper / name)
+            clone_script = clone / 'scripts/qa/nightjar-jekyll-rehearsal.py'
+            shutil.copy2(SCRIPT, clone_script)
+            source = clone / 'examples/jekyll/martlet/index.md'
+            source.write_text(source.read_text() + '\nsynthetic uncommitted edit\n')
+            output = parent / 'dirty-output'; output.mkdir()
+            rejected_dirty = subprocess.run([sys.executable, str(clone_script), '--destination', str(output)], capture_output=True, text=True)
+            self.assertNotEqual(rejected_dirty.returncode, 0)
+            self.assertIn('source/export paths are dirty', rejected_dirty.stderr)
+            self.assertEqual(list(output.iterdir()), [])
 
 if __name__ == '__main__':
     unittest.main()
