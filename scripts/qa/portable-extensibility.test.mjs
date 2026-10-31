@@ -5,7 +5,7 @@ import {execFileSync} from 'node:child_process';
 import {mkdtempSync,writeFileSync,rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {execute,validateManifest} from '../scripts/qa/portable-runner.mjs';
+import {execute,validateManifest} from './portable-runner.mjs';
 
 test('data-driven two-family by four-framework adapter smoke and rejection controls',async()=>{
  const repo=mkdtempSync(join(tmpdir(),'nightjar-four-frameworks-'));
