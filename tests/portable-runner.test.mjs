@@ -15,6 +15,7 @@ test('manifest rejects moving refs, unsafe fixture paths, duplicates and unknown
  data=manifest();data.fixture.catalog='../outside';assert.throws(()=>validateManifest(data),/repository-relative/);
  data=manifest();data.targets.push({...data.targets[0]});assert.throws(()=>validateManifest(data),/duplicate target/);
  data=manifest();data.targets[0].repository='missing';assert.throws(()=>validateManifest(data),/unknown repository/);
+ data=manifest();data.targets[0].inputs=['missing'];assert.throws(()=>validateManifest(data),/unique known repositories/);
  data=manifest();data.targets[0].commands=[['node',null]];assert.throws(()=>validateManifest(data),/argument array/);
 });
 
