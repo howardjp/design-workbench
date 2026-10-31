@@ -74,12 +74,14 @@ def generate():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true', help='verify the checked-in snapshot against the current tree')
+    parser.add_argument('--snapshot', type=Path, default=OUTPUT, help='explicit snapshot path, relative to repository root unless absolute')
     args = parser.parse_args()
+    snapshot = args.snapshot if args.snapshot.is_absolute() else ROOT / args.snapshot
     value = generate()
     if args.check:
-        if not OUTPUT.exists() or OUTPUT.read_text() != value:
-            raise SystemExit(f'{OUTPUT.relative_to(ROOT)} is missing or differs; examine authority and regenerate deliberately')
-        print(f'{OUTPUT.relative_to(ROOT)} matches the current export manifests and bytes')
+        if not snapshot.exists() or snapshot.read_text() != value:
+            raise SystemExit(f'{snapshot} is missing or differs; examine authority and regenerate deliberately')
+        print(f'{snapshot} matches the current export manifests and bytes')
     else:
-        OUTPUT.write_text(value)
-        print(f'Wrote {OUTPUT.relative_to(ROOT)}')
+        snapshot.write_text(value)
+        print(f'Wrote {snapshot}')
