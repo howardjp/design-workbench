@@ -1,5 +1,6 @@
 // Exercise local workspace packages as a controlled native-dialog consumer.
 import assert from 'node:assert/strict';
+import {installPackedConsumer} from './nightjar3/install-packed-consumer.mjs';
 import {mkdtemp,readFile,rm,writeFile} from 'node:fs/promises';
 import {createServer} from 'node:http';
 import {extname,resolve} from 'node:path';
@@ -8,6 +9,7 @@ import {chromium,firefox,webkit} from 'playwright';
 import {expect} from '@playwright/test';
 const root=process.cwd(),engine=process.env.WORKBENCH_BROWSER||'chromium';assert.ok(['chromium','firefox','webkit'].includes(engine));const browser=await ({chromium,firefox,webkit})[engine].launch(engine==='chromium'&&process.env.PLAYWRIGHT_EXECUTABLE_PATH?{executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH}:{headless:true});
 try{for(const family of ['martlet','krigsvold']){const temp=await mkdtemp(resolve(root,'tests/.dialog-consumer-'));let server;try{
+ installPackedConsumer(temp,family);
  await writeFile(resolve(temp,'index.html'),'<html lang="en"><head><meta charset="utf-8"><title>Dialog consumer</title></head><body><div id="root"></div><script type="module" src="/main.jsx"></script></body></html>');
  await writeFile(resolve(temp,'main.jsx'),`import React,{useState} from 'react';import{createRoot}from'react-dom/client';import{flushSync}from'react-dom';import{Dialog,Button}from'@${family}/react';function App(){const[open,setOpen]=useState(false),[dismissals,setDismissals]=useState(0);return <><button id="open" onClick={()=>setOpen(true)}>Open dialog</button><p id="count">{dismissals}</p><Dialog open={open} title="Confirm example" onDismiss={()=>{setDismissals(n=>n+1);setOpen(false)}}><form method="dialog"><Button type="submit" autoFocus>Close with native form</Button></form><Button onClick={()=>setOpen(false)}>Close by parent</Button><Button onClick={()=>{flushSync(()=>setOpen(false));setOpen(true)}}>Rapid reopen</Button></Dialog></>}createRoot(document.getElementById('root')).render(<App/>);`);
  await build({root:temp,configFile:false,logLevel:'warn',build:{outDir:'dist',emptyOutDir:true}});const dir=resolve(temp,'dist');server=createServer(async(req,res)=>{const path=new URL(req.url,'http://localhost').pathname,file=resolve(dir,path.slice(1)+(path.endsWith('/')?'index.html':''));if(!file.startsWith(dir+'/')){res.writeHead(403).end();return}try{const data=await readFile(file),type={'.html':'text/html','.js':'text/javascript','.css':'text/css'};res.writeHead(200,{'Content-Type':type[extname(file)]||'application/octet-stream'}).end(data)}catch{res.writeHead(404).end()}});await new Promise(r=>server.listen(0,'127.0.0.1',r));

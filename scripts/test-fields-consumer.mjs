@@ -1,16 +1,19 @@
 // Exercise local workspace packages as a composed fields and native controls consumer.
 import assert from 'node:assert/strict';
+import {installPackedConsumer} from './nightjar3/install-packed-consumer.mjs';
 import {mkdtemp,readFile,rm,writeFile} from 'node:fs/promises';
 import {createServer} from 'node:http';
 import {extname,resolve} from 'node:path';
+import {createRequire} from 'node:module';
 import {build,createServer as createVite} from 'vite';
-import React from 'react';
-import {renderToString} from 'react-dom/server';
 import {chromium,firefox,webkit} from 'playwright';
 import {expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 const root=process.cwd(),engine=process.env.WORKBENCH_BROWSER||'chromium';assert.ok(['chromium','firefox','webkit'].includes(engine));const browser=await ({chromium,firefox,webkit})[engine].launch(engine==='chromium'&&process.env.PLAYWRIGHT_EXECUTABLE_PATH?{executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH}:{headless:true});
 try{for(const family of ['martlet','krigsvold']){const temp=await mkdtemp(resolve(root,'tests/.fields-consumer-'));let server;try{
+ installPackedConsumer(temp,family);
+ const requireConsumer=createRequire(resolve(temp,'package.json'));
+ const React=requireConsumer('react'),{renderToString}=requireConsumer('react-dom/server');
  await writeFile(resolve(temp,'index.html'),'<html lang="en"><head><meta charset="utf-8"><title>Field consumer</title><link rel="icon" href="data:,"></head><body><div id="root"><!--app--></div><script type="module" src="/main.jsx"></script></body></html>');
  await writeFile(resolve(temp,'App.jsx'),`import React from 'react';import{Field,TextInput,Switch,Disclosure}from'@${family}/react';export function App(){return <main><h1>Form consumer</h1><form><Field id="reference" label="Reference" hint="Use the stable reference." error="Reference is required.">{props=><TextInput {...props} name="reference"/>}</Field><Field id="reference-hint" label="Alternate hint code">{props=><TextInput {...props} name="alternate"/>}</Field><Field id="reference-error" label="Alternate error code">{props=><TextInput {...props} name="error-code"/>}</Field><Field id="legacy" label="Legacy control" hint="Legacy hint." error="Legacy error." hintId="legacy-hint" errorId="legacy-error">{props=><TextInput {...props} name="legacy"/>}</Field><Switch label="Keep notes" name="keep" defaultChecked/><Switch label="Unavailable option" name="disabled" disabled/><button type="reset">Reset</button></form><Disclosure summary="More details"><p>Disclosure body</p></Disclosure></main>}`);
  await writeFile(resolve(temp,'main.jsx'),"import React from 'react';import{hydrateRoot}from'react-dom/client';import{App}from'./App.jsx';hydrateRoot(document.getElementById('root'),React.createElement(App));");
