@@ -48,3 +48,4 @@ jobs:
           npm run test:error-summary-consumer
           npm run test:fields-consumer
           npm run test:tabs-consumer
+          node scripts/nightjar3/test-packed-shell-table.mjs
