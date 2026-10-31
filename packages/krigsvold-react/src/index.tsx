@@ -312,11 +312,12 @@ export function ErrorSummary({
                   href={`#${error.targetId}`}
                   onClick={(event) => {
                     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-                    const target = document.getElementById(error.targetId!);
+                    const owner = event.currentTarget.ownerDocument;
+                    const target = owner.getElementById(error.targetId!);
                     if (target) {
                       target.focus();
                       // If focus cannot move, retain the link's native fragment navigation.
-                      if (document.activeElement === target) event.preventDefault();
+                      if (owner.activeElement === target) event.preventDefault();
                     }
                   }}
                 >
