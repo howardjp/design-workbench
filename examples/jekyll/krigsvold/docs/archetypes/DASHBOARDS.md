@@ -21,6 +21,99 @@ Three canonical applications use exactly the same information architecture, reco
 
 Dashboard CSS and modules load only on dashboard pages. Ordinary examples retain their current assets; the general table-density addition preserves the default appearance. Both standalone exports receive generated copies and the same data, checked for drift.
 
+## Compose a small standalone directory
+
+The example dashboard layouts and controllers implement the three Northlight applications; they are not a generic dashboard API. For a separate site, a smaller composition can use the shipped family shell, `examples/table.html` and `examples/button-classes.html` with a consumer-owned enhancement. The table include accepts `block.title` (caption and scroll-region name), `block.headers` (column labels), `block.rows` (arrays of cell text, with the first cell becoming a row header), and optional `density` (`comfortable` or `compact`). Values are escaped. Use unique names for the surrounding section and the table region. The styles and includes are versioned with the source snapshot; do not assume these example-adapter names are a separately stable package API.
+
+This example shows a locally filtered directory. It retains both rows and an explanation when JavaScript is unavailable or the script cannot load; controls enable only after listeners are installed. Search and changes stay in the page. In an independent snapshot, create `_data/adoption_people.json`:
+
+<!-- nightjar-directory-data:start -->
+```json
+{"title":"People","headers":["Name","Status"],"rows":[["Mara","Active"],["Pavel","Pending"]]}
+```
+<!-- nightjar-directory-data:end -->
+
+Create `adoption-directory.html`:
+
+<!-- nightjar-directory-page:start -->
+```liquid
+---
+layout: default
+title: People directory
+description: A local example with synthetic people.
+permalink: /adoption-directory/
+---
+<link rel="stylesheet" href="{{ '/assets/css/dashboard.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/dashboard-family.css' | relative_url }}">
+<div class="example-root dash-app" data-adoption-directory>
+  <div class="example-wrap">
+    <p>These two synthetic records stay in this page. Nothing is sent or saved.</p>
+    <form class="example-form dash-toolbar" data-directory-form>
+      <fieldset disabled data-directory-controls>
+        <legend>Directory search</legend>
+        <label for="directory-search">Find a person</label>
+        <p id="directory-hint">Search the two example names.</p>
+        <input id="directory-search" name="query" type="search" aria-describedby="directory-hint">
+        <button type="submit" class="{% include examples/button-classes.html %}">Apply search</button>
+        <button type="button" data-directory-clear class="{% include examples/button-classes.html secondary=true %}">Clear search</button>
+      </fieldset>
+    </form>
+    <p data-directory-fallback>The interactive directory is unavailable. Both example records remain visible.</p>
+    <p role="status" data-directory-status></p>
+    <section class="dash-panel" aria-labelledby="directory-example-title">
+      <h2 id="directory-example-title">Directory</h2>
+      <div data-directory-table>{% include examples/table.html block=site.data.adoption_people %}</div>
+      <p data-directory-empty hidden>No matching people. Change the search to recover.</p>
+    </section>
+  </div>
+</div>
+<script src="{{ '/assets/js/adoption-directory.js' | relative_url }}" defer></script>
+```
+<!-- nightjar-directory-page:end -->
+
+Create `assets/js/adoption-directory.js`:
+
+<!-- nightjar-directory-script:start -->
+```javascript
+(() => {
+  const root = document.querySelector('[data-adoption-directory]');
+  const form = root?.querySelector('[data-directory-form]');
+  const controls = root?.querySelector('[data-directory-controls]');
+  const input = form?.querySelector('[name=query]');
+  const clear = form?.querySelector('[data-directory-clear]');
+  const status = root?.querySelector('[data-directory-status]');
+  const empty = root?.querySelector('[data-directory-empty]');
+  const fallback = root?.querySelector('[data-directory-fallback]');
+  const rows = [...(root?.querySelectorAll('[data-directory-table] tbody tr') || [])];
+  if (!form || !controls || !input || !clear || !status || !empty || !fallback || !rows.length) return;
+  const show = query => {
+    const search = query.trim().toLowerCase();
+    let count = 0;
+    rows.forEach(row => {
+      const matches = row.querySelector('th')?.textContent.toLowerCase().includes(search) ?? false;
+      row.hidden = !matches;
+      if (matches) count++;
+    });
+    empty.hidden = count !== 0;
+  };
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    show(input.value);
+    status.textContent = 'Search applied to the local example.';
+  });
+  clear.addEventListener('click', () => {
+    input.value = '';
+    show('');
+    status.textContent = '';
+  });
+  controls.disabled = false;
+  fallback.hidden = true;
+})();
+```
+<!-- nightjar-directory-script:end -->
+
+Run `bundle exec jekyll build --destination /absolute/output --baseurl /preview` with the snapshot's locked dependencies; use an empty base URL for root hosting. For a rehearsal snapshot's allowlisted `nightjar/build.py` source archive, add exactly `_data/adoption_people.json`, `adoption-directory.html`, and `assets/js/adoption-directory.js` to `nightjar/source-files.json` before running that helper. Review the allowlist before including any other local files. This is an illustrative small application, not the administration dashboard's persistence, sorting, selection or export contract. The workbench remains the owner of shared fixtures and example adapters until a separately approved transfer.
+
 ## Shared fixture
 
 Northlight is fictional. Data includes 168 daily category observations over 56 days ending October 28, 2026; 24 invented directory records using `example.invalid`; five services with 24 hourly synthetic samples each; three alerts and their corresponding activity entries. No personal or production data is used. Every page identifies its actual as-of time in UTC and its synthetic/page-memory boundary. Invalid snapshot timestamps are labelled as invalid; operations separately rejects invalid timestamps in its data.

@@ -22,9 +22,12 @@ class Document(HTMLParser):
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('directory',type=Path)
 parser.add_argument('--baseurl',default='')
-a=parser.parse_args(); root=a.directory.resolve(); documents={}
-for file in root.rglob('*.html'): documents[file]=Document(file.read_text())
-errors=[]; count=0
+a=parser.parse_args(); root=a.directory.resolve(); documents={}; errors=[]; count=0
+for file in root.rglob('*.html'):
+    resolved=file.resolve()
+    if not resolved.is_relative_to(root):
+        errors.append(f'{file.relative_to(root)}: HTML document escapes site root');continue
+    documents[resolved]=Document(resolved.read_text())
 for file,doc in documents.items():
     if doc.h1!=1:errors.append(f'{file.relative_to(root)}: {doc.h1} h1 elements')
     for duplicate in doc.duplicates:errors.append(f'{file.relative_to(root)}: duplicate ID {duplicate}')
@@ -37,8 +40,13 @@ for file,doc in documents.items():
         target=urlsplit(urljoin(public,link)); path=unquote(target.path)
         if a.baseurl and not(path==a.baseurl or path.startswith(a.baseurl+'/')):
             errors.append(f'{relative}: lost baseurl in {link}');continue
-        local=root/path.removeprefix(a.baseurl).lstrip('/')
-        if local.is_dir():local=local/'index.html'
+        local=(root/path.removeprefix(a.baseurl).lstrip('/')).resolve()
+        if not local.is_relative_to(root):
+            errors.append(f'{relative}: destination escapes site root in {link}');continue
+        if local.is_dir():
+            local=(local/'index.html').resolve()
+            if not local.is_relative_to(root):
+                errors.append(f'{relative}: directory index escapes site root in {link}');continue
         count+=1
         if not local.exists():errors.append(f'{relative}: missing {link}')
         elif target.fragment and local.suffix=='.html' and unquote(target.fragment) not in documents.get(local,Document('')).ids:
