@@ -1,7 +1,7 @@
 name: Verify standalone Jekyll directory rehearsal
 on:
   pull_request:
-    branches: [nightjar3/jekyll-dashboard-adoption]
+    branches: [nightjar3/jekyll-dashboard-adoption, nightjar/ii-integration-candidate]
 permissions:
   contents: read
 jobs:
@@ -15,7 +15,6 @@ jobs:
     env:
       NIGHTJAR_BROWSER: ${{ matrix.browser }}
       BUNDLE_FROZEN: 'true'
-      NIGHTJAR_JEKYLL_CANDIDATES: ${{ runner.temp }}/nightjar-jekyll-candidates
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,6 +33,8 @@ jobs:
           (cd examples/jekyll/martlet && bundle install)
           (cd examples/jekyll/krigsvold && bundle install)
       - name: Materialize and pin the exact reviewed guide snapshots
+        env:
+          NIGHTJAR_JEKYLL_CANDIDATES: ${{ runner.temp }}/nightjar-jekyll-candidates
         shell: bash
         run: |
           mkdir -p "$NIGHTJAR_JEKYLL_CANDIDATES"
@@ -54,4 +55,6 @@ jobs:
       - name: Install the selected browser
         run: npx playwright install --with-deps "$NIGHTJAR_BROWSER"
       - name: Verify documented consumer and archive
+        env:
+          NIGHTJAR_JEKYLL_CANDIDATES: ${{ runner.temp }}/nightjar-jekyll-candidates
         run: node scripts/qa/nightjar-iii-jekyll-dashboard-adoption.mjs
