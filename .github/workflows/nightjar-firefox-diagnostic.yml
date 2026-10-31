@@ -44,3 +44,11 @@ jobs:
           name: nightjar-firefox-native-ui
           path: ${{ runner.temp }}/nightjar-*.png
           if-no-files-found: ignore
+      - name: Inspect native screenshot
+        if: failure() && matrix.mode == 'headed'
+        run: |
+          if [ -f "$RUNNER_TEMP/nightjar-before.png" ]; then
+            printf 'NIGHTJAR_BEFORE_BEGIN'
+            base64 -w0 "$RUNNER_TEMP/nightjar-before.png"
+            printf 'NIGHTJAR_BEFORE_END\n'
+          fi
