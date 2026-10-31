@@ -36,6 +36,8 @@ At earlier head `3f114c3`, integration hosted runs were workbench `41218007058`,
 
 After adding the paired theme patch and hash-checked temporary overlay, integration head `4a1b099` passed local `npm run check` (120 tests), the full Chromium workbench browser suite (178 tests), final authority and whitespace checks. Its identical overlay harness at the previous implementation head independently passed both families under Astro 5 and Astro 7 in Chromium, including original axe assertions and sampled transition contrast. Exact-head hosted workbench `41219051523` Chromium and Jekyll `41219051672` WebKit jobs passed; the other matrix jobs, portable `41219051546`, React `41219051417`, and Astro `41219051554` were still running or queued at this checkpoint. No green status is inferred from pending jobs or prior commits.
 
+The hardened link verifier additionally passed all four locally built Jekyll family/root-subpath sites, with 58 rendered pages and 1,448 local destinations/fragments per build. Hosted workbench `41219051523` Firefox has also passed at this head; WebKit and the other hosted matrices are still running or queued at this checkpoint.
+
 ## Decisions and next work
 
 Published `@martlet/react@0.1.0` and `@krigsvold/react@0.1.0` differ in JS, types and CSS from the unreleased candidate packages that declare the same version. Any eventual publication requires a distinct reviewed version and separate authorization. Astro `latest` is 1.1.0 while `next` is 1.2.2; current workbench Astro pins the latter and newer theme versions, while React pins theme 2.1.0. Do not represent unqualified installs as identical artifacts.
