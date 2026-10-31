@@ -17,8 +17,9 @@ try { for(const family of families) {
  const temp=await mkdtemp(resolve(root,'tests/.packed-tabs-'));let server;
  try {
   await writeFile(resolve(temp,'package.json'),JSON.stringify({name:'packed-tabs-consumer',private:true,type:'module'}));
-  const archive=JSON.parse(execFileSync('npm',['pack','--json','--workspace',`@${family}/react`,'--pack-destination',temp],{cwd:root,encoding:'utf8'}))[0].filename;
-  execFileSync('npm',['install','--ignore-scripts','--no-audit','--no-fund','--package-lock=false','react@19.3.1','react-dom@19.3.1',resolve(temp,archive)],{cwd:temp,stdio:'pipe'});
+  const supplied=process.env.NIGHTJAR_REACT_ARCHIVE_DIR;
+  const archive=supplied?resolve(supplied,`${family}-react-0.1.0.tgz`):resolve(temp,JSON.parse(execFileSync('npm',['pack','--json','--workspace',`@${family}/react`,'--pack-destination',temp],{cwd:root,encoding:'utf8'}))[0].filename);
+  execFileSync('npm',['install','--ignore-scripts','--no-audit','--no-fund','--package-lock=false','react@19.3.1','react-dom@19.3.1',archive],{cwd:temp,stdio:'pipe'});
   await writeFile(resolve(temp,'index.html'),'<html lang="en"><head><meta charset="utf-8"><title>Dynamic tabs</title></head><body><div id="root"></div><script type="module" src="/main.jsx"></script></body></html>');
   await writeFile(resolve(temp,'main.jsx'),`import React,{useState} from 'react';import{createRoot}from'react-dom/client';import{Tabs}from'@${family}/react';function App(){const[mode,setMode]=useState('normal');window.setMode=setMode;return <main><button id="outside">Outside</button><Tabs label="Views" value="alpha" onValueChange={()=>{}} items={[{id:'alpha',label:'Alpha',content:'Alpha content',disabled:mode==='disable-alpha'},...(mode==='remove'?[]:[{id:'beta',label:'Beta',content:'Beta content',disabled:mode==='disable'}]),{id:'gamma',label:'Gamma',content:'Gamma content'}]}/></main>}createRoot(document.getElementById('root')).render(<React.StrictMode><App/></React.StrictMode>);`);
   await build({root:temp,configFile:false,logLevel:'warn',build:{outDir:'dist',emptyOutDir:true}});
