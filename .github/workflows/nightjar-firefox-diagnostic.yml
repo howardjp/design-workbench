@@ -31,10 +31,16 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: cd examples/jekyll/martlet && bundle install
       - run: npx playwright install --with-deps firefox
-      - run: sudo apt-get update && sudo apt-get install -y xvfb xauth xdotool
+      - run: sudo apt-get update && sudo apt-get install -y xvfb xauth xdotool imagemagick
       - run: |
           if [ '${{ matrix.mode }}' = headed ]; then
             NIGHTJAR_HEADED=1 xvfb-run -a node examples/page-archetypes/tests/form-stale-validity.mjs
           else
             node examples/page-archetypes/tests/form-stale-validity.mjs
           fi
+      - uses: actions/upload-artifact@v4
+        if: failure() && matrix.mode == 'headed'
+        with:
+          name: nightjar-firefox-native-ui
+          path: ${{ runner.temp }}/nightjar-*.png
+          if-no-files-found: ignore
