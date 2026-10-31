@@ -105,7 +105,6 @@ Create `assets/js/adoption-directory.js`:
     input.value = '';
     show('');
     status.textContent = '';
-    input.focus();
   });
   controls.disabled = false;
   fallback.hidden = true;
