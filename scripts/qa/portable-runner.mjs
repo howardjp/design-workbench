@@ -24,6 +24,8 @@ export function pinned(repo,commit){
  assert.ok(fullCommit.test(commit),'Every input needs a full 40-character lowercase commit ID; moving refs are not accepted');
  const actual=run('git',['-C',repo,'rev-parse','--verify',`${commit}^{commit}`]).trim();
  assert.equal(actual,commit,`Missing or non-commit pin in ${repo}`);
+ const entries=run('git',['-C',repo,'ls-tree','-r',commit]).split('\n');
+ assert.ok(!entries.some(entry=>/^(120000|160000) /.test(entry)),`${repo}@${commit}: symlinks and submodules are not supported; snapshot all required sources explicitly`);
 }
 export function validateManifest(manifest){
  assert.equal(manifest.version,1,'manifest version must be 1');

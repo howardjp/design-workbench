@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
-import {mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync} from 'node:fs';
+import {mkdtempSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {archive,execute,pinned,readPin,validateManifest} from '../scripts/qa/portable-runner.mjs';
@@ -34,5 +34,6 @@ test('pinned offline archive uses committed bytes, not a later checkout or dirty
   writeFileSync(join(repo,'catalog.json'),'second');git('commit','-qam','second');writeFileSync(join(repo,'catalog.json'),'uncommitted');writeFileSync(join(repo,'untracked.txt'),'not in archive');
   assert.doesNotThrow(()=>pinned(repo,first));assert.throws(()=>pinned(repo,'HEAD'),/full 40-character/);assert.equal(readPin(repo,first,'catalog.json'),'first');archive(repo,first,out);
   assert.equal(readFileSync(join(out,'catalog.json'),'utf8'),'first');assert.throws(()=>readFileSync(join(out,'untracked.txt')),{code:'ENOENT'});assert.throws(()=>readFileSync(join(out,'.git','HEAD')),{code:'ENOENT'});
+  symlinkSync('/tmp',join(repo,'outside'));git('add','outside');git('commit','-qm','add unsafe symlink');assert.throws(()=>pinned(repo,git('rev-parse','HEAD')),/symlinks and submodules/);
  }finally{rmSync(temp,{recursive:true,force:true});}
 });
