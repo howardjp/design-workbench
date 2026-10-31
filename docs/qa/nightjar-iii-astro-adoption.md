@@ -23,21 +23,21 @@ Local family commits, both based directly on the source revisions above:
 | Martlet | `66e543b6f6b5a04c4e29dac1ab3191876805075b` | [martlet-safe-form.patch](nightjar-iii-astro-patches/martlet-safe-form.patch) |
 | Krigsvold | `65504010638330c3f93a2b28221698a5526bef40` | [krigsvold-safe-form.patch](nightjar-iii-astro-patches/krigsvold-safe-form.patch) |
 
-Both patches passed `git apply --check` against the exact clean source heads. Both family `npm test` suites passed (three tests each). Clean packaged-consumer starter builds and Chromium browser smoke passed for each family with Astro 5.18.2 and 7.4.4, Node 24.19.0, and their respective pinned, locally built theme sources. This covers six viewport widths, light/dark modes, enlarged text, keyboard, form validation/retry/reset, no-JS, CSP-blocked scripts, partial setup failure and automated axe checks. Firefox, WebKit, actual assistive technology and physical printing were not run in this local assessment. No visual baseline was approved. A clean `npm audit` is not claimed to resolve repository security alerts or assess published Workers.
+Both zero-context patches passed `git apply --check --unidiff-zero` against the exact clean source heads, and applying each to a temporary Git index reconstructed the corresponding candidate tree exactly. Zero-context patches avoid carrying whitespace-only context into the workbench; they must only be applied to the recorded exact base because they provide less context for detecting drift. Both family `npm test` suites passed (three tests each). Clean packaged-consumer starter builds and Chromium browser smoke passed for each family with Astro 5.18.2 and 7.4.4, Node 24.19.0, and their respective pinned, locally built theme sources. This covers six viewport widths, light/dark modes, enlarged text, keyboard, form validation/retry/reset, no-JS, CSP-blocked scripts, partial setup failure and automated axe checks. Firefox, WebKit, actual assistive technology and physical printing were not run in this local assessment. No visual baseline was approved. A clean `npm audit` is not claimed to resolve repository security alerts or assess published Workers.
 
 ## Reproducing the patches
 
 Use an isolated, clean checkout of each existing Astro repository at its exact base above and inspect the patch. From that checkout, substitute the local path to this review package:
 
 ```sh
-git apply --check /path/to/workbench/docs/qa/nightjar-iii-astro-patches/martlet-safe-form.patch
-git apply /path/to/workbench/docs/qa/nightjar-iii-astro-patches/martlet-safe-form.patch
+git apply --check --unidiff-zero /path/to/workbench/docs/qa/nightjar-iii-astro-patches/martlet-safe-form.patch
+git apply --unidiff-zero /path/to/workbench/docs/qa/nightjar-iii-astro-patches/martlet-safe-form.patch
 npm ci --ignore-scripts --legacy-peer-deps --no-audit --no-fund
 npm test
 MARTLET_CORE_SOURCE=/absolute/path/to/built/pinned-martlet-theme MARTLET_BROWSER=1 PLAYWRIGHT_EXECUTABLE_PATH=/path/to/chromium node scripts/smoke.mjs
 ```
 
-For Krigsvold use `krigsvold-safe-form.patch`, `KRIGSVOLD_CORE_SOURCE` and `KRIGSVOLD_BROWSER`. Use the pinned theme revision and lockfile before building it; the smoke script packs the theme and Astro package, installs them in a temporary starter, builds it and executes browser assertions. `npm install` used by the temporary starter may fetch Astro and its dependencies; these are **not** offline-install tests. No command above pushes or publishes. To roll back a local application use `git apply -R` on the exact same patch after checking the worktree; do not reset or overwrite unrelated work.
+For Krigsvold use `krigsvold-safe-form.patch`, `KRIGSVOLD_CORE_SOURCE` and `KRIGSVOLD_BROWSER`. Use the pinned theme revision and lockfile before building it; the smoke script packs the theme and Astro package, installs them in a temporary starter, builds it and executes browser assertions. `npm install` used by the temporary starter may fetch Astro and its dependencies; these are **not** offline-install tests. No command above pushes or publishes. To roll back a local application use `git apply -R --unidiff-zero` on the exact same patch after checking the worktree; do not reset or overwrite unrelated work.
 
 ## Remaining maturity gaps
 
