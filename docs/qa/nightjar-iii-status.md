@@ -14,15 +14,15 @@ An independent local baseline at `80a5635` passed `npm ci --ignore-scripts`, `np
 
 | Phase | Current status | Evidence and next gate |
 | --- | --- | --- |
-| 0 — authority inventory | In progress | Re-inventory exact repositories, versions, ownership, generated exports, fixtures and downstream actions. |
-| 1 — Jekyll rehearsal | In progress | Produce two local standalone candidates and reproducible, offline build/archive evidence; no remote repositories or cutover. |
-| 2 — React rehearsal | In progress | Produce two local package candidates and packed-consumer evidence; no package publication or ownership transfer. |
-| 3 — Astro maturity | In progress | Inspect the actual family package repos and test justified fixes on isolated branches; no deployment. |
-| 4 — independent conformance | In progress | Prototype explicit immutable pins and offline local inputs, maintaining truthful coverage. |
-| 5 — clean-room adoption | Pending | Exercise each family/framework from documented artifacts; record missing APIs, metrics and limitations. |
-| 6 — hardening | Pending | Verify cross-browser and adversarial contracts and preserve incomplete/manual classifications. |
-| 7 — publication and migration | Pending | Prepare an independently reviewable plan and explicit approval gates; do not activate controls or move ownership. |
-| 8 — extended queue | Pending | Continue evidence-led work without gratuitous abstraction or examples. |
+| 0 — authority inventory | Reviewable in #44 | Seven exact repository revisions, release identities and 370-path source map; source ownership unchanged. |
+| 1 — Jekyll rehearsal | Reviewable in #46/#53 | Two local-only snapshot families, provenance and rollback, offline-observed builds, archive/safety tests and a documented clean-room directory. No remote repositories or cutover. |
+| 2 — React rehearsal | Reviewable in #45 | Two local-only package candidates, provenance and three-engine packed-consumer checks; same-version registry collision blocks publication. |
+| 3 — Astro maturity | Reviewable in #47 | Paired local safety/subpath patches and Chromium adoption tests; family pushes and Firefox/WebKit remain open. |
+| 4 — independent conformance | Prototype in #50 | Explicit immutable pins and 600 bounded static route/base checks; Astro/React galleries still use workbench-owned harnesses and full behavioral parity is not claimed. |
+| 5 — clean-room adoption | Reviewable in #52/#53 | Paired, equivalent small dashboard exercises across all frameworks at root/subpath in Chromium; Firefox/WebKit and sustained use remain open. |
+| 6 — hardening | Partial | Source landmark fix #48, candidate safety tests and React three-engine packed checks; 18+18 contrast incompletes and manual checks remain. |
+| 7 — publication and migration | Proposal in #51 | Separate approval boundaries and four-repository rollback; no active controls or authority changes. |
+| 8 — extended queue | In progress | Continue evidence-led work without gratuitous abstraction or examples. |
 
 This ledger records progress and does not itself transfer ownership or authorize integration. Individual branches and exact test results will be added as work is completed.
 
