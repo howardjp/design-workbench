@@ -16,5 +16,10 @@ test('rendered-link verification rejects encoded traversal and external symlinks
    const good=verify(base,`${base}/#home`);assert.equal(good.status,0,good.stderr);
    for(const href of [`${base}/%2e%2e/outside.txt`,`${base}/external-link`]){const result=verify(base,href);assert.notEqual(result.status,0,`${base||'/'} accepted ${href}`);assert.match(result.stderr,/destination escapes site root/);}
   }
+  const outsideDir=join(temp,'outside-dir');mkdirSync(outsideDir);writeFileSync(join(outsideDir,'index.html'),'<h1>External</h1>');symlinkSync(outsideDir,join(root,'redirected-dir'),'dir');mkdirSync(join(root,'directory'));symlinkSync(join(outsideDir,'index.html'),join(root,'directory','index.html'));
+  for(const base of ['', '/preview']){
+   const nested=verify(base,`${base}/redirected-dir/`);assert.notEqual(nested.status,0);assert.match(nested.stderr,/destination escapes site root/);
+   const index=verify(base,`${base}/directory/`);assert.notEqual(index.status,0);assert.match(index.stderr,/HTML document escapes site root/);assert.match(index.stderr,/directory index escapes site root/);
+  }
  }finally{rmSync(temp,{recursive:true,force:true});}
 });
