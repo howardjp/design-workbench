@@ -1,0 +1,23 @@
+# Independent Astro starter browser checks
+
+This is a **review-only**, nonpublishing test harness for the paired local patches in [the adoption report](../../../docs/qa/nightjar-iii-astro-adoption.md). It tests the real published package payloads with the proposed starter changes applied in temporary directories; it does not access a private source repository, publish an archive, deploy a site, or transfer authority.
+
+## Inputs and provenance
+
+The two fixture lockfiles pin Node-package inputs and npm `integrity` values. `astro5` pins Astro 5.18.2; `astro7` pins Astro 7.4.4. Both pin `@martlet/astro@1.2.2`, `@martlet/theme@2.2.2`, `@krigsvold/astro@1.2.2`, and `@krigsvold/theme@2.2.3`. A clean `npm ci` fetches these packages and transitive dependencies from npm; **this is not an offline install**. The registry packages were independently unpacked and compared byte-for-byte with every one of the 37 package files at Martlet source `ed1f121ae991fd868e757228664d1c3a737c3c10` and Krigsvold source `af57afbc6413d7690cea8a839c7c0e1d48e2730c`. `provenance.json` records those per-file SHA-256 values and the expected patched starter trees at local family commits `3c43243653a1f5a3acf3bca23e776177a53e2402` and `9e2cced9b4397c04f444a864c8eda4c0b43e75b2`. Npm integrity pins the theme package bytes; these are public registry artifacts, not an assertion that an arbitrary source checkout is identical to them.
+
+The harness checks the complete installed Astro-package file map before copying, applies only `starter/**` hunks from the two reviewed zero-context patches to a temporary copy, then compares every resulting starter file against the expected patched tree. The mirrored `browser.mjs`, `form-checks.mjs` and `subpath-check.mjs` are the exact test harness files at those candidate commits and their hashes are checked against the provenance record. The package's components themselves are unchanged by these patches; the consumer uses the registry package and theme. No source checkout is substituted silently.
+
+## Running
+
+From the workbench root with Node 24 and an installed Playwright browser:
+
+```sh
+npm ci --ignore-scripts --no-audit --no-fund
+npm ci --prefix scripts/qa/astro-starter-check/astro7 --ignore-scripts --no-audit --no-fund
+NIGHTJAR_ASTRO_MATRIX=astro7 DESIGN_BROWSER=firefox node scripts/qa/astro-starter-check/run.mjs
+```
+
+Use `astro5` for the other lock, and `chromium`, `firefox` or `webkit` for `DESIGN_BROWSER`. Set `PLAYWRIGHT_EXECUTABLE_PATH` only for a compatible system Chromium if desired. Each family is built at root and `/preview`, then the original family browser and subpath checks exercise reading/layout, reflow, axe, keyboard, local form recovery and no-JS/CSP-blocked/partial initialization. Only the five starter routes are tested; the 50 workbench recipes, dashboards and scientific workspace are **not** covered. The candidate workflow is PR-only, has read-only contents permissions, uses no secrets, does not upload artifacts, and performs no publication or deployment. It installs browser dependencies on its ephemeral runner.
+
+`npm audit` on October 31, 2026 reported five findings in the deliberately pinned Astro 5 compatibility fixture (one critical, three high and one low: Astro, sharp, zod, zod-to-ts and esbuild), and zero in the Astro 7 fixture. This compatibility test uses synthetic local content and does not justify deploying Astro 5 or dismissing production alerts. Check fresh advisories and reachability before any actual use. No manual assistive-technology or physical-print pass is claimed.
