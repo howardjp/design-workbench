@@ -13,6 +13,10 @@ OUTPUT = ROOT / 'docs/qa/nightjar-iii-jekyll-authority.csv'
 
 
 def owner(family, path):
+    source_site = {
+        'martlet': ('martlettheme/martlettheme', 'b588542b36cb67ed84a57700ce26ce845d475df9'),
+        'krigsvold': ('krigsvoldtheme/krigsvoldtheme', 'fa4a66c8675d9258f733250f1e32149c3622ea39'),
+    }
     shared = ARCHETYPES / 'jekyll' / path
     overlay = ARCHETYPES / 'families' / family / path
     if (ROOT / shared).is_file() and (ROOT / overlay).is_file():
@@ -29,6 +33,12 @@ def owner(family, path):
         return 'copied-workbench-guide', str(ARCHETYPES / Path(path).name)
     if path in {'_layouts/default.html', '_config.yml', 'index.md'}:
         return 'seeded-export-transformed-by-sync', f'examples/jekyll/{family}/{path} + {ARCHETYPES}/scripts/sync.py'
+    if path == 'assets/css/shell.css':
+        repo, sha = source_site[family]
+        return 'source-site-generated-shell', f'{repo}@{sha}:site/src/styles/shell.css + scripts/generate-shell.mjs'
+    if path == 'docs/source-shell/CONTRACT.md':
+        repo, sha = source_site[family]
+        return 'source-site-contract-snapshot', f'{repo}@{sha}:docs/source-shell/CONTRACT.md'
     if path.startswith('examples/') or path in {'404.html', '_data/dashboard_navigation.json', '_data/dashboard_peer.json', '_data/examples.json', '_data/navigation.yml'}:
         return 'generated-by-sync', str(ARCHETYPES / 'scripts/sync.py')
     return 'tracked-family-export', f'examples/jekyll/{family}/{path}'
@@ -41,6 +51,7 @@ def generate():
     writer.writerow(['family', 'export_path', 'authority_class', 'source_or_generator', 'sha256'])
     for family in ('martlet', 'krigsvold'):
         paths = manifests[family]
+        shell = json.loads((ROOT / 'examples/jekyll' / family / '_data/shell.json').read_text())
         if len(paths) != len(set(paths)):
             raise ValueError(f'Duplicate manifest path for {family}')
         for path in sorted(paths):
@@ -52,7 +63,11 @@ def generate():
                 origin = ROOT / upstream
                 if not origin.is_file() or origin.is_symlink() or origin.read_bytes() != source.read_bytes():
                     raise ValueError(f'Copied source is missing, symbolic or differs: {origin} -> {source}')
-            writer.writerow([family, f'examples/jekyll/{family}/{path}', kind, upstream, hashlib.sha256(source.read_bytes()).hexdigest()])
+            digest = hashlib.sha256(source.read_bytes()).hexdigest()
+            expected = shell.get('sha256') if kind == 'source-site-generated-shell' else shell.get('contract_sha256') if kind == 'source-site-contract-snapshot' else None
+            if kind in {'source-site-generated-shell', 'source-site-contract-snapshot'} and digest != expected:
+                raise ValueError(f'Shell provenance digest differs: {source}')
+            writer.writerow([family, f'examples/jekyll/{family}/{path}', kind, upstream, digest])
     return result.getvalue()
 
 
