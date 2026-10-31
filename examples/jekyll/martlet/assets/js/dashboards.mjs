@@ -53,7 +53,8 @@ function administration(){
   const addressWarning=element('p','',{role:'status'});status.after(addressWarning);
   const syncAddress=()=>{const updated=updateURL({q:state.query,status:state.status,sort:state.sort,direction:state.direction,page:state.page,size:state.size,density:filters.elements.density.value},!initializing);addressWarning.textContent=updated?'':'The address could not be updated. Local changes remain available; try applying the filters again.';};
   const editorFields=['name','email','role','status'];const editorValues=()=>Object.fromEntries(editorFields.map(name=>[name,editor.elements[name].value]));let editorBaseline=editorValues();
-  const allowEditorChange=()=>{if(editorFields.every(name=>editor.elements[name].value===editorBaseline[name]))return true;status.textContent='Unsaved changes. Save or discard this draft before changing the editor.';editor.elements.name.focus();return false;};
+  const editorDirty=()=>editorFields.some(name=>editor.elements[name].value!==editorBaseline[name]);
+  const allowEditorChange=()=>{if(!editorDirty())return true;status.textContent='Unsaved changes. Save or discard this draft before changing the editor.';editor.elements.name.focus();return false;};
   const clearErrors=()=>{root.querySelector('#person-errors').hidden=true;for(const name of ['name','email','role','status']){editor.elements[name].removeAttribute('aria-invalid');editor.elements[name].removeAttribute('aria-describedby');root.querySelector(`#person-${name}-error`).hidden=true;}};
   const resetEditor=()=>{editing=null;editor.reset();editorBaseline=editorValues();clearErrors();root.querySelector('[data-editor-legend]').textContent='Add a person';};
   const updateSelection=()=>{
@@ -112,9 +113,9 @@ function administration(){
     const id=editing||nextPersonId(records);
     records=editing?records.map(person=>person.id===editing?{id,...draft}:person):[...records,{id,...draft}];selected.clear();resetEditor();render();status.textContent=`Saved ${draft.name} (${id}) locally. Reload restores the original fixture.`;
   });
-  root.querySelectorAll('[data-bulk]').forEach(button=>button.addEventListener('click',()=>{pending={ids:[...selected],status:button.dataset.bulk};returnFocus=button;root.querySelector('[data-bulk-description]').textContent=`Set ${pending.ids.length} selected people to ${pending.status}: ${records.filter(person=>selected.has(person.id)).map(person=>person.name).join(', ')}.`;dialog.showModal();root.querySelector('[data-bulk-cancel]').focus();}));
+  root.querySelectorAll('[data-bulk]').forEach(button=>button.addEventListener('click',()=>{if(editing&&selected.has(editing)&&editorDirty()){status.textContent='Unsaved changes. Save or discard this draft before changing this person in bulk.';editor.elements.name.focus();return;}pending={ids:[...selected],status:button.dataset.bulk};returnFocus=button;root.querySelector('[data-bulk-description]').textContent=`Set ${pending.ids.length} selected people to ${pending.status}: ${records.filter(person=>selected.has(person.id)).map(person=>person.name).join(', ')}.`;dialog.showModal();root.querySelector('[data-bulk-cancel]').focus();}));
   root.querySelector('[data-bulk-cancel]').addEventListener('click',()=>dialog.close());
-  root.querySelector('[data-bulk-confirm]').addEventListener('click',()=>{if(!pending)return;records=applyBulk(records,pending.ids,pending.status);const count=pending.ids.length;selected.clear();dialog.close();render();status.textContent=`Updated ${count} selected people locally. No unselected records were changed.`;});
+  root.querySelector('[data-bulk-confirm]').addEventListener('click',()=>{if(!pending)return;records=applyBulk(records,pending.ids,pending.status);if(editing&&pending.ids.includes(editing)){editor.elements.status.value=pending.status;editorBaseline.status=pending.status;}const count=pending.ids.length;selected.clear();dialog.close();render();status.textContent=`Updated ${count} selected people locally. No unselected records were changed.`;});
   dialog.addEventListener('close',()=>{if(dialog.open)return;pending=null;if(returnFocus&&!returnFocus.disabled)returnFocus.focus();else selectPage.focus();});
   // Preserve the interactive rows and focus while printing the applied result set.
   let prePrintStatus=null;
