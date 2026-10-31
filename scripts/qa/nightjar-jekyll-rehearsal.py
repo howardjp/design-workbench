@@ -7,10 +7,11 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 import subprocess
 
 REPO = Path(__file__).resolve().parents[2]
-BASE = '80a5635abe4de7a07a1983de0b3ef796b101e047'
+FROZEN = '80a5635abe4de7a07a1983de0b3ef796b101e047'
 HELPERS = REPO / 'scripts/qa/jekyll-rehearsal'
 
 def git(*args):
@@ -22,7 +23,21 @@ def names_at(prefix):
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--destination', type=Path, required=True, help='existing directory for the two new local repositories')
+parser.add_argument('--source-commit', default=FROZEN, help='full immutable local workbench commit descended from the frozen baseline')
 args = parser.parse_args()
+BASE = args.source_commit
+if not re.fullmatch(r'[0-9a-f]{40}', BASE):
+    raise SystemExit('Source commit must be a full lowercase 40-character SHA')
+try:
+    resolved = git('rev-parse', '--verify', BASE + '^{commit}').decode().strip()
+    subprocess.run(['git', '-C', str(REPO), 'merge-base', '--is-ancestor', FROZEN, BASE], check=True, capture_output=True)
+except subprocess.CalledProcessError as error:
+    raise SystemExit('Source commit must exist locally and descend from the frozen baseline') from error
+if resolved != BASE:
+    raise SystemExit('Source commit must identify the exact commit, not a tag')
+dirty = git('status', '--porcelain=v1', '-z', '--untracked-files=all', '--', 'examples/jekyll', 'examples/page-archetypes')
+if dirty:
+    raise SystemExit('Jekyll source/export paths are dirty; commit, stash, or use a clean worktree before rehearsal')
 parent = args.destination.resolve(strict=True)
 if not parent.is_dir() or parent == REPO or REPO.is_relative_to(parent) or parent.is_relative_to(REPO):
     raise SystemExit('Destination must be an existing directory outside the workbench')
