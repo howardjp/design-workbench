@@ -22,7 +22,6 @@ jobs:
         browser: [chromium, firefox, webkit]
     env:
       WORKBENCH_BROWSER: ${{ matrix.browser }}
-      NIGHTJAR_REACT_ARCHIVE_DIR: ${{ runner.temp }}/react-archives
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,6 +31,8 @@ jobs:
           node-version: '24'
       - run: npm ci --ignore-scripts
       - name: Reproduce private standalone candidates at the pinned revision
+        env:
+          NIGHTJAR_REACT_ARCHIVE_DIR: ${{ runner.temp }}/react-archives
         run: |
           node --test scripts/nightjar3/react-extraction.test.mjs
           node scripts/nightjar3/react-extraction.mjs --out "$RUNNER_TEMP/react-candidates"
@@ -43,6 +44,8 @@ jobs:
         timeout-minutes: 10
         run: npx playwright install --with-deps "${{ matrix.browser }}"
       - name: Check packed consumers
+        env:
+          NIGHTJAR_REACT_ARCHIVE_DIR: ${{ runner.temp }}/react-archives
         run: |
           npm run test:dialog-consumer
           npm run test:pagination-consumer
