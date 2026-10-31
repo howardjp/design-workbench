@@ -25,3 +25,13 @@ An independent local baseline at `80a5635` passed `npm ci --ignore-scripts`, `np
 | 8 — extended queue | Pending | Continue evidence-led work without gratuitous abstraction or examples. |
 
 This ledger records progress and does not itself transfer ownership or authorize integration. Individual branches and exact test results will be added as work is completed.
+
+## Early findings and rehearsal evidence
+
+An initial independent inventory reports that the registry's React `0.1.0` packages and the frozen workbench's unreleased packages both declare `0.1.0` but have different built JavaScript, declarations and CSS. A local tarball under that name/version is therefore not the published artifact; replacing or publishing that version is not an available cutover. The source-site/theme and Astro version ownership map is being verified against exact repository and registry snapshots.
+
+Initial local-only Jekyll snapshots have passed root/subpath link checks, safe mode, sanitization, archive rebuild without Git metadata and unsafe-file rejection. Network tracing observed no network calls during the tested builds, but network-namespace isolation was denied, so this is observation rather than enforced isolation. The candidates and verification are being refined; their final exact revisions will be recorded separately.
+
+Initial local-only React snapshots built and packed with no workbench checkout, passed isolated tarball rendering and a Chromium packed Tabs exercise, and produced JS/types/CSS matching the frozen workbench builds. A no-Git archive also installed offline with a warmed npm cache. These findings do not establish all component, browser or 50-recipe conformance. The repository-independent runner prototype has exercised 200 Jekyll static routes across both families and root/subpath; it explicitly marks absent Astro/React inputs and does not label static checks as full behavioral or accessibility conformance.
+
+The Astro package review reproduced a potential privacy defect in both existing starter registration forms: when JavaScript is unavailable, the enabled form can send entered values in a native GET despite its local-only notice. Isolated family fixes and no-JavaScript/blocked/partial-initialization regression tests are in progress; no deployment or package publication has occurred.
