@@ -10,6 +10,10 @@ export async function formChecks(browser, base) {
   const fits = async () => assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), 'Form has no horizontal overflow');
   const axe = async label => {
     const { violations } = await new AxeBuilder({ page }).analyze();
+    if (violations.length) {
+      const state = await page.locator('#submit').evaluate(node => {const style=getComputedStyle(node),rect=node.getBoundingClientRect();return {color:style.color,background:style.backgroundColor,opacity:style.opacity,fontSize:style.fontSize,fontWeight:style.fontWeight,disabled:node.disabled,ariaDisabled:node.getAttribute('aria-disabled'),hover:node.matches(':hover'),focus:node.matches(':focus'),rect:{x:rect.x,y:rect.y,width:rect.width,height:rect.height},animations:node.getAnimations().map(a=>({playState:a.playState,currentTime:a.currentTime}))};});
+      console.error('Contrast diagnostic:',JSON.stringify({label,state,violations}));
+    }
     assert.deepEqual(violations.map(v => ({ id:v.id, nodes:v.nodes.map(n=>n.target) })), [], label);
   };
   try {
