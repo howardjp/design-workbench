@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {mkdtempSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
+import {createHash} from 'node:crypto';
 import {join} from 'node:path';
-import {archive,execute,expand,pinned,readPin,validateManifest,verifyOutputRoot} from '../scripts/qa/portable-runner.mjs';
+import {archive,execute,expand,pinned,readPin,validateManifest,verifyInput,verifyOutputRoot} from '../scripts/qa/portable-runner.mjs';
 
 const sha='1234567890abcdef1234567890abcdef12345678';
 function manifest(){return {version:1,repositories:{fixture:{path:'/tmp/fixture',commit:sha}},fixture:{repository:'fixture',catalog:'catalog.json',dashboards:'dashboards.json'},targets:[{family:'martlet',framework:'jekyll',repository:'fixture',commands:[['python3','build.py','--out','{output}']]}]};}
@@ -19,6 +20,22 @@ test('manifest rejects moving refs, unsafe fixture paths, duplicates and unknown
  data=manifest();data.targets[0].commands=[['node',null]];assert.throws(()=>validateManifest(data),/argument array/);
  data=manifest();data.repositories.other={path:'/tmp/other',commit:sha};data.targets[0].commands=[['node','{source:other}']];assert.throws(()=>validateManifest(data),/declared input/);data.targets[0].inputs=['other'];assert.doesNotThrow(()=>validateManifest(data));
  assert.throws(()=>expand('{source:constructor}',{sources:{}}),/Unknown placeholder/);
+});
+
+test('package input checks reject missing, wrong-family, wrong-version and altered implementation bytes',async()=>{
+ const temp=mkdtempSync(join(tmpdir(),'nightjar-package-check-'));try{
+  const hash=value=>createHash('sha256').update(value).digest('hex');
+  const check={package_name:'@martlet/react',package_version:'0.2.0',files:{'src/index.js':hash('export const Article = 1;')}};
+  mkdirSync(join(temp,'src'));writeFileSync(join(temp,'package.json'),JSON.stringify({name:'@martlet/react',version:'0.2.0'}));writeFileSync(join(temp,'src','index.js'),'export const Article = 1;');
+  await assert.doesNotReject(verifyInput(temp,check));
+  writeFileSync(join(temp,'package.json'),JSON.stringify({name:'@krigsvold/react',version:'0.2.0'}));await assert.rejects(verifyInput(temp,check),/Package name differs/);
+  writeFileSync(join(temp,'package.json'),JSON.stringify({name:'@martlet/react',version:'0.1.0'}));await assert.rejects(verifyInput(temp,check),/Package version differs/);
+  writeFileSync(join(temp,'package.json'),JSON.stringify({name:'@martlet/react',version:'0.2.0'}));writeFileSync(join(temp,'src','index.js'),'export const Renamed = 1;');await assert.rejects(verifyInput(temp,check),/Input file hash differs/);
+  rmSync(join(temp,'src','index.js'));await assert.rejects(verifyInput(temp,check),{code:'ENOENT'});
+  const data=manifest();data.targets[0].input_checks={fixture:check};assert.doesNotThrow(()=>validateManifest(data));
+  data.targets[0].input_checks={fixture:{...check,files:{'../outside':hash('x')}}};assert.throws(()=>validateManifest(data),/unsafe checked file path/);
+  data.targets[0].input_checks={other:check};assert.throws(()=>validateManifest(data),/checked source/);
+ }finally{rmSync(temp,{recursive:true,force:true});}
 });
 
 test('complete-matrix mode refuses partial coverage before opening repositories',async()=>{

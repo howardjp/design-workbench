@@ -48,6 +48,20 @@ export function validateManifest(manifest){
   assert.ok(families.includes(target.family)&&frameworks.includes(target.framework),'unknown family or framework');const key=`${target.family}/${target.framework}`;assert.ok(!seen.has(key),`duplicate target ${key}`);seen.add(key);
   assert.ok(keys.includes(target.repository),`${key}: unknown repository`);
   if(target.inputs!==undefined){assert.ok(Array.isArray(target.inputs)&&new Set(target.inputs).size===target.inputs.length&&target.inputs.every(name=>keys.includes(name)),`${key}: inputs must be unique known repositories`);}
+  if(target.input_checks!==undefined){
+   assert.ok(target.input_checks && typeof target.input_checks==='object' && !Array.isArray(target.input_checks),`${key}: input_checks must be an object`);
+   for(const [name,check] of Object.entries(target.input_checks)){
+    assert.ok(name===target.repository||(target.inputs||[]).includes(name),`${key}: checked source must be the target or a declared input`);
+    assert.ok(check && typeof check==='object' && !Array.isArray(check),`${key}: invalid input check`);
+    assert.ok(typeof check.package_name==='string' && check.package_name.length,`${key}: package_name required`);
+    assert.ok(typeof check.package_version==='string' && check.package_version.length,`${key}: package_version required`);
+    assert.ok(check.files && typeof check.files==='object' && !Array.isArray(check.files) && Object.keys(check.files).length,`${key}: file hashes required`);
+    for(const [file,hash] of Object.entries(check.files)){
+     assert.match(file,/^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[A-Za-z0-9_./-]+$/,`${key}: unsafe checked file path`);
+     assert.match(hash,/^[0-9a-f]{64}$/,`${key}: file hashes must be SHA-256`);
+    }
+   }
+  }
   assert.ok(Array.isArray(target.commands)&&target.commands.length,`${key}: build commands required`);
   for(const command of target.commands){
    assert.ok(Array.isArray(command)&&command.length&&command.every(value=>typeof value==='string'&&value.length),`${key}: each command must be a nonempty argument array`);
@@ -57,6 +71,17 @@ export function validateManifest(manifest){
  return manifest;
 }
 export function readPin(repo,commit,path){return git(repo,['show',`${commit}:${path}`]);}
+// Validate the actual archived package before running the consumer. This binds
+// identity and specific source bytes, but cannot prove arbitrary commands use it.
+export async function verifyInput(root,check){
+ const pkg=JSON.parse(await readFile(join(root,'package.json'),'utf8'));
+ assert.equal(pkg.name,check.package_name,'Package name differs from the expected implementation');
+ assert.equal(pkg.version,check.package_version,'Package version differs from the expected implementation');
+ for(const [file,expected] of Object.entries(check.files)){
+  const bytes=await readFile(join(root,file));
+  assert.equal(createHash('sha256').update(bytes).digest('hex'),expected,`Input file hash differs: ${file}`);
+ }
+}
 export function archive(repo,commit,dest){
  // A clean temporary bare repository uses the source's object database but
  // not its untracked .git/info/attributes or repository-specific Git config.
@@ -133,13 +158,14 @@ export async function execute(manifest,{browserName='chromium',output,requireMat
    // Every build starts with a fresh archive of each pinned input. Build output
    // and caches from one family/base cannot become another case's source.
    const sources={};for(const [name,repo] of Object.entries(repos)){sources[name]=join(temp,'sources',target.family,target.framework,base?'preview':'root',name);await mkdir(sources[name],{recursive:true});archive(repo.path,repo.commit,sources[name]);}
+   for(const [name,check] of Object.entries(target.input_checks||{}))await verifyInput(sources[name],check);
    const outputPath=join(temp,'builds',target.family,target.framework,base?'preview':'root');await mkdir(outputPath,{recursive:true});
    for(const command of target.commands){const args=command.map(arg=>expand(arg,{sources,base,baseSlash:base?`${base}/`:'/',output:outputPath}));run(args[0],args.slice(1),{cwd:sources[target.repository],timeout:15*60*1000});}
    await verifyOutputRoot(temp,outputPath);
    const outputHash=await digestTree(outputPath); // reject output symlinks before traversing rendered documents
    const htmlCheck=run('python3',[join(here,'../../examples/page-archetypes/scripts/verify-html.py'),outputPath,'--baseurl',base]);
    const audited=await auditSite(page,outputPath,base||'/',catalog,dashboards,`${target.family}/${target.framework}${base||'/'}`);
-   results.push({family:target.family,framework:target.framework,base:base||'/',source:target.repository,source_commit:repos[target.repository].commit,declared_inputs:Object.fromEntries((target.inputs||[]).map(name=>[name,repos[name].commit])),declared_input_consumption:'not_verified',build_commands:target.commands,output_tree_sha256:outputHash,html_check:htmlCheck.trim(),...audited});
+   results.push({family:target.family,framework:target.framework,base:base||'/',source:target.repository,source_commit:repos[target.repository].commit,declared_inputs:Object.fromEntries((target.inputs||[]).map(name=>[name,repos[name].commit])),input_checks:target.input_checks||{},declared_input_consumption:'not_verified',build_commands:target.commands,output_tree_sha256:outputHash,html_check:htmlCheck.trim(),...audited});
    console.log(`${target.family}/${target.framework}${base||'/'}: 50 static routes, local links and experimental static results checked`);
   }
   await context.close();
