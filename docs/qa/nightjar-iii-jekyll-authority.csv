@@ -70,7 +70,7 @@ martlet,examples/jekyll/martlet/assets/css/examples.css,shared-workbench-source,
 martlet,examples/jekyll/martlet/assets/css/fonts.css,tracked-family-export,examples/jekyll/martlet/assets/css/fonts.css,80f766b73961542249d0cd82917d72ad65a9d869cfbb1566daeba5caba56560f
 martlet,examples/jekyll/martlet/assets/css/jekyll.css,tracked-family-export,examples/jekyll/martlet/assets/css/jekyll.css,d39fe3c7b317ebdf32330d6502afd5c96d0f2e2c38ce9d4418e8ca88f51a29f1
 martlet,examples/jekyll/martlet/assets/css/scientific.css,shared-workbench-source,examples/page-archetypes/jekyll/assets/css/scientific.css,08614aa3c62d2217aaf709c6f94e9704dec8145f3b63427c76f1e36554c6c5ab
-martlet,examples/jekyll/martlet/assets/css/shell.css,tracked-family-export,examples/jekyll/martlet/assets/css/shell.css,d5cf12b35bac7b01cfb2c0298102454309fe979e19584c00490a21c93d500f45
+martlet,examples/jekyll/martlet/assets/css/shell.css,source-site-generated-shell,martlettheme/martlettheme@b588542b36cb67ed84a57700ce26ce845d475df9:site/src/styles/shell.css + scripts/generate-shell.mjs,d5cf12b35bac7b01cfb2c0298102454309fe979e19584c00490a21c93d500f45
 martlet,examples/jekyll/martlet/assets/examples/coast.svg,shared-workbench-source,examples/page-archetypes/jekyll/assets/examples/coast.svg,8854d27cabdcb1c8a471b7fdb56ae640a957f3c5977cdd9ffa71ca44dd7f8b4b
 martlet,examples/jekyll/martlet/assets/examples/notebook.svg,shared-workbench-source,examples/page-archetypes/jekyll/assets/examples/notebook.svg,7ea9240d26c7cb2d60912dbad34c4eff87aaa8f48f65735987e1843292b18353
 martlet,examples/jekyll/martlet/assets/examples/observations.csv,shared-workbench-source,examples/page-archetypes/jekyll/assets/examples/observations.csv,8818a5383144e4e4ff8525631ddd3186f04836763564cba37abae9ed9dd3c955
@@ -130,7 +130,7 @@ martlet,examples/jekyll/martlet/docs/archetypes/README.md,copied-workbench-guide
 martlet,examples/jekyll/martlet/docs/archetypes/VERIFICATION.md,copied-workbench-guide,examples/page-archetypes/VERIFICATION.md,607bd6bc36a6e41c4d7409446fc184a6443cfeb330ac357a833fc0f2d2bcb8bf
 martlet,examples/jekyll/martlet/docs/archetypes/contracts/catalog.schema.json,copied-workbench-contract,examples/page-archetypes/contracts/catalog.schema.json,60785cc5f9d712419f06b45ef8a656016e0602c3516a6d455c69d8b84c979eeb
 martlet,examples/jekyll/martlet/docs/archetypes/contracts/dashboards.schema.json,copied-workbench-contract,examples/page-archetypes/contracts/dashboards.schema.json,5c7cbcf973247bf2bf51002d2100e46c814e891aac009eb08cd882a201fb0b92
-martlet,examples/jekyll/martlet/docs/source-shell/CONTRACT.md,tracked-family-export,examples/jekyll/martlet/docs/source-shell/CONTRACT.md,6eb74f3e3de2071386c8c0822ce3ea65e7b0fa61d41cb0a3670a0b68c54fc1d5
+martlet,examples/jekyll/martlet/docs/source-shell/CONTRACT.md,source-site-contract-snapshot,martlettheme/martlettheme@b588542b36cb67ed84a57700ce26ce845d475df9:docs/source-shell/CONTRACT.md,6eb74f3e3de2071386c8c0822ce3ea65e7b0fa61d41cb0a3670a0b68c54fc1d5
 martlet,examples/jekyll/martlet/docs/source-shell/README.md,tracked-family-export,examples/jekyll/martlet/docs/source-shell/README.md,0afa59ffa8ae5fb230bd71d75f17e0f0f0b7cc997be439fe2cc85764f5d319a5
 martlet,examples/jekyll/martlet/examples/about.html,generated-by-sync,examples/page-archetypes/scripts/sync.py,dde56a3efcadf6f99870a089cf483f3e09367ee463d5c9b4245bfa304d10ed07
 martlet,examples/jekyll/martlet/examples/archive.html,generated-by-sync,examples/page-archetypes/scripts/sync.py,1864651f060caf75b4592d9f9376e6d194408c13c875c70eabebadd8cd23ae3a
@@ -258,7 +258,7 @@ krigsvold,examples/jekyll/krigsvold/assets/css/examples.css,shared-workbench-sou
 krigsvold,examples/jekyll/krigsvold/assets/css/fonts.css,tracked-family-export,examples/jekyll/krigsvold/assets/css/fonts.css,acc1aca21d6a25594b82e6c63da7e8e0f3fcb6459e2bb60521ac0db7556bf162
 krigsvold,examples/jekyll/krigsvold/assets/css/jekyll.css,tracked-family-export,examples/jekyll/krigsvold/assets/css/jekyll.css,5a9dd04c0dc3534dcba67be0219be6526e8bb3e19205a175ce78169137c23c16
 krigsvold,examples/jekyll/krigsvold/assets/css/scientific.css,shared-workbench-source,examples/page-archetypes/jekyll/assets/css/scientific.css,08614aa3c62d2217aaf709c6f94e9704dec8145f3b63427c76f1e36554c6c5ab
-krigsvold,examples/jekyll/krigsvold/assets/css/shell.css,tracked-family-export,examples/jekyll/krigsvold/assets/css/shell.css,a65b1cbbe032d46be7373b1f3a90ca46ba1b3971fa85c98975cd9ec76394c05d
+krigsvold,examples/jekyll/krigsvold/assets/css/shell.css,source-site-generated-shell,krigsvoldtheme/krigsvoldtheme@fa4a66c8675d9258f733250f1e32149c3622ea39:site/src/styles/shell.css + scripts/generate-shell.mjs,a65b1cbbe032d46be7373b1f3a90ca46ba1b3971fa85c98975cd9ec76394c05d
 krigsvold,examples/jekyll/krigsvold/assets/examples/coast.svg,shared-workbench-source,examples/page-archetypes/jekyll/assets/examples/coast.svg,8854d27cabdcb1c8a471b7fdb56ae640a957f3c5977cdd9ffa71ca44dd7f8b4b
 krigsvold,examples/jekyll/krigsvold/assets/examples/notebook.svg,shared-workbench-source,examples/page-archetypes/jekyll/assets/examples/notebook.svg,7ea9240d26c7cb2d60912dbad34c4eff87aaa8f48f65735987e1843292b18353
 krigsvold,examples/jekyll/krigsvold/assets/examples/observations.csv,shared-workbench-source,examples/page-archetypes/jekyll/assets/examples/observations.csv,8818a5383144e4e4ff8525631ddd3186f04836763564cba37abae9ed9dd3c955
@@ -311,7 +311,7 @@ krigsvold,examples/jekyll/krigsvold/docs/archetypes/README.md,copied-workbench-g
 krigsvold,examples/jekyll/krigsvold/docs/archetypes/VERIFICATION.md,copied-workbench-guide,examples/page-archetypes/VERIFICATION.md,607bd6bc36a6e41c4d7409446fc184a6443cfeb330ac357a833fc0f2d2bcb8bf
 krigsvold,examples/jekyll/krigsvold/docs/archetypes/contracts/catalog.schema.json,copied-workbench-contract,examples/page-archetypes/contracts/catalog.schema.json,60785cc5f9d712419f06b45ef8a656016e0602c3516a6d455c69d8b84c979eeb
 krigsvold,examples/jekyll/krigsvold/docs/archetypes/contracts/dashboards.schema.json,copied-workbench-contract,examples/page-archetypes/contracts/dashboards.schema.json,5c7cbcf973247bf2bf51002d2100e46c814e891aac009eb08cd882a201fb0b92
-krigsvold,examples/jekyll/krigsvold/docs/source-shell/CONTRACT.md,tracked-family-export,examples/jekyll/krigsvold/docs/source-shell/CONTRACT.md,7f2796e82976a575f3552ee57d61ab202598beecd51f75dba8a7011c78d37508
+krigsvold,examples/jekyll/krigsvold/docs/source-shell/CONTRACT.md,source-site-contract-snapshot,krigsvoldtheme/krigsvoldtheme@fa4a66c8675d9258f733250f1e32149c3622ea39:docs/source-shell/CONTRACT.md,7f2796e82976a575f3552ee57d61ab202598beecd51f75dba8a7011c78d37508
 krigsvold,examples/jekyll/krigsvold/docs/source-shell/README.md,tracked-family-export,examples/jekyll/krigsvold/docs/source-shell/README.md,7283520a2593a4ea7f98b195b93e46e9687d01dbb44efea40b3b7293ddf72dbe
 krigsvold,examples/jekyll/krigsvold/examples/about.html,generated-by-sync,examples/page-archetypes/scripts/sync.py,dde56a3efcadf6f99870a089cf483f3e09367ee463d5c9b4245bfa304d10ed07
 krigsvold,examples/jekyll/krigsvold/examples/archive.html,generated-by-sync,examples/page-archetypes/scripts/sync.py,1864651f060caf75b4592d9f9376e6d194408c13c875c70eabebadd8cd23ae3a
