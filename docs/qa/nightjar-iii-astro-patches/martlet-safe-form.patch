@@ -1,0 +1,112 @@
+From 66e543b6f6b5a04c4e29dac1ab3191876805075b Mon Sep 17 00:00:00 2001
+From: James Howard <howardjp@gmail.com>
+Date: Sat, 31 Oct 2026 15:18:13 +0000
+Subject: [PATCH] Prevent native submission when starter scripts fail
+
+---
+ README.md                        |  2 +-
+ scripts/form-checks.mjs          | 18 ++++++++++++++++++
+ starter/src/pages/form.astro     | 11 ++++++-----
+ starter/src/scripts/form-demo.js |  9 +++++++++
+ 4 files changed, 34 insertions(+), 6 deletions(-)
+
+diff --git a/README.md b/README.md
+index 0920e38..5dcb17b 100644
+--- a/README.md
++++ b/README.md
+@@ -66,4 +66,4 @@ Astro 1.2.2 pairs with core ^2.2.2. [New contents/footer contracts and migration
+ 
+ ## Forms
+ 
+-The starter `/form/` demonstrates native HTML with supported core form classes, explicit submit/reset types, validation, retained input, simulated failure/retry, and a changed-reset dialog. Nothing is sent or stored durably. Core owns the appearance; the small controller is host example code, not a new Astro API. See the core [form styling contract](https://github.com/martlettheme/npm/blob/main/docs/form-styling.md). A `Button` accepts `type="submit"`, `type="reset"`, or its default `type="button"` without duplicate attributes; modifiers use `class="martlet-button--secondary"`.
++The starter `/form/` demonstrates native HTML with supported core form classes, explicit submit/reset types, validation, retained input, simulated failure/retry, and a changed-reset dialog. Nothing is sent or stored durably. Its local controls start disabled and are enabled only after initialization completes. If JavaScript is disabled, blocked, or fails during setup, an unavailable message remains visible and values cannot be submitted to the hosting server. Core owns the appearance; the small controller is host example code, not a new Astro API. See the core [form styling contract](https://github.com/martlettheme/npm/blob/main/docs/form-styling.md). A `Button` accepts `type="submit"`, `type="reset"`, or its default `type="button"` without duplicate attributes; modifiers use `class="martlet-button--secondary"`.
+diff --git a/scripts/form-checks.mjs b/scripts/form-checks.mjs
+index 93ed47f..dc34e45 100644
+--- a/scripts/form-checks.mjs
++++ b/scripts/form-checks.mjs
+@@ -13,6 +13,24 @@ export async function formChecks(browser, base) {
+     assert.deepEqual(violations.map(v => ({ id:v.id, nodes:v.nodes.map(n=>n.target) })), [], label);
+   };
+   try {
++    // The specimen must not submit personal-looking values when enhancement is absent.
++    for (const mode of ['nojs', 'blocked', 'partial']) {
++      const offline = await browser.newContext({javaScriptEnabled:mode !== 'nojs'});
++      const fallback = await offline.newPage();
++      const navigations = [];
++      fallback.on('request', request => { if (request.isNavigationRequest()) navigations.push(request.url()); });
++      if (mode === 'blocked') await fallback.route('**/*', async route => { if (route.request().isNavigationRequest()) { const response = await route.fetch(); return route.fulfill({response, headers:{...response.headers(), 'content-security-policy':"script-src 'none'"}}); } return route.request().resourceType() === 'script' ? route.abort() : route.continue(); });
++      if (mode === 'partial') await fallback.addInitScript(() => { const original = EventTarget.prototype.addEventListener; EventTarget.prototype.addEventListener = function(type, listener, options) { if (type === 'reset' && this instanceof HTMLFormElement && this.id === 'registration') throw new Error('synthetic registration setup failure'); return original.call(this,type,listener,options); }; });
++      await fallback.goto(base + '/form/');
++      assert.equal(await fallback.locator('#name').isDisabled(), true, `${mode}: form is disabled before complete initialization`);
++      assert.equal(await fallback.locator('#submit').isDisabled(), true, `${mode}: submit is disabled before complete initialization`);
++      assert.equal(await fallback.locator('#registration').evaluate(node => node.noValidate), false, `${mode}: native validation remains intact`);
++      assert.equal(await fallback.locator('#form-fallback').isVisible(), true, `${mode}: unavailable state is explained`);
++      const before = navigations.length;
++      await fallback.locator('#submit').evaluate(node => node.click());
++      assert.equal(navigations.length, before, `${mode}: disabled form never navigates`);
++      await offline.close();
++    }
+     await page.goto(base + '/form/');
+     await page.locator('h1').waitFor(); await page.evaluate(() => document.fonts.ready);
+     assert.equal(await page.locator('#submit').evaluate(e=>e.type), 'submit');
+diff --git a/starter/src/pages/form.astro b/starter/src/pages/form.astro
+index 15d213a..8f191e9 100644
+--- a/starter/src/pages/form.astro
++++ b/starter/src/pages/form.astro
+@@ -7,12 +7,13 @@ import '@martlet/theme/source-profile.css';
+   <Section><Stack><h1>Workshop registration</h1><p class="martlet-eyebrow">A native HTML application extension</p>
+     <p>This example sends nothing and stores nothing durably. The first valid attempt fails deliberately; retry succeeds.</p>
+     <p><Button href="#registration" id="anchor-button">Go to the registration form</Button></p>
+-    <form id="registration" class="martlet-form" aria-label="Workshop registration" novalidate>
++    <p id="form-fallback" role="status">Interactive registration is unavailable. Enable JavaScript and reload to use this local example.</p>
++    <form id="registration" class="martlet-form" aria-label="Workshop registration">
+       <section id="summary" class="martlet-error-summary" role="alert" aria-labelledby="summary-title" tabindex="-1" hidden>
+         <h2 id="summary-title">Check your registration</h2><ul id="summary-errors"></ul>
+         <Button id="retry" hidden>Retry registration</Button>
+       </section>
+-      <fieldset class="martlet-fieldset" id="details">
++      <fieldset class="martlet-fieldset" id="details" disabled>
+         <legend>Your details</legend>
+         <div class="martlet-field">
+           <label for="name">Name (required)</label><input id="name" name="name" required autocomplete="name" aria-describedby="name-hint name-error" />
+@@ -23,17 +24,17 @@ import '@martlet/theme/source-profile.css';
+           <p id="email-hint" class="martlet-hint">We would use this for registration details.</p><p id="email-error" class="martlet-error" hidden>Enter a valid email address.</p>
+         </div>
+       </fieldset>
+-      <fieldset class="martlet-fieldset" id="attendance-group" tabindex="-1" aria-describedby="attendance-error">
++      <fieldset class="martlet-fieldset" id="attendance-group" tabindex="-1" aria-describedby="attendance-error" disabled>
+         <legend>Attendance (required)</legend>
+         <label class="martlet-radio"><input name="attendance" type="radio" value="studio" /><span>In the studio</span></label>
+         <label class="martlet-radio"><input name="attendance" type="radio" value="online" /><span>Online</span></label>
+         <p id="attendance-error" class="martlet-error" hidden>Choose how you will attend.</p>
+       </fieldset>
+-      <fieldset class="martlet-fieldset"><legend>Preferences</legend>
++      <fieldset class="martlet-fieldset" disabled><legend>Preferences</legend>
+         <label class="martlet-checkbox"><input id="reminder" name="reminder" type="checkbox" /><span>Send a workshop reminder</span></label>
+         <div class="martlet-field"><label for="notes">Access requirements (optional)</label><textarea id="notes" name="notes" rows="3"></textarea></div>
+       </fieldset>
+-      <div class="martlet-actions"><Button type="submit" id="submit">Register</Button><Button type="reset" id="reset-button" class="martlet-button--secondary">Reset registration</Button><Button id="default-button" class="martlet-button--quiet">Preview only</Button><Button disabled class="martlet-button--secondary" id="disabled-button">Unavailable</Button></div>
++      <div class="martlet-actions"><Button type="submit" id="submit" disabled>Register</Button><Button type="reset" id="reset-button" disabled class="martlet-button--secondary">Reset registration</Button><Button disabled id="default-button" class="martlet-button--quiet">Preview only</Button><Button disabled class="martlet-button--secondary" id="disabled-button">Unavailable</Button></div>
+       <p id="status" class="martlet-notice" role="status" aria-atomic="true">Not submitted.</p>
+     </form>
+     <dialog id="discard" class="martlet-dialog" aria-labelledby="discard-title"><form method="dialog"><h2 id="discard-title">Discard this registration?</h2><p>Your unsent entries will be cleared.</p><div class="martlet-actions"><Button type="submit" value="keep" autofocus>Keep editing</Button><Button type="submit" value="discard" class="martlet-button--secondary">Discard entries</Button></div></form></dialog>
+diff --git a/starter/src/scripts/form-demo.js b/starter/src/scripts/form-demo.js
+index 3e3d638..cc5a7d5 100644
+--- a/starter/src/scripts/form-demo.js
++++ b/starter/src/scripts/form-demo.js
+@@ -81,3 +81,12 @@ dialog.addEventListener('close', () => {
+   returnTarget?.focus();
+ });
+ window.addEventListener('beforeunload', event => { if (dirty) { event.preventDefault(); event.returnValue = ''; } });
++
++// Only enable the local demonstration after all handlers are installed. A failed
++// or blocked script must never submit form values to the hosting server.
++form.noValidate = true;
++for (const fieldset of form.querySelectorAll('fieldset')) fieldset.disabled = false;
++submit.disabled = false;
++reset.disabled = false;
++document.querySelector('#default-button').disabled = false;
++document.querySelector('#form-fallback').hidden = true;
+-- 
+2.52.0
+
