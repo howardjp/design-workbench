@@ -4,7 +4,7 @@
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
-import {mkdtempSync, rmSync} from 'node:fs';
+import {mkdtempSync, readFileSync, rmSync} from 'node:fs';
 import {lstat, mkdtemp, mkdir, readFile, readdir, realpath, rm, writeFile} from 'node:fs/promises';
 import {devNull, tmpdir} from 'node:os';
 import {dirname, isAbsolute, join, relative, resolve, sep} from 'node:path';
@@ -12,7 +12,8 @@ import {fileURLToPath} from 'node:url';
 import {chromium, firefox, webkit} from '@playwright/test';
 
 const here=dirname(fileURLToPath(import.meta.url));
-const families=['martlet','krigsvold'], frameworks=['jekyll','astro','react'];
+const defaultMatrix=JSON.parse(readFileSync(join(here,'portable-matrix.json'),'utf8'));
+const supportedCapabilities=['catalog','static-route-smoke'];
 const dashboardIds=new Set(['dashboard-analytics','dashboard-administration','dashboard-operations']);
 const fullCommit=/^[0-9a-f]{40}$/;
 function run(program,args,opts={}) {
@@ -42,10 +43,18 @@ export function validateManifest(manifest){
  const keys=Object.keys(manifest.repositories);assert.ok(keys.length,'at least one repository required');
  for(const key of keys){assert.match(key,/^[a-z][a-z0-9_-]*$/);const repo=manifest.repositories[key];assert.equal(typeof repo.path,'string');assert.ok(fullCommit.test(repo.commit||''),`${key}: full commit required`)}
  assert.ok(manifest.fixture && keys.includes(manifest.fixture.repository),'fixture repository required');
+ const matrix=manifest.matrix||defaultMatrix;
+ assert.ok(matrix && typeof matrix==='object' && !Array.isArray(matrix),'matrix required');
+ for(const field of ['families','frameworks']){
+  const values=matrix[field];assert.ok(Array.isArray(values)&&values.length&&new Set(values).size===values.length&&values.every(value=>typeof value==='string'&&/^[a-z][a-z0-9-]*$/.test(value)),`matrix ${field} must be unique nonempty identifiers`);
+ }
  for(const key of ['catalog','dashboards'])assert.match(manifest.fixture[key]||'',/^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[A-Za-z0-9_./-]+$/,`${key}: use a repository-relative path`);
  assert.ok(Array.isArray(manifest.targets)&&manifest.targets.length,'targets required');
  const seen=new Set();for(const target of manifest.targets){
-  assert.ok(families.includes(target.family)&&frameworks.includes(target.framework),'unknown family or framework');const key=`${target.family}/${target.framework}`;assert.ok(!seen.has(key),`duplicate target ${key}`);seen.add(key);
+  assert.ok(matrix.families.includes(target.family)&&matrix.frameworks.includes(target.framework),'unknown family or framework');const key=`${target.family}/${target.framework}`;assert.ok(!seen.has(key),`duplicate target ${key}`);seen.add(key);
+  if(manifest.matrix)assert.equal(target.adapter?.framework,target.framework,`${key}: adapter framework mismatch`);
+  else if(target.adapter!==undefined)assert.equal(target.adapter?.framework,target.framework,`${key}: adapter framework mismatch`);
+  assert.ok(supportedCapabilities.includes(target.capability||'catalog'),`${key}: unsupported capability`);
   assert.ok(keys.includes(target.repository),`${key}: unknown repository`);
   if(target.inputs!==undefined){assert.ok(Array.isArray(target.inputs)&&new Set(target.inputs).size===target.inputs.length&&target.inputs.every(name=>keys.includes(name)),`${key}: inputs must be unique known repositories`);}
   if(target.input_checks!==undefined){
@@ -140,12 +149,28 @@ export async function auditSite(page,root,base,catalog,dashboards,label){
  assert.equal(await page.locator('h1').count(),1,`${label}: experimental science has one heading`);assert.ok(await page.locator('main tbody tr').count()>0,`${label}: experimental science has static results`);
  return {cells,science:{status:'experimental',static_results:'checked',interactive_behavior:'not_assessed'}};
 }
+// A small adapter smoke contract checks one canonical record, and never claims
+// the full catalog, dashboards, science, interactions or accessibility.
+export async function auditSmoke(page,root,base,catalog,label){
+ const record=catalog.pages[0];
+ const html=await readFile(join(root,'examples',record.id,'index.html'),'utf8');
+ await page.setContent(html,{waitUntil:'domcontentloaded'});
+ const found=await page.evaluate(()=>({headings:[...document.querySelectorAll('h1')].map(n=>n.textContent.replace(/\s+/g,' ').trim()),mainCount:document.querySelectorAll('main').length,main:document.querySelector('main')?.textContent.replace(/\s+/g,' ').trim()||''}));
+ assert.deepEqual(found.headings,[norm(record.title)],`${label}/${record.id}: canonical heading`);
+ assert.equal(found.mainCount,1,`${label}/${record.id}: one main`);
+ assert.ok(found.main.includes(norm(record.summary)),`${label}/${record.id}: canonical summary`);
+ return {cells:[{example:record.id,base,static_content:'checked',scope:'adapter-smoke',interactive_behavior:'not_assessed',automated_accessibility:'not_assessed',visual_conformance:'not_assessed'}],science:{status:'not_assessed'}};
+}
 export async function execute(manifest,{browserName='chromium',output,requireMatrix=false}={}){
  validateManifest(manifest);assert.ok(['chromium','firefox','webkit'].includes(browserName),'unsupported browser');
- if(requireMatrix)assert.equal(manifest.targets.length,6,'complete matrix requires both families and all three frameworks');
+ const matrix=manifest.matrix||defaultMatrix;
+ const expected=matrix.families.flatMap(f=>matrix.frameworks.map(fr=>`${f}/${fr}`));
+ const present=new Set(manifest.targets.map(t=>`${t.family}/${t.framework}`));
+ const missing=expected.filter(key=>!present.has(key));
+ if(requireMatrix)assert.equal(missing.length,0,`complete matrix missing targets: ${missing.join(', ')}`);
  if(output){try{await lstat(resolve(output));throw Error('Output already exists; choose a new result path');}catch(error){if(error.code!=='ENOENT')throw error;}}
- const runnerFile=fileURLToPath(import.meta.url),verifier=join(here,'../../examples/page-archetypes/scripts/verify-html.py'),hashFile=async path=>createHash('sha256').update(await readFile(path)).digest('hex');
- const runnerCommit=git(here,['rev-parse','HEAD']).trim(),scriptHash=await hashFile(runnerFile),verifierHash=await hashFile(verifier),dirty=!!git(here,['status','--porcelain','--untracked-files=all']).trim();
+ const runnerFile=fileURLToPath(import.meta.url),verifier=join(here,'../../examples/page-archetypes/scripts/verify-html.py'),matrixFile=join(here,'portable-matrix.json'),hashFile=async path=>createHash('sha256').update(await readFile(path)).digest('hex');
+ const runnerCommit=git(here,['rev-parse','HEAD']).trim(),scriptHash=await hashFile(runnerFile),verifierHash=await hashFile(verifier),matrixFileHash=await hashFile(matrixFile),dirty=!!git(here,['status','--porcelain','--untracked-files=all']).trim();
  const repos={};for(const [name,spec] of Object.entries(manifest.repositories)){const path=resolve(spec.path);pinned(path,spec.commit);repos[name]={path,commit:spec.commit};}
  const fixtureRepo=repos[manifest.fixture.repository],catalogText=readPin(fixtureRepo.path,fixtureRepo.commit,manifest.fixture.catalog),dashboardText=readPin(fixtureRepo.path,fixtureRepo.commit,manifest.fixture.dashboards);
  const catalog=JSON.parse(catalogText),dashboards=JSON.parse(dashboardText);assert.equal(catalog.pages.length,50,'canonical fixture must have 50 examples');assert.equal(new Set(catalog.pages.map(p=>p.id)).size,50,'duplicate catalog ID');
@@ -164,13 +189,15 @@ export async function execute(manifest,{browserName='chromium',output,requireMat
    await verifyOutputRoot(temp,outputPath);
    const outputHash=await digestTree(outputPath); // reject output symlinks before traversing rendered documents
    const htmlCheck=run('python3',[join(here,'../../examples/page-archetypes/scripts/verify-html.py'),outputPath,'--baseurl',base]);
-   const audited=await auditSite(page,outputPath,base||'/',catalog,dashboards,`${target.family}/${target.framework}${base||'/'}`);
-   results.push({family:target.family,framework:target.framework,base:base||'/',source:target.repository,source_commit:repos[target.repository].commit,declared_inputs:Object.fromEntries((target.inputs||[]).map(name=>[name,repos[name].commit])),input_checks:target.input_checks||{},declared_input_consumption:'not_verified',build_commands:target.commands,output_tree_sha256:outputHash,html_check:htmlCheck.trim(),...audited});
-   console.log(`${target.family}/${target.framework}${base||'/'}: 50 static routes, local links and experimental static results checked`);
+   const capability=target.capability||'catalog';
+   const audited=await (capability==='catalog'?auditSite:auditSmoke)(page,outputPath,base||'/',catalog,...(capability==='catalog'?[dashboards]:[]),`${target.family}/${target.framework}${base||'/'}`);
+   results.push({family:target.family,framework:target.framework,capability,base:base||'/',source:target.repository,source_commit:repos[target.repository].commit,declared_inputs:Object.fromEntries((target.inputs||[]).map(name=>[name,repos[name].commit])),input_checks:target.input_checks||{},declared_input_consumption:'not_verified',build_commands:target.commands,output_tree_sha256:outputHash,html_check:htmlCheck.trim(),...audited});
+   console.log(`${target.family}/${target.framework}${base||'/'}: ${audited.cells.length} ${capability} static route checks`);
   }
   await context.close();
   assert.equal(await hashFile(runnerFile),scriptHash,'Runner changed during execution');assert.equal(await hashFile(verifier),verifierHash,'HTML verifier changed during execution');assert.equal(git(here,['rev-parse','HEAD']).trim(),runnerCommit,'Runner commit changed during execution');
-  const result={version:1,runner_scope:'Static content, local link/fragment inventory and experimental static-result presence only. Not full conformance or an accessibility audit.',network_policy:'Runner performs no fetch; build commands are trusted code and network isolation is not enforced.',runner:{commit:runnerCommit,script_sha256:scriptHash,html_verifier_sha256:verifierHash,worktree_dirty:dirty},fixture:{repository:manifest.fixture.repository,commit:fixtureRepo.commit,catalog_path:manifest.fixture.catalog,dashboards_path:manifest.fixture.dashboards,catalog_sha256:createHash('sha256').update(catalogText).digest('hex'),dashboards_sha256:createHash('sha256').update(dashboardText).digest('hex')},repositories:Object.fromEntries(Object.entries(repos).map(([name,repo])=>[name,{commit:repo.commit}])),browser:{engine:browserName,version:browser.version()},node:process.version,javascript:'disabled',results,missing:families.flatMap(f=>frameworks.map(fr=>`${f}/${fr}`)).filter(key=>!manifest.targets.some(t=>`${t.family}/${t.framework}`===key)),not_assessed:['declared package input consumption','interactive behavior','JavaScript failure recovery','automated accessibility','contrast incomplete findings','visual identity','manual assistive technology','physical print','performance']};
+  assert.equal(await hashFile(matrixFile),matrixFileHash,'Default matrix configuration changed during execution');
+  const result={version:1,runner_scope:'Capability-scoped static content and local link/fragment inventory; catalog additionally checks experimental static-result presence. Not full conformance or an accessibility audit.',network_policy:'Runner performs no fetch; build commands are trusted code and network isolation is not enforced.',runner:{commit:runnerCommit,script_sha256:scriptHash,html_verifier_sha256:verifierHash,default_matrix_sha256:matrixFileHash,worktree_dirty:dirty},matrix,fixture:{repository:manifest.fixture.repository,commit:fixtureRepo.commit,catalog_path:manifest.fixture.catalog,dashboards_path:manifest.fixture.dashboards,catalog_sha256:createHash('sha256').update(catalogText).digest('hex'),dashboards_sha256:createHash('sha256').update(dashboardText).digest('hex')},repositories:Object.fromEntries(Object.entries(repos).map(([name,repo])=>[name,{commit:repo.commit}])),browser:{engine:browserName,version:browser.version()},node:process.version,javascript:'disabled',results,missing,not_assessed:['declared package input consumption','interactive behavior','JavaScript failure recovery','automated accessibility','contrast incomplete findings','visual identity','manual assistive technology','physical print','performance']};
   if(output)await writeFile(resolve(output),JSON.stringify(result,null,2)+'\n',{flag:'wx'});return result;
  }finally{if(browser)await browser.close();await rm(temp,{recursive:true,force:true});}
 }

@@ -39,7 +39,7 @@ test('package input checks reject missing, wrong-family, wrong-version and alter
 });
 
 test('complete-matrix mode refuses partial coverage before opening repositories',async()=>{
- await assert.rejects(execute(manifest(),{requireMatrix:true}),/complete matrix requires both families/);
+ await assert.rejects(execute(manifest(),{requireMatrix:true}),/complete matrix missing targets/);
 });
 
 test('existing result files are never overwritten or mistaken for a new run',async()=>{
