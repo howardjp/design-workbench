@@ -1,0 +1,30 @@
+name: Nightjar Firefox diagnostic
+on:
+  pull_request:
+    branches: [nightjar2/forms-stress]
+    paths:
+      - examples/page-archetypes/tests/form-stale-validity.mjs
+      - .github/workflows/nightjar-firefox-diagnostic.yml
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      BUNDLE_FROZEN: 'true'
+      NIGHTJAR_BROWSER: firefox
+      NIGHTJAR_TEST_FAMILY: martlet
+      NIGHTJAR_TEST_FRAMEWORK: jekyll
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+      - run: npm ci --ignore-scripts
+      - run: cd examples/jekyll/martlet && bundle install
+      - run: npx playwright install --with-deps firefox
+      - run: node examples/page-archetypes/tests/form-stale-validity.mjs
