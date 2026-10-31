@@ -8,7 +8,7 @@ const navToggle=root.querySelector('.dash-nav-toggle'),nav=root.querySelector('#
 navToggle.addEventListener('click',()=>navToggle.setAttribute('aria-expanded',String(navToggle.getAttribute('aria-expanded')!=='true')));
 root.querySelector('.dash-sidebar').addEventListener('keydown',event=>{if(event.key==='Escape'){navToggle.setAttribute('aria-expanded','false');navToggle.focus();}});
 navToggle.hidden=false;root.dataset.ready='true';
-function updateURL(values,tolerateFailure=false){const url=new URL(location.href);for(const[key,value]of Object.entries(values))value===null?url.searchParams.delete(key):url.searchParams.set(key,String(value));try{history.replaceState(null,'',url);}catch(error){if(!tolerateFailure)throw error;return false;}const peer=root.querySelector('[data-compare]');const compare=new URL(peer.href);compare.search=comparisonSearch(root.dataset.dashboard,url.search);peer.href=compare.href;return true;}
+function updateURL(values,tolerateFailure=false){const url=new URL(location.href);for(const[key,value]of Object.entries(values))value===null?url.searchParams.delete(key):url.searchParams.set(key,String(value));try{history.replaceState(history.state,'',url);}catch(error){if(!tolerateFailure)throw error;return false;}const peer=root.querySelector('[data-compare]');const compare=new URL(peer.href);compare.search=comparisonSearch(root.dataset.dashboard,url.search);peer.href=compare.href;return true;}
 const number=value=>new Intl.NumberFormat('en-US').format(value);
 function analytics(){
   const fallback=root.querySelector('[data-dashboard-fallback]');if(!fallback)return;
@@ -52,8 +52,11 @@ function administration(){
   let current,saving=false,initializing=true;
   const addressWarning=element('p','',{role:'status'});status.after(addressWarning);
   const syncAddress=()=>{const updated=updateURL({q:state.query,status:state.status,sort:state.sort,direction:state.direction,page:state.page,size:state.size,density:filters.elements.density.value},!initializing);addressWarning.textContent=updated?'':'The address could not be updated. Local changes remain available; try applying the filters again.';};
+  const editorFields=['name','email','role','status'];const editorValues=()=>Object.fromEntries(editorFields.map(name=>[name,editor.elements[name].value]));let editorBaseline=editorValues();
+  const editorDirty=()=>editorFields.some(name=>editor.elements[name].value!==editorBaseline[name]);
+  const allowEditorChange=()=>{if(!editorDirty())return true;status.textContent='Unsaved changes. Save or discard this draft before changing the editor.';editor.elements.name.focus();return false;};
   const clearErrors=()=>{root.querySelector('#person-errors').hidden=true;for(const name of ['name','email','role','status']){editor.elements[name].removeAttribute('aria-invalid');editor.elements[name].removeAttribute('aria-describedby');root.querySelector(`#person-${name}-error`).hidden=true;}};
-  const resetEditor=()=>{editing=null;editor.reset();clearErrors();root.querySelector('[data-editor-legend]').textContent='Add a person';};
+  const resetEditor=()=>{editing=null;editor.reset();editorBaseline=editorValues();clearErrors();root.querySelector('[data-editor-legend]').textContent='Add a person';};
   const updateSelection=()=>{
     root.querySelector('[data-selection-count]').textContent=`${selected.size} people selected across result pages. Changing filters clears selection.`;
     root.querySelectorAll('[data-bulk]').forEach(button=>button.disabled=!selected.size||filters.elements.state.value!=='ready');
@@ -100,8 +103,8 @@ function administration(){
   for(const[selector,step]of [['[data-people-previous]',-1],['[data-people-next]',1]])root.querySelector(selector).addEventListener('click',()=>{state.page+=step;render();const next=root.querySelector(selector);if(next.disabled)root.querySelector(step===1?'[data-people-previous]':'[data-people-next]').focus();});
   body.addEventListener('change',event=>{const id=event.target.dataset.selectPerson;if(!id)return;event.target.checked?selected.add(id):selected.delete(id);updateSelection();});
   selectPage.addEventListener('change',()=>{current.rows.forEach(person=>selectPage.checked?selected.add(person.id):selected.delete(person.id));body.querySelectorAll('[data-select-person]').forEach(input=>input.checked=selected.has(input.dataset.selectPerson));updateSelection();});
-  body.addEventListener('click',event=>{const id=event.target.closest('[data-edit-person]')?.dataset.editPerson;if(!id)return;const person=records.find(item=>item.id===id);editing=id;clearErrors();for(const field of ['name','email','role','status'])editor.elements[field].value=person[field];root.querySelector('[data-editor-legend]').textContent=`Edit ${person.name} (${person.id})`;editor.elements.name.focus();});
-  root.querySelector('[data-new-person]').addEventListener('click',()=>{resetEditor();editor.elements.name.focus();});
+  body.addEventListener('click',event=>{const id=event.target.closest('[data-edit-person]')?.dataset.editPerson;if(!id)return;if(editing===id){editor.elements.name.focus();return;}if(!allowEditorChange())return;const person=records.find(item=>item.id===id);editing=id;clearErrors();for(const field of editorFields)editor.elements[field].value=person[field];editorBaseline=editorValues();root.querySelector('[data-editor-legend]').textContent=`Edit ${person.name} (${person.id})`;status.textContent=`Editing ${person.name} (${person.id}).`;editor.elements.name.focus();});
+  root.querySelector('[data-new-person]').addEventListener('click',()=>{if(!allowEditorChange())return;resetEditor();status.textContent='Adding a person.';editor.elements.name.focus();});
   root.querySelector('[data-discard-person]').addEventListener('click',()=>{resetEditor();status.textContent='Draft discarded. Directory records are unchanged.';});
   editor.addEventListener('submit',event=>{
     event.preventDefault();if(saving)return;const draft=Object.fromEntries(['name','email','role','status'].map(name=>[name,editor.elements[name].value.trim()]));const errors=validatePerson(draft,records,editing);clearErrors();
@@ -110,10 +113,10 @@ function administration(){
     const id=editing||nextPersonId(records);
     records=editing?records.map(person=>person.id===editing?{id,...draft}:person):[...records,{id,...draft}];selected.clear();resetEditor();render();status.textContent=`Saved ${draft.name} (${id}) locally. Reload restores the original fixture.`;
   });
-  root.querySelectorAll('[data-bulk]').forEach(button=>button.addEventListener('click',()=>{pending={ids:[...selected],status:button.dataset.bulk};returnFocus=button;root.querySelector('[data-bulk-description]').textContent=`Set ${pending.ids.length} selected people to ${pending.status}: ${records.filter(person=>selected.has(person.id)).map(person=>person.name).join(', ')}.`;dialog.showModal();root.querySelector('[data-bulk-cancel]').focus();}));
+  root.querySelectorAll('[data-bulk]').forEach(button=>button.addEventListener('click',()=>{if(editing&&selected.has(editing)&&editorDirty()){status.textContent='Unsaved changes. Save or discard this draft before changing this person in bulk.';editor.elements.name.focus();return;}pending={ids:[...selected],status:button.dataset.bulk};returnFocus=button;root.querySelector('[data-bulk-description]').textContent=`Set ${pending.ids.length} selected people to ${pending.status}: ${records.filter(person=>selected.has(person.id)).map(person=>person.name).join(', ')}.`;dialog.showModal();root.querySelector('[data-bulk-cancel]').focus();}));
   root.querySelector('[data-bulk-cancel]').addEventListener('click',()=>dialog.close());
-  root.querySelector('[data-bulk-confirm]').addEventListener('click',()=>{if(!pending)return;records=applyBulk(records,pending.ids,pending.status);const count=pending.ids.length;selected.clear();dialog.close();render();status.textContent=`Updated ${count} selected people locally. No unselected records were changed.`;});
-  dialog.addEventListener('close',()=>{pending=null;if(returnFocus&&!returnFocus.disabled)returnFocus.focus();else selectPage.focus();});
+  root.querySelector('[data-bulk-confirm]').addEventListener('click',()=>{if(!pending)return;records=applyBulk(records,pending.ids,pending.status);if(editing&&pending.ids.includes(editing)){editor.elements.status.value=pending.status;editorBaseline.status=pending.status;}const count=pending.ids.length;selected.clear();dialog.close();render();status.textContent=`Updated ${count} selected people locally. No unselected records were changed.`;});
+  dialog.addEventListener('close',()=>{if(dialog.open)return;pending=null;if(returnFocus&&!returnFocus.disabled)returnFocus.focus();else selectPage.focus();});
   // Preserve the interactive rows and focus while printing the applied result set.
   let prePrintStatus=null;
   window.addEventListener('beforeprint',()=>{

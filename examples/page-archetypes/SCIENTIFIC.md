@@ -6,6 +6,8 @@ The Jekyll include `jekyll/_includes/examples/scientific.html` is a trusted auth
 
 A failed calculation retains draft inputs and the last successful results, chart and CSV. Errors identify each invalid field and an error-summary link moves focus to it. A successful retry updates the run parameters, chart, table and CSV together. Values are synthetic, local and reset on reload. The model is illustrative and is not a measurement or engineering prediction. The shared template and stylesheet are an application extension using the host shells; separate family type and host conventions remain in force. The offline Martlet and Krigsvold builder guidance identifies forms and calculation controllers as host-owned native HTML in Astro; no React API is attributed to Astro.
 
+The last-run description wraps long numeric representations without clipping or modifying the entered value. Jekyll and Astro update their draft status only when its text changes, matching React's observable behavior and avoiding repeated identical live-region writes. Automated mutation and reflow checks are not a substitute for screen-reader or real-zoom review.
+
 After installing locked Node/Ruby dependencies and building the workbench packages:
 
 ```sh

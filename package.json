@@ -31,7 +31,7 @@
     "test:public-react": "node scripts/test-public-react.mjs",
     "test:dialog-consumer": "node scripts/test-dialog-consumer.mjs",
     "test:pagination-consumer": "node scripts/test-pagination-consumer.mjs",
-    "test:tabs-consumer": "node scripts/test-tabs-consumer.mjs",
+    "test:tabs-consumer": "node scripts/test-tabs-consumer.mjs && node scripts/test-tabs-packed-dynamic.mjs",
     "test:error-summary-consumer": "node scripts/test-error-summary-consumer.mjs",
     "test:fields-consumer": "node scripts/test-fields-consumer.mjs",
     "test:examples": "node examples/page-archetypes/scripts/verify.mjs && node --test examples/page-archetypes/tests/dashboard-model.test.mjs examples/page-archetypes/tests/catalog-date.test.mjs examples/page-archetypes/tests/event-time.test.mjs",

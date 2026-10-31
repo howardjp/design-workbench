@@ -1,17 +1,19 @@
 // Bounded cross-engine checks against independently built portable examples.
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
-import {readFile} from 'node:fs/promises';
-import {extname,resolve} from 'node:path';
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import {extname,resolve,join} from 'node:path';
 import {chromium,firefox,webkit,expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import catalog from '../content/catalog.json' with {type:'json'};
+import {captureIncompleteTargets} from './contrast-incomplete-evidence.mjs';
 
 const engine=process.env.NIGHTJAR_BROWSER || 'chromium';
 const browsers={chromium,firefox,webkit};
 if(!browsers[engine]) throw Error('NIGHTJAR_BROWSER must be chromium, firefox, or webkit');
 const roots={jekyll:process.env.NIGHTJAR_JEKYLL_ROOT,astro:process.env.NIGHTJAR_ASTRO_ROOT||'examples/astro-slice/dist',react:process.env.NIGHTJAR_REACT_ROOT||'examples/react-catalog/dist'};
 if(!roots.jekyll) throw Error('NIGHTJAR_JEKYLL_ROOT must contain the paired root-path Jekyll builds');
+const evidence=process.env.NIGHTJAR_CONTRAST_EVIDENCE;if(evidence)await mkdir(evidence,{recursive:true});
 async function serve(root){
   const server=createServer(async(req,res)=>{
     const path=new URL(req.url,'http://localhost').pathname, name=decodeURIComponent(path.slice(1)),file=resolve(root,name.endsWith('/')?`${name}index.html`:name);
@@ -47,6 +49,15 @@ try{
     assert.deepEqual(violations,[],`${engine} ${family} ${framework} ${appearance} ${state}: WCAG-tagged axe violations`);
     const incomplete=result.incomplete.filter(rule=>rule.nodes.length).map(rule=>({id:rule.id,targets:rule.nodes.map(node=>node.target)}));
     if(incomplete.length)console.log(`${engine} ${family} ${framework} ${appearance} ${state}: axe requires manual review: ${JSON.stringify(incomplete)}`);
+    const contrast=incomplete.find(rule=>rule.id==='color-contrast');
+    if(evidence&&contrast){
+     const name=[engine,family,framework,appearance,state].join('-').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'');
+     const targets=await captureIncompleteTargets(page,contrast.targets);
+     assert.deepEqual(targets.map(record=>record.target),contrast.targets,`${name}: every axe target is retained in evidence`);
+     const screenshot=`${name}.png`;
+     await page.screenshot({path:join(evidence,screenshot),fullPage:true});
+     await writeFile(join(evidence,`${name}.json`),JSON.stringify({engine,family,framework,appearance,state,url:page.url(),axeResult:'incomplete',screenshot,targets},null,2)+'\n');
+    }
    }
    await open('article');
    await expect(page.getByRole('heading',{name:catalog.pages.find(item=>item.id==='article').title,exact:true})).toBeVisible();
@@ -90,6 +101,12 @@ try{
    const science=page.locator(framework==='react'?'.scientific-workspace':'[data-science]');
    const duration=science.getByLabel('Duration (min)'),run=science.getByRole('button',{name:'Run calculation'}),exportCsv=science.getByRole('button',{name:'Download results CSV'}),rows=science.locator('tbody tr');
    await expect(rows).toHaveCount(6);await expect(rows.last()).toContainText('24.93');
+   if(appearance==='light'){
+    const initial=science.getByLabel('Initial temperature (°C)'),longValue='0'.repeat(1000);
+    await science.getByRole('status').evaluate(node=>{window.__scienceStatusMutations=0;window.__scienceStatusObserver=new MutationObserver(records=>{window.__scienceStatusMutations+=records.length});window.__scienceStatusObserver.observe(node,{childList:true,characterData:true,subtree:true})});for(const value of ['8','81','812'])await initial.fill(value);await page.waitForFunction(()=>window.__scienceStatusMutations>=1);assert.equal(await page.evaluate(()=>window.__scienceStatusMutations),1,'unchanged draft status is not repeatedly rewritten');await initial.fill('80');await page.waitForFunction(()=>window.__scienceStatusMutations>=2);assert.equal(await page.evaluate(()=>window.__scienceStatusMutations),2,'returning to applied values updates status once');await page.evaluate(()=>window.__scienceStatusObserver.disconnect());
+    await initial.fill(longValue);await run.click();await expect(rows.last()).toContainText('18.36');assert.equal(await initial.inputValue(),longValue);assert.ok((await science.innerText()).includes(`${longValue} °C initial`));assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`${family}/${framework}: long scientific value reflows`);assert.equal(await science.locator('p').filter({hasText:'Last run:'}).evaluate(node=>node.scrollWidth<=node.clientWidth),true,'last-run value wraps without clipping');
+    const longDownload=page.waitForEvent('download');await exportCsv.click();const longCsv=await readFile(await (await longDownload).path(),'utf8');assert.match(longCsv,/10\.00,18\.36/);await initial.fill('80');await run.click();await expect(rows.last()).toContainText('24.93');
+   }
    await duration.fill('0');await run.click();await expect(science.getByRole('alert')).toContainText('Duration must be a number');await expect(duration).toHaveAttribute('aria-invalid','true');await expect(rows.last()).toContainText('24.93');
    await science.getByRole('link',{name:/Duration must be a number/}).click();await expect(duration).toBeFocused();
    if(appearance==='light'){

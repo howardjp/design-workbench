@@ -9,21 +9,53 @@
       const label = input.name === 'name' ? 'name' : 'message';
       input.setCustomValidity(input.value && !input.value.trim() ? `Enter a ${label} with at least one non-whitespace character.` : '');
     });
+    // Whitespace is a custom rule, so expose its error inline instead of relying
+    // on a browser popup which can obscure a subsequent pointer activation.
+    let suppressNativePopup = false;
+    const originalInvalid = new WeakMap();
+    const clearWhitespace = () => freeText.forEach(input => {
+      if (input.validity.customError) return;
+      const error = form.querySelector(`[data-whitespace-error="${input.name}"]`);
+      if (!error) return;
+      const ids = (input.getAttribute('aria-describedby') || '').split(/\s+/).filter(id => id && id !== error.id);
+      if (ids.length) input.setAttribute('aria-describedby', ids.join(' ')); else input.removeAttribute('aria-describedby');
+      const oldInvalid = originalInvalid.get(input);
+      if (oldInvalid === null) input.removeAttribute('aria-invalid'); else input.setAttribute('aria-invalid', oldInvalid);
+      originalInvalid.delete(input); error.remove();
+    });
+    const showWhitespace = input => {
+      let error = form.querySelector(`[data-whitespace-error="${input.name}"]`);
+      if (!error) {
+        error = document.createElement('span'); error.id = `${input.id}-whitespace-error`;
+        error.dataset.whitespaceError = input.name; error.setAttribute('role', 'alert');
+        originalInvalid.set(input, input.getAttribute('aria-invalid'));
+        input.insertAdjacentElement('afterend', error);
+        input.setAttribute('aria-describedby', [input.getAttribute('aria-describedby'), error.id].filter(Boolean).join(' '));
+      }
+      input.setAttribute('aria-invalid', 'true'); error.textContent = input.validationMessage;
+    };
     form.addEventListener('submit', event => {
       event.preventDefault();
-      validateText();
-      if (!form.reportValidity()) return;
+      validateText(); clearWhitespace();
+      const firstInvalid = Array.from(form.elements).find(input => input.willValidate && !input.validity.valid);
+      suppressNativePopup = !!firstInvalid?.validity?.customError;
+      if (suppressNativePopup) showWhitespace(firstInvalid);
+      const valid = form.reportValidity();
+      suppressNativePopup = false;
+      if (!valid) { if (firstInvalid?.validity?.customError) firstInvalid.focus(); return; }
       status.textContent = 'Example validated locally. Nothing was sent, saved, or authenticated.';
       // Do not retain even illustrative passwords or verification codes.
       form.querySelectorAll('[type=password], [name=code]').forEach(input => { input.value = ''; });
     });
-    // Native constraint validation runs before submit and emits a non-bubbling invalid event.
-    form.addEventListener('invalid', () => { status.textContent = ''; }, true);
+    // Explicit reportValidity still emits a non-bubbling invalid event.
+    form.addEventListener('invalid', event => { status.textContent = ''; if (suppressNativePopup) event.preventDefault(); }, true);
     // A validation message describes the submitted values, not later edits.
-    form.addEventListener('input', () => { validateText(); status.textContent = ''; });
-    form.addEventListener('change', () => { validateText(); status.textContent = ''; });
-    form.addEventListener('reset', () => { freeText.forEach(input => input.setCustomValidity('')); status.textContent = ''; });
-    fields.disabled = false; fallback.hidden = true;
+    form.addEventListener('input', () => { validateText(); clearWhitespace(); status.textContent = ''; });
+    form.addEventListener('change', () => { validateText(); clearWhitespace(); status.textContent = ''; });
+    form.addEventListener('reset', () => { freeText.forEach(input => input.setCustomValidity('')); clearWhitespace(); status.textContent = ''; });
+    // Recheck custom errors at submission even if a host changed a value without
+    // dispatching input. reportValidity above still enforces native constraints.
+    form.noValidate = true; fields.disabled = false; fallback.hidden = true;
   });
 
   document.querySelectorAll('[data-listing]').forEach(listing => {

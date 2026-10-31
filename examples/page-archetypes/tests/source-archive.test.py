@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Exercise source archives in a disposable checkout without Git metadata."""
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -41,6 +42,10 @@ class SourceArchiveTest(unittest.TestCase):
                         with zipfile.ZipFile(dest / 'template.zip') as archive:
                             self.assertEqual(set(archive.namelist()), set(manifest[family]))
                             self.assertEqual(archive.read('README.md'), b'Local intentional template change.\n')
+                            shell = json.loads(archive.read('_data/shell.json'))
+                            self.assertEqual(shell['contract'], 'docs/source-shell/CONTRACT.md')
+                            self.assertEqual(hashlib.sha256(archive.read(shell['contract'])).hexdigest(), shell['contract_sha256'])
+                            self.assertIn(b'upstream', archive.read('docs/source-shell/README.md'))
                         for unwanted in ('.env', 'unlisted-private.txt', '.private-link', 'assets/unlisted-link.txt'):
                             self.assertFalse((dest / unwanted).exists(), f'{unwanted} leaked into the built site')
                         if not base:
