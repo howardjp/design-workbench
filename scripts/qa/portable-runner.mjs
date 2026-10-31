@@ -5,9 +5,9 @@ import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {mkdtempSync, rmSync} from 'node:fs';
-import {lstat, mkdtemp, mkdir, readFile, readdir, rm, writeFile} from 'node:fs/promises';
+import {lstat, mkdtemp, mkdir, readFile, readdir, realpath, rm, writeFile} from 'node:fs/promises';
 import {devNull, tmpdir} from 'node:os';
-import {dirname, join, resolve} from 'node:path';
+import {dirname, isAbsolute, join, relative, resolve, sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {chromium, firefox, webkit} from '@playwright/test';
 
@@ -77,6 +77,12 @@ export function expand(arg,context){
  });
 }
 const norm=value=>value.replace(/\s+/g,' ').trim();
+export async function verifyOutputRoot(container,root){
+ const location=relative(container,root);
+ assert.ok(location&&!isAbsolute(location)&&location!=='..'&&!location.startsWith(`..${sep}`),'Build output must remain inside its temporary run directory');
+ const info=await lstat(root);assert.ok(info.isDirectory()&&!info.isSymbolicLink(),'Build output root must be a real directory, not a symlink');
+ assert.equal(await realpath(root),resolve(await realpath(container),location),'Build output or an ancestor is a symlink');
+}
 async function digestTree(root){
  const files=[];async function walk(directory,prefix=''){
   for(const name of (await readdir(directory)).sort()){
@@ -129,6 +135,7 @@ export async function execute(manifest,{browserName='chromium',output,requireMat
    const sources={};for(const [name,repo] of Object.entries(repos)){sources[name]=join(temp,'sources',target.family,target.framework,base?'preview':'root',name);await mkdir(sources[name],{recursive:true});archive(repo.path,repo.commit,sources[name]);}
    const outputPath=join(temp,'builds',target.family,target.framework,base?'preview':'root');await mkdir(outputPath,{recursive:true});
    for(const command of target.commands){const args=command.map(arg=>expand(arg,{sources,base,baseSlash:base?`${base}/`:'/',output:outputPath}));run(args[0],args.slice(1),{cwd:sources[target.repository],timeout:15*60*1000});}
+   await verifyOutputRoot(temp,outputPath);
    const outputHash=await digestTree(outputPath); // reject output symlinks before traversing rendered documents
    const htmlCheck=run('python3',[join(here,'../../examples/page-archetypes/scripts/verify-html.py'),outputPath,'--baseurl',base]);
    const audited=await auditSite(page,outputPath,base||'/',catalog,dashboards,`${target.family}/${target.framework}${base||'/'}`);

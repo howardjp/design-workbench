@@ -4,7 +4,7 @@ import {execFileSync} from 'node:child_process';
 import {mkdtempSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {archive,execute,expand,pinned,readPin,validateManifest} from '../scripts/qa/portable-runner.mjs';
+import {archive,execute,expand,pinned,readPin,validateManifest,verifyOutputRoot} from '../scripts/qa/portable-runner.mjs';
 
 const sha='1234567890abcdef1234567890abcdef12345678';
 function manifest(){return {version:1,repositories:{fixture:{path:'/tmp/fixture',commit:sha}},fixture:{repository:'fixture',catalog:'catalog.json',dashboards:'dashboards.json'},targets:[{family:'martlet',framework:'jekyll',repository:'fixture',commands:[['python3','build.py','--out','{output}']]}]};}
@@ -27,6 +27,16 @@ test('complete-matrix mode refuses partial coverage before opening repositories'
 
 test('existing result files are never overwritten or mistaken for a new run',async()=>{
  const temp=mkdtempSync(join(tmpdir(),'nightjar-result-test-'));try{const output=join(temp,'result.json');writeFileSync(output,'prior evidence');await assert.rejects(execute(manifest(),{output}),/Output already exists/);assert.equal(readFileSync(output,'utf8'),'prior evidence');}finally{rmSync(temp,{recursive:true,force:true});}
+});
+
+test('output root and ancestor cannot be redirected through symlinks',async()=>{
+ const temp=mkdtempSync(join(tmpdir(),'nightjar-output-boundary-'));try{
+  const real=join(temp,'real'),output=join(real,'output'),rootLink=join(temp,'root-link'),ancestorLink=join(temp,'ancestor-link');mkdirSync(real);mkdirSync(output);symlinkSync(output,rootLink,'dir');symlinkSync(real,ancestorLink,'dir');
+  await assert.doesNotReject(verifyOutputRoot(temp,output));
+  await assert.rejects(verifyOutputRoot(temp,rootLink),/not a symlink/);
+  await assert.rejects(verifyOutputRoot(temp,join(ancestorLink,'output')),/ancestor is a symlink/);
+  await assert.rejects(verifyOutputRoot(output,real),/remain inside/);
+ }finally{rmSync(temp,{recursive:true,force:true});}
 });
 
 test('pinned offline archive uses committed bytes, not a later checkout or dirty files',()=>{
