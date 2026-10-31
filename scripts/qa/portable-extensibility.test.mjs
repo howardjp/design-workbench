@@ -14,7 +14,7 @@ test('data-driven two-family by four-framework adapter smoke and rejection contr
   git('init','-q');git('config','user.name','Nightjar fixture');git('config','user.email','nightjar@example.invalid');
   const pages=Array.from({length:50},(_,i)=>({id:`record-${i}`,title:`Record ${i}`,summary:`Summary ${i}`,sections:[]}));
   writeFileSync(join(repo,'catalog.json'),JSON.stringify({pages}));writeFileSync(join(repo,'dashboards.json'),JSON.stringify({people:[]}));
-  writeFileSync(join(repo,'adapter.mjs'),`import {mkdirSync,writeFileSync} from 'node:fs';import {join} from 'node:path';const out=process.argv[2],base=process.argv[3],bad=process.argv[4]==='bad';mkdirSync(join(out,'examples/record-0'),{recursive:true});writeFileSync(join(out,'examples/record-0/index.html'),'<html><body><main><h1>'+(bad?'Wrong':'Record 0')+'</h1><p>Summary 0</p></main></body></html>');if(!['','/preview'].includes(base))throw Error('bad base');`);
+  writeFileSync(join(repo,'adapter.mjs'),`import {mkdirSync,writeFileSync} from 'node:fs';import {join} from 'node:path';const out=process.argv[2],base=process.argv[3],mode=process.argv[4];if(!['','/preview'].includes(base))throw Error('bad base');mkdirSync(join(out,'examples/record-0'),{recursive:true});writeFileSync(join(out,'examples/record-0/index.html'),'<html><body><main><h1 id="record">'+(mode==='bad'?'Wrong':'Record 0')+'</h1><p>Summary 0</p><a href="'+(mode==='bad-base'?'':base)+'/examples/record-0/#record">Record</a></main></body></html>');`);
   git('add','.');git('commit','-qm','synthetic adapter and canonical test fixtures');const commit=git('rev-parse','HEAD');
   const frameworks=['jekyll','astro','react','vue'],families=['martlet','krigsvold'];
   const matrix={families,frameworks};
@@ -32,6 +32,7 @@ test('data-driven two-family by four-framework adapter smoke and rejection contr
   const unsupported=structuredClone(data);unsupported.targets[0].capability='full-accessibility';assert.throws(()=>validateManifest(unsupported),/unsupported capability/);
   const wrong=structuredClone(data);wrong.repositories.fixture.commit='0'.repeat(40);await assert.rejects(execute(wrong,{requireMatrix:true}),/failed/);
   const bad=structuredClone(data);bad.targets=[{...targets[0],commands:[['node','adapter.mjs','{output}','{base}','bad']]}];await assert.rejects(execute(bad),/canonical heading/);
+  const badBase=structuredClone(data);badBase.targets=[{...targets[0],commands:[['node','adapter.mjs','{output}','{base}','bad-base']]}];await assert.rejects(execute(badBase),/verify-html\.py.*failed/);
   // Omission of matrix uses the separate default configuration and its three
   // existing framework IDs; this is still a synthetic smoke test only.
   const original={...data,targets:targets.filter(t=>t.framework!=='vue')};delete original.matrix;
