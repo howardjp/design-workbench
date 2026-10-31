@@ -8,6 +8,8 @@ The work order is [issue #42](https://github.com/k3jph/design-workbench/issues/4
 
 At this checkpoint Node is `v24.19.0` and the provisioned Ruby is `3.2.3`; network access follows the managed environment's enforced restricted policy. The 18 Firefox and 18 WebKit axe contrast incompletes, manual assistive-technology and physical-print checks, and individual default-branch Dependabot alert records remain open. The Nightjar II publication-control proposal is not active protection.
 
+An independent local baseline at `80a5635` passed `npm ci --ignore-scripts`, `npm run check` (112 Node tests plus builds), `npm run test:examples` (50-recipe verification and 28 model/date tests), the Jekyll source-archive test, `update-source-manifest.py --check`, and the 300-cell conformance inventory consistency check. The latter validates the recorded matrix and inputs; it is not a fresh 300-cell browser or accessibility assessment. Exact commands use the pinned Ruby 3.2.3 and existing Bundler gems for the archive test.
+
 ## Workstreams
 
 | Phase | Current status | Evidence and next gate |
