@@ -79,8 +79,8 @@ try {
             await expect(fallback).toBeHidden();await expect(field).toHaveAccessibleDescription('Search the two example names.');
             await field.focus();await page.keyboard.type('mArA');await expect(page.getByRole('rowheader',{name:'Pavel'})).toBeVisible();await page.keyboard.press('Enter');
             await expect(status).toHaveText('Search applied to the local example.');await expect(page.getByRole('rowheader',{name:'Mara'})).toBeVisible();await expect(page.getByRole('rowheader',{name:'Pavel',includeHidden:true})).toBeHidden();
-            await field.fill('Nobody');await apply.click();await expect(page.getByText('No matching people. Change the search to recover.')).toBeVisible();await clear.click();
-            await expect(field).toHaveValue('');await expect(field).toBeFocused();await expect(status).toBeEmpty();await expect(page.getByRole('rowheader',{name:'Mara'})).toBeVisible();await expect(page.getByRole('rowheader',{name:'Pavel'})).toBeVisible();
+            await field.fill('Nobody');await apply.click();await expect(page.getByText('No matching people. Change the search to recover.')).toBeVisible();await clear.focus();await page.keyboard.press('Enter');
+            await expect(field).toHaveValue('');await expect(clear).toBeFocused();await expect(status).toBeEmpty();await expect(page.getByRole('rowheader',{name:'Mara'})).toBeVisible();await expect(page.getByRole('rowheader',{name:'Pavel'})).toBeVisible();
             assert.deepEqual((await new AxeBuilder({page}).analyze()).violations.map(v=>v.id),[],`${family}/${base}: ready axe`);
             await page.setViewportSize({width:1440,height:900});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`${family}/${base}: wide viewport reflows`);
             assert.deepEqual(errors,[]);
